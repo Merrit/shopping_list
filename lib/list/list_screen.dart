@@ -7,7 +7,7 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   int itemCount;
-  List<String> listItems = ['Test1', 'Test2'];
+  List<Widget> listItems = [ListItem()];
 
   @override
   Widget build(BuildContext context) {
@@ -25,70 +25,72 @@ class _ShoppingListState extends State<ShoppingList> {
                 bottom: 2.0,
               ),
               child: ListView(
-                children: [
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                  Text(
-                    'Test',
-                    textScaleFactor: 5,
-                  ),
-                ],
+                children: listItems,
               ),
             ),
           ),
-          ModalBottomSheetLauncher(),
+          // ModalBottomSheetLauncher(),
         ],
       ),
     );
   }
 }
 
+class ListItem extends StatelessWidget {
+  var itemColor = Colors.blue;
+
+  var myDiag = AlertDialog(
+    title: Text('Reset settings?'),
+    content:
+        Text('This will reset your device to its default factory settings.'),
+    actions: [
+      FlatButton(
+        textColor: Color(0xFF6200EE),
+        onPressed: () {},
+        child: Text('CANCEL'),
+      ),
+      FlatButton(
+        textColor: Color(0xFF6200EE),
+        onPressed: () {},
+        child: Text('ACCEPT'),
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        color: itemColor,
+        height: 35,
+        width: double.infinity,
+      ),
+    );
+  }
+}
+
+/* 
+() async {
+        await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Message'),
+            content: Text('Your file is saved.'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .pop(); // dismisses only the dialog and returns nothing
+                },
+                child: new Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } */
+
+/* 
 class ModalBottomSheetLauncher extends StatelessWidget {
   const ModalBottomSheetLauncher({
     Key key,
@@ -151,3 +153,4 @@ class ShoppingModalBottomSheet extends StatelessWidget {
     );
   }
 }
+ */
