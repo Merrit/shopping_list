@@ -29,7 +29,6 @@ class _ShoppingListState extends State<ShoppingList> {
               ),
             ),
           ),
-          // ModalBottomSheetLauncher(),
         ],
       ),
     );
@@ -37,30 +36,12 @@ class _ShoppingListState extends State<ShoppingList> {
 }
 
 class ListItem extends StatelessWidget {
-  var itemColor = Colors.blue;
-
-  var myDiag = AlertDialog(
-    title: Text('Reset settings?'),
-    content:
-        Text('This will reset your device to its default factory settings.'),
-    actions: [
-      FlatButton(
-        textColor: Color(0xFF6200EE),
-        onPressed: () {},
-        child: Text('CANCEL'),
-      ),
-      FlatButton(
-        textColor: Color(0xFF6200EE),
-        onPressed: () {},
-        child: Text('ACCEPT'),
-      ),
-    ],
-  );
+  final itemColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => _showDialog(context),
       child: Container(
         color: itemColor,
         height: 35,
@@ -70,87 +51,24 @@ class ListItem extends StatelessWidget {
   }
 }
 
-/* 
-() async {
-        await showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Message'),
-            content: Text('Your file is saved.'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pop(); // dismisses only the dialog and returns nothing
-                },
-                child: new Text('OK'),
+_showDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+            title: Text('Reset settings?'),
+            content: Text(
+                'This will reset your device to its default factory settings.'),
+            actions: [
+              FlatButton(
+                textColor: Color(0xFF6200EE),
+                onPressed: () {},
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                textColor: Color(0xFF6200EE),
+                onPressed: () {},
+                child: Text('ACCEPT'),
               ),
             ],
-          ),
-        );
-      } */
-
-/* 
-class ModalBottomSheetLauncher extends StatelessWidget {
-  const ModalBottomSheetLauncher({
-    Key key,
-  }) : super(key: key);
-
-  static const BoxDecoration bottomSheetDecoration = BoxDecoration(
-    color: Colors.blue,
-    borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(30),
-      topRight: Radius.circular(30),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        width: double.infinity,
-        height: 50,
-        decoration: bottomSheetDecoration,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add),
-            Text('New Item'),
-          ],
-        ),
-      ),
-      onTap: () {
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return ShoppingModalBottomSheet(
-                bottomSheetDecoration: bottomSheetDecoration,
-              );
-            });
-      },
-    );
-  }
+          ));
 }
-
-class ShoppingModalBottomSheet extends StatelessWidget {
-  const ShoppingModalBottomSheet({
-    Key key,
-    this.bottomSheetDecoration,
-  }) : super(key: key);
-
-  final BoxDecoration bottomSheetDecoration;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: bottomSheetDecoration,
-      height: 500,
-      child: Column(
-        children: [
-          TextField(),
-        ],
-      ),
-    );
-  }
-}
- */
