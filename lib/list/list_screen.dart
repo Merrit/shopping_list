@@ -1,74 +1,213 @@
 import 'package:flutter/material.dart';
 
-class ShoppingList extends StatefulWidget {
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:grouped_list/grouped_list.dart';
+import 'package:shopping_list/firebase/firebase_auth.dart';
+import 'package:shopping_list/list/components/item_tile.dart';
+import 'package:shopping_list/list/item.dart';
+import 'package:shopping_list/list/list.dart';
+import 'package:shopping_list/list/list_collection.dart';
+import 'package:shopping_list/list/sub_item.dart';
+
+final listCollection = ListCollection();
+
+class ListScreen extends StatefulWidget {
   @override
-  _ShoppingListState createState() => _ShoppingListState();
+  _ListScreenState createState() => _ListScreenState();
 }
 
-class _ShoppingListState extends State<ShoppingList> {
-  int itemCount;
-  List<Widget> listItems = [ListItem()];
+class _ListScreenState extends State<ListScreen> {
+  var listOfStores = []; // Add to seperate drawer widget
+  var storeName = "";
+
+  void addItem(String itemName) {
+    var _item = Item(
+      itemName: itemName,
+      amount: 0,
+      category: '',
+    );
+    // listCollection.lists
+    // walmart.items.add(_item);
+  }
+
+  void initDrawer() {
+    listCollection.lists.forEach((listName, list) {
+      listOfStores.add(TextButton(
+        child: Text(listName),
+        onPressed: () {},
+      ));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initDrawer();
+    listCollection.createNewList(listName: 'Walmart');
+    // storeName = listCollection.
+    // initFirebase();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Shopping List"), centerTitle: true),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 8.0,
-                left: 8.0,
-                right: 8.0,
-                bottom: 2.0,
-              ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(
+              child: Text('My Shopping Lists'),
+            ),
+            RaisedButton(
+              child: Text('New List'),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Create a new shopping list'),
+                              Text('Name'),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(onSubmitted: (value) {
+                                      setState(() {
+                                        listCollection.createNewList(
+                                            listName: value);
+                                      });
+                                      Navigator.pop(context);
+                                    }),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.check),
+                                    onPressed: () {},
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+            ),
+            Expanded(
               child: ListView(
-                children: listItems,
+                children: [],
               ),
             ),
+          ],
+        ),
+      ),
+      body: GroupedListView<dynamic, String>(
+        elements: listCollection.lists['Walmart'].items,
+        groupBy: (element) => element.category,
+        groupComparator: (value1, value2) => value2.compareTo(value1),
+        itemComparator: (item1, item2) =>
+            item1.itemName.compareTo(item2.itemName),
+        order: GroupedListOrder.DESC,
+        useStickyGroupSeparators: false,
+        groupSeparatorBuilder: (String value) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            value,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-        ],
+        ),
+        itemBuilder: (c, product) {
+          return ItemTile(item: product);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                var newItem = '';
+                return Dialog(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    height: 300,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text('Add item', style: TextStyle(fontSize: 30)),
+                        TextField(
+                          autofocus: true,
+                          onChanged: (value) {
+                            newItem = value;
+                          },
+                          onSubmitted: (value) {
+                            addItem(value);
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                        ),
+                        Ink(
+                          decoration: ShapeDecoration(
+                            color: Colors.blue,
+                            shape: CircleBorder(),
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () {
+                              addItem(newItem);
+                              setState(() {
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        },
       ),
     );
   }
 }
 
-class ListItem extends StatelessWidget {
-  final itemColor = Colors.blue;
+class SomethingWentWrongScreen extends StatefulWidget {
+  @override
+  _SomethingWentWrongScreenState createState() =>
+      _SomethingWentWrongScreenState();
+}
 
+class _SomethingWentWrongScreenState extends State<SomethingWentWrongScreen> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showDialog(context),
-      child: Container(
-        color: itemColor,
-        height: 35,
-        width: double.infinity,
+    return Scaffold(
+      body: Container(
+        child: Text('Something went wrong'),
       ),
     );
   }
 }
 
-_showDialog(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-            title: Text('Reset settings?'),
-            content: Text(
-                'This will reset your device to its default factory settings.'),
-            actions: [
-              FlatButton(
-                textColor: Color(0xFF6200EE),
-                onPressed: () {},
-                child: Text('CANCEL'),
-              ),
-              FlatButton(
-                textColor: Color(0xFF6200EE),
-                onPressed: () {},
-                child: Text('ACCEPT'),
-              ),
-            ],
-          ));
+class LoadingScreen extends StatefulWidget {
+  @override
+  _LoadingScreenState createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        child: Text('Loading..'),
+      ),
+    );
+  }
 }

@@ -21,9 +21,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   RunLoop run_loop;
 
   flutter::DartProject project(L"data");
+
+  std::vector<std::string> command_line_arguments =
+      GetCommandLineArguments();
+
+  project.set_dart_entrypoint_arguments(std::move(command_line_arguments));
+
   FlutterWindow window(&run_loop, project);
-  Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1280, 720);
+
+/* ------------------- Set custom window size and position ------------------ */
+
+  // Set the initial window size.
+  int kFlutterWindowWidth = 400;
+  int kFlutterWindowHeight = 700;
+  Win32Window::Size size(kFlutterWindowWidth, kFlutterWindowHeight);
+  // Set the initial window position to center of screen.
+  int x = (GetSystemMetrics(SM_CXSCREEN) / 2) - (kFlutterWindowWidth / 2);
+  int y = (GetSystemMetrics(SM_CYSCREEN) / 2) - (kFlutterWindowHeight / 2);
+  Win32Window::Point origin(x, y);
+
+/* ---------------------- End custom size and position ---------------------- */
+
   if (!window.CreateAndShow(L"shopping_list", origin, size)) {
     return EXIT_FAILURE;
   }
