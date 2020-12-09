@@ -14,6 +14,7 @@ void main() async {
   await Firebase.initializeApp();
 
   // Load authentication.
+  // TODO: Add some loading indicator.
   auth = FirebaseAuth.instance;
 
   if (auth.currentUser != null) {
