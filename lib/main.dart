@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
-
-import 'package:shopping_list/firebase/firebase_auth.dart';
-import 'package:shopping_list/firebase/signin_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shopping_list/authentication/signin_screen.dart';
 import 'package:shopping_list/list/list_screen.dart';
-import 'package:shopping_list/globals.dart' as globals;
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized() appears to be
-  // needed because we are doing work before runApp().
+FirebaseAuth auth;
+
+void main() async {
+  // Ensure setup is finished before running app.
   WidgetsFlutterBinding.ensureInitialized();
-  initFirebase();
-  // if (globals.userSignedIn) {
-  //   runApp(ListApp());
-  // } else {
-  //   runApp(SigninApp());
-  // }
+
+  // Initialize Firebase.
+  await Firebase.initializeApp();
+
+  // Load authentication.
+  auth = FirebaseAuth.instance;
+
+  if (auth.currentUser != null) {
+    runApp(ListApp());
+  } else {
+    runApp(SigninApp());
+  }
 }
 
+// TODO: Implement anonymous signin.
+/// Runs if the user needs to sign in or sign up.
 class SigninApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -30,6 +38,7 @@ class SigninApp extends StatelessWidget {
   }
 }
 
+/// The main Shopping List app.
 class ListApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

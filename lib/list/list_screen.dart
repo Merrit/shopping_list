@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:grouped_list/grouped_list.dart';
-import 'package:shopping_list/firebase/firebase_auth.dart';
 import 'package:shopping_list/list/components/item_tile.dart';
 import 'package:shopping_list/list/item.dart';
-import 'package:shopping_list/list/list.dart';
 import 'package:shopping_list/list/list_collection.dart';
-import 'package:shopping_list/list/sub_item.dart';
+import 'package:shopping_list/main.dart';
 
 final listCollection = ListCollection();
 
@@ -96,6 +93,13 @@ class _ListScreenState extends State<ListScreen> {
                         ),
                       );
                     });
+              },
+            ),
+            TextButton(
+              child: Text('Sign out'),
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                runApp(SigninApp());
               },
             ),
             Expanded(
