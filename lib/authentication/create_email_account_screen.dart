@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:shopping_list/authentication/create_email_account.dart';
-import 'package:shopping_list/authentication/signin_screen.dart';
-import 'package:shopping_list/main.dart';
+import 'package:shopping_list/globals.dart';
 
-// ignore: must_be_immutable
 class CreateEmailAccountScreen extends StatefulWidget {
-  CreateEmailAccountScreen({
-    Key key,
-  }) : super(key: key);
-
   @override
   _CreateEmailAccountScreenState createState() =>
       _CreateEmailAccountScreenState();
@@ -18,7 +12,6 @@ class CreateEmailAccountScreen extends StatefulWidget {
 // TODO: This and email_signin_screen.dart can probably be combined,
 // with a conditional on which column of elements is shown or similar.
 // This would reduce duplicate code and complexity.
-
 class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   final GlobalKey<FormState> _createEmailAccountFormKey =
       GlobalKey<FormState>();
@@ -35,6 +28,71 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   String password = '';
   String confirmedPassword = '';
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Create account')),
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: Form(
+          key: _createEmailAccountFormKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  errorText: _emailErrorText,
+                ),
+                onTap: () {
+                  setState(() {
+                    _emailErrorText = null;
+                  });
+                },
+                onChanged: (value) => email = value,
+                // onFieldSubmitted: (value) => _signUp(context: context),
+              ),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  errorText: _passwordErrorText,
+                ),
+                onTap: () {
+                  setState(() {
+                    _passwordErrorText = null;
+                  });
+                },
+                onChanged: (value) => password = value,
+                // onFieldSubmitted: (value) => _signUp(context: context),
+              ),
+              TextFormField(
+                controller: _passwordConfirmController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirm password',
+                  errorText: _passwordConfirmErrorText,
+                ),
+                onTap: () {
+                  setState(() {
+                    _passwordConfirmErrorText = null;
+                  });
+                },
+                onChanged: (value) => confirmedPassword = value,
+                // onFieldSubmitted: (value) => _signUp(context: context),
+              ),
+              ElevatedButton(
+                child: Text('Sign up'),
+                onPressed: () => _signUp(context: context),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _signUp({@required BuildContext context}) async {
     if (password == confirmedPassword) {
       var result = await createEmailAccount(email: email, password: password);
@@ -45,11 +103,13 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
             content: Text(_msg),
             duration: Duration(seconds: 2),
           );
+          _dispose();
           ScaffoldMessenger.of(context)
               .showSnackBar(_successSnack)
               .closed
               .then((SnackBarClosedReason reason) {
-            runApp(ListApp());
+            // runApp(ListApp());
+            Navigator.pushReplacementNamed(context, Routes.listScreen);
           });
           break;
         case 'weak-password':
@@ -75,65 +135,8 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Create account')),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Form(
-          key: _createEmailAccountFormKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  errorText: _emailErrorText,
-                ),
-                onTap: () {
-                  setState(() {
-                    _emailErrorText = null;
-                  });
-                },
-                onChanged: (value) => email = value,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  errorText: _passwordErrorText,
-                ),
-                onTap: () {
-                  setState(() {
-                    _passwordErrorText = null;
-                  });
-                },
-                onChanged: (value) => password = value,
-              ),
-              TextFormField(
-                controller: _passwordConfirmController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Confirm password',
-                  errorText: _passwordConfirmErrorText,
-                ),
-                onTap: () {
-                  setState(() {
-                    _passwordConfirmErrorText = null;
-                  });
-                },
-                onChanged: (value) => confirmedPassword = value,
-              ),
-              ElevatedButton(
-                child: Text('Sign up'),
-                onPressed: () => _signUp(context: context),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  void _dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
   }
 }

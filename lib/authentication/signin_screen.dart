@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/authentication/create_email_account.dart';
-import 'package:shopping_list/authentication/email_signin_screen.dart';
-import 'package:shopping_list/main.dart';
+import 'package:shopping_list/authentication/authentication.dart';
+import 'package:shopping_list/globals.dart';
 
 class SigninScreen extends StatefulWidget {
   @override
@@ -9,6 +8,32 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkIfSignedIn());
+  }
+
+  // Workaround because the initial SteamBuilder's snapshot.hasData never
+  // triggers on the web version.
+  // May have something to do with this bug that was just fixed,
+  // but will need verification:
+  // https://github.com/FirebaseExtended/flutterfire/pull/4312
+  void _checkIfSignedIn() async {
+    // Slight delay for any potential user info to actually populate.
+    // We can't do this directly in the StreamBuilder since it
+    // doesn't work with async.
+    await Future.delayed(Duration(milliseconds: 500));
+    // **Now** check if there is a logged in user.
+    if (Globals.auth.currentUser != null) {
+      print('User is logged in, moving to main app screen.');
+      Navigator.pushReplacementNamed(context, Routes.listScreen);
+    } else {
+      // No saved user loaded, so continue normal sign in.
+      print('User not logged in.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +64,16 @@ class _SigninScreenState extends State<SigninScreen> {
                     ],
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EmailSigninScreen()));
+                    Navigator.pushNamed(context, Routes.signinEmailScreen);
                   },
                 ),
               ),
+              // TextButton(
+              //   child: Text('User?'),
+              //   onPressed: () {
+              //     print('current user: ${Globals.auth.currentUser}');
+              //   },
+              // ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 height: 50,
@@ -70,26 +98,4 @@ class _SigninScreenState extends State<SigninScreen> {
       ),
     );
   }
-}
-
-void showErrorDialog(
-    {@required BuildContext context,
-    @required String errorMessage // Message to the user.
-    }) {
-  showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('There was a problem'),
-          content: Text(errorMessage),
-          actions: [
-            TextButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      });
 }

@@ -1,14 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:shopping_list/globals.dart';
 
-// Not sure when to use this yet.
+void initAuth() {
+  Globals.auth = FirebaseAuth.instance;
 
-// void subscribeAuth() {
-//   FirebaseAuth.instance.authStateChanges().listen((User user) {
-//     if (user == null) {
-//       print('User is currently signed out!');
-//     } else {
-//       print('User is signed in!');
-//     }
-//   });
-// }
+  subscribeAuth();
+}
+
+void subscribeAuth() {
+  Globals.auth.authStateChanges().listen((User user) {
+    if (user == null) {
+      print('User is currently signed out!');
+      Globals.user = null;
+    } else {
+      print('User is signed in!');
+      Globals.user = user;
+    }
+  });
+}

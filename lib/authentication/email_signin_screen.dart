@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/authentication/create_email_account_screen.dart';
 import 'package:shopping_list/authentication/sign_in.dart';
-import 'package:shopping_list/main.dart';
+import 'package:shopping_list/globals.dart';
 
 class EmailSigninScreen extends StatefulWidget {
   EmailSigninScreen({
@@ -46,6 +45,9 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
                           _emailErrorText = null;
                         });
                       },
+                      // Having onFieldSubmitted enabled causes the web
+                      // version to fail to sign in at all in any way.
+                      // onFieldSubmitted: (value) => _signIn(context),
                     ),
                     TextFormField(
                       controller: _passwordController,
@@ -57,8 +59,10 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
                       onTap: () {
                         setState(() {
                           _passwordErrorText = null;
+                          _passwordController.clear();
                         });
                       },
+                      // onFieldSubmitted: (value) => _signIn(context),
                     ),
                   ],
                 ),
@@ -66,19 +70,12 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Sign in'),
-              onPressed: () {
-                _signIn(context);
-              },
-            ),
+                child: Text('Sign in'), onPressed: () => _signIn(context)),
             Spacer(),
             TextButton(
               child: Text('Create account'),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateEmailAccountScreen()));
+                Navigator.pushNamed(context, Routes.createEmailAccountScreen);
               },
             ),
           ],
@@ -88,48 +85,45 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
   }
 
   void _signIn(BuildContext context) async {
-    if (_emailSigninFormKey.currentState.validate()) {
-      String result = await signInWithEmail(
-          email: _emailController.text, password: _passwordController.text);
-      switch (result) {
-        case 'success':
-          var _msg = 'Success! You will now be logged in.';
-          var _successSnack = SnackBar(
-            content: Text(_msg),
-            duration: Duration(seconds: 2),
-          );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(_successSnack)
-              .closed
-              .then((SnackBarClosedReason reason) {
-            runApp(ListApp());
-          });
-          break;
-        case 'user-not-found':
-          setState(() {
-            _emailErrorText = 'User not found';
-          });
-          break;
-        case 'invalid-email':
-          setState(() {
-            _emailErrorText = 'Invalid email';
-          });
-          break;
-        case 'user-disabled':
-          setState(() {
-            _emailErrorText = 'Account is disabled';
-          });
-          break;
-        case 'wrong-password':
-          setState(() {
-            _passwordErrorText = 'Incorrect password';
-          });
-          break;
-        default:
-          var _otherErrorSnack =
-              SnackBar(content: Text('There was a problem..'));
-          ScaffoldMessenger.of(context).showSnackBar(_otherErrorSnack);
-      }
+    String result = await signInWithEmail(
+        email: _emailController.text, password: _passwordController.text);
+    switch (result) {
+      case 'success':
+        var _msg = 'Success! You will now be logged in.';
+        var _successSnack = SnackBar(
+          content: Text(_msg),
+          duration: Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(_successSnack)
+            .closed
+            .then((SnackBarClosedReason reason) {
+          Navigator.pushReplacementNamed(context, Routes.listScreen);
+        });
+        break;
+      case 'user-not-found':
+        setState(() {
+          _emailErrorText = 'User not found';
+        });
+        break;
+      case 'invalid-email':
+        setState(() {
+          _emailErrorText = 'Invalid email';
+        });
+        break;
+      case 'user-disabled':
+        setState(() {
+          _emailErrorText = 'Account is disabled';
+        });
+        break;
+      case 'wrong-password':
+        setState(() {
+          _passwordErrorText = 'Incorrect password';
+        });
+        break;
+      default:
+        var _otherErrorSnack = SnackBar(content: Text('There was a problem..'));
+        ScaffoldMessenger.of(context).showSnackBar(_otherErrorSnack);
     }
   }
 }

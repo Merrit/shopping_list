@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:grouped_list/grouped_list.dart';
+import 'package:shopping_list/globals.dart';
+
 import 'package:shopping_list/list/components/item_tile.dart';
 import 'package:shopping_list/list/item.dart';
 import 'package:shopping_list/list/list_collection.dart';
-import 'package:shopping_list/main.dart';
 
 final listCollection = ListCollection();
 
@@ -43,8 +43,6 @@ class _ListScreenState extends State<ListScreen> {
     super.initState();
     initDrawer();
     listCollection.createNewList(listName: 'Walmart');
-    // storeName = listCollection.
-    // initFirebase();
   }
 
   @override
@@ -99,7 +97,7 @@ class _ListScreenState extends State<ListScreen> {
               child: Text('Sign out'),
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
-                runApp(SigninApp());
+                Navigator.pushReplacementNamed(context, 'signinScreen');
               },
             ),
             Expanded(
@@ -178,39 +176,6 @@ class _ListScreenState extends State<ListScreen> {
                 );
               });
         },
-      ),
-    );
-  }
-}
-
-class SomethingWentWrongScreen extends StatefulWidget {
-  @override
-  _SomethingWentWrongScreenState createState() =>
-      _SomethingWentWrongScreenState();
-}
-
-class _SomethingWentWrongScreenState extends State<SomethingWentWrongScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Text('Something went wrong'),
-      ),
-    );
-  }
-}
-
-class LoadingScreen extends StatefulWidget {
-  @override
-  _LoadingScreenState createState() => _LoadingScreenState();
-}
-
-class _LoadingScreenState extends State<LoadingScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Text('Loading..'),
       ),
     );
   }

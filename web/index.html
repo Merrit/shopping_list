@@ -35,6 +35,7 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
 
   <!-- Firebase Configuration -->
   <script>
@@ -46,11 +47,12 @@
       storageBucket: "shopping-list-b2c41.appspot.com",
       messagingSenderId: "117835173986",
       appId: "1:117835173986:web:f06646318f2d293e2f013b",
-      measurementId: "G-LN4ZD88JMK",
+      measurementId: "G-LN4ZD88JMK"
     };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    const unsub = firebase.auth().onAuthStateChanged(() => unsub());
   </script>
 
   <!-- This script installs service_worker.js to provide PWA functionality to

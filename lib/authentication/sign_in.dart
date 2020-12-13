@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:shopping_list/main.dart';
+import 'package:shopping_list/globals.dart';
 
 Future<String> signInWithEmail(
     {@required String email, @required String password}) async {
   try {
-    UserCredential userCredential =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
+    UserCredential userCredential = await Globals.auth
+        .signInWithEmailAndPassword(email: email, password: password);
     return 'success';
   } catch (e) {
     return e.code;
