@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/authentication/authentication.dart';
+
 import 'package:shopping_list/globals.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -14,11 +14,11 @@ class _SigninScreenState extends State<SigninScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkIfSignedIn());
   }
 
-  // Workaround because the initial SteamBuilder's snapshot.hasData never
-  // triggers on the web version.
-  // May have something to do with this bug that was just fixed,
-  // but will need verification:
-  // https://github.com/FirebaseExtended/flutterfire/pull/4312
+  /// Workaround because the initial SteamBuilder's snapshot.hasData never
+  /// triggers on the web version.
+  /// May have something to do with this bug that was just fixed,
+  /// but will need verification:
+  /// https://github.com/FirebaseExtended/flutterfire/pull/4312
   void _checkIfSignedIn() async {
     // Slight delay for any potential user info to actually populate.
     // We can't do this directly in the StreamBuilder since it
@@ -68,12 +68,6 @@ class _SigninScreenState extends State<SigninScreen> {
                   },
                 ),
               ),
-              // TextButton(
-              //   child: Text('User?'),
-              //   onPressed: () {
-              //     print('current user: ${Globals.auth.currentUser}');
-              //   },
-              // ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 height: 50,

@@ -3,10 +3,6 @@ import 'package:shopping_list/authentication/sign_in.dart';
 import 'package:shopping_list/globals.dart';
 
 class EmailSigninScreen extends StatefulWidget {
-  EmailSigninScreen({
-    Key key,
-  }) : super(key: key);
-
   @override
   _EmailSigninScreenState createState() => _EmailSigninScreenState();
 }
