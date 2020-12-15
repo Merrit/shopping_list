@@ -1,10 +1,20 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shopping_list/list/item.dart';
 
-class ShoppingList {
-  final String storeName;
-  final List<Item> items;
-  // customColor;
+class ShoppingList extends StatelessWidget {
+  // ShoppingList({@required })
 
-  ShoppingList({@required this.storeName}) : items = [];
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
+
+// class ShoppingList {
+//   final String listName;
+//   final List<Item> items;
+//   // customColor;
+
+//   ShoppingList({@required this.listName}) : items = [];
+// }
