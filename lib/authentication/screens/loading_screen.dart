@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:shopping_list/authentication/authentication.dart';
-import 'package:shopping_list/authentication/signin_screen.dart';
+import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/list/list_screen.dart';
 
 class Loading extends StatefulWidget {
