@@ -12,16 +12,10 @@ class FirestoreUser extends ChangeNotifier {
     // this.userDoc = getUserDoc();
   }
 
-  String _currentListName = '';
+  String _currentListName = 'needDefault&lastUsed';
   String get currentListName => _currentListName;
   set currentListName(String value) {
     _currentListName = value;
     notifyListeners();
   }
-
-  // Future<DocumentReference> getUserDoc() async {
-  //   return await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(Globals.user.uid);
-  // }
 }

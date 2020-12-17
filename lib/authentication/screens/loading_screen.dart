@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
+import 'package:shopping_list/firestore/preload_info.dart';
+import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/list_screen.dart';
 
 class Loading extends StatefulWidget {
@@ -31,6 +33,8 @@ class _LoadingState extends State<Loading> {
           // If yes, start the app; if no, start the sign in screen.
           // On web this always comes up null, so we get to the sign in screen.
           if (FirebaseAuth.instance.currentUser != null) {
+            preloadInfo();
+            // .then((value) => ListScreen());
             return ListScreen();
           } else {
             return SigninScreen();
