@@ -1,16 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/create_new_list.dart';
 
 class ShoppingDrawer extends StatefulWidget {
   final Function setCurrentList;
+  final List<Widget> drawerListWidgets;
 
-  ShoppingDrawer({@required Function callback})
-      : this.setCurrentList = callback;
+  ShoppingDrawer({
+    @required Function callback,
+    @required this.drawerListWidgets,
+  }) : this.setCurrentList = callback;
 
   @override
   _ShoppingDrawerState createState() => _ShoppingDrawerState();
@@ -18,14 +19,6 @@ class ShoppingDrawer extends StatefulWidget {
 
 class _ShoppingDrawerState extends State<ShoppingDrawer> {
   TextEditingController newListController = TextEditingController();
-  List listNames = [];
-  List<Widget> drawerListWidgets = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _initDrawer();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +88,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView(children: drawerListWidgets),
-          ),
+          Expanded(child: ListView(children: widget.drawerListWidgets)),
           TextButton(
             child: Text('Sign out'),
             onPressed: () async {
@@ -108,39 +99,5 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
         ],
       ),
     );
-  }
-
-  Future<void> _initDrawer() async {
-    PreloadInfo.listNames.forEach((element) {
-      drawerListWidgets.add(TextButton(
-        child: Text(element),
-        onPressed: () {
-          Provider.of<FirestoreUser>(context, listen: false).currentListName =
-              element;
-          widget.setCurrentList();
-          setState(() => Navigator.pop(context));
-        },
-      ));
-    });
-
-    // QuerySnapshot listsSnapshot =
-    //     await Provider.of<FirestoreUser>(context, listen: false)
-    //         .userDoc
-    //         .collection('lists')
-    //         .get();
-    // listsSnapshot.docs.forEach((doc) {
-    //   listNames.add(doc.id);
-    //   drawerListWidgets.add(TextButton(
-    //     child: Text(doc.id),
-    //     onPressed: () {
-    //       Provider.of<FirestoreUser>(context, listen: false).currentListName =
-    //           doc.id;
-    //       setState(() => Navigator.pop(context));
-    //     },
-    //   ));
-    // });
-    // setState(() {
-    //   listNames = listNames;
-    // });
   }
 }

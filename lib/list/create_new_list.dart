@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 
+/// Create a new list document in Firebase.
 void createNewList(
     {@required BuildContext context, @required String listName}) {
   Provider.of<FirestoreUser>(context, listen: false)

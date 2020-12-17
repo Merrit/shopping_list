@@ -9,7 +9,6 @@ class FirestoreUser extends ChangeNotifier {
   FirestoreUser() {
     this.userDoc =
         FirebaseFirestore.instance.collection('users').doc(Globals.user.uid);
-    // this.userDoc = getUserDoc();
   }
 
   String _currentListName = 'needDefault&lastUsed';
