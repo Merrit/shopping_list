@@ -29,6 +29,7 @@ dependencies:
   firebase_core: ^0.5.3
   grouped_list: ^3.7.1
   provider: ^4.3.2+3
+  shared_preferences: '>=0.5.12+4 <2.0.0'
 
 dev_dependencies:
   flutter_test:

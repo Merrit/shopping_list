@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/components/drawer.dart';
@@ -15,7 +16,7 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   /// listItems is what SteamBuilder listens to in order to build the list.
-  CollectionReference listItems;
+  // CollectionReference listItems;
 
   /// Buttons for each of the user's lists.
   List<Widget> drawerListWidgets = [];
@@ -23,7 +24,19 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
-    _initFirebase();
+    // var listName =
+    //     Provider.of<FirestoreUser>(context, listen: false).currentListName;
+    // switch (listName) {
+    //   case '':
+    //     var defaultList = 'Shopping List';
+    //     _initFirebase(listName: defaultList);
+    //     Provider.of<FirestoreUser>(context, listen: false).currentListName =
+    //         defaultList;
+    //     break;
+    //   default:
+    //     _initFirebase(listName: listName);
+    // }
+    _initDrawer();
   }
 
   @override
@@ -35,11 +48,11 @@ class _ListScreenState extends State<ListScreen> {
           }),
           centerTitle: true),
       drawer: ShoppingDrawer(
-        callback: setCurrentList,
+        // callback: setCurrentList,
         drawerListWidgets: drawerListWidgets,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: listItems.snapshots(),
+        stream: Provider.of<FirestoreUser>(context).listItems.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
@@ -61,15 +74,14 @@ class _ListScreenState extends State<ListScreen> {
     );
   }
 
-  void _initFirebase() async {
-    listItems = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<FirestoreUser>(context, listen: false).userDoc.id)
-        .collection('lists')
-        .doc(Provider.of<FirestoreUser>(context, listen: false).currentListName)
-        .collection('items');
-    _initDrawer();
-  }
+  // void _initFirebase({@required String listName}) async {
+  //   listItems = FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(Provider.of<FirestoreUser>(context, listen: false).userDoc.id)
+  //       .collection('lists')
+  //       .doc(listName)
+  //       .collection('items');
+  // }
 
   Future<void> _initDrawer() async {
     // Find what lists exist.
@@ -85,7 +97,7 @@ class _ListScreenState extends State<ListScreen> {
         onPressed: () {
           Provider.of<FirestoreUser>(context, listen: false).currentListName =
               doc.id;
-          setCurrentList();
+          // setCurrentList();
           setState(() => Navigator.pop(context));
         },
       ));
@@ -93,15 +105,16 @@ class _ListScreenState extends State<ListScreen> {
   }
 
   /// Switch to a new list.
-  void setCurrentList() {
-    setState(() {
-      listItems = FirebaseFirestore.instance
-          .collection('users')
-          .doc(Provider.of<FirestoreUser>(context, listen: false).userDoc.id)
-          .collection('lists')
-          .doc(Provider.of<FirestoreUser>(context, listen: false)
-              .currentListName)
-          .collection('items');
-    });
-  }
+  // void setCurrentList() {
+  //   Provider.of<FirestoreUser>(context, listen: false).currentListName
+  //   // setState(() {
+  //   //   listItems = FirebaseFirestore.instance
+  //   //       .collection('users')
+  //   //       .doc(Provider.of<FirestoreUser>(context, listen: false).userDoc.id)
+  //   //       .collection('lists')
+  //   //       .doc(Provider.of<FirestoreUser>(context, listen: false)
+  //   //           .currentListName)
+  //   //       .collection('items');
+  //   // });
+  // }
 }

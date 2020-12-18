@@ -5,13 +5,14 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/create_new_list.dart';
 
 class ShoppingDrawer extends StatefulWidget {
-  final Function setCurrentList;
+  // final Function setCurrentList;
   final List<Widget> drawerListWidgets;
 
   ShoppingDrawer({
-    @required Function callback,
+    // @required Function callback,
     @required this.drawerListWidgets,
-  }) : this.setCurrentList = callback;
+  });
+  //  : this.setCurrentList = callback;
 
   @override
   _ShoppingDrawerState createState() => _ShoppingDrawerState();
@@ -55,7 +56,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                                             Provider.of<FirestoreUser>(context,
                                                     listen: false)
                                                 .currentListName = listName;
-                                            widget.setCurrentList();
+                                            // widget.setCurrentList();
                                             setState(
                                                 () => Navigator.pop(context));
                                           },
@@ -71,7 +72,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                                                       listen: false)
                                                   .currentListName =
                                               newListController.text;
-                                          widget.setCurrentList();
+                                          // widget.setCurrentList();
                                           setState(
                                               () => Navigator.pop(context));
                                         },

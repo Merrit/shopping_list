@@ -4,11 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
-import 'package:shopping_list/authentication/screens/loading_screen.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/list_screen.dart';
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/loading_screen.dart';
 
 void main() async {
   // Ensure setup is finished.
