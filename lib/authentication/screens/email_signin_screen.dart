@@ -41,9 +41,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
                           _emailErrorText = null;
                         });
                       },
-                      // Having onFieldSubmitted enabled causes the web
-                      // version to fail to sign in at all in any way.
-                      // onFieldSubmitted: (value) => _signIn(context),
+                      onFieldSubmitted: (value) => _signIn(context),
                     ),
                     TextFormField(
                       controller: _passwordController,
@@ -58,7 +56,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
                           _passwordController.clear();
                         });
                       },
-                      // onFieldSubmitted: (value) => _signIn(context),
+                      onFieldSubmitted: (value) => _signIn(context),
                     ),
                   ],
                 ),
