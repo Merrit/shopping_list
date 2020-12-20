@@ -105,7 +105,6 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
             content: Text(_msg),
             duration: Duration(seconds: 2),
           );
-          _dispose();
           ScaffoldMessenger.of(context)
               .showSnackBar(_successSnack)
               .closed
@@ -134,10 +133,5 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
         _passwordConfirmErrorText = 'Passwords do not match';
       });
     }
-  }
-
-  void _dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
   }
 }

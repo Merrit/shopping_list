@@ -11,4 +11,6 @@ void createNewList(
       .collection('lists')
       .doc(listName)
       .set({'listName': listName}, SetOptions(merge: true));
+
+  Provider.of<FirestoreUser>(context, listen: false).listNames.add(listName);
 }

@@ -9,6 +9,7 @@ Future<String> signInWithEmail(
   try {
     UserCredential userCredential = await Globals.auth
         .signInWithEmailAndPassword(email: email, password: password);
+    Globals.user = userCredential.user;
     return 'success';
   } catch (e) {
     return e.code;
