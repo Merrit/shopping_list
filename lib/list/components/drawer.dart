@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/drawer_provider.dart';
-import 'package:shopping_list/list/create_new_list.dart';
+import 'package:shopping_list/list/components/new_list_dialog.dart';
 import 'package:shopping_list/list/delete_list.dart';
 import 'package:shopping_list/main.dart';
 
@@ -14,8 +14,6 @@ class ShoppingDrawer extends StatefulWidget {
 }
 
 class _ShoppingDrawerState extends State<ShoppingDrawer> {
-  TextEditingController newListController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     String currentList =
@@ -46,59 +44,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.all(15),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text('Create a new shopping list'),
-                                            Text('Name'),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: TextField(
-                                                    controller:
-                                                        newListController,
-                                                    onSubmitted: (listName) {
-                                                      createNewList(
-                                                          context: context,
-                                                          listName: listName);
-                                                      Provider.of<FirestoreUser>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .currentListName =
-                                                          listName;
-                                                      setState(() =>
-                                                          Navigator.pop(
-                                                              context));
-                                                    },
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  icon: Icon(Icons.check),
-                                                  onPressed: () {
-                                                    createNewList(
-                                                        context: context,
-                                                        listName:
-                                                            newListController
-                                                                .text);
-                                                    Provider.of<FirestoreUser>(
-                                                                context,
-                                                                listen: false)
-                                                            .currentListName =
-                                                        newListController.text;
-                                                    // widget.setCurrentList();
-                                                    setState(() =>
-                                                        Navigator.pop(context));
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    return NewListDialog();
                                   });
                             },
                           )
