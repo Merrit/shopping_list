@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/preferences.dart';
 
 class FirestoreUser extends ChangeNotifier {
   /// Provides direct access to this user's section in Firestore.
@@ -37,9 +40,7 @@ class FirestoreUser extends ChangeNotifier {
     _currentListName = value;
     _setListItems();
     notifyListeners();
-    // TODO: Create prefs class with getters/methods and prepend every setting
-    // with the unique user id.
-    Globals.prefs.setString('lastUsedList', value);
+    Preferences.lastUsedList = value;
   }
 
   void _setListItems() {
@@ -53,12 +54,12 @@ class FirestoreUser extends ChangeNotifier {
 
   /// Populate the inital data the main app screen will need.
   Future<bool> setInitialData() async {
-    await Globals.initPrefs();
+    await Preferences.initPrefs();
     // Check what lists the user has, if any.
     List<String> storedLists = await _getCurrentLists();
     if (storedLists.length > 0) {
       // Check for a stored 'last used list'.
-      String lastUsedList = await _getLastUsedList();
+      String lastUsedList = Preferences.lastUsedList;
       if (storedLists.contains(lastUsedList)) {
         _currentListName = lastUsedList;
       } else {
@@ -86,12 +87,6 @@ class FirestoreUser extends ChangeNotifier {
       listNames.add(list.id);
     });
     return listNames;
-  }
-
-  /// Returns null if none present.
-  static Future<String> _getLastUsedList() async {
-    String lastList = Globals.prefs.getString('lastUsedList');
-    return lastList;
   }
 
   // void buildDrawerListTiles(BuildContext context) {
