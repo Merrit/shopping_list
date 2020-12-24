@@ -9,6 +9,14 @@ class FirestoreUser extends ChangeNotifier {
   /// Provides direct access to this user's section in Firestore.
   DocumentReference userDoc;
 
+  DocumentReference get currentListReference {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Globals.user.uid)
+        .collection('lists')
+        .doc(_currentListName);
+  }
+
   static String _currentListName = '';
 
   List<Widget> drawerListWidgets = [];
@@ -52,6 +60,40 @@ class FirestoreUser extends ChangeNotifier {
         .collection('items');
   }
 
+  List<String> _aisles = [];
+
+  /// The aisles by which list items are grouped.
+  List<String> get aisles => _aisles;
+
+  Future<void> _getAislesData() async {
+    QuerySnapshot querySnapshot =
+        await currentListReference.collection('aisles').get();
+    if (_aisles.isEmpty) {
+      // This was getting run twice for some reason on
+      // hot restart, duplicating the list?! So we check.
+      // TODO: Figure out why and fix better.
+      querySnapshot.docs.forEach((element) => _aisles.add(element.id));
+    }
+  }
+
+  Future<void> addAisle({@required String newAisle}) async {
+    if (!_aisles.contains(newAisle)) {
+      _aisles.add(newAisle);
+      _aisles.sort();
+      currentListReference
+          .collection('aisles')
+          .doc(newAisle)
+          .set({'aisleName': newAisle});
+      notifyListeners();
+    }
+  }
+
+  Future<void> removeAisle({@required String aisle}) async {
+    _aisles.remove(aisle);
+    currentListReference.collection('aisles').doc(aisle).delete();
+    notifyListeners();
+  }
+
   /// Populate the inital data the main app screen will need.
   Future<bool> setInitialData() async {
     await Preferences.initPrefs();
@@ -71,7 +113,9 @@ class FirestoreUser extends ChangeNotifier {
       // No stored lists.
       _currentListName = 'No lists yet';
     }
+    _getAislesData();
     _setListItems();
+    aisles;
     return true;
   }
 
