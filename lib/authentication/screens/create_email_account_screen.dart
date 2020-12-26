@@ -52,7 +52,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
                 onChanged: (value) => email = value,
                 // Having onFieldSubmitted enabled causes the web
                 // version to fail to sign in at all in any way.
-                // onFieldSubmitted: (value) => _signUp(context: context),
+                onFieldSubmitted: (value) => _signUp(context: context),
               ),
               TextFormField(
                 controller: _passwordController,
@@ -67,7 +67,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
                   });
                 },
                 onChanged: (value) => password = value,
-                // onFieldSubmitted: (value) => _signUp(context: context),
+                onFieldSubmitted: (value) => _signUp(context: context),
               ),
               TextFormField(
                 controller: _passwordConfirmController,
@@ -82,7 +82,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
                   });
                 },
                 onChanged: (value) => confirmedPassword = value,
-                // onFieldSubmitted: (value) => _signUp(context: context),
+                onFieldSubmitted: (value) => _signUp(context: context),
               ),
               ElevatedButton(
                 child: Text('Sign up'),
@@ -99,6 +99,12 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
     if (email == '') {
       setState(() {
         _emailErrorText = 'Email is required';
+      });
+      return;
+    }
+    if (password.length < 12) {
+      setState(() {
+        _passwordConfirmErrorText = 'Password must be at least 12 characters';
       });
       return;
     }
@@ -119,6 +125,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
           });
           break;
         case 'weak-password':
+          // This should never run since we require 12 characters.
           setState(() {
             _passwordConfirmErrorText =
                 'Password must be at least 6 characters';
