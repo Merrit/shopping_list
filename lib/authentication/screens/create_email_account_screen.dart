@@ -20,9 +20,9 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   final TextEditingController _passwordConfirmController =
       TextEditingController();
 
-  String _emailErrorText = null;
-  String _passwordErrorText = null;
-  String _passwordConfirmErrorText = null;
+  String _emailErrorText;
+  String _passwordErrorText;
+  String _passwordConfirmErrorText;
 
   String email = '';
   String password = '';
@@ -96,6 +96,12 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   }
 
   void _signUp({@required BuildContext context}) async {
+    if (email == '') {
+      setState(() {
+        _emailErrorText = 'Email is required';
+      });
+      return;
+    }
     if (password == confirmedPassword) {
       var result = await createEmailAccount(email: email, password: password);
       switch (result) {
@@ -121,6 +127,11 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
         case 'email-already-in-use':
           setState(() {
             _emailErrorText = 'Account with this email already exists';
+          });
+          break;
+        case 'invalid-email':
+          setState(() {
+            _emailErrorText = 'Ivalid email';
           });
           break;
         default:

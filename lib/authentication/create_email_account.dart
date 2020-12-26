@@ -13,6 +13,8 @@ Future<String> createEmailAccount(
       return 'weak-password';
     } else if (e.code == 'email-already-in-use') {
       return 'email-already-in-use';
+    } else if (e.code == 'invalid-email') {
+      return 'invalid-email';
     }
   }
   return 'error';
