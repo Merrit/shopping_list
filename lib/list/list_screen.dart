@@ -70,6 +70,7 @@ class _ListScreenState extends State<ListScreen> {
                       AisleHeader(aisle: groupByValue),
                   itemBuilder: (context, dynamic document) =>
                       ShoppingListTile(document: document),
+                  // separator: Divider(),
                   // itemComparator: , // optional
                   useStickyGroupSeparators: false, // optional
                   floatingHeader: false, // optional
