@@ -20,6 +20,24 @@
                 "$dart-pub-build_runner"
             ],
             "isBackground": true
+        },
+        {
+            "label": "Build APK",
+            "type": "flutter",
+            "command": "flutter",
+            "args": [
+                "build",
+                "apk",
+                "--release",
+                "--target-platform",
+                "android-arm64",
+                "--split-per-abi"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         }
     ]
 }
