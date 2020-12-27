@@ -25,12 +25,11 @@ class _SigninScreenState extends State<SigninScreen> {
     // doesn't work with async.
     await Future.delayed(Duration(milliseconds: 500));
     // **Now** check if there is a logged in user.
-    if (Globals.auth.currentUser != null) {
-      print('User is logged in, moving to main app screen.');
+    if (Globals.auth.currentUser != null &&
+        Globals.auth.currentUser.emailVerified) {
       Navigator.pushReplacementNamed(context, Routes.listScreen);
     } else {
       // No saved user loaded, so continue normal sign in.
-      print('User not logged in.');
     }
   }
 

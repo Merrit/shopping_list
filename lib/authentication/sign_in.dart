@@ -6,12 +6,28 @@ import 'package:shopping_list/globals.dart';
 
 Future<String> signInWithEmail(
     {@required String email, @required String password}) async {
+  UserCredential userCredential;
+  String result;
+
   try {
-    UserCredential userCredential = await Globals.auth
+    userCredential = await Globals.auth
         .signInWithEmailAndPassword(email: email, password: password);
-    Globals.user = userCredential.user;
-    return 'success';
+    // Globals.user = userCredential.user;
+    result = 'success';
   } catch (e) {
-    return e.code;
+    result = e.code;
+  }
+
+  switch (result) {
+    case 'success':
+      if (Globals.auth.currentUser.emailVerified) {
+        Globals.user = userCredential.user;
+        return result;
+      } else {
+        return 'email-not-verified';
+      }
+      break;
+    default:
+      return result;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:shopping_list/authentication/create_email_account.dart';
-import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/authentication/notify_email_sent.dart';
 
 class CreateEmailAccountScreen extends StatefulWidget {
   @override
@@ -112,17 +112,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
       var result = await createEmailAccount(email: email, password: password);
       switch (result) {
         case 'success':
-          var _msg = 'Success! You will now be logged in.';
-          var _successSnack = SnackBar(
-            content: Text(_msg),
-            duration: Duration(seconds: 2),
-          );
-          ScaffoldMessenger.of(context)
-              .showSnackBar(_successSnack)
-              .closed
-              .then((SnackBarClosedReason reason) {
-            Navigator.pushReplacementNamed(context, Routes.listScreen);
-          });
+          notifyEmailSent(context);
           break;
         case 'weak-password':
           // This should never run since we require 12 characters.

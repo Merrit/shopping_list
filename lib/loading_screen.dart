@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
+import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/list_screen.dart';
 
 class Loading extends StatefulWidget {
@@ -41,7 +42,11 @@ class _LoadingState extends State<Loading> {
               future: loadingComplete,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListScreen();
+                  if (Globals.auth.currentUser.emailVerified) {
+                    return ListScreen();
+                  } else {
+                    return SigninScreen();
+                  }
                 }
                 return CircularProgressIndicator();
               },

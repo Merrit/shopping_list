@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/authentication/notify_email_sent.dart';
 import 'package:shopping_list/authentication/sign_in.dart';
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/main.dart';
 
 class EmailSigninScreen extends StatefulWidget {
   @override
@@ -95,6 +97,9 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
           Navigator.pushReplacementNamed(context, Routes.listScreen);
         });
         break;
+      case 'email-not-verified':
+        _notifyEmailNotVerified();
+        break;
       case 'user-not-found':
         setState(() {
           _emailErrorText = 'User not found';
@@ -119,5 +124,30 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
         var _otherErrorSnack = SnackBar(content: Text('There was a problem..'));
         ScaffoldMessenger.of(context).showSnackBar(_otherErrorSnack);
     }
+  }
+
+  _notifyEmailNotVerified() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text('Email address has not been verified.\n'
+              '\n'
+              'Follow the link in the verification email that was sent to the '
+              'address you provided (${Globals.auth.currentUser.email}), '
+              'then try again.'),
+          actions: [
+            TextButton(
+              child: Text('Resend Verification Email'),
+              onPressed: () => notifyEmailSent(context),
+            ),
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () => RestartWidget.restartApp(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
