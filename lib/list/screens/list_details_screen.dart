@@ -4,24 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/list/delete_list.dart';
 
 class ListDetailsScreen extends StatefulWidget {
-  // final String listName;
+  final String listID;
 
-  // ListDetailsScreen({@required this.listName});
+  ListDetailsScreen({@required this.listID});
 
   @override
   _ListDetailsScreenState createState() => _ListDetailsScreenState();
 }
 
 class _ListDetailsScreenState extends State<ListDetailsScreen> {
+  FirestoreUser firestoreUser;
+  String listID;
+  Map<String, dynamic> listInfo;
   String listName;
 
   @override
   void initState() {
     super.initState();
-    listName =
-        Provider.of<FirestoreUser>(context, listen: false).currentListName;
+    firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
+    listID = widget.listID;
+    listInfo = firestoreUser.lists[listID];
+    listName = listInfo['listName'];
+    // listName =
+    // Provider.of<FirestoreUser>(context, listen: false).currentListName;
   }
 
   @override
@@ -41,17 +49,19 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Consumer<FirestoreUser>(
-                builder: (context, firestoreUser, widget) {
+                builder: (context, user, widget) {
                   return SettingsTile(
                     children: [
                       Text('List Sharing'),
                       Text('Shared with:'),
                       Builder(builder: (context) {
                         List<Widget> sharedTiles = [];
-                        Map<String, String> sharedWith =
-                            Map<String, String>.from(
-                                firestoreUser.lists[firestoreUser.currentList]
-                                    ['sharedWith']);
+                        Map<String, String> sharedWith;
+                        try {
+                          sharedWith = Map<String, String>.from(
+                              user.lists[listID]['sharedWith']);
+                        } catch (e) {}
+                        // Don't care about the error because we check below.
                         if (sharedWith != null && sharedWith.length > 0) {
                           sharedWith.forEach((key, value) {
                             sharedTiles.add(Text(key));
@@ -93,6 +103,14 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
                   );
                 },
               ),
+              TextButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) =>
+                            ConfirmListDelete(listID: listID));
+                  },
+                  child: Text('Delete List'))
             ],
           ),
         ),
@@ -201,6 +219,37 @@ class SettingsTile extends StatelessWidget {
           children: children,
         ),
       ),
+    );
+  }
+}
+
+/// Confirm user wishes to delete this list.
+class ConfirmListDelete extends StatelessWidget {
+  final String listID;
+
+  ConfirmListDelete({@required this.listID});
+
+  @override
+  Widget build(BuildContext context) {
+    FirestoreUser user = Provider.of<FirestoreUser>(context, listen: false);
+    var _listName = user.lists[listID]['listName'];
+
+    return AlertDialog(
+      content: SingleChildScrollView(
+        child: Text('Delete $_listName?'),
+      ),
+      actions: [
+        TextButton(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        TextButton(
+          child: Text('Confirm'),
+          onPressed: () {
+            deleteList(context: context, listID: listID);
+          },
+        ),
+      ],
     );
   }
 }
