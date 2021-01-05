@@ -21,9 +21,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Item Name',
-            ),
+            decoration: InputDecoration(labelText: 'Item Name'),
             controller: addItemController,
             autofocus: true,
             onFieldSubmitted: (value) => _addItem(),

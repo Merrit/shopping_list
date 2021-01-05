@@ -10,6 +10,7 @@ import 'package:shopping_list/list/components/drawer.dart';
 import 'package:shopping_list/list/components/drawer_provider.dart';
 import 'package:shopping_list/list/components/floating_add_list_item_button.dart';
 import 'package:shopping_list/list/components/shopping_list_tile.dart';
+import 'package:shopping_list/list/screens/list_details_screen.dart';
 
 /// The main app screen that contains the shopping list.
 class ListScreen extends StatefulWidget {
@@ -20,10 +21,18 @@ class ListScreen extends StatefulWidget {
 class _ListScreenState extends State<ListScreen> {
   @override
   Widget build(BuildContext context) {
+    FirestoreUser firestoreUser = Provider.of<FirestoreUser>(context);
+
     return Scaffold(
       appBar: AppBar(
           title: Consumer<FirestoreUser>(builder: (context, user, child) {
-            return Text(user.currentListName);
+            return GestureDetector(
+              child: Text(user.currentListName),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ListDetailsScreen()),
+              ),
+            );
           }),
           centerTitle: true),
       drawer: ChangeNotifierProvider(
@@ -50,10 +59,12 @@ class _ListScreenState extends State<ListScreen> {
               ],
             ),
           ),
-          StreamBuilder<QuerySnapshot>(
-            stream: Provider.of<FirestoreUser>(context).listItems.snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          // if (firestoreUser.listItems != null)
+          StreamBuilder<DocumentSnapshot>(
+            stream: firestoreUser.listStream,
+            // ignore: missing_return
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasError) {
                 return Text('Something went wrong');
               }
@@ -62,23 +73,64 @@ class _ListScreenState extends State<ListScreen> {
                 return Text('Loading');
               }
 
-              return Expanded(
-                child: GroupedListView<dynamic, String>(
-                  elements: snapshot.data.docs,
-                  groupBy: (document) => document.data()['aisle'],
-                  groupSeparatorBuilder: (String groupByValue) =>
-                      AisleHeader(aisle: groupByValue),
-                  itemBuilder: (context, dynamic document) =>
-                      ShoppingListTile(document: document),
-                  // separator: Divider(),
-                  // itemComparator: , // optional
-                  useStickyGroupSeparators: false, // optional
-                  floatingHeader: false, // optional
-                  order: GroupedListOrder.ASC, // optional
-                ),
-              );
+              if (snapshot.connectionState == ConnectionState.active) {
+                Map<String, dynamic> listData = snapshot.data.data();
+                List<Map<String, dynamic>> listItems = [];
+                if (listData['items'] != null) {
+                  listData['items'].forEach((key, value) {
+                    listItems.add(value);
+                  });
+                }
+
+                return Expanded(
+                  child: GroupedListView<dynamic, String>(
+                    elements: listItems,
+                    groupBy: (item) => item['aisle'],
+                    groupSeparatorBuilder: (String groupByValue) =>
+                        AisleHeader(aisle: groupByValue),
+                    itemBuilder: (context, dynamic item) =>
+                        ShoppingListTile(item: item),
+                    // separator: Divider(),
+                    // itemComparator: , // optional
+                    useStickyGroupSeparators: false, // optional
+                    floatingHeader: false, // optional
+                    order: GroupedListOrder.ASC, // optional
+                  ),
+                );
+              }
+              return Container();
             },
           ),
+          // if (firestoreUser.listItems != null)
+          //   StreamBuilder<QuerySnapshot>(
+          //     stream: Provider.of<FirestoreUser>(context).listItems.snapshots(),
+          //     builder: (BuildContext context,
+          //         AsyncSnapshot<QuerySnapshot> snapshot) {
+          //       if (snapshot.hasError) {
+          //         return Text('Something went wrong');
+          //       }
+
+          //       if (snapshot.connectionState == ConnectionState.waiting) {
+          //         return Text('Loading');
+          //       }
+
+          //       return Expanded(
+          //         child: GroupedListView<dynamic, String>(
+          //           elements: snapshot.data.docs,
+          //           groupBy: (document) => document.data()['aisle'],
+          //           groupSeparatorBuilder: (String groupByValue) =>
+          //               AisleHeader(aisle: groupByValue),
+          //           itemBuilder: (context, dynamic document) =>
+          //               ShoppingListTile(document: document),
+          //           // separator: Divider(),
+          //           // itemComparator: , // optional
+          //           useStickyGroupSeparators: false, // optional
+          //           floatingHeader: false, // optional
+          //           order: GroupedListOrder.ASC, // optional
+          //         ),
+          //       );
+          //     },
+          //   ),
         ],
       ),
       floatingActionButton:

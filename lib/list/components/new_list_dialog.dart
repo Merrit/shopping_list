@@ -54,8 +54,6 @@ class _NewListDialogState extends State<NewListDialog> {
       });
     } else {
       createNewList(context: context, listName: listName);
-      Provider.of<FirestoreUser>(context, listen: false).currentListName =
-          listName;
       setState(() => Navigator.pop(context));
     }
   }

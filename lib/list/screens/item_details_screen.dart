@@ -5,43 +5,36 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/screens/aisles_screen.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
-  final DocumentSnapshot document;
+  final Map<String, dynamic> item;
+  // final DocumentSnapshot document;
 
-  ItemDetailsScreen({@required this.document});
+  ItemDetailsScreen({@required this.item});
+  // ItemDetailsScreen({@required this.document});
 
   @override
   _ItemDetailsScreenState createState() => _ItemDetailsScreenState();
 }
 
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
+  Map<String, dynamic> item;
   String selectedAisle;
-  List<String> aisles;
-  DocumentReference document;
+  // DocumentReference document;
 
   @override
   void initState() {
     super.initState();
-    document = widget.document.reference;
-    selectedAisle = widget.document.data()['aisle'];
-    _setAisles();
-  }
-
-  /// Add the `Unsorted` pseudo-aisle without propogating it elsewhere.
-  ///
-  /// There is no reason for example it should show up when adding a new item,
-  /// or when managing the user's lists.
-  _setAisles() {
-    aisles = Provider.of<FirestoreUser>(context, listen: false).aisles;
-    if (!aisles.contains('Unsorted')) {
-      aisles.add('Unsorted');
-    }
+    // document = widget.document.reference;
+    item = widget.item;
+    selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
+    // selectedAisle = widget.document.data()['aisle'];
   }
 
   @override
   Widget build(BuildContext context) {
+    FirestoreUser user = Provider.of<FirestoreUser>(context);
+
     return Scaffold(
-      appBar: AppBar(
-          title: Text(widget.document.data()['itemName']), centerTitle: true),
+      appBar: AppBar(title: Text(item['itemName']), centerTitle: true),
       body: Column(
         children: [
           SizedBox(height: 20),
@@ -54,10 +47,25 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                 onChanged: (value) {
                   setState(() {
                     selectedAisle = value;
-                    document.update({'aisle': value});
+                    // document.update({'aisle': value});
+                    item['aisle'] = value;
+                    FirebaseFirestore.instance
+                        .collection('lists')
+                        .doc(user.currentList)
+                        .set(
+                      {
+                        'items': {
+                          item['itemName']: {
+                            'aisle': value,
+                          },
+                        },
+                      },
+                      SetOptions(merge: true),
+                    );
                   });
                 },
-                items: aisles.map<DropdownMenuItem<String>>((String value) {
+                items:
+                    user.aisles.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -65,27 +73,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   );
                 }).toList(),
               ),
-              // Consumer<FirestoreUser>(
-              //   builder: (context, user, widget) {
-              //     return DropdownButton(
-              //       hint: Text('Aisle (optional)'),
-              //       value: selectedAisle,
-              //       onChanged: (value) {
-              //         setState(() {
-              //           selectedAisle = value;
-              //         });
-              //       },
-              //       items: user.aisles
-              //           .map<DropdownMenuItem<String>>((String value) {
-              //         return DropdownMenuItem<String>(
-              //           value: value,
-              //           child: Text(value),
-              //           // onTap: () => aisle = value,
-              //         );
-              //       }).toList(),
-              //     );
-              //   },
-              // ),
               IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () => Navigator.push(

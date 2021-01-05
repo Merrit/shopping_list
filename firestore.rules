@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /lists/{documents=**} {
+      allow read, write: if true;
+    }
+
+    // Allow user access to their own document & subcollections.
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    match /lists/{listId}/{document=**} {
+      allow read, write: if request.auth.uid in request.resource.data.roles;
+    }
+    // function {}
+
+    // Allow read / write access to a different user's list (and subcollections)
+    // if their UID is listed.
+    match /users/{userId}/lists/{listId}/{document=**} {
+      allow read, write: if request.auth.uid in resource.data.sharedWith;
+    }
+  }
+}

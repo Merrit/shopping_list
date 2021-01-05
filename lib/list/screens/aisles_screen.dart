@@ -5,7 +5,8 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 class AislesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List _aisles = Provider.of<FirestoreUser>(context, listen: true).aisles;
+    List<String> _aisles =
+        Provider.of<FirestoreUser>(context, listen: true).aisles;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,12 +25,14 @@ class AislesScreen extends StatelessWidget {
       ),
       body: Container(
         padding: EdgeInsets.all(20),
-        child: ListView.builder(
-          itemCount: _aisles.length,
-          itemBuilder: (context, int index) {
-            return AisleTile(aisle: _aisles[index]);
-          },
-        ),
+        child: (_aisles != null)
+            ? ListView.builder(
+                itemCount: _aisles.length,
+                itemBuilder: (context, int index) {
+                  return AisleTile(aisle: _aisles[index]);
+                },
+              )
+            : Container(),
       ),
     );
   }
@@ -45,15 +48,17 @@ class AisleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Center(child: Text(aisle)),
-      trailing: IconButton(
-          icon: Icon(Icons.remove_circle),
-          onPressed: () {
-            Provider.of<FirestoreUser>(context, listen: false)
-                .removeAisle(aisle: aisle);
-          }),
-    );
+    return (aisle != 'Unsorted')
+        ? ListTile(
+            title: Center(child: Text(aisle)),
+            trailing: IconButton(
+                icon: Icon(Icons.remove_circle),
+                onPressed: () {
+                  Provider.of<FirestoreUser>(context, listen: false)
+                      .removeAisle(aisle: aisle);
+                }),
+          )
+        : Container();
   }
 }
 

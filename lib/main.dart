@@ -67,6 +67,7 @@ class ListApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
+          appBarTheme: AppBarTheme(centerTitle: true),
         ),
         routes: {
           Routes.signinScreen: (context) => SigninScreen(),
