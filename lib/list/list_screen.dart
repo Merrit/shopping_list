@@ -30,7 +30,9 @@ class _ListScreenState extends State<ListScreen> {
               child: Text(user.currentListName),
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListDetailsScreen()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ListDetailsScreen(listID: user.currentList)),
               ),
             );
           }),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,8 +8,6 @@ class FirestoreUser extends ChangeNotifier {
   /// Provides direct access to this user's section in Firestore.
   DocumentReference userDoc;
 
-  // QuerySnapshot lists;
-
   Map<String, dynamic> lists = {};
 
   void deleteList(String listID) {
@@ -20,19 +16,6 @@ class FirestoreUser extends ChangeNotifier {
     if (currentList == listID) currentList = '';
     notifyListeners();
   }
-
-  // DocumentReference get currentListReference {
-  //   return lists[currentList].reference;
-  // }
-
-  // /// Returns a map in the form of `user: role`.
-  // Future<List<String>> get listSharedWith async {
-  //   DocumentSnapshot _listData = await currentListReference.get();
-  //   List<String> _users = _listData.data()['allowedUsers'];
-  //   return _users;
-  // }
-
-  // static String _currentListName = '';
 
   List<Widget> drawerListWidgets = [];
   static bool editingDrawer = false;
@@ -71,7 +54,6 @@ class FirestoreUser extends ChangeNotifier {
     } else {
       _currentList = listID;
     }
-    // _setListItems();
     setListStream();
     notifyListeners();
     Preferences.lastUsedList = listID;
@@ -104,11 +86,6 @@ class FirestoreUser extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void _setListItems() {
-  //   if (lists.isNotEmpty && (lists.keys.contains(currentList)))
-  //     listItems = lists[currentList].reference.collection('items');
-  // }
-
   List<String> _aisles = [];
 
   /// The aisles by which list items are grouped.
@@ -116,20 +93,9 @@ class FirestoreUser extends ChangeNotifier {
 
   Future<void> _getAislesData() async {
     if (lists.isNotEmpty && _aisles.isEmpty) {
-      // lists.forEach((key, value) {
-      //   if (value['aisle'] != null) _aisles.add(value['aisle']);
-      // });
       List<String> currentListAisles =
           List<String>.from(lists[currentList]['aisles']);
       if (currentListAisles != null) _aisles = currentListAisles;
-      // QuerySnapshot querySnapshot =
-      //     await lists[currentList].reference.collection('aisles').get();
-      // if (_aisles.isEmpty) {
-      //   // This was getting run twice for some reason on
-      //   // hot restart, duplicating the list?! So we check.
-      //   // TODO: Figure out why and fix better.
-      //   querySnapshot.docs.forEach((element) => _aisles.add(element.id));
-      // }
     }
     if (_aisles.isEmpty) {
       _aisles.add('Unsorted');
@@ -145,10 +111,6 @@ class FirestoreUser extends ChangeNotifier {
           .collection('lists')
           .doc(currentList)
           .update({'aisles': _aisles});
-      // currentListReference
-      //     .collection('aisles')
-      //     .doc(newAisle)
-      //     .set({'aisleName': newAisle});
       notifyListeners();
     }
   }
@@ -159,7 +121,6 @@ class FirestoreUser extends ChangeNotifier {
       {'aisles': _aisles},
       SetOptions(merge: true),
     );
-    // currentListReference.collection('aisles').doc(aisle).delete();
     notifyListeners();
   }
 
@@ -172,8 +133,6 @@ class FirestoreUser extends ChangeNotifier {
     _loadInitialCurrentList();
     setListStream();
     _getAislesData();
-    // _setListItems();
-    // aisles;
     return true;
   }
 
@@ -195,31 +154,6 @@ class FirestoreUser extends ChangeNotifier {
       _currentList = 'No lists yet';
     }
   }
-  // Future<bool> setInitialData() async {
-  //   firestoreInstance = FirebaseFirestore.instance;
-  //   // await _setEmulator();
-  //   await Preferences.initPrefs();
-  //   // Check what lists the user has, if any.
-  //   List<String> storedLists = await _getCurrentLists();
-  //   if (storedLists.length > 0) {
-  //     // Check for a stored 'last used list'.
-  //     String lastUsedList = Preferences.lastUsedList;
-  //     if (storedLists.contains(lastUsedList)) {
-  //       _currentListName = lastUsedList;
-  //     } else {
-  //       // We have to set a list so widgets
-  //       // don't throw errors by loading nothing.
-  //       _currentListName = storedLists[0];
-  //     }
-  //   } else {
-  //     // No stored lists.
-  //     _currentListName = 'No lists yet';
-  //   }
-  //   _getAislesData();
-  //   _setListItems();
-  //   aisles;
-  //   return true;
-  // }
 
   Future<void> _setEmulator() async {
     String host = defaultTargetPlatform == TargetPlatform.android
