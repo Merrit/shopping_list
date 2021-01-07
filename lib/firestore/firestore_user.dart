@@ -4,42 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/preferences.dart';
 
+/// [FirestoreUser] is the Provider-powered hub that handles Firebase data.
 class FirestoreUser extends ChangeNotifier {
-  /// Provides direct access to this user's section in Firestore.
-  DocumentReference userDoc;
-
+  /// All lists the user has access to.
+  ///
+  /// Takes the form of `{listUID: dynamic}`.
   Map<String, dynamic> lists = {};
 
-  void deleteList(String listID) {
-    FirebaseFirestore.instance.collection('lists').doc(listID).delete();
-    lists.remove(listID);
-    if (currentList == listID) currentList = '';
-    notifyListeners();
-  }
-
-  List<Widget> drawerListWidgets = [];
-  static bool editingDrawer = false;
-
-  /// The stream the app's StreamBuilder listens to in order
-  /// to build the main list UI.
-  CollectionReference listItems;
-
-  Map<String, String> get listNames {
-    Map<String, String> _names = {};
-    lists.forEach((key, value) => _names[key] = value.data()['listName']);
-    return _names;
-  }
-
-  void removeListName(String listID) {
-    lists.remove(listID);
-    notifyListeners();
-  }
-
-  FirestoreUser() {
-    this.userDoc =
-        FirebaseFirestore.instance.collection('users').doc(Globals.user.uid);
-  }
-
+  /// The unique id for the current list.
   String get currentList {
     return _currentList;
   }
@@ -54,22 +26,13 @@ class FirestoreUser extends ChangeNotifier {
     } else {
       _currentList = listID;
     }
-    setListStream();
+    _getAislesData();
+    _setListStream();
     notifyListeners();
     Preferences.lastUsedList = listID;
   }
 
-  Stream<DocumentSnapshot> listStream;
-
-  void setListStream() {
-    listStream = (_currentList != 'No lists yet')
-        ? FirebaseFirestore.instance
-            .collection('lists')
-            .doc(_currentList)
-            .snapshots()
-        : null;
-  }
-
+  /// Name of the currently active list, for example: `Costco`.
   String get currentListName {
     if (lists.isNotEmpty && lists.keys.contains(currentList)) {
       _currentListName = lists[currentList]['listName'];
@@ -86,85 +49,8 @@ class FirestoreUser extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> _aisles = [];
-
-  /// The aisles by which list items are grouped.
-  List<String> get aisles => _aisles;
-
-  Future<void> _getAislesData() async {
-    if (lists.isNotEmpty && _aisles.isEmpty) {
-      List<String> currentListAisles =
-          List<String>.from(lists[currentList]['aisles']);
-      if (currentListAisles != null) _aisles = currentListAisles;
-    }
-    if (_aisles.isEmpty) {
-      _aisles.add('Unsorted');
-    }
-    return null;
-  }
-
-  Future<void> addAisle({@required String newAisle}) async {
-    if (!_aisles.contains(newAisle)) {
-      _aisles.add(newAisle);
-      _aisles.sort();
-      FirebaseFirestore.instance
-          .collection('lists')
-          .doc(currentList)
-          .update({'aisles': _aisles});
-      notifyListeners();
-    }
-  }
-
-  Future<void> removeAisle({@required String aisle}) async {
-    _aisles.remove(aisle);
-    FirebaseFirestore.instance.collection('lists').doc(currentList).set(
-      {'aisles': _aisles},
-      SetOptions(merge: true),
-    );
-    notifyListeners();
-  }
-
-  /// Populate the inital data the main app screen will need.
-  Future<bool> setInitialData() async {
-    // await _setEmulator();
-    await Preferences.initPrefs();
-    // Check what lists the user has, if any.
-    await getCurrentLists();
-    _loadInitialCurrentList();
-    setListStream();
-    _getAislesData();
-    return true;
-  }
-
-  void _loadInitialCurrentList() {
-    if (lists.length > 0) {
-      // Check for a stored 'last used list'.
-      var lastUsedList = Preferences.lastUsedList;
-      var listIDs = [];
-      lists.forEach((key, value) => listIDs.add(key));
-      if (listIDs.contains(lastUsedList)) {
-        _currentList = lastUsedList;
-      } else {
-        // We have to set a list so widgets
-        // don't throw errors by loading nothing.
-        _currentList = lists.keys.first;
-      }
-    } else {
-      // No stored lists.
-      _currentList = 'No lists yet';
-    }
-  }
-
-  Future<void> _setEmulator() async {
-    String host = defaultTargetPlatform == TargetPlatform.android
-        ? '10.0.2.2:8080'
-        : 'localhost:8080';
-    FirebaseFirestore.instance.settings =
-        Settings(host: host, sslEnabled: false);
-    return;
-  }
-
-  Future<void> getCurrentLists() async {
+  /// Fetch data from Firebase for every list user has access to.
+  Future<void> fetchListsData() async {
     var uid = Globals.user.uid;
     var query = await FirebaseFirestore.instance
         .collection('lists')
@@ -176,5 +62,133 @@ class FirestoreUser extends ChangeNotifier {
     });
     notifyListeners();
     return null;
+  }
+
+  void deleteList(String listID) {
+    FirebaseFirestore.instance.collection('lists').doc(listID).delete();
+    lists.remove(listID);
+    if (currentList == listID) currentList = '';
+    notifyListeners();
+  }
+
+  /// The stream `ListScreen()`'s StreamBuilder listens to in order
+  /// to build the main list UI. Updates automatically with new items.
+  Stream<DocumentSnapshot> listStream;
+
+  void _setListStream() {
+    listStream = (_currentList != 'No lists yet')
+        ? FirebaseFirestore.instance
+            .collection('lists')
+            .doc(_currentList)
+            .snapshots()
+        : null;
+  }
+
+  /// The aisles by which list items are grouped.
+  List<String> get aisles => _aisles;
+
+  List<String> _aisles = [];
+
+  /// Populate _aisles with data for the active list.
+  Future<void> _getAislesData() async {
+    if (lists.isNotEmpty) {
+      _aisles.clear();
+      var currentListAisles = List<String>.from(lists[currentList]['aisles']);
+      if (currentListAisles != null) _aisles = currentListAisles;
+    }
+    if (_aisles.isEmpty) _aisles.add('Unsorted');
+    return null;
+  }
+
+  void addAisle({@required String newAisle}) {
+    if (!_aisles.contains(newAisle)) {
+      _aisles.add(newAisle);
+      _aisles.sort();
+      FirebaseFirestore.instance
+          .collection('lists')
+          .doc(currentList)
+          .update({'aisles': _aisles});
+      notifyListeners();
+    }
+  }
+
+  void updateAisle({@required String item, String aisle}) {
+    lists[currentList]['items'][item]['aisle'] = aisle;
+    FirebaseFirestore.instance.collection('lists').doc(currentList).set(
+      {
+        'items': {
+          item: {'aisle': aisle},
+        },
+      },
+      SetOptions(merge: true),
+    );
+    notifyListeners();
+  }
+
+  void removeAisle({@required String aisle}) {
+    _aisles.remove(aisle);
+    // Grab the item data with correct type so we can update all item aisles.
+    var items = lists[currentList]['items'];
+    items.forEach((key, value) {
+      if (!_aisles.contains(value['aisle'])) value['aisle'] = 'Unsorted';
+    });
+    var fireStore =
+        FirebaseFirestore.instance.collection('lists').doc(currentList);
+    // Update the aisles for the list on Firebase.
+    fireStore.set(
+      {'aisles': _aisles},
+      SetOptions(merge: true),
+    );
+    // Update the aisles for the items in the list on Firebase.
+    fireStore.set(
+      {'items': items},
+      SetOptions(merge: true),
+    );
+    notifyListeners();
+  }
+
+  /// Populate the inital data the main app screen will need.
+  ///
+  /// This is called on app startup to pre-load important data.
+  Future<bool> setInitialData() async {
+    // await _setEmulator();  // Enable to use local Firebase emulator.
+    await Preferences.initPrefs();
+    // Check what lists the user has, if any.
+    await fetchListsData();
+    _loadInitialCurrentList();
+    _setListStream();
+    _getAislesData();
+    return true;
+  }
+
+  /// On startup, if any lists exist we set one as 'current' or active.
+  void _loadInitialCurrentList() {
+    if (lists.length > 0) {
+      // Check for a stored 'last used list'.
+      var lastUsedList = Preferences.lastUsedList;
+      var listIDs = [];
+      lists.forEach((key, value) => listIDs.add(key));
+      if (listIDs.contains(lastUsedList)) {
+        _currentList = lastUsedList;
+      } else {
+        // Current list from Preferences doesn't exist, but..
+        // We have to set a list so widgets
+        // don't throw errors by loading nothing.
+        _currentList = lists.keys.first;
+      }
+    } else {
+      // No lists found.
+      _currentList = 'No lists yet';
+    }
+  }
+
+  /// Enable settings so the app will use the local Firebase emulator.
+  Future<void> _setEmulator() async {
+    String host = defaultTargetPlatform == TargetPlatform.android
+        ? '10.0.2.2:8080'
+        : 'localhost:8080';
+    FirebaseFirestore.instance.settings =
+        Settings(host: host, sslEnabled: false);
+    return;
   }
 }

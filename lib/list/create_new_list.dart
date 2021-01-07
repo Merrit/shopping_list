@@ -20,7 +20,7 @@ Future<void> createNewList(
     SetOptions(merge: true),
   );
 
-  await user.getCurrentLists();
+  await user.fetchListsData();
 
   if (user.lists.length == 1) {
     user.currentList = user.lists.keys.first;

@@ -58,13 +58,15 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                           .currentList = list.key;
                       setState(() => Navigator.pop(context));
                     },
-                    onLongPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ListDetailsScreen(listID: list.key)));
-                    },
+                    // This should only be available once active maybe?
+                    // Or before pushing we could set it active..
+                    // onLongPress: () {
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) =>
+                    //               ListDetailsScreen(listID: list.key)));
+                    // },
                   );
                 }).toList(),
               ),
