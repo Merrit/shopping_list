@@ -73,7 +73,7 @@ class ListApp extends StatelessWidget {
           Routes.createEmailAccountScreen: (context) =>
               CreateEmailAccountScreen(),
           Routes.listScreen: (context) => ListScreen(),
-          Routes.loadingScreen: (context) => Loading(),
+          Routes.loadingScreen: (context) => LoadingScreen(),
         },
         initialRoute: Routes.loadingScreen,
       ),

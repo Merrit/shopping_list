@@ -9,12 +9,12 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/list_screen.dart';
 
-class Loading extends StatefulWidget {
+class LoadingScreen extends StatefulWidget {
   @override
-  _LoadingState createState() => _LoadingState();
+  _LoadingScreenState createState() => _LoadingScreenState();
 }
 
-class _LoadingState extends State<Loading> {
+class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
