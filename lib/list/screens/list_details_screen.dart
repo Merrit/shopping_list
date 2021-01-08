@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
@@ -28,8 +27,6 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
     listID = widget.listID;
     listInfo = firestoreUser.lists[listID];
     listName = listInfo['listName'];
-    // listName =
-    // Provider.of<FirestoreUser>(context, listen: false).currentListName;
   }
 
   @override
@@ -67,30 +64,8 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
                             sharedTiles.add(Text(key));
                           });
                         }
-                        // snapshot.data.forEach((key, value) {
-                        //   sharedTiles.add(ListTile(title: Text(key)));
-                        // });
                         return Column(children: sharedTiles);
                       }),
-                      // FutureBuilder(
-                      //   future: firestoreUser.listSharedWith,
-                      //   builder:
-                      //       (context, AsyncSnapshot<List<String>> snapshot) {
-                      //     if (!snapshot.hasData) {
-                      //       return Container();
-                      //     }
-                      //     return (snapshot.data.length > 0)
-                      //         ? Builder(builder: (context) {
-                      //             List<Widget> sharedTiles = [];
-                      //             snapshot.data.forEach((element) {});
-                      //             // snapshot.data.forEach((key, value) {
-                      //             //   sharedTiles.add(ListTile(title: Text(key)));
-                      //             // });
-                      //             return Column(children: sharedTiles);
-                      //           })
-                      //         : Text('Not shared');
-                      //   },
-                      // ),
                       TextButton(
                         child: Text('Add person'),
                         onPressed: () {
@@ -159,15 +134,7 @@ Future<String> _shareList(
   String currentUserEmail = Globals.user.email;
   if ((currentUserEmail != null) && (email != currentUserEmail)) {
     FirestoreUser user = Provider.of<FirestoreUser>(context, listen: false);
-    var allowedUsers = user.lists[user.currentList]['allowedUsers'];
-    // List<String> foundAccounts;
-    // try {
-    //   foundAccounts =
-    //       await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-    // } on FirebaseAuthException catch (e) {
-    //   if (e.code == 'invalid-email') return 'invalid-email';
-    // }
-    // if (foundAccounts.length == 1) {
+    // var allowedUsers = user.lists[user.currentList]['allowedUsers'];
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     var query = await firestore
         .collection('users')
@@ -187,22 +154,7 @@ Future<String> _shareList(
     } else {
       return 'multiple-accounts';
     }
-
-    // }
-
-    // Provider.of<FirestoreUser>(context, listen: false)
-    //     .currentListReference
-    //     .update({'allowedUsers': email});
   }
-
-  // List<String> myList =
-  //     await FirebaseAuth.instance.;
-
-  // var myquery = await FirebaseFirestore.instance
-  //     .collection('users')
-  //     .where('email', isEqualTo: email)
-  //     .;
-  var end = 'end';
 }
 
 class SettingsTile extends StatelessWidget {

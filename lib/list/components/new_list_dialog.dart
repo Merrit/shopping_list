@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/create_new_list.dart';
 
 class NewListDialog extends StatefulWidget {

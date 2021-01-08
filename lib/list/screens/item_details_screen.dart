@@ -6,10 +6,8 @@ import 'package:shopping_list/list/screens/aisles_screen.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> item;
-  // final DocumentSnapshot document;
 
   ItemDetailsScreen({@required this.item});
-  // ItemDetailsScreen({@required this.document});
 
   @override
   _ItemDetailsScreenState createState() => _ItemDetailsScreenState();
@@ -18,15 +16,12 @@ class ItemDetailsScreen extends StatefulWidget {
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   Map<String, dynamic> item;
   String selectedAisle;
-  // DocumentReference document;
 
   @override
   void initState() {
     super.initState();
-    // document = widget.document.reference;
     item = widget.item;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
-    // selectedAisle = widget.document.data()['aisle'];
   }
 
   @override
@@ -49,7 +44,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         ['items'][item['itemName']]['aisle'],
                     onChanged: (value) {
                       setState(() {
-                        // selectedAisle = value;
                         item['aisle'] = value;
                         Provider.of<FirestoreUser>(context, listen: false)
                             .updateAisle(item: item['itemName'], aisle: value);
@@ -60,31 +54,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
-                        // onTap: () => aisle = value,
                       );
                     }).toList(),
                   );
                 },
-                // child: DropdownButton<String>(
-                //   hint: Text('Aisle (optional)'),
-                //   value: selectedAisle,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       selectedAisle = value;
-                //       item['aisle'] = value;
-                //       Provider.of<FirestoreUser>(context, listen: false)
-                //           .updateAisle(item: item['itemName'], aisle: value);
-                //     });
-                //   },
-                //   items:
-                //       user.aisles.map<DropdownMenuItem<String>>((String value) {
-                //     return DropdownMenuItem<String>(
-                //       value: value,
-                //       child: Text(value),
-                //       // onTap: () => aisle = value,
-                //     );
-                //   }).toList(),
-                // ),
               ),
               IconButton(
                 icon: Icon(Icons.settings),

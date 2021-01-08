@@ -21,13 +21,4 @@ void addListItem(
     },
     SetOptions(merge: true),
   );
-
-  //   .Provider
-  //   .of<FirestoreUser>(context, listen: false)
-  //   .currentListReference
-  //   .collection('items')
-  //   .add({
-  // 'itemName': itemName,
-  // 'aisle': _aisle,
-  // });
 }

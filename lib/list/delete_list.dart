@@ -7,16 +7,8 @@ import 'package:shopping_list/list/list_screen.dart';
 /// Deletes a list document in Firebase.
 deleteList({@required BuildContext context, @required String listID}) {
   FirestoreUser user = Provider.of<FirestoreUser>(context, listen: false);
+
   user.deleteList(listID);
-  // FirebaseFirestore.instance.collection('lists').doc(listID).delete();
-
-  // user.lists.remove(listID);
-
-  // // user.removeListName(listID);
-
-  // if (user.currentList == listID) user.currentList = '';
-
-  // Navigator.pop(context);
 
   Navigator.pushReplacement(
     context,

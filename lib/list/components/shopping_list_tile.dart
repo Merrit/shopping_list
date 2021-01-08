@@ -1,18 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
 
 /// The tile that represents each item in the main list screen.
 class ShoppingListTile extends StatefulWidget {
   final Map<String, dynamic> item;
-  // final DocumentSnapshot document;
-  // final String item;
 
   ShoppingListTile({@required this.item});
-
-  // ShoppingListTile({
-  //   @required this.document,
-  // }) : this.item = document.data()['itemName'];
 
   @override
   _ShoppingListTileState createState() => _ShoppingListTileState();

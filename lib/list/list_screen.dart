@@ -61,7 +61,6 @@ class _ListScreenState extends State<ListScreen> {
               ],
             ),
           ),
-          // if (firestoreUser.listItems != null)
           StreamBuilder<DocumentSnapshot>(
             stream: firestoreUser.listStream,
             // ignore: missing_return
@@ -103,36 +102,6 @@ class _ListScreenState extends State<ListScreen> {
               return Container();
             },
           ),
-          // if (firestoreUser.listItems != null)
-          //   StreamBuilder<QuerySnapshot>(
-          //     stream: Provider.of<FirestoreUser>(context).listItems.snapshots(),
-          //     builder: (BuildContext context,
-          //         AsyncSnapshot<QuerySnapshot> snapshot) {
-          //       if (snapshot.hasError) {
-          //         return Text('Something went wrong');
-          //       }
-
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return Text('Loading');
-          //       }
-
-          //       return Expanded(
-          //         child: GroupedListView<dynamic, String>(
-          //           elements: snapshot.data.docs,
-          //           groupBy: (document) => document.data()['aisle'],
-          //           groupSeparatorBuilder: (String groupByValue) =>
-          //               AisleHeader(aisle: groupByValue),
-          //           itemBuilder: (context, dynamic document) =>
-          //               ShoppingListTile(document: document),
-          //           // separator: Divider(),
-          //           // itemComparator: , // optional
-          //           useStickyGroupSeparators: false, // optional
-          //           floatingHeader: false, // optional
-          //           order: GroupedListOrder.ASC, // optional
-          //         ),
-          //       );
-          //     },
-          //   ),
         ],
       ),
       floatingActionButton:
