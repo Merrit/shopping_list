@@ -1,156 +1,115 @@
 import 'package:flutter/material.dart';
 
-class ShoppingList extends StatefulWidget {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:provider/provider.dart';
+
+import 'package:shopping_list/firestore/firestore_user.dart';
+import 'package:shopping_list/list/components/aisle_header.dart';
+import 'package:shopping_list/list/components/drawer.dart';
+import 'package:shopping_list/list/components/drawer_provider.dart';
+import 'package:shopping_list/list/components/floating_add_list_item_button.dart';
+import 'package:shopping_list/list/components/shopping_list_tile.dart';
+import 'package:shopping_list/list/screens/list_details_screen.dart';
+
+/// The main app screen that contains the shopping list.
+class ListScreen extends StatefulWidget {
   @override
-  _ShoppingListState createState() => _ShoppingListState();
+  _ListScreenState createState() => _ListScreenState();
 }
 
-class _ShoppingListState extends State<ShoppingList> {
-  int itemCount;
-  List<Widget> listItems = [ListItem()];
-
+class _ListScreenState extends State<ListScreen> {
   @override
   Widget build(BuildContext context) {
+    FirestoreUser firestoreUser = Provider.of<FirestoreUser>(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Shopping List"), centerTitle: true),
+      appBar: AppBar(
+          title: Consumer<FirestoreUser>(builder: (context, user, child) {
+            return GestureDetector(
+              child: Text(user.currentListName),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ListDetailsScreen(listID: user.currentList)),
+              ),
+            );
+          }),
+          centerTitle: true),
+      drawer: ChangeNotifierProvider(
+        create: (context) => DrawerProvider(),
+        child: ShoppingDrawer(),
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 8.0,
-                left: 8.0,
-                right: 8.0,
-                bottom: 2.0,
-              ),
-              child: ListView(
-                children: listItems,
-              ),
+          Container(
+            padding: EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 5,
+              bottom: 5,
+            ),
+            child: Row(
+              children: [
+                Expanded(flex: 3, child: Text('Item')),
+                Expanded(flex: 1, child: Text('#')),
+                Expanded(flex: 1, child: Text('\$ ea.')),
+                Expanded(flex: 1, child: Text('\$ total')),
+                Expanded(flex: 1, child: Container()),
+              ],
             ),
           ),
-          // ModalBottomSheetLauncher(),
-        ],
-      ),
-    );
-  }
-}
+          StreamBuilder<DocumentSnapshot>(
+            stream: firestoreUser.listStream,
+            // ignore: missing_return
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Something went wrong');
+              }
 
-class ListItem extends StatelessWidget {
-  var itemColor = Colors.blue;
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text('Loading');
+              }
 
-  var myDiag = AlertDialog(
-    title: Text('Reset settings?'),
-    content:
-        Text('This will reset your device to its default factory settings.'),
-    actions: [
-      FlatButton(
-        textColor: Color(0xFF6200EE),
-        onPressed: () {},
-        child: Text('CANCEL'),
-      ),
-      FlatButton(
-        textColor: Color(0xFF6200EE),
-        onPressed: () {},
-        child: Text('ACCEPT'),
-      ),
-    ],
-  );
+              if (snapshot.connectionState == ConnectionState.active) {
+                Map<String, dynamic> listData = snapshot.data.data();
+                List<Map<String, dynamic>> listItems = [];
+                if (listData['items'] != null) {
+                  listData['items'].forEach((key, value) {
+                    listItems.add(value);
+                  });
+                }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        color: itemColor,
-        height: 35,
-        width: double.infinity,
-      ),
-    );
-  }
-}
-
-/* 
-() async {
-        await showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Message'),
-            content: Text('Your file is saved.'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pop(); // dismisses only the dialog and returns nothing
-                },
-                child: new Text('OK'),
-              ),
-            ],
+                return Expanded(
+                  child: GroupedListView<dynamic, String>(
+                    elements: listItems,
+                    groupBy: (item) => item['aisle'],
+                    groupSeparatorBuilder: (String groupByValue) =>
+                        AisleHeader(aisle: groupByValue),
+                    itemBuilder: (context, dynamic item) =>
+                        ShoppingListTile(item: item),
+                    // separator: Divider(),
+                    // itemComparator: , // optional
+                    useStickyGroupSeparators: false, // optional
+                    floatingHeader: false, // optional
+                    order: GroupedListOrder.ASC, // optional
+                  ),
+                );
+              }
+              return Container();
+            },
           ),
-        );
-      } */
-
-/* 
-class ModalBottomSheetLauncher extends StatelessWidget {
-  const ModalBottomSheetLauncher({
-    Key key,
-  }) : super(key: key);
-
-  static const BoxDecoration bottomSheetDecoration = BoxDecoration(
-    color: Colors.blue,
-    borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(30),
-      topRight: Radius.circular(30),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        width: double.infinity,
-        height: 50,
-        decoration: bottomSheetDecoration,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add),
-            Text('New Item'),
-          ],
-        ),
-      ),
-      onTap: () {
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return ShoppingModalBottomSheet(
-                bottomSheetDecoration: bottomSheetDecoration,
-              );
-            });
-      },
-    );
-  }
-}
-
-class ShoppingModalBottomSheet extends StatelessWidget {
-  const ShoppingModalBottomSheet({
-    Key key,
-    this.bottomSheetDecoration,
-  }) : super(key: key);
-
-  final BoxDecoration bottomSheetDecoration;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: bottomSheetDecoration,
-      height: 500,
-      child: Column(
-        children: [
-          TextField(),
         ],
       ),
+      floatingActionButton:
+          Consumer<FirestoreUser>(builder: (context, user, child) {
+        return (user.currentListName == 'No lists yet')
+            ? Container()
+            : FloatingAddListItemButton();
+      }),
     );
   }
 }
- */
