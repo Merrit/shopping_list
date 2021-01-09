@@ -12,7 +12,6 @@ Future<String> signInWithEmail(
   try {
     userCredential = await Globals.auth
         .signInWithEmailAndPassword(email: email, password: password);
-    // Globals.user = userCredential.user;
     result = 'success';
   } catch (e) {
     result = e.code;
