@@ -24,6 +24,7 @@ Future<String> signInWithEmail(
         Globals.user = userCredential.user;
         return result;
       } else {
+        Globals.auth.signOut();
         return 'email-not-verified';
       }
       break;

@@ -14,8 +14,8 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String _emailErrorText = null;
-  String _passwordErrorText = null;
+  String _emailErrorText;
+  String _passwordErrorText;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +39,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
                         errorText: _emailErrorText,
                       ),
                       onTap: () {
-                        setState(() {
-                          _emailErrorText = null;
-                        });
+                        setState(() => _emailErrorText = null);
                       },
                       onFieldSubmitted: (value) => _signIn(context),
                     ),
@@ -70,9 +68,10 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
             Spacer(),
             TextButton(
               child: Text('Create account'),
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.createEmailAccountScreen);
-              },
+              onPressed: () => Navigator.pushNamed(
+                context,
+                Routes.createEmailAccountScreen,
+              ),
             ),
           ],
         ),
@@ -143,7 +142,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
             ),
             TextButton(
               child: Text('Ok'),
-              onPressed: () => RestartWidget.restartApp(context),
+              onPressed: () => Navigator.pop(context),
             ),
           ],
         );
