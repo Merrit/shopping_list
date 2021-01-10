@@ -44,7 +44,6 @@ class _AddItemDialogState extends State<AddItemDialog> {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
-                        // onTap: () => aisle = value,
                       );
                     }).toList(),
                   );
