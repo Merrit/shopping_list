@@ -9,9 +9,6 @@ class CreateEmailAccountScreen extends StatefulWidget {
       _CreateEmailAccountScreenState();
 }
 
-// TODO: This and email_signin_screen.dart can probably be combined,
-// with a conditional on which column of elements is shown or similar.
-// This would reduce duplicate code and complexity.
 class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   final GlobalKey<FormState> _createEmailAccountFormKey =
       GlobalKey<FormState>();
@@ -28,69 +25,79 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   String password = '';
   String confirmedPassword = '';
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Create account')),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Form(
-          key: _createEmailAccountFormKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  errorText: _emailErrorText,
-                ),
-                onTap: () {
-                  setState(() {
-                    _emailErrorText = null;
-                  });
-                },
-                onChanged: (value) => email = value,
-                // Having onFieldSubmitted enabled causes the web
-                // version to fail to sign in at all in any way.
-                onFieldSubmitted: (value) => _signUp(context: context),
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Form(
+              key: _createEmailAccountFormKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      errorText: _emailErrorText,
+                    ),
+                    onTap: () {
+                      setState(() => _emailErrorText = null);
+                    },
+                    onChanged: (value) => email = value,
+                    onFieldSubmitted: (value) => _signUp(context: context),
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      errorText: _passwordErrorText,
+                    ),
+                    onTap: () {
+                      setState(() => _passwordErrorText = null);
+                    },
+                    onChanged: (value) => password = value,
+                    onFieldSubmitted: (value) => _signUp(context: context),
+                  ),
+                  TextFormField(
+                    controller: _passwordConfirmController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm password',
+                      errorText: _passwordConfirmErrorText,
+                    ),
+                    onTap: () {
+                      setState(() => _passwordConfirmErrorText = null);
+                    },
+                    onChanged: (value) => confirmedPassword = value,
+                    onFieldSubmitted: (value) => _signUp(context: context),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Text('A validation email will be '
+                        'sent to the address you provide'),
+                  ),
+                  ElevatedButton(
+                    child: Text('Sign up'),
+                    onPressed: () => _signUp(context: context),
+                  ),
+                ],
               ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  errorText: _passwordErrorText,
-                ),
-                onTap: () {
-                  setState(() {
-                    _passwordErrorText = null;
-                  });
-                },
-                onChanged: (value) => password = value,
-                onFieldSubmitted: (value) => _signUp(context: context),
-              ),
-              TextFormField(
-                controller: _passwordConfirmController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Confirm password',
-                  errorText: _passwordConfirmErrorText,
-                ),
-                onTap: () {
-                  setState(() {
-                    _passwordConfirmErrorText = null;
-                  });
-                },
-                onChanged: (value) => confirmedPassword = value,
-                onFieldSubmitted: (value) => _signUp(context: context),
-              ),
-              ElevatedButton(
-                child: Text('Sign up'),
-                onPressed: () => _signUp(context: context),
-              ),
-            ],
+            ),
           ),
-        ),
+          isLoading
+              ? Container(
+                  padding: EdgeInsets.all(30),
+                  color: Colors.black.withOpacity(0.5),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Container(),
+        ],
       ),
     );
   }
@@ -109,7 +116,9 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
       return;
     }
     if (password == confirmedPassword) {
+      setState(() => isLoading = true);
       var result = await createEmailAccount(email: email, password: password);
+      setState(() => isLoading = false);
       switch (result) {
         case 'success':
           notifyEmailSent(context);

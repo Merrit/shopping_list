@@ -1,8 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/new_list_dialog.dart';
+import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/main.dart';
 
 class ShoppingDrawer extends StatefulWidget {
@@ -13,10 +16,6 @@ class ShoppingDrawer extends StatefulWidget {
 class _ShoppingDrawerState extends State<ShoppingDrawer> {
   @override
   Widget build(BuildContext context) {
-    FirestoreUser firestoreUser =
-        Provider.of<FirestoreUser>(context, listen: false);
-    String currentList = firestoreUser.currentListName;
-
     return Drawer(
         child: SafeArea(
       child: Column(
@@ -49,19 +48,19 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                   return ListTile(
                     title: Center(child: Text(list.value['listName'])),
                     onTap: () {
-                      Provider.of<FirestoreUser>(context, listen: false)
-                          .currentList = list.key;
+                      user.currentList = list.key;
                       setState(() => Navigator.pop(context));
                     },
-                    // This should only be available once active maybe?
-                    // Or before pushing we could set it active..
-                    // onLongPress: () {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               ListDetailsScreen(listID: list.key)));
-                    // },
+                    onLongPress: () {
+                      user.currentList = list.key;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ListDetailsScreen(listID: list.key),
+                        ),
+                      );
+                    },
                   );
                 }).toList(),
               ),

@@ -12,7 +12,6 @@ Future<String> signInWithEmail(
   try {
     userCredential = await Globals.auth
         .signInWithEmailAndPassword(email: email, password: password);
-    // Globals.user = userCredential.user;
     result = 'success';
   } catch (e) {
     result = e.code;
@@ -24,6 +23,7 @@ Future<String> signInWithEmail(
         Globals.user = userCredential.user;
         return result;
       } else {
+        Globals.auth.signOut();
         return 'email-not-verified';
       }
       break;
