@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/aisle_header.dart';
 import 'package:shopping_list/list/components/drawer.dart';
-import 'package:shopping_list/list/components/drawer_provider.dart';
 import 'package:shopping_list/list/components/floating_add_list_item_button.dart';
 import 'package:shopping_list/list/components/shopping_list_tile.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
@@ -37,10 +36,7 @@ class _ListScreenState extends State<ListScreen> {
             );
           }),
           centerTitle: true),
-      drawer: ChangeNotifierProvider(
-        create: (context) => DrawerProvider(),
-        child: ShoppingDrawer(),
-      ),
+      drawer: ShoppingDrawer(),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
