@@ -12,7 +12,16 @@ class ShoppingListTile extends StatefulWidget {
 }
 
 class _ShoppingListTileState extends State<ShoppingListTile> {
+  Map<String, dynamic> item;
+  String itemName;
   bool isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    item = widget.item;
+    itemName = item['itemName'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +31,13 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ItemDetailsScreen(item: widget.item)));
+                  builder: (context) => ItemDetailsScreen(item: item)));
         },
         child: Column(
           children: [
             Row(
               children: [
-                Expanded(flex: 3, child: Text(widget.item['itemName'])),
+                Expanded(flex: 3, child: Text(itemName)),
                 Expanded(flex: 1, child: Text('')), // #
                 Expanded(flex: 1, child: Text('')), // $
                 Expanded(flex: 1, child: Text('')), // $ total
