@@ -21,6 +21,7 @@ class _ListScreenState extends State<ListScreen> {
   @override
   Widget build(BuildContext context) {
     FirestoreUser firestoreUser = Provider.of<FirestoreUser>(context);
+    var items = firestoreUser.lists[firestoreUser.currentList]['items'];
 
     return Scaffold(
       appBar: AppBar(
@@ -30,8 +31,9 @@ class _ListScreenState extends State<ListScreen> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ListDetailsScreen(listID: user.currentList)),
+                  builder: (context) =>
+                      ListDetailsScreen(listID: user.currentList),
+                ),
               ),
             );
           }),
@@ -40,26 +42,26 @@ class _ListScreenState extends State<ListScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: EdgeInsets.only(
-              left: 10,
-              right: 10,
-              top: 5,
-              bottom: 5,
+          if (items != null && items.length > 0)
+            Container(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5,
+              ),
+              child: Row(
+                children: [
+                  Expanded(flex: 3, child: Text('Item')),
+                  Expanded(flex: 1, child: Text('#')),
+                  Expanded(flex: 1, child: Text('\$ ea.')),
+                  Expanded(flex: 1, child: Text('\$ total')),
+                  Expanded(flex: 1, child: Container()),
+                ],
+              ),
             ),
-            child: Row(
-              children: [
-                Expanded(flex: 3, child: Text('Item')),
-                Expanded(flex: 1, child: Text('#')),
-                Expanded(flex: 1, child: Text('\$ ea.')),
-                Expanded(flex: 1, child: Text('\$ total')),
-                Expanded(flex: 1, child: Container()),
-              ],
-            ),
-          ),
           StreamBuilder<DocumentSnapshot>(
             stream: firestoreUser.listStream,
-            // ignore: missing_return
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasError) {
