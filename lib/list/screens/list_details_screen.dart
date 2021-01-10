@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/delete_list.dart';
+import 'package:shopping_list/list/share_list.dart';
 
 class ListDetailsScreen extends StatefulWidget {
   final String listID;
@@ -109,7 +110,7 @@ class _AddShareDialogState extends State<AddShareDialog> {
         autofocus: true,
         controller: _shareToEmailController,
         decoration: InputDecoration(hintText: 'Email of user to share with'),
-        onFieldSubmitted: (value) => _shareList(context: context, email: value),
+        onFieldSubmitted: (value) => shareList(context: context, email: value),
       ),
       actions: [
         TextButton(
@@ -119,41 +120,10 @@ class _AddShareDialogState extends State<AddShareDialog> {
         TextButton(
           child: Text('Confirm'),
           onPressed: () =>
-              _shareList(context: context, email: _shareToEmailController.text),
+              shareList(context: context, email: _shareToEmailController.text),
         ),
       ],
     );
-  }
-}
-
-/// Check if the provided email is associated with an existing user account, if
-/// yes then give that account permission to use this list.
-Future<String> _shareList(
-    {@required BuildContext context, @required String email}) async {
-  // Check not current user
-  String currentUserEmail = Globals.user.email;
-  if ((currentUserEmail != null) && (email != currentUserEmail)) {
-    FirestoreUser user = Provider.of<FirestoreUser>(context, listen: false);
-    // var allowedUsers = user.lists[user.currentList]['allowedUsers'];
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    var query = await firestore
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .get();
-    if (query.docs.length == 1) {
-      Map<String, dynamic> accountInfo = query.docs.first.data();
-      var uid = accountInfo['uid'];
-      firestore.collection('lists').doc(user.currentList).set(
-        {
-          'sharedWith': {email: uid},
-          'allowedUsers': {uid: true},
-        },
-        SetOptions(merge: true),
-      );
-      return 'success';
-    } else {
-      return 'multiple-accounts';
-    }
   }
 }
 
