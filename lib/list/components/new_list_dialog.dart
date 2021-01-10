@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:shopping_list/helpers/capitalize_string.dart';
 import 'package:shopping_list/list/create_new_list.dart';
 
 class NewListDialog extends StatefulWidget {
@@ -46,6 +48,7 @@ class _NewListDialogState extends State<NewListDialog> {
   }
 
   _createList(String listName) {
+    listName = listName.capitalizeFirstOfEach;
     if (listName == '') {
       setState(() {
         newListErrorText = 'Choose a list name';
