@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
+import 'package:shopping_list/list/screens/list_screen.dart';
 
 /// The tile that represents each item in the main list screen.
 class ShoppingListTile extends StatefulWidget {
@@ -14,7 +16,6 @@ class ShoppingListTile extends StatefulWidget {
 class _ShoppingListTileState extends State<ShoppingListTile> {
   Map<String, dynamic> item;
   String itemName;
-  bool isChecked = false;
 
   @override
   void initState() {
@@ -31,7 +32,8 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ItemDetailsScreen(item: item)));
+                builder: (context) => ItemDetailsScreen(item: item),
+              ));
         },
         child: Column(
           children: [
@@ -42,14 +44,21 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                 Expanded(flex: 1, child: Text('')), // $
                 Expanded(flex: 1, child: Text('')), // $ total
                 Expanded(
-                    flex: 1,
-                    child: Checkbox(
-                        value: isChecked,
+                  flex: 1,
+                  child: Consumer<ListItems>(
+                    builder: (context, listItems, widget) {
+                      return Checkbox(
+                        value: listItems.checkedItems[itemName],
                         onChanged: (value) {
-                          setState(() {
-                            isChecked = value;
-                          });
-                        })),
+                          listItems.setItemState(
+                            itemName: itemName,
+                            value: value,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
             )
           ],
