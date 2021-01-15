@@ -106,10 +106,13 @@ class _ListScreenState extends State<ListScreen> {
                       groupSeparatorBuilder: (String groupByValue) =>
                           AisleHeader(aisle: groupByValue),
                       itemBuilder: (context, dynamic item) {
-                        listItemState.setItemState(
-                          itemName: item['itemName'],
-                          value: false,
-                        );
+                        var itemName = item['itemName'];
+                        if (!listItemState.checkedItems.containsKey(itemName)) {
+                          listItemState.setItemState(
+                            itemName: itemName,
+                            value: false,
+                          );
+                        }
                         return ShoppingListTile(item: item);
                       },
                       // separator: Divider(),
@@ -172,9 +175,11 @@ class ListItems extends ChangeNotifier {
     return _checkedItems;
   }
 
-  void setItemState({@required String itemName, @required bool value}) {
+  void setItemState(
+      {@required String itemName,
+      @required bool value,
+      bool isUpdate = false}) {
     assert(itemName != null && value != null);
-    bool isUpdate = (_checkedItems.containsKey(itemName)) ? true : false;
     _checkedItems[itemName] = value;
     if (isUpdate) notifyListeners();
   }

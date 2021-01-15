@@ -53,6 +53,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                           listItems.setItemState(
                             itemName: itemName,
                             value: value,
+                            isUpdate: true,
                           );
                         },
                       );
