@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/helpers/capitalize_string.dart';
 import 'package:shopping_list/preferences.dart';
 
 /// [FirestoreUser] is the Provider-powered hub that handles Firebase data.
@@ -10,6 +13,73 @@ class FirestoreUser extends ChangeNotifier {
   ///
   /// Takes the form of `{listUID: dynamic}`.
   Map<String, dynamic> lists = {};
+
+  /// Add a new item to the current shopping list.
+  void addListItem({@required String itemName, String aisle}) {
+    var _aisle = aisle ?? 'Unsorted';
+    itemName = itemName.capitalizeFirst;
+    var _newItem = {
+      'itemName': itemName,
+      'aisle': _aisle,
+      'isComplete': false,
+    };
+    // Add to Firebase.
+    FirebaseFirestore.instance.collection('lists').doc(currentList).set(
+      {
+        'items': {itemName: _newItem}
+      },
+      SetOptions(merge: true),
+    );
+    // Add to local cache.
+    lists[currentList]['items'][itemName] = _newItem;
+    // Make sure this isn't in completedItems already.
+    // This could be necessary if the user adds a list item of something
+    // they had previously checked off their list.
+    completedItems.remove(itemName);
+    notifyListeners();
+  }
+
+  /// `Map<itemName, bool>` with `bool` representing complete or not.
+  Map<String, dynamic> completedItems = {};
+
+  /// Set the `isComplete` status for completedItems.
+  void setIsComplete({@required Map<String, bool> items}) {
+    // Update local cache of items.
+    items.forEach((itemName, value) {
+      lists[currentList]['items'][itemName]['isComplete'] = value;
+    });
+    // Update completedItems.
+    var _listItems = lists[currentList]['items'];
+    _listItems.forEach((item, value) {
+      if (value['isComplete'] == true) {
+        completedItems[value['itemName']] = value;
+      } else {
+        completedItems.remove(value['itemName']);
+      }
+    });
+    // Update Firebase items.
+    updateItems(items: _listItems);
+    // Notify widgets like Checked Items of changes.
+    notifyListeners();
+  }
+
+  /// Update the entire collection of items at once.
+  void updateItems({@required Map<String, dynamic> items}) {
+    FirebaseFirestore.instance
+        .collection('lists')
+        .doc(currentList)
+        .update({'items': items});
+  }
+
+  void deleteItems({@required List<String> items}) {
+    Map<String, dynamic> _currentItems = lists[currentList]['items'];
+    items.forEach((item) {
+      _currentItems.remove(item);
+      completedItems.remove(item);
+    });
+    updateItems(items: _currentItems);
+    notifyListeners();
+  }
 
   /// The unique id for the current list.
   String get currentList {
@@ -26,10 +96,24 @@ class FirestoreUser extends ChangeNotifier {
     } else {
       _currentList = listID;
     }
+    completedItems.clear();
+    populateCompletedItems();
     _getAislesData();
     _setListStream();
     notifyListeners();
     Preferences.lastUsedList = listID;
+  }
+
+  void populateCompletedItems() {
+    Map<String, dynamic> items;
+    if (lists.length > 0) items = lists[currentList]['items'];
+    if (items != null) {
+      items.forEach((key, value) {
+        if (value['isComplete'] == true) {
+          completedItems[value['itemName']] = value;
+        }
+      });
+    }
   }
 
   /// Name of the currently active list, for example: `Costco`.
@@ -180,6 +264,7 @@ class FirestoreUser extends ChangeNotifier {
       // No lists found.
       _currentList = 'No lists yet';
     }
+    populateCompletedItems();
   }
 
   /// Enable settings so the app will use the local Firebase emulator.

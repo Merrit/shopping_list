@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
-import 'package:shopping_list/list/screens/list_screen.dart';
+import 'package:shopping_list/list/screens/list_items.dart';
 
 /// The tile that represents each item in the main list screen.
 class ShoppingListTile extends StatefulWidget {
   final Map<String, dynamic> item;
 
-  ShoppingListTile({@required this.item});
+  ShoppingListTile({Key key, @required this.item}) : super(key: key);
 
   @override
   _ShoppingListTileState createState() => _ShoppingListTileState();
@@ -52,7 +52,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                         onChanged: (value) {
                           listItems.setItemState(
                             itemName: itemName,
-                            value: value,
+                            isChecked: value,
                             isUpdate: true,
                           );
                         },

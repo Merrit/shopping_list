@@ -9,7 +9,9 @@ import 'package:shopping_list/list/components/aisle_header.dart';
 import 'package:shopping_list/list/components/drawer.dart';
 import 'package:shopping_list/list/components/floating_add_list_item_button.dart';
 import 'package:shopping_list/list/components/shopping_list_tile.dart';
+import 'package:shopping_list/list/screens/completed_items_screen.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
+import 'package:shopping_list/list/screens/list_items.dart';
 
 /// The main app screen that contains the shopping list.
 class ListScreen extends StatefulWidget {
@@ -28,8 +30,10 @@ class _ListScreenState extends State<ListScreen> {
     // Ensure we only initialize once.
     if (!_isInitialized) {
       firestoreUser = Provider.of<FirestoreUser>(context);
-      items = firestoreUser.lists[firestoreUser.currentList]['items'];
-      _isInitialized = true;
+      if (firestoreUser.lists.length > 0) {
+        items = firestoreUser.lists[firestoreUser.currentList]['items'];
+        _isInitialized = true;
+      }
     }
     super.didChangeDependencies();
   }
@@ -105,15 +109,18 @@ class _ListScreenState extends State<ListScreen> {
                       groupBy: (item) => item['aisle'],
                       groupSeparatorBuilder: (String groupByValue) =>
                           AisleHeader(aisle: groupByValue),
+                      // ignore: missing_return
                       itemBuilder: (context, dynamic item) {
                         var itemName = item['itemName'];
                         if (!listItemState.checkedItems.containsKey(itemName)) {
                           listItemState.setItemState(
                             itemName: itemName,
-                            value: false,
+                            isChecked: false,
                           );
                         }
-                        return ShoppingListTile(item: item);
+                        if (item['isComplete'] != true) {
+                          return ShoppingListTile(item: item);
+                        }
                       },
                       // separator: Divider(),
                       // itemComparator: , // optional
@@ -128,61 +135,50 @@ class _ListScreenState extends State<ListScreen> {
             ),
           ],
         ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.blueGrey,
+          child: Row(
+            children: [
+              Spacer(flex: 5),
+              Flexible(
+                flex: 1,
+                child: Consumer<ListItems>(
+                  builder: (context, items, widget) {
+                    if (items.checkedItems.containsValue(true)) {
+                      return OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          side: BorderSide(color: Colors.white),
+                        ),
+                        onPressed: () => items.completeItems(firestoreUser),
+                        child: Icon(Icons.clear_all),
+                      );
+                    }
+                    if (firestoreUser.completedItems.length > 0) {
+                      return IconButton(
+                          icon: Icon(Icons.done_all, color: Colors.grey[400]),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CompletedItemsScreen()),
+                            );
+                          });
+                    }
+                    return Container(height: 0);
+                  },
+                ),
+              ),
+              Spacer(flex: 1),
+              IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+            ],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: (firestoreUser.currentListName == 'No lists yet')
             ? Container()
-            : Consumer<ListItems>(
-                builder: (context, items, widget) {
-                  if (items.checkedItems.containsValue(true)) {
-                    return FloatingClearItemsButton();
-                  }
-                  return FloatingAddListItemButton();
-                },
-              ),
+            : FloatingAddListItemButton(),
       ),
     );
   }
-}
-
-/// Appears when one or more list items are checked.
-///
-/// When pressed sends checked items to Completed.
-class FloatingClearItemsButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.clear_all),
-      backgroundColor: Colors.orange,
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text('test'),
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
-/// Holds the state for the current list.
-class ListItems extends ChangeNotifier {
-  Map<String, bool> _checkedItems = {};
-
-  /// List items are added here as Map<itemName, isChecked>.
-  Map<String, bool> get checkedItems {
-    return _checkedItems;
-  }
-
-  void setItemState(
-      {@required String itemName,
-      @required bool value,
-      bool isUpdate = false}) {
-    assert(itemName != null && value != null);
-    _checkedItems[itemName] = value;
-    if (isUpdate) notifyListeners();
-  }
-
-  void reset() => _checkedItems.clear();
 }
