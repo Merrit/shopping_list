@@ -148,6 +148,26 @@ class FirestoreUser extends ChangeNotifier {
     return null;
   }
 
+  /// Create a new list document in Firebase.
+  Future<void> createNewList({@required String listName}) async {
+    String uid = Globals.user.uid;
+    FirebaseFirestore.instance.collection('lists').doc().set(
+      {
+        'listName': listName,
+        'owner': uid,
+        'allowedUsers': {uid: true},
+        'aisles': ['Unsorted'],
+      },
+      SetOptions(merge: true),
+    );
+    await fetchListsData();
+    if (lists.length == 1) {
+      currentList = lists.keys.first;
+      currentListName = lists.values.first['listName'];
+    }
+    return null;
+  }
+
   void deleteList(String listID) {
     FirebaseFirestore.instance.collection('lists').doc(listID).delete();
     lists.remove(listID);
