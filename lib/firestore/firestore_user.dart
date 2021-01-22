@@ -157,6 +157,7 @@ class FirestoreUser extends ChangeNotifier {
         'owner': uid,
         'allowedUsers': {uid: true},
         'aisles': ['Unsorted'],
+        'items': {},
       },
       SetOptions(merge: true),
     );
