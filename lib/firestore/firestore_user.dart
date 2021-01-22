@@ -289,6 +289,7 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// Enable settings so the app will use the local Firebase emulator.
+  // ignore: unused_element
   Future<void> _setEmulator() async {
     String host = defaultTargetPlatform == TargetPlatform.android
         ? '10.0.2.2:8080'
