@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/list/add_list_item.dart';
 import 'package:shopping_list/list/screens/aisles_screen.dart';
 
 class AddItemDialog extends StatefulWidget {
@@ -11,10 +10,13 @@ class AddItemDialog extends StatefulWidget {
 
 class _AddItemDialogState extends State<AddItemDialog> {
   final TextEditingController addItemController = TextEditingController();
+  FirestoreUser firestoreUser;
   String aisle;
 
   @override
   Widget build(BuildContext context) {
+    firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
+
     return AlertDialog(
       title: Text('Add item'),
       content: Column(
@@ -74,11 +76,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   _addItem() {
-    addListItem(
-      context: context,
-      itemName: addItemController.text,
-      aisle: aisle,
-    );
+    firestoreUser.addListItem(itemName: addItemController.text, aisle: aisle);
     Navigator.pop(context);
   }
 }

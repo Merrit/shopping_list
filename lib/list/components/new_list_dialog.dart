@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/list/create_new_list.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_list/firestore/firestore_user.dart';
+
+import 'package:shopping_list/helpers/capitalize_string.dart';
 
 class NewListDialog extends StatefulWidget {
   @override
@@ -46,12 +49,14 @@ class _NewListDialogState extends State<NewListDialog> {
   }
 
   _createList(String listName) {
+    listName = listName.capitalizeFirstOfEach;
     if (listName == '') {
       setState(() {
         newListErrorText = 'Choose a list name';
       });
     } else {
-      createNewList(context: context, listName: listName);
+      var firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
+      firestoreUser.createNewList(listName: listName);
       setState(() => Navigator.pop(context));
     }
   }

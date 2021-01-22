@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
 import 'package:shopping_list/firestore/firestore_user.dart';
+import 'package:shopping_list/helpers/capitalize_string.dart';
 
 class AislesScreen extends StatelessWidget {
   @override
@@ -95,7 +98,7 @@ class _AddAisleDialogState extends State<AddAisleDialog> {
   _addAisle() {
     setState(() {
       Provider.of<FirestoreUser>(context, listen: false)
-          .addAisle(newAisle: aisleNameController.text);
+          .addAisle(newAisle: aisleNameController.text.capitalizeFirstOfEach);
       Navigator.pop(context);
     });
   }
