@@ -5,10 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "shopping_list",
+            "name": "Shopping List",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart"
-        }
+            "program": "lib/main.dart",
+        },
+        {
+            "name": "Web Server",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "8000",
+            ],
+        },
     ]
 }
