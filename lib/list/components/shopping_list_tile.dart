@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
 import 'package:shopping_list/list/screens/list_items.dart';
 
@@ -14,6 +15,7 @@ class ShoppingListTile extends StatefulWidget {
 }
 
 class _ShoppingListTileState extends State<ShoppingListTile> {
+  FirestoreUser firestoreUser;
   Map<String, dynamic> item;
   String itemName;
 
@@ -22,25 +24,32 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
     super.initState();
     item = widget.item;
     itemName = item['itemName'];
+    firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          bool wasUpdated = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ItemDetailsScreen(item: item),
               ));
+          if (wasUpdated) firestoreUser.updateItem(item);
         },
         child: Column(
           children: [
             Row(
               children: [
                 Expanded(flex: 3, child: Text(itemName)),
-                Expanded(flex: 1, child: Text('')), // #
+                Expanded(
+                  flex: 1,
+                  child: (item['amount'] != '')
+                      ? Text(item['amount'])
+                      : Container(),
+                ), // #
                 Expanded(flex: 1, child: Text('')), // $
                 Expanded(flex: 1, child: Text('')), // $ total
                 Expanded(

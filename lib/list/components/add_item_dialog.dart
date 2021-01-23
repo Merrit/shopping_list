@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/helpers/capitalize_string.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/screens/aisles_screen.dart';
 
@@ -10,6 +11,7 @@ class AddItemDialog extends StatefulWidget {
 
 class _AddItemDialogState extends State<AddItemDialog> {
   final TextEditingController addItemController = TextEditingController();
+  final TextEditingController howManyController = TextEditingController();
   FirestoreUser firestoreUser;
   String aisle;
 
@@ -60,6 +62,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
               )
             ],
           ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'How many'),
+            controller: howManyController,
+            onFieldSubmitted: (value) => _addItem(),
+          ),
         ],
       ),
       actions: [
@@ -76,7 +83,14 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   _addItem() {
-    firestoreUser.addListItem(itemName: addItemController.text, aisle: aisle);
+    String _aisle = aisle ?? 'Unsorted';
+    Map<String, dynamic> item = {
+      'itemName': addItemController.text.capitalizeFirst,
+      'aisle': _aisle,
+      'isComplete': false,
+      'amount': howManyController.text,
+    };
+    firestoreUser.addListItem(item);
     Navigator.pop(context);
   }
 }

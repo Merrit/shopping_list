@@ -15,23 +15,14 @@ class FirestoreUser extends ChangeNotifier {
   Map<String, dynamic> lists = {};
 
   /// Add a new item to the current shopping list.
-  void addListItem({@required String itemName, String aisle}) {
-    var _aisle = aisle ?? 'Unsorted';
-    itemName = itemName.capitalizeFirst;
-    var _newItem = {
-      'itemName': itemName,
-      'aisle': _aisle,
-      'isComplete': false,
-    };
+  void addListItem(Map<String, dynamic> item) {
+    var itemName = item['itemName'];
     // Add to Firebase.
-    FirebaseFirestore.instance.collection('lists').doc(currentList).set(
-      {
-        'items': {itemName: _newItem}
-      },
-      SetOptions(merge: true),
-    );
+    FirebaseFirestore.instance.collection('lists').doc(currentList).set({
+      'items': {itemName: item}
+    }, SetOptions(merge: true));
     // Add to local cache.
-    lists[currentList]['items'][itemName] = _newItem;
+    lists[currentList]['items'][itemName] = item;
     // Make sure this isn't in completedItems already.
     // This could be necessary if the user adds a list item of something
     // they had previously checked off their list.
@@ -61,6 +52,15 @@ class FirestoreUser extends ChangeNotifier {
     updateItems(items: _listItems);
     // Notify widgets like Checked Items of changes.
     notifyListeners();
+  }
+
+  /// Update a single item.
+  void updateItem(Map<String, dynamic> item) {
+    var itemName = item['itemName'];
+    // .set() is required, .update() will replace the entire 'items' field.
+    FirebaseFirestore.instance.collection('lists').doc(currentList).set({
+      'items': {itemName: item}
+    }, SetOptions(merge: true));
   }
 
   /// Update the entire collection of items at once.
