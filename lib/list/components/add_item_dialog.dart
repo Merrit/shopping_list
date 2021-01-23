@@ -63,7 +63,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
             ],
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'How many'),
+            decoration: InputDecoration(labelText: 'Amount'),
             controller: howManyController,
             onFieldSubmitted: (value) => _addItem(),
           ),

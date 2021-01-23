@@ -84,12 +84,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                 ],
               ),
               Spacer(),
-              Text('How many:'),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 130),
                 child: TextFormField(
                   controller: howManyController,
                   keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(labelText: 'Amount'),
                 ),
               ),
               Spacer(flex: 6),
