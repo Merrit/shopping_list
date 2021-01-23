@@ -48,7 +48,7 @@ class FirestoreUser extends ChangeNotifier {
       }
     });
     // Update Firebase items.
-    updateItems(items: _listItems);
+    updateAllItems(items: _listItems);
     // Notify widgets like Checked Items of changes.
     notifyListeners();
   }
@@ -63,7 +63,7 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// Update the entire collection of items at once.
-  void updateItems({@required Map<String, dynamic> items}) {
+  void updateAllItems({@required Map<String, dynamic> items}) {
     FirebaseFirestore.instance
         .collection('lists')
         .doc(currentList)
@@ -76,7 +76,7 @@ class FirestoreUser extends ChangeNotifier {
       _currentItems.remove(item);
       completedItems.remove(item);
     });
-    updateItems(items: _currentItems);
+    updateAllItems(items: _currentItems);
     notifyListeners();
   }
 
