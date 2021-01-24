@@ -11,7 +11,7 @@ class AddItemDialog extends StatefulWidget {
 
 class _AddItemDialogState extends State<AddItemDialog> {
   final TextEditingController addItemController = TextEditingController();
-  final TextEditingController howManyController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
   FirestoreUser firestoreUser;
   String aisle;
 
@@ -63,8 +63,8 @@ class _AddItemDialogState extends State<AddItemDialog> {
             ],
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'Amount'),
-            controller: howManyController,
+            decoration: InputDecoration(labelText: 'Quantity'),
+            controller: quantityController,
             onFieldSubmitted: (value) => _addItem(),
           ),
         ],
@@ -84,11 +84,15 @@ class _AddItemDialogState extends State<AddItemDialog> {
 
   _addItem() {
     String _aisle = aisle ?? 'Unsorted';
+    var _quantity =
+        (quantityController.text != '') ? quantityController.text : '0';
     Map<String, dynamic> item = {
       'itemName': addItemController.text.capitalizeFirst,
       'aisle': _aisle,
       'isComplete': false,
-      'amount': howManyController.text,
+      'quantity': _quantity,
+      'price': '0.00',
+      'total': '0.00',
     };
     firestoreUser.addListItem(item);
     Navigator.pop(context);

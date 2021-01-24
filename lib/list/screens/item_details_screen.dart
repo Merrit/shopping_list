@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
@@ -15,14 +16,18 @@ class ItemDetailsScreen extends StatefulWidget {
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   Map<String, dynamic> item;
   String selectedAisle;
-  TextEditingController howManyController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     item = widget.item;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
-    howManyController.text = item['amount'];
+    quantityController.text =
+        (item['quantity'] != '0') ? item['quantity'].toString() : null;
+    priceController.text =
+        (item['price'] != '0.00') ? item['price'].toString() : '';
   }
 
   @override
@@ -30,20 +35,16 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     FirestoreUser user = Provider.of<FirestoreUser>(context);
 
     return WillPopScope(
-      // Notify when popped if item was changed.
+      // When user returns to previous page, notify whether or not the item was
+      // changed so we know if an update needs to be triggered.
       onWillPop: () async {
-        bool wasUpdated = false;
-        if (item['amount'] != howManyController.text) {
-          item['amount'] = howManyController.text;
-          wasUpdated = true;
-        }
-        Navigator.pop(context, wasUpdated);
+        _updateItem();
         return false;
       },
       child: Scaffold(
         appBar: AppBar(title: Text(item['itemName']), centerTitle: true),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 120),
           child: Column(
             children: [
               SizedBox(height: 20),
@@ -83,13 +84,26 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   )
                 ],
               ),
-              Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 130),
+                padding: EdgeInsets.symmetric(vertical: 5),
                 child: TextFormField(
-                  controller: howManyController,
+                  controller: quantityController,
                   keyboardType: TextInputType.visiblePassword,
-                  decoration: InputDecoration(labelText: 'Amount'),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(labelText: 'Quantity'),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: TextFormField(
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
+                  // Only allow entry numbers in double format.
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^(\d+)?\.?\d{0,2}'))
+                  ],
+                  decoration: InputDecoration(labelText: 'Price'),
                 ),
               ),
               Spacer(flex: 6),
@@ -98,5 +112,31 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
         ),
       ),
     );
+  }
+
+  /// If the user updated any fields, update the item data.
+  void _updateItem() {
+    bool wasUpdated = false;
+    // Check if quantity was updated and field is not empty.
+    if (quantityController.text != item['quantity'] &&
+        quantityController.text != '') {
+      item['quantity'] = quantityController.text.trim();
+      wasUpdated = true;
+    }
+    // Check if price was updated and field is not empty.
+    if (priceController.text != item['price'] && priceController.text != '') {
+      var _price = double.tryParse(priceController.text.trim());
+      item['price'] = _price.toStringAsFixed(2).toString();
+      wasUpdated = true;
+    }
+    // Update the total price for this item.
+    if (wasUpdated) {
+      int _quantity = int.tryParse(item['quantity']);
+      double _price = double.tryParse(item['price']);
+      double _total = _quantity * _price;
+      item['total'] = _total.toStringAsFixed(2);
+    }
+    // Now allow return to previous screen.
+    Navigator.pop(context, wasUpdated);
   }
 }

@@ -46,12 +46,22 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                 Expanded(flex: 3, child: Text(itemName)),
                 Expanded(
                   flex: 1,
-                  child: (item['amount'] != '')
-                      ? Text(item['amount'])
+                  child: (item['quantity'] != '0')
+                      ? Text(item['quantity'].toString())
                       : Container(),
-                ), // #
-                Expanded(flex: 1, child: Text('')), // $
-                Expanded(flex: 1, child: Text('')), // $ total
+                ),
+                Expanded(
+                  flex: 1,
+                  child: (item['price'] != '0.00')
+                      ? Text('\$${item['price'].toString()}')
+                      : Container(),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: (item['total'] != '0.00')
+                      ? Text('\$${item['total'].toString()}')
+                      : Container(),
+                ),
                 Expanded(
                   flex: 1,
                   child: Consumer<ListItems>(
