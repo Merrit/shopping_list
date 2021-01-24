@@ -56,6 +56,9 @@ class FirestoreUser extends ChangeNotifier {
   /// Update a single item.
   void updateItem(Map<String, dynamic> item) {
     var itemName = item['itemName'];
+    // Update the local cache.
+    lists[currentList]['items'][itemName] = item;
+    // Update the Firebase data.
     // .set() is required, .update() will replace the entire 'items' field.
     FirebaseFirestore.instance.collection('lists').doc(currentList).set({
       'items': {itemName: item}
