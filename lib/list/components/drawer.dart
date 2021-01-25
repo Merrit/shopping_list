@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,12 +67,23 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
               ),
             );
           }),
-          TextButton(
-            child: Text('Sign out'),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              RestartWidget.restartApp(context);
-            },
+          ButtonBar(
+            alignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Transform(
+                  // Have the logout icon pointing left (away from app).
+                  // Default is pointing right (towards app).
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(math.pi),
+                  child: Icon(Icons.logout),
+                ),
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  RestartWidget.restartApp(context);
+                },
+              ),
+            ],
           ),
         ],
       ),
