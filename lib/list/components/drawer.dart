@@ -8,6 +8,7 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/new_list_dialog.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/main.dart';
+import 'package:shopping_list/preferences/screens/preferences_screen.dart';
 
 class ShoppingDrawer extends StatefulWidget {
   @override
@@ -81,6 +82,17 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
                   RestartWidget.restartApp(context);
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PreferencesScreen(),
+                    ),
+                  );
                 },
               ),
             ],
