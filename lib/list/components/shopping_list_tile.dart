@@ -46,7 +46,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                 Expanded(flex: 3, child: Text(itemName)),
                 Expanded(
                   flex: 1,
-                  child: (item['quantity'] != '0')
+                  child: (item['quantity'] != '1')
                       ? Text(item['quantity'].toString())
                       : Container(),
                 ),

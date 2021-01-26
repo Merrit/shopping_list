@@ -35,4 +35,10 @@ class Preferences {
     // shared_preferences can't save maps, so we convert to String first.
     prefs.setString(_uid, json.encode(lastListMap));
   }
+
+  static String get taxRate {
+    var _taxRate = prefs.get('taxRate');
+    if (_taxRate == null) _taxRate = '';
+    return _taxRate;
+  }
 }

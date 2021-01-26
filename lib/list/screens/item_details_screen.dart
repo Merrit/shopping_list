@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/screens/aisles_screen.dart';
+import 'package:shopping_list/preferences/preferences.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -14,15 +15,19 @@ class ItemDetailsScreen extends StatefulWidget {
 }
 
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
+  bool wasUpdated = false;
   Map<String, dynamic> item;
   String selectedAisle;
-  TextEditingController quantityController = TextEditingController();
+  bool hasTax;
+
+  final TextEditingController quantityController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     item = widget.item;
+    hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
     quantityController.text =
         (item['quantity'] != '0') ? item['quantity'].toString() : null;
@@ -90,7 +95,17 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   controller: quantityController,
                   keyboardType: TextInputType.visiblePassword,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: InputDecoration(labelText: 'Quantity'),
+                  onChanged: (_) => wasUpdated = true,
+                  decoration: InputDecoration(
+                    labelText: 'Quantity',
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        quantityController.clear();
+                        wasUpdated = true;
+                      },
+                    ),
+                  ),
                 ),
               ),
               Container(
@@ -98,12 +113,29 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                 child: TextFormField(
                   controller: priceController,
                   keyboardType: TextInputType.number,
+                  onChanged: (_) => wasUpdated = true,
                   // Only allow entry numbers in double format.
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^(\d+)?\.?\d{0,2}'))
                   ],
                   decoration: InputDecoration(labelText: 'Price'),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Row(
+                  children: [
+                    Text('Tax'),
+                    Checkbox(
+                      value: hasTax,
+                      onChanged: (value) {
+                        setState(() => hasTax = value);
+                        item['hasTax'] = value;
+                        wasUpdated = true;
+                      },
+                    ),
+                  ],
                 ),
               ),
               Spacer(flex: 6),
@@ -116,24 +148,32 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
   /// If the user updated any fields, update the item data.
   void _updateItem() {
-    bool wasUpdated = false;
-    // Check if quantity was updated and field is not empty.
-    if (quantityController.text != item['quantity'] &&
-        quantityController.text != '') {
-      item['quantity'] = quantityController.text.trim();
-      wasUpdated = true;
+    // Check if quantity was updated.
+    if (quantityController.text != item['quantity']) {
+      var _newQuantity;
+      if (quantityController.text == '') {
+        _newQuantity = '1';
+      } else {
+        _newQuantity = quantityController.text.trim();
+      }
+      item['quantity'] = _newQuantity;
     }
     // Check if price was updated and field is not empty.
     if (priceController.text != item['price'] && priceController.text != '') {
       var _price = double.tryParse(priceController.text.trim());
       item['price'] = _price.toStringAsFixed(2).toString();
-      wasUpdated = true;
     }
     // Update the total price for this item.
     if (wasUpdated) {
       int _quantity = int.tryParse(item['quantity']);
       double _price = double.tryParse(item['price']);
-      double _total = _quantity * _price;
+      double _taxRate = double.tryParse(Preferences.taxRate) ?? 0.00;
+      double _total = (_quantity * _price);
+      if (hasTax && _taxRate > 0.00) {
+        _taxRate = _taxRate / 100;
+        var _taxAmount = _total * _taxRate;
+        _total = _total + _taxAmount;
+      }
       item['total'] = _total.toStringAsFixed(2);
     }
     // Now allow return to previous screen.

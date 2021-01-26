@@ -85,7 +85,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
   _addItem() {
     String _aisle = aisle ?? 'Unsorted';
     var _quantity =
-        (quantityController.text != '') ? quantityController.text : '0';
+        (quantityController.text != '') ? quantityController.text : '1';
     Map<String, dynamic> item = {
       'itemName': addItemController.text.capitalizeFirst,
       'aisle': _aisle,
@@ -93,6 +93,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
       'quantity': _quantity,
       'price': '0.00',
       'total': '0.00',
+      'hasTax': false
     };
     firestoreUser.addListItem(item);
     Navigator.pop(context);
