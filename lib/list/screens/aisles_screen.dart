@@ -15,27 +15,29 @@ class AislesScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Aisles'),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AddAisleDialog(),
-                );
-              })
-        ],
       ),
       body: Container(
         padding: EdgeInsets.all(20),
         child: (_aisles != null)
-            ? ListView.builder(
+            ? ListView.separated(
                 itemCount: _aisles.length,
                 itemBuilder: (context, int index) {
                   return AisleTile(aisle: _aisles[index]);
                 },
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
               )
             : Container(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AddAisleDialog(),
+          );
+        },
       ),
     );
   }
@@ -51,17 +53,35 @@ class AisleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (aisle != 'Unsorted')
-        ? ListTile(
-            title: Center(child: Text(aisle)),
-            trailing: IconButton(
-                icon: Icon(Icons.remove_circle),
-                onPressed: () {
-                  Provider.of<FirestoreUser>(context, listen: false)
-                      .removeAisle(aisle: aisle);
-                }),
-          )
-        : Container();
+    return ListTile(
+      title: Center(child: Text(aisle)),
+      onTap: () => Navigator.pop(context, aisle),
+      onLongPress: () async {
+        if (aisle == 'Unsorted') return; // TODO: Add message or something.
+        var confirmed = await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text('Delete list?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text('Confirm'),
+                ),
+              ],
+            );
+          },
+        );
+        if (confirmed) {
+          Provider.of<FirestoreUser>(context, listen: false)
+              .removeAisle(aisle: aisle);
+        }
+      },
+    );
   }
 }
 

@@ -1,8 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:settings_ui/settings_ui.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/list/screens/aisles_screen.dart';
+import 'package:shopping_list/list/aisle.dart';
 import 'package:shopping_list/preferences/preferences.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
@@ -49,45 +50,31 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(title: Text(item['itemName']), centerTitle: true),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 120),
+          padding: EdgeInsets.all(20),
           child: Column(
             children: [
               SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Consumer<FirestoreUser>(
-                    builder: (context, firestoreUser, widget) {
-                      return DropdownButton<String>(
-                        hint: Text('Aisle (optional)'),
-                        value: firestoreUser.lists[firestoreUser.currentList]
-                            ['items'][item['itemName']]['aisle'],
-                        onChanged: (value) {
-                          setState(() {
-                            item['aisle'] = value;
-                            Provider.of<FirestoreUser>(context, listen: false)
-                                .updateAisle(
-                                    item: item['itemName'], aisle: value);
-                          });
-                        },
-                        items: user.aisles
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.settings),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AislesScreen()),
+              Expanded(
+                child: SettingsList(
+                  darkBackgroundColor: Colors.grey[850],
+                  sections: [
+                    SettingsSection(
+                      tiles: [
+                        SettingsTile(
+                          title: 'Aisle',
+                          leading: Icon(Icons.shopping_cart_outlined),
+                          subtitle: item['aisle'],
+                          onPressed: (context) async {
+                            var _aisle = await setAisle(context);
+                            setState(() => item['aisle'] = _aisle);
+                            user.updateAisle(
+                                item: item['itemName'], aisle: _aisle);
+                          },
+                        ),
+                      ],
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
