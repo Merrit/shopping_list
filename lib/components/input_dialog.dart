@@ -79,5 +79,12 @@ Future<String> showInputDialog({
 
   if (result == null) return '';
 
+  // Format as a full double, for example text entered as '.49' becomes '0.49'
+  // and '5' becomes '5.00'.
+  if (type == InputDialogs.onlyDouble) {
+    var _asDouble = double.tryParse(result);
+    result = _asDouble.toStringAsFixed(2).toString();
+  }
+
   return result;
 }
