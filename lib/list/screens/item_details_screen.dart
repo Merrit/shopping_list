@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shopping_list/components/input_dialog.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/aisle.dart';
 import 'package:shopping_list/preferences/preferences.dart';
@@ -21,7 +22,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   String selectedAisle;
   bool hasTax;
 
-  final TextEditingController quantityController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
   @override
@@ -30,8 +30,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     item = widget.item;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
-    quantityController.text =
-        (item['quantity'] != '0') ? item['quantity'].toString() : null;
     priceController.text =
         (item['price'] != '0.00') ? item['price'].toString() : '';
   }
@@ -71,28 +69,25 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 item: item['itemName'], aisle: _aisle);
                           },
                         ),
+                        SettingsTile(
+                          leading: Icon(Icons.add_shopping_cart),
+                          title: 'Quantity',
+                          subtitle: item['quantity'],
+                          onPressed: (context) async {
+                            String result = await showInputDialog(
+                              context: context,
+                              title: 'Quantity',
+                              type: InputDialogs.onlyInt,
+                            );
+                            if (result != '') {
+                              setState(() => item['quantity'] = result);
+                              wasUpdated = true;
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: TextFormField(
-                  controller: quantityController,
-                  keyboardType: TextInputType.visiblePassword,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onChanged: (_) => wasUpdated = true,
-                  decoration: InputDecoration(
-                    labelText: 'Quantity',
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        quantityController.clear();
-                        wasUpdated = true;
-                      },
-                    ),
-                  ),
                 ),
               ),
               Container(
@@ -125,7 +120,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   ],
                 ),
               ),
-              Spacer(flex: 6),
+              Spacer(flex: 1),
             ],
           ),
         ),
@@ -135,16 +130,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
   /// If the user updated any fields, update the item data.
   void _updateItem() {
-    // Check if quantity was updated.
-    if (quantityController.text != item['quantity']) {
-      var _newQuantity;
-      if (quantityController.text == '') {
-        _newQuantity = '1';
-      } else {
-        _newQuantity = quantityController.text.trim();
-      }
-      item['quantity'] = _newQuantity;
-    }
     // Check if price was updated and field is not empty.
     if (priceController.text != item['price'] && priceController.text != '') {
       var _price = double.tryParse(priceController.text.trim());
