@@ -76,7 +76,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                               type: InputDialogs.onlyInt,
                             );
                             if (result != '') {
-                              setState(() => item['quantity'] = result);
+                              var _newQuantity = (result == '0') ? '1' : result;
+                              setState(() => item['quantity'] = _newQuantity);
                               wasUpdated = true;
                             }
                           },
