@@ -36,7 +36,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               tiles: [
                 SettingsTile(
                   title: 'Tax rate',
-                  leading: Icon(Icons.attach_money),
+                  leading: Icon(Icons.calculate_outlined),
                   subtitle: (taxRate != '') ? '$taxRate%' : 'Not set',
                   onPressed: (context) {
                     _taxRateDialog(context);
