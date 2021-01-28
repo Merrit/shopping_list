@@ -83,7 +83,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           },
                         ),
                         SettingsTile(
-                          leading: Icon(Icons.add_shopping_cart),
+                          leading: Icon(Icons.attach_money),
                           title: 'Price',
                           subtitle: (item['price'] != '0.00')
                               ? item['price']
