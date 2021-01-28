@@ -45,83 +45,68 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
         appBar: AppBar(title: Text(item['itemName']), centerTitle: true),
         body: Container(
           padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              Expanded(
-                child: SettingsList(
-                  darkBackgroundColor: Colors.grey[850],
-                  sections: [
-                    SettingsSection(
-                      tiles: [
-                        SettingsTile(
-                          title: 'Aisle',
-                          leading: Icon(Icons.shopping_cart_outlined),
-                          subtitle: item['aisle'],
-                          onPressed: (context) async {
-                            var _aisle = await setAisle(context);
-                            setState(() => item['aisle'] = _aisle);
-                            user.updateAisle(
-                                item: item['itemName'], aisle: _aisle);
-                          },
-                        ),
-                        SettingsTile(
-                          leading: Icon(Icons.add_shopping_cart),
-                          title: 'Quantity',
-                          subtitle: item['quantity'],
-                          onPressed: (context) async {
-                            String result = await showInputDialog(
-                              context: context,
-                              title: 'Quantity',
-                              type: InputDialogs.onlyInt,
-                            );
-                            if (result != '') {
-                              var _newQuantity = (result == '0') ? '1' : result;
-                              setState(() => item['quantity'] = _newQuantity);
-                              wasUpdated = true;
-                            }
-                          },
-                        ),
-                        SettingsTile(
-                          leading: Icon(Icons.attach_money),
-                          title: 'Price',
-                          subtitle: (item['price'] != '0.00')
-                              ? item['price']
-                              : 'Not set',
-                          onPressed: (context) async {
-                            String result = await showInputDialog(
-                              context: context,
-                              title: 'Price',
-                              type: InputDialogs.onlyDouble,
-                            );
-                            if (result != '') {
-                              setState(() => item['price'] = result);
-                              wasUpdated = true;
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  children: [
-                    Text('Tax'),
-                    Checkbox(
-                      value: hasTax,
-                      onChanged: (value) {
-                        setState(() => hasTax = value);
-                        item['hasTax'] = value;
+          child: SettingsList(
+            darkBackgroundColor: Colors.grey[850],
+            sections: [
+              SettingsSection(
+                tiles: [
+                  SettingsTile(
+                    title: 'Aisle',
+                    leading: Icon(Icons.shopping_cart_outlined),
+                    subtitle: item['aisle'],
+                    onPressed: (context) async {
+                      var _aisle = await setAisle(context);
+                      setState(() => item['aisle'] = _aisle);
+                      user.updateAisle(item: item['itemName'], aisle: _aisle);
+                    },
+                  ),
+                  SettingsTile(
+                    leading: Icon(Icons.add_shopping_cart),
+                    title: 'Quantity',
+                    subtitle: item['quantity'],
+                    onPressed: (context) async {
+                      String result = await showInputDialog(
+                        context: context,
+                        title: 'Quantity',
+                        type: InputDialogs.onlyInt,
+                      );
+                      if (result != '') {
+                        var _newQuantity = (result == '0') ? '1' : result;
+                        setState(() => item['quantity'] = _newQuantity);
                         wasUpdated = true;
-                      },
-                    ),
-                  ],
-                ),
+                      }
+                    },
+                  ),
+                  SettingsTile(
+                    leading: Icon(Icons.attach_money),
+                    title: 'Price',
+                    subtitle:
+                        (item['price'] != '0.00') ? item['price'] : 'Not set',
+                    onPressed: (context) async {
+                      String result = await showInputDialog(
+                        context: context,
+                        title: 'Price',
+                        type: InputDialogs.onlyDouble,
+                      );
+                      if (result != '') {
+                        setState(() => item['price'] = result);
+                        wasUpdated = true;
+                      }
+                    },
+                  ),
+                  SettingsTile.switchTile(
+                    leading: Icon(Icons.calculate_outlined),
+                    title: 'Tax',
+                    switchValue: hasTax,
+                    onToggle: (bool value) {
+                      setState(() {
+                        hasTax = value;
+                        wasUpdated = true;
+                      });
+                    },
+                  ),
+                ],
               ),
-              Spacer(flex: 1),
             ],
           ),
         ),
@@ -131,6 +116,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
   /// If the user updated any fields, update the item data.
   void _updateItem() {
+    item['hasTax'] = hasTax;
     // Update the total price for this item.
     if (wasUpdated) {
       int _quantity = int.tryParse(item['quantity']);
