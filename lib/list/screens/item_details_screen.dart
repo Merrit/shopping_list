@@ -22,16 +22,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   String selectedAisle;
   bool hasTax;
 
-  final TextEditingController priceController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     item = widget.item;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
-    priceController.text =
-        (item['price'] != '0.00') ? item['price'].toString() : '';
   }
 
   @override
@@ -85,23 +81,27 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             }
                           },
                         ),
+                        SettingsTile(
+                          leading: Icon(Icons.add_shopping_cart),
+                          title: 'Price',
+                          subtitle: (item['price'] != '0.00')
+                              ? item['price']
+                              : 'Not set',
+                          onPressed: (context) async {
+                            String result = await showInputDialog(
+                              context: context,
+                              title: 'Price',
+                              type: InputDialogs.onlyDouble,
+                            );
+                            if (result != '') {
+                              setState(() => item['price'] = result);
+                              wasUpdated = true;
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: TextFormField(
-                  controller: priceController,
-                  keyboardType: TextInputType.number,
-                  onChanged: (_) => wasUpdated = true,
-                  // Only allow entry numbers in double format.
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^(\d+)?\.?\d{0,2}'))
-                  ],
-                  decoration: InputDecoration(labelText: 'Price'),
                 ),
               ),
               Container(
@@ -130,11 +130,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
   /// If the user updated any fields, update the item data.
   void _updateItem() {
-    // Check if price was updated and field is not empty.
-    if (priceController.text != item['price'] && priceController.text != '') {
-      var _price = double.tryParse(priceController.text.trim());
-      item['price'] = _price.toStringAsFixed(2).toString();
-    }
     // Update the total price for this item.
     if (wasUpdated) {
       int _quantity = int.tryParse(item['quantity']);
