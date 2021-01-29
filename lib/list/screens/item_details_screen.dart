@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -6,6 +5,7 @@ import 'package:shopping_list/components/input_dialog.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/aisle.dart';
 import 'package:shopping_list/preferences/preferences.dart';
+import 'package:shopping_list/preferences/screens/preferences_screen.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -21,6 +21,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   Map<String, dynamic> item;
   String selectedAisle;
   bool hasTax;
+  String taxRate;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     item = widget.item;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
+    taxRate = _getTaxRate();
   }
 
   @override
@@ -97,12 +99,17 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   SettingsTile.switchTile(
                     leading: Icon(Icons.calculate_outlined),
                     title: 'Tax',
+                    subtitle: taxRate,
                     switchValue: hasTax,
                     onToggle: (bool value) {
-                      setState(() {
-                        hasTax = value;
-                        wasUpdated = true;
-                      });
+                      if (taxRate == 'Not set') {
+                        _setTaxRate();
+                      } else {
+                        setState(() {
+                          hasTax = value;
+                          wasUpdated = true;
+                        });
+                      }
                     },
                   ),
                 ],
@@ -132,5 +139,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     }
     // Now allow return to previous screen.
     Navigator.pop(context, wasUpdated);
+  }
+
+  String _getTaxRate() {
+    String taxRate = '${Preferences.taxRate}%';
+    if (taxRate == '%') taxRate = 'Not set';
+    return taxRate;
+  }
+
+  Future<void> _setTaxRate() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PreferencesScreen()),
+    );
+    setState(() => taxRate = _getTaxRate());
   }
 }
