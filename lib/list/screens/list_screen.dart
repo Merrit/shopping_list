@@ -97,11 +97,6 @@ class _ListScreenState extends State<ListScreen> {
                   if (snapshot.hasError) {
                     return Text('Something went wrong');
                   }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text('Loading');
-                  }
-
                   if (snapshot.connectionState == ConnectionState.active) {
                     listItemState =
                         Provider.of<ListItems>(context, listen: false);
