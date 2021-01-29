@@ -152,41 +152,44 @@ class _ListScreenState extends State<ListScreen> {
           ),
           bottomNavigationBar: BottomAppBar(
             color: Colors.blueGrey,
-            child: Row(
-              children: [
-                Spacer(flex: 5),
-                Flexible(
-                  flex: 1,
-                  child: Consumer<ListItems>(
-                    builder: (context, items, widget) {
-                      if (items.checkedItems.containsValue(true)) {
-                        return OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            primary: Colors.white,
-                            side: BorderSide(color: Colors.white),
-                          ),
-                          onPressed: () => items.completeItems(firestoreUser),
-                          child: Icon(Icons.clear_all),
-                        );
-                      }
-                      if (firestoreUser.completedItems.length > 0) {
-                        return IconButton(
-                            icon: Icon(Icons.done_all, color: Colors.grey[400]),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CompletedItemsScreen()),
-                              );
-                            });
-                      }
-                      return Container(height: 0);
-                    },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Spacer(flex: 1),
+                  Flexible(
+                    flex: 1,
+                    child: Consumer<ListItems>(
+                      builder: (context, items, widget) {
+                        // Clear items button.
+                        if (items.checkedItems.containsValue(true)) {
+                          return RaisedButton(
+                            child: Text('Clear'),
+                            color: Colors.orange[900],
+                            onPressed: () => items.completeItems(firestoreUser),
+                          );
+                        }
+                        // Go to Completed Items screen button.
+                        if (firestoreUser.completedItems.length > 0) {
+                          return RaisedButton(
+                              child: Text('Completed'),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return CompletedItemsScreen();
+                                  },
+                                ));
+                              });
+                        }
+                        // Hide the bottombar.
+                        return Container(height: 0);
+                      },
+                    ),
                   ),
-                ),
-                Spacer(flex: 2),
-              ],
+                  // Spacer(flex: 1),
+                ],
+              ),
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
