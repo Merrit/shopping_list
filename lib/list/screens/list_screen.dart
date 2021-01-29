@@ -137,7 +137,15 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     );
                   }
-                  return Container();
+                  return Expanded(
+                    child: Column(
+                      children: [
+                        Spacer(),
+                        CircularProgressIndicator(),
+                        Spacer(flex: 4),
+                      ],
+                    ),
+                  );
                 },
               ),
             ],
