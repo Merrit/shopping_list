@@ -185,13 +185,11 @@ class _ListScreenState extends State<ListScreen> {
                     },
                   ),
                 ),
-                Spacer(flex: 1),
-                IconButton(icon: Icon(Icons.more_vert), onPressed: null),
+                Spacer(flex: 2),
               ],
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton:
               (firestoreUser.currentListName == 'No lists yet')
                   ? Container()
