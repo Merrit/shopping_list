@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/add_item_dialog.dart';
-import 'package:shopping_list/list/components/aisle_header.dart';
 import 'package:shopping_list/list/components/drawer.dart';
 import 'package:shopping_list/list/components/floating_list_button_bar.dart';
-import 'package:shopping_list/list/components/shopping_list_tile.dart';
+import 'package:shopping_list/list/components/shopping_list_builder.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/list/screens/list_items.dart';
 
@@ -24,7 +21,6 @@ class _ListScreenState extends State<ListScreen> {
   FirestoreUser firestoreUser;
   Map<String, dynamic> items;
   bool _isInitialized = false;
-  ListItems listItemState;
   FocusNode hotkeyFocusNode = FocusNode();
   bool mainListHasFocus = false;
 
@@ -91,64 +87,7 @@ class _ListScreenState extends State<ListScreen> {
                         ],
                       ),
                     ),
-                  StreamBuilder<DocumentSnapshot>(
-                    stream: firestoreUser.listStream,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Something went wrong');
-                      }
-                      if (snapshot.connectionState == ConnectionState.active) {
-                        listItemState =
-                            Provider.of<ListItems>(context, listen: false);
-                        listItemState.reset();
-                        Map<String, dynamic> listData = snapshot.data.data();
-                        List<Map<String, dynamic>> listItems = [];
-                        if (listData['items'] != null) {
-                          listData['items'].forEach((key, value) {
-                            listItems.add(value);
-                          });
-                        }
-
-                        return Expanded(
-                          child: GroupedListView<dynamic, String>(
-                            elements: listItems,
-                            groupBy: (item) => item['aisle'],
-                            groupSeparatorBuilder: (String groupByValue) =>
-                                AisleHeader(aisle: groupByValue),
-                            // ignore: missing_return
-                            itemBuilder: (context, dynamic item) {
-                              var itemName = item['itemName'];
-                              if (!listItemState.checkedItems
-                                  .containsKey(itemName)) {
-                                listItemState.setItemState(
-                                  itemName: itemName,
-                                  isChecked: false,
-                                );
-                              }
-                              if (item['isComplete'] != true) {
-                                return ShoppingListTile(item: item);
-                              }
-                            },
-                            // separator: Divider(),
-                            // itemComparator: , // optional
-                            useStickyGroupSeparators: false, // optional
-                            floatingHeader: false, // optional
-                            order: GroupedListOrder.ASC, // optional
-                          ),
-                        );
-                      }
-                      return Expanded(
-                        child: Column(
-                          children: [
-                            Spacer(),
-                            CircularProgressIndicator(),
-                            Spacer(flex: 4),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                  ShoppingListBuilder(context),
                 ],
               ),
               FloatingListButtonBar(context),
