@@ -18,14 +18,20 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  FocusNode hotkeyFocusNode = FocusNode();
   FirestoreUser firestoreUser;
   Map<String, dynamic> items;
   bool _isInitialized = false;
-  FocusNode hotkeyFocusNode = FocusNode();
   bool mainListHasFocus = false;
 
   @override
   void didChangeDependencies() {
+    _initFirestoreUser();
+    _initHotkey();
+    super.didChangeDependencies();
+  }
+
+  void _initFirestoreUser() {
     // Ensure we only initialize once.
     if (!_isInitialized) {
       firestoreUser = Provider.of<FirestoreUser>(context);
@@ -34,10 +40,13 @@ class _ListScreenState extends State<ListScreen> {
         _isInitialized = true;
       }
     }
+  }
+
+  void _initHotkey() {
+    // Start the Add Item ('N') hotkey.
     hotkeyFocusNode.addListener(() {
       setState(() => mainListHasFocus = hotkeyFocusNode.hasFocus);
     });
-    super.didChangeDependencies();
   }
 
   @override
@@ -49,20 +58,7 @@ class _ListScreenState extends State<ListScreen> {
         autofocus: true,
         onKey: (mainListHasFocus) ? (RawKeyEvent key) => _hotkey(key) : null,
         child: Scaffold(
-          appBar: AppBar(
-              title: Consumer<FirestoreUser>(builder: (context, user, child) {
-                return GestureDetector(
-                  child: Text(user.currentListName),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ListDetailsScreen(listID: user.currentList),
-                    ),
-                  ),
-                );
-              }),
-              centerTitle: true),
+          appBar: _appBar(),
           drawer: ShoppingDrawer(),
           body: Stack(
             children: [
@@ -71,12 +67,11 @@ class _ListScreenState extends State<ListScreen> {
                 children: [
                   if (items != null && items.length > 0)
                     Container(
-                      padding: EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                        top: 5,
-                        bottom: 5,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
                       ),
+                      // List header. TODO: Improve / fix / remove this..
                       child: Row(
                         children: [
                           Expanded(flex: 3, child: Text('Item')),
@@ -96,6 +91,21 @@ class _ListScreenState extends State<ListScreen> {
         ),
       ),
     );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+        title: Consumer<FirestoreUser>(builder: (context, user, child) {
+          return GestureDetector(
+            child: Text(user.currentListName),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ListDetailsScreen(listID: user.currentList);
+              }));
+            },
+          );
+        }),
+        centerTitle: true);
   }
 
   _hotkey(RawKeyEvent key) {
