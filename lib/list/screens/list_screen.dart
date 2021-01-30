@@ -9,9 +9,8 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/add_item_dialog.dart';
 import 'package:shopping_list/list/components/aisle_header.dart';
 import 'package:shopping_list/list/components/drawer.dart';
-import 'package:shopping_list/list/components/floating_add_list_item_button.dart';
+import 'package:shopping_list/list/components/floating_list_button_bar.dart';
 import 'package:shopping_list/list/components/shopping_list_tile.dart';
-import 'package:shopping_list/list/screens/completed_items_screen.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/list/screens/list_items.dart';
 
@@ -69,134 +68,92 @@ class _ListScreenState extends State<ListScreen> {
               }),
               centerTitle: true),
           drawer: ShoppingDrawer(),
-          body: Column(
-            mainAxisSize: MainAxisSize.min,
+          body: Stack(
             children: [
-              if (items != null && items.length > 0)
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                    top: 5,
-                    bottom: 5,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(flex: 3, child: Text('Item')),
-                      Expanded(flex: 1, child: Text('#')),
-                      Expanded(flex: 1, child: Text('\$ ea.')),
-                      Expanded(flex: 1, child: Text('\$ total')),
-                      Expanded(flex: 1, child: Container()),
-                    ],
-                  ),
-                ),
-              StreamBuilder<DocumentSnapshot>(
-                stream: firestoreUser.listStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Something went wrong');
-                  }
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    listItemState =
-                        Provider.of<ListItems>(context, listen: false);
-                    listItemState.reset();
-                    Map<String, dynamic> listData = snapshot.data.data();
-                    List<Map<String, dynamic>> listItems = [];
-                    if (listData['items'] != null) {
-                      listData['items'].forEach((key, value) {
-                        listItems.add(value);
-                      });
-                    }
-
-                    return Expanded(
-                      child: GroupedListView<dynamic, String>(
-                        elements: listItems,
-                        groupBy: (item) => item['aisle'],
-                        groupSeparatorBuilder: (String groupByValue) =>
-                            AisleHeader(aisle: groupByValue),
-                        // ignore: missing_return
-                        itemBuilder: (context, dynamic item) {
-                          var itemName = item['itemName'];
-                          if (!listItemState.checkedItems
-                              .containsKey(itemName)) {
-                            listItemState.setItemState(
-                              itemName: itemName,
-                              isChecked: false,
-                            );
-                          }
-                          if (item['isComplete'] != true) {
-                            return ShoppingListTile(item: item);
-                          }
-                        },
-                        // separator: Divider(),
-                        // itemComparator: , // optional
-                        useStickyGroupSeparators: false, // optional
-                        floatingHeader: false, // optional
-                        order: GroupedListOrder.ASC, // optional
-                      ),
-                    );
-                  }
-                  return Expanded(
-                    child: Column(
-                      children: [
-                        Spacer(),
-                        CircularProgressIndicator(),
-                        Spacer(flex: 4),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.blueGrey,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Spacer(flex: 1),
-                  Flexible(
-                    flex: 1,
-                    child: Consumer<ListItems>(
-                      builder: (context, items, widget) {
-                        // Clear items button.
-                        if (items.checkedItems.containsValue(true)) {
-                          return RaisedButton(
-                            child: Text('Clear'),
-                            color: Colors.orange[900],
-                            onPressed: () => items.completeItems(firestoreUser),
-                          );
-                        }
-                        // Go to Completed Items screen button.
-                        if (firestoreUser.completedItems.length > 0) {
-                          return RaisedButton(
-                              child: Text('Completed'),
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return CompletedItemsScreen();
-                                  },
-                                ));
-                              });
-                        }
-                        // Hide the bottombar.
-                        return Container(height: 0);
-                      },
+                  if (items != null && items.length > 0)
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(flex: 3, child: Text('Item')),
+                          Expanded(flex: 1, child: Text('#')),
+                          Expanded(flex: 1, child: Text('\$ ea.')),
+                          Expanded(flex: 1, child: Text('\$ total')),
+                          Expanded(flex: 1, child: Container()),
+                        ],
+                      ),
                     ),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: firestoreUser.listStream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        listItemState =
+                            Provider.of<ListItems>(context, listen: false);
+                        listItemState.reset();
+                        Map<String, dynamic> listData = snapshot.data.data();
+                        List<Map<String, dynamic>> listItems = [];
+                        if (listData['items'] != null) {
+                          listData['items'].forEach((key, value) {
+                            listItems.add(value);
+                          });
+                        }
+
+                        return Expanded(
+                          child: GroupedListView<dynamic, String>(
+                            elements: listItems,
+                            groupBy: (item) => item['aisle'],
+                            groupSeparatorBuilder: (String groupByValue) =>
+                                AisleHeader(aisle: groupByValue),
+                            // ignore: missing_return
+                            itemBuilder: (context, dynamic item) {
+                              var itemName = item['itemName'];
+                              if (!listItemState.checkedItems
+                                  .containsKey(itemName)) {
+                                listItemState.setItemState(
+                                  itemName: itemName,
+                                  isChecked: false,
+                                );
+                              }
+                              if (item['isComplete'] != true) {
+                                return ShoppingListTile(item: item);
+                              }
+                            },
+                            // separator: Divider(),
+                            // itemComparator: , // optional
+                            useStickyGroupSeparators: false, // optional
+                            floatingHeader: false, // optional
+                            order: GroupedListOrder.ASC, // optional
+                          ),
+                        );
+                      }
+                      return Expanded(
+                        child: Column(
+                          children: [
+                            Spacer(),
+                            CircularProgressIndicator(),
+                            Spacer(flex: 4),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                  // Spacer(flex: 1),
                 ],
               ),
-            ),
+              FloatingListButtonBar(context),
+            ],
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton:
-              (firestoreUser.currentListName == 'No lists yet')
-                  ? Container()
-                  : FloatingAddListItemButton(),
         ),
       ),
     );
