@@ -30,6 +30,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.symmetric(vertical: 1),
       child: InkWell(
         onTap: () async {
           bool wasUpdated = await Navigator.push(
@@ -39,49 +40,52 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
               ));
           if (wasUpdated) firestoreUser.updateItem(item);
         },
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(flex: 3, child: Text(itemName)),
-                Expanded(
-                  flex: 1,
-                  child: (item['quantity'] != '1')
-                      ? Text(item['quantity'].toString())
-                      : Container(),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: (item['price'] != '0.00')
-                      ? Text('\$${item['price'].toString()}')
-                      : Container(),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: (item['total'] != '0.00')
-                      ? Text('\$${item['total'].toString()}')
-                      : Container(),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Consumer<ListItems>(
-                    builder: (context, listItems, widget) {
-                      return Checkbox(
-                        value: listItems.checkedItems[itemName],
-                        onChanged: (value) {
-                          listItems.setItemState(
-                            itemName: itemName,
-                            isChecked: value,
-                            isUpdate: true,
-                          );
-                        },
-                      );
-                    },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(flex: 3, child: Text(itemName)),
+                  Expanded(
+                    flex: 1,
+                    child: (item['quantity'] != '1')
+                        ? Text(item['quantity'].toString())
+                        : Container(),
                   ),
-                ),
-              ],
-            )
-          ],
+                  Expanded(
+                    flex: 1,
+                    child: (item['price'] != '0.00')
+                        ? Text('\$${item['price'].toString()}')
+                        : Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: (item['total'] != '0.00')
+                        ? Text('\$${item['total'].toString()}')
+                        : Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Consumer<ListItems>(
+                      builder: (context, listItems, widget) {
+                        return Checkbox(
+                          value: listItems.checkedItems[itemName],
+                          onChanged: (value) {
+                            listItems.setItemState(
+                              itemName: itemName,
+                              isChecked: value,
+                              isUpdate: true,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
