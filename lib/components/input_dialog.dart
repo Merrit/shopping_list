@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 /// Allows to easily specify dialog properties such as the text field only
 /// accepting input as a double, which type of soft keyboard to show, etc.
 enum InputDialogs {
+  multiLine,
   onlyDouble,
   onlyInt,
 }
@@ -17,11 +18,8 @@ Future<String> showInputDialog({
   String title,
   String hintText,
 }) async {
-  final TextEditingController controller = TextEditingController();
-  final FocusNode hotkeyFocusNode = FocusNode();
-  final FocusNode textFieldFocusNode = FocusNode();
-  List<TextInputFormatter> formatter;
   TextInputType keyboardType;
+  List<TextInputFormatter> formatter;
 
   switch (type) {
     case InputDialogs.onlyInt:
@@ -34,6 +32,10 @@ Future<String> showInputDialog({
       ];
       keyboardType = TextInputType.number;
       break;
+    case InputDialogs.multiLine:
+      keyboardType = TextInputType.multiline;
+      formatter = null;
+      break;
     default:
       formatter = null; // No restrictions on text entry.
       keyboardType = TextInputType.visiblePassword;
@@ -42,37 +44,13 @@ Future<String> showInputDialog({
   var result = await showDialog(
     context: context,
     builder: (context) {
-      return RawKeyboardListener(
-        focusNode: hotkeyFocusNode,
-        onKey: (event) {
-          if (event.isKeyPressed(LogicalKeyboardKey.escape)) {
-            Navigator.pop(context);
-          }
-          if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
-            Navigator.pop(context, controller.text);
-          }
-        },
-        child: AlertDialog(
-          title: (title != null) ? Text(title) : null,
-          content: TextFormField(
-            controller: controller,
-            focusNode: textFieldFocusNode,
-            autofocus: true,
-            decoration: InputDecoration(hintText: hintText),
-            keyboardType: keyboardType,
-            inputFormatters: formatter,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, controller.text),
-              child: Text('Confirm'),
-            ),
-          ],
-        ),
+      return InputDialog(
+        context: context,
+        type: type,
+        title: title,
+        hintText: hintText,
+        keyboardType: keyboardType,
+        formatter: formatter,
       );
     },
   );
@@ -87,4 +65,79 @@ Future<String> showInputDialog({
   }
 
   return result;
+}
+
+class InputDialog extends StatelessWidget {
+  InputDialog({
+    this.context,
+    this.type,
+    this.title,
+    this.hintText,
+    this.keyboardType,
+    this.formatter,
+  }) : maxLines = (type == InputDialogs.multiLine) ? 5 : 1;
+
+  final BuildContext context;
+  final InputDialogs type;
+  final String title;
+  final String hintText;
+  final int maxLines;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter> formatter;
+  final FocusNode hotkeyFocusNode = FocusNode();
+  final FocusNode textFieldFocusNode = FocusNode();
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return RawKeyboardListener(
+      focusNode: hotkeyFocusNode,
+      onKey: (RawKeyEvent event) => hotkey(event),
+      child: AlertDialog(
+        title: (title != null) ? Text(title) : null,
+        content: TextFormField(
+          controller: controller,
+          focusNode: textFieldFocusNode,
+          autofocus: true,
+          decoration: InputDecoration(hintText: hintText),
+          keyboardType: keyboardType,
+          inputFormatters: formatter,
+          minLines: 1,
+          maxLines: maxLines,
+          textInputAction: TextInputAction.newline,
+          // For non-multiline fields onFieldSubmitted has enter => submit.
+          // For multiline fields the hotkey Ctrl + Enter works instead.
+          onFieldSubmitted: (value) =>
+              (type == InputDialogs.multiLine) ? null : _onSubmitted(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text('Confirm'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void hotkey(RawKeyEvent event) {
+    // Ctrl + Enter submits for multiline.
+    if (event.data.isModifierPressed(ModifierKey.controlModifier)) {
+      if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
+        Navigator.pop(context, controller.text);
+      }
+    }
+  }
+
+  void _onSubmitted() {
+    if (controller.text == '') {
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context, controller.text);
+    }
+  }
 }
