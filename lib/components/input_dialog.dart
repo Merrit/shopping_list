@@ -17,6 +17,7 @@ Future<String> showInputDialog({
   InputDialogs type,
   String title,
   String hintText,
+  String initialValue,
 }) async {
   TextInputType keyboardType;
   List<TextInputFormatter> formatter;
@@ -51,6 +52,7 @@ Future<String> showInputDialog({
         hintText: hintText,
         keyboardType: keyboardType,
         formatter: formatter,
+        initialValue: initialValue,
       );
     },
   );
@@ -75,7 +77,10 @@ class InputDialog extends StatelessWidget {
     this.hintText,
     this.keyboardType,
     this.formatter,
-  }) : maxLines = (type == InputDialogs.multiLine) ? 5 : 1;
+    String initialValue,
+  }) : maxLines = (type == InputDialogs.multiLine) ? 5 : 1 {
+    controller.text = initialValue;
+  }
 
   final BuildContext context;
   final InputDialogs type;
