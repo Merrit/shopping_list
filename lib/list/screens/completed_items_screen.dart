@@ -21,14 +21,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
         builder: (context) {
           listItems = Provider.of<ListItems>(context, listen: false);
           return Scaffold(
-            appBar: AppBar(
-              actions: [
-                TextButton(
-                  onPressed: () => _deleteItems(deleteAll: true),
-                  child: Text('Delete all'),
-                ),
-              ],
-            ),
+            appBar: AppBar(),
             body: ListView.builder(
               itemCount:
                   Provider.of<FirestoreUser>(context).completedItems.length,
@@ -50,7 +43,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                   Spacer(),
                   Consumer<ListItems>(
                     builder: (context, listItems, widget) {
-                      return TextButton(
+                      return RaisedButton(
                         onPressed: (listItems.checkedItems.containsValue(true))
                             ? _restoreItems
                             : null,
@@ -61,13 +54,18 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                   Spacer(),
                   Consumer<ListItems>(
                     builder: (context, listItems, widget) {
-                      return TextButton(
+                      return RaisedButton(
                         onPressed: (listItems.checkedItems.containsValue(true))
                             ? () => _deleteItems(deleteAll: false)
                             : null,
                         child: Text('Delete checked'),
                       );
                     },
+                  ),
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: () => _deleteItems(deleteAll: true),
+                    child: Text('Delete all'),
                   ),
                   Spacer(),
                 ],

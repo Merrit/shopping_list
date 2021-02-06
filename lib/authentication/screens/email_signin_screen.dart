@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list/authentication/notify_email_sent.dart';
 import 'package:shopping_list/authentication/sign_in.dart';
 import 'package:shopping_list/globals.dart';
-import 'package:shopping_list/main.dart';
 
 class EmailSigninScreen extends StatefulWidget {
   @override

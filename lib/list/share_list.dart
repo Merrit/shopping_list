@@ -8,6 +8,7 @@ import 'package:shopping_list/globals.dart';
 
 /// Check if the provided email is associated with an existing user account, if
 /// yes then give that account permission to use this list.
+// ignore: missing_return
 Future<String> shareList(
     {@required BuildContext context, @required String email}) async {
   // Check not current user

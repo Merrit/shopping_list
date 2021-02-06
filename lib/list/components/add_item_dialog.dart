@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:settings_ui/settings_ui.dart';
+import 'package:shopping_list/helpers/capitalize_string.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/list/screens/aisles_screen.dart';
+import 'package:shopping_list/list/aisle.dart';
 
 class AddItemDialog extends StatefulWidget {
   @override
@@ -10,8 +13,9 @@ class AddItemDialog extends StatefulWidget {
 
 class _AddItemDialogState extends State<AddItemDialog> {
   final TextEditingController addItemController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
   FirestoreUser firestoreUser;
-  String aisle;
+  String aisle = 'Unsorted';
 
   @override
   Widget build(BuildContext context) {
@@ -22,43 +26,35 @@ class _AddItemDialogState extends State<AddItemDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Item Name'),
-            controller: addItemController,
-            autofocus: true,
-            onFieldSubmitted: (value) => _addItem(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            child: TextFormField(
+              decoration: InputDecoration(labelText: 'Item Name'),
+              controller: addItemController,
+              autofocus: true,
+              onFieldSubmitted: (value) => _addItem(),
+            ),
           ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              Consumer<FirestoreUser>(
-                builder: (context, user, widget) {
-                  return DropdownButton(
-                    hint: Text('Aisle (optional)'),
-                    value: aisle,
-                    onChanged: (value) {
-                      setState(() {
-                        aisle = value;
-                      });
-                    },
-                    items: user.aisles
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AislesScreen()),
-                ),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            child: TextFormField(
+              decoration: InputDecoration(labelText: 'Quantity'),
+              controller: quantityController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              onFieldSubmitted: (value) => _addItem(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SettingsTile(
+              title: 'Aisle',
+              subtitle: aisle,
+              onPressed: (context) async {
+                var _aisle = await setAisle(context);
+                setState(() => aisle = _aisle);
+              },
+            ),
           ),
         ],
       ),
@@ -76,7 +72,19 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   _addItem() {
-    firestoreUser.addListItem(itemName: addItemController.text, aisle: aisle);
+    String _aisle = aisle ?? 'Unsorted';
+    var _quantity =
+        (quantityController.text != '') ? quantityController.text : '1';
+    Map<String, dynamic> item = {
+      'itemName': addItemController.text.capitalizeFirst,
+      'aisle': _aisle,
+      'isComplete': false,
+      'quantity': _quantity,
+      'price': '0.00',
+      'total': '0.00',
+      'hasTax': false
+    };
+    firestoreUser.addListItem(item);
     Navigator.pop(context);
   }
 }

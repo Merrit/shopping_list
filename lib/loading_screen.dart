@@ -48,15 +48,27 @@ class _LoadingScreenState extends State<LoadingScreen> {
                     return SigninScreen();
                   }
                 }
-                return CircularProgressIndicator();
+                return _loadingScreen();
               },
             );
           } else {
             return SigninScreen();
           }
         }
-        return Container(child: CircularProgressIndicator());
+        return _loadingScreen();
       },
+    );
+  }
+
+  Widget _loadingScreen() {
+    return Material(
+      child: Center(
+        child: Container(
+          height: 100,
+          width: 100,
+          child: CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }

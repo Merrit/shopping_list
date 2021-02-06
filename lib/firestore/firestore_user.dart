@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:shopping_list/globals.dart';
-import 'package:shopping_list/helpers/capitalize_string.dart';
-import 'package:shopping_list/preferences.dart';
+import 'package:shopping_list/preferences/preferences.dart';
 
 /// [FirestoreUser] is the Provider-powered hub that handles Firebase data.
 class FirestoreUser extends ChangeNotifier {
@@ -15,23 +14,14 @@ class FirestoreUser extends ChangeNotifier {
   Map<String, dynamic> lists = {};
 
   /// Add a new item to the current shopping list.
-  void addListItem({@required String itemName, String aisle}) {
-    var _aisle = aisle ?? 'Unsorted';
-    itemName = itemName.capitalizeFirst;
-    var _newItem = {
-      'itemName': itemName,
-      'aisle': _aisle,
-      'isComplete': false,
-    };
+  void addListItem(Map<String, dynamic> item) {
+    var itemName = item['itemName'];
     // Add to Firebase.
-    FirebaseFirestore.instance.collection('lists').doc(currentList).set(
-      {
-        'items': {itemName: _newItem}
-      },
-      SetOptions(merge: true),
-    );
+    FirebaseFirestore.instance.collection('lists').doc(currentList).set({
+      'items': {itemName: item}
+    }, SetOptions(merge: true));
     // Add to local cache.
-    lists[currentList]['items'][itemName] = _newItem;
+    lists[currentList]['items'][itemName] = item;
     // Make sure this isn't in completedItems already.
     // This could be necessary if the user adds a list item of something
     // they had previously checked off their list.
@@ -58,13 +48,25 @@ class FirestoreUser extends ChangeNotifier {
       }
     });
     // Update Firebase items.
-    updateItems(items: _listItems);
+    updateAllItems(items: _listItems);
     // Notify widgets like Checked Items of changes.
     notifyListeners();
   }
 
+  /// Update a single item.
+  void updateItem(Map<String, dynamic> item) {
+    var itemName = item['itemName'];
+    // Update the local cache.
+    lists[currentList]['items'][itemName] = item;
+    // Update the Firebase data.
+    // .set() is required, .update() will replace the entire 'items' field.
+    FirebaseFirestore.instance.collection('lists').doc(currentList).set({
+      'items': {itemName: item}
+    }, SetOptions(merge: true));
+  }
+
   /// Update the entire collection of items at once.
-  void updateItems({@required Map<String, dynamic> items}) {
+  void updateAllItems({@required Map<String, dynamic> items}) {
     FirebaseFirestore.instance
         .collection('lists')
         .doc(currentList)
@@ -77,7 +79,7 @@ class FirestoreUser extends ChangeNotifier {
       _currentItems.remove(item);
       completedItems.remove(item);
     });
-    updateItems(items: _currentItems);
+    updateAllItems(items: _currentItems);
     notifyListeners();
   }
 
@@ -289,6 +291,7 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// Enable settings so the app will use the local Firebase emulator.
+  // ignore: unused_element
   Future<void> _setEmulator() async {
     String host = defaultTargetPlatform == TargetPlatform.android
         ? '10.0.2.2:8080'
