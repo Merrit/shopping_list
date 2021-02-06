@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shopping_list/components/advanced_text_field.dart';
 import 'package:shopping_list/components/input_dialog.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/aisle.dart';
@@ -17,19 +18,28 @@ class ItemDetailsScreen extends StatefulWidget {
 }
 
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
+  FirestoreUser firestoreUser;
   bool wasUpdated = false;
   Map<String, dynamic> item;
   String selectedAisle;
   bool hasTax;
   String taxRate;
+  String originalName;
+
+  Widget titleWidget;
+  Text _defaultTitleWidget;
+  final titleController = TextEditingController();
+  Widget titleTextField;
 
   @override
   void initState() {
     super.initState();
+    firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
     item = widget.item;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
     taxRate = _getTaxRate();
+    _createTitleWidgets();
   }
 
   @override
@@ -44,7 +54,13 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(item['itemName']), centerTitle: true),
+        appBar: AppBar(
+          title: GestureDetector(
+            child: titleWidget,
+            onTap: () => setState(() => titleWidget = titleTextField),
+          ),
+          centerTitle: true,
+        ),
         body: Container(
           padding: EdgeInsets.all(20),
           child: SettingsList(
@@ -137,8 +153,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       }
       item['total'] = _total.toStringAsFixed(2);
     }
+    // Check if itemName was updated.
+    if (originalName != null) {
+      // Delete old item & create new item with new name.
+      // Needed until the process of creating and handling items doesn't
+      // rely on using the item name for the map name.
+      firestoreUser.addListItem(item);
+      firestoreUser.deleteItems(items: [originalName]);
+    } else {
+      // If itemName is unchanged just update the item.
+      firestoreUser.updateItem(item);
+    }
     // Now allow return to previous screen.
-    Navigator.pop(context, wasUpdated);
+    Navigator.pop(context);
   }
 
   String _getTaxRate() {
@@ -153,5 +180,27 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       MaterialPageRoute(builder: (context) => PreferencesScreen()),
     );
     setState(() => taxRate = _getTaxRate());
+  }
+
+  void _createTitleWidgets() {
+    _defaultTitleWidget = Text(item['itemName']);
+    titleWidget = _defaultTitleWidget;
+    titleTextField = AdvancedTextField(
+      width: 300,
+      initialValue: item['itemName'],
+      callback: _titleWidgetCallback,
+    );
+  }
+
+  void _titleWidgetCallback(String newName) {
+    if (newName == '') {
+      setState(() => titleWidget = _defaultTitleWidget);
+    } else {
+      originalName = item['itemName'];
+      item['itemName'] = newName;
+      _defaultTitleWidget = Text(newName);
+      setState(() => titleWidget = _defaultTitleWidget);
+      wasUpdated = true;
+    }
   }
 }
