@@ -11,7 +11,7 @@
             "program": "lib/main.dart",
         },
         {
-            "name": "Web Server",
+            "name": "Chrome",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -20,6 +20,20 @@
                 "chrome",
                 "--web-port",
                 "8000",
+            ],
+        },
+        {
+            "name": "Web Server",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "-d",
+                "web-server",
+                "--web-port",
+                "8000",
+                "--web-hostname",
+                "0.0.0.0",
             ],
         },
     ]
