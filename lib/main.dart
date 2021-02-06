@@ -8,6 +8,7 @@ import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/list/screens/item_details_screen.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/loading_screen.dart';
 
@@ -74,6 +75,7 @@ class ListApp extends StatelessWidget {
               CreateEmailAccountScreen(),
           Routes.listScreen: (context) => ListScreen(),
           Routes.loadingScreen: (context) => LoadingScreen(),
+          ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
         },
         initialRoute: Routes.loadingScreen,
       ),

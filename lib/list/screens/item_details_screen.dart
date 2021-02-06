@@ -9,9 +9,7 @@ import 'package:shopping_list/preferences/preferences.dart';
 import 'package:shopping_list/preferences/screens/preferences_screen.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
-  final Map<String, dynamic> item;
-
-  ItemDetailsScreen({@required this.item});
+  static const id = 'item_details_screen';
 
   @override
   _ItemDetailsScreenState createState() => _ItemDetailsScreenState();
@@ -32,14 +30,14 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   Widget titleTextField;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-    item = widget.item;
+    item = ModalRoute.of(context).settings.arguments;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
     taxRate = _getTaxRate();
     _createTitleWidgets();
+    super.didChangeDependencies();
   }
 
   @override
