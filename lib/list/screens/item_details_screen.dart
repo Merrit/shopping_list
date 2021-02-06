@@ -128,6 +128,23 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       }
                     },
                   ),
+                  SettingsTile(
+                    leading: Icon(Icons.notes),
+                    title: 'Notes',
+                    subtitle: item['notes'] ?? '',
+                    onPressed: (context) async {
+                      String result = await showInputDialog(
+                        type: InputDialogs.multiLine,
+                        context: context,
+                        title: 'Notes',
+                        initialValue: item['notes'],
+                      );
+                      if (result != '') {
+                        setState(() => item['notes'] = result);
+                        wasUpdated = true;
+                      }
+                    },
+                  ),
                 ],
               ),
             ],

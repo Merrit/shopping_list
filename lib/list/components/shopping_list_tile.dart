@@ -38,7 +38,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
               builder: (context) => ItemDetailsScreen(item: item),
             )),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.only(left: 13), // Match CheckBox padding.
           child: Column(
             children: [
               Row(
@@ -80,11 +80,28 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                     ),
                   ),
                 ],
-              )
+              ),
+              _notesWidget(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _notesWidget() {
+    if (item['notes'] == null) return Container();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Text(
+            item['notes'],
+            style: TextStyle(color: Colors.grey[400]),
+          ),
+        ),
+      ],
     );
   }
 }
