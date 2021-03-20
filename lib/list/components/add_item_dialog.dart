@@ -60,22 +60,22 @@ class _AddItemDialogState extends State<AddItemDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
           onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
         ),
         TextButton(
-          child: Text('Confirm'),
           onPressed: () => _addItem(),
+          child: Text('Confirm'),
         ),
       ],
     );
   }
 
-  _addItem() {
-    String _aisle = aisle ?? 'Unsorted';
+  void _addItem() {
+    final _aisle = aisle ?? 'Unsorted';
     var _quantity =
         (quantityController.text != '') ? quantityController.text : '1';
-    Map<String, dynamic> item = {
+    final item = {
       'itemName': addItemController.text.capitalizeFirst,
       'aisle': _aisle,
       'isComplete': false,

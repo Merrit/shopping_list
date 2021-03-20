@@ -82,7 +82,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     );
   }
 
-  _setStringPref() {
+  void _setStringPref() {
     prefs.setString('taxRate', taxRateController.text);
     taxRate = taxRateController.text;
     setState(() => Navigator.pop(context));

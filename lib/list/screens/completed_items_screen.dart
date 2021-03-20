@@ -78,8 +78,8 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
   }
 
   /// If `deleteAll` is false, only delete checked items.
-  _deleteItems({bool deleteAll = false}) async {
-    bool confirmed = await showDialog(
+  void _deleteItems({bool deleteAll = false}) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(content: 'Confirm: delete items?'),
     );
@@ -92,8 +92,8 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
   }
 
   /// Restores all checked items to the main list.
-  _restoreItems() async {
-    bool confirmed = await showDialog(
+  Future<void> _restoreItems() async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(content: 'Confirm: Restore items?'),
     );

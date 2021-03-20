@@ -28,7 +28,6 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
               children: [
                 Text('My Shopping Lists'),
                 ElevatedButton(
-                  child: Text('New List'),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -36,6 +35,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                           return NewListDialog();
                         });
                   },
+                  child: Text('New List'),
                 ),
               ],
             ),

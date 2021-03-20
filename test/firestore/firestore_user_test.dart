@@ -3,7 +3,7 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 
 void main() {
   test('Can instantiate', () {
-    FirestoreUser firestoreUser = FirestoreUser();
+    final firestoreUser = FirestoreUser();
     expect(firestoreUser.runtimeType, FirestoreUser);
   });
 }

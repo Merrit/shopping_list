@@ -9,12 +9,12 @@ class AisleHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: TextButton(
+        onPressed: () {},
         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Text(
           aisle,
           style: TextStyle(color: Colors.white),
         ),
-        onPressed: () {},
       ),
     );
   }

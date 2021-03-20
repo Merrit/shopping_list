@@ -37,18 +37,18 @@ class _NewListDialogState extends State<NewListDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
           onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
         ),
         TextButton(
-          child: Text('Confirm'),
           onPressed: () => _createList(newListController.text),
+          child: Text('Confirm'),
         ),
       ],
     );
   }
 
-  _createList(String listName) {
+  void _createList(String listName) {
     listName = listName.capitalizeFirstOfEach;
     if (listName == '') {
       setState(() {
