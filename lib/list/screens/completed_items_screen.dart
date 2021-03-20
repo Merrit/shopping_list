@@ -43,7 +43,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                   Spacer(),
                   Consumer<ListItems>(
                     builder: (context, listItems, widget) {
-                      return RaisedButton(
+                      return ElevatedButton(
                         onPressed: (listItems.checkedItems.containsValue(true))
                             ? _restoreItems
                             : null,
@@ -54,7 +54,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                   Spacer(),
                   Consumer<ListItems>(
                     builder: (context, listItems, widget) {
-                      return RaisedButton(
+                      return ElevatedButton(
                         onPressed: (listItems.checkedItems.containsValue(true))
                             ? () => _deleteItems(deleteAll: false)
                             : null,
@@ -63,7 +63,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                     },
                   ),
                   Spacer(),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () => _deleteItems(deleteAll: true),
                     child: Text('Delete all'),
                   ),

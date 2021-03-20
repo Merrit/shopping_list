@@ -27,7 +27,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
             child: Column(
               children: [
                 Text('My Shopping Lists'),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('New List'),
                   onPressed: () {
                     showDialog(
