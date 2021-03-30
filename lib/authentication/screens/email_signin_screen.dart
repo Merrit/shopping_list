@@ -63,14 +63,16 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-                child: Text('Sign in'), onPressed: () => _signIn(context)),
+              onPressed: () => _signIn(context),
+              child: Text('Sign in'),
+            ),
             Spacer(),
             TextButton(
-              child: Text('Create account'),
               onPressed: () => Navigator.pushNamed(
                 context,
                 Routes.createEmailAccountScreen,
               ),
+              child: Text('Create account'),
             ),
           ],
         ),
@@ -79,7 +81,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
   }
 
   void _signIn(BuildContext context) async {
-    String result = await signInWithEmail(
+    final result = await signInWithEmail(
         email: _emailController.text, password: _passwordController.text);
     switch (result) {
       case 'success':
@@ -88,7 +90,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
           content: Text(_msg),
           duration: Duration(seconds: 2),
         );
-        ScaffoldMessenger.of(context)
+        await ScaffoldMessenger.of(context)
             .showSnackBar(_successSnack)
             .closed
             .then((SnackBarClosedReason reason) {
@@ -96,7 +98,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
         });
         break;
       case 'email-not-verified':
-        _notifyEmailNotVerified();
+        await _notifyEmailNotVerified();
         break;
       case 'user-not-found':
         setState(() {
@@ -124,8 +126,8 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
     }
   }
 
-  _notifyEmailNotVerified() {
-    showDialog(
+  Future<void> _notifyEmailNotVerified() async {
+    await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -136,12 +138,12 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
               'then try again.'),
           actions: [
             TextButton(
-              child: Text('Resend Verification Email'),
               onPressed: () => notifyEmailSent(context),
+              child: Text('Resend Verification Email'),
             ),
             TextButton(
-              child: Text('Ok'),
               onPressed: () => Navigator.pop(context),
+              child: Text('Ok'),
             ),
           ],
         );

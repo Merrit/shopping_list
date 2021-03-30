@@ -8,11 +8,13 @@ class AisleHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FlatButton(
-        // color: Colors.blue,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Text(aisle),
+      child: TextButton(
         onPressed: () {},
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Text(
+          aisle,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

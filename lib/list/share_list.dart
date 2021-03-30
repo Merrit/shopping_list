@@ -12,18 +12,18 @@ import 'package:shopping_list/globals.dart';
 Future<String> shareList(
     {@required BuildContext context, @required String email}) async {
   // Check not current user
-  String currentUserEmail = Globals.user.email;
+  final currentUserEmail = Globals.user.email;
   if ((currentUserEmail != null) && (email != currentUserEmail)) {
-    FirestoreUser user = Provider.of<FirestoreUser>(context, listen: false);
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final user = Provider.of<FirestoreUser>(context, listen: false);
+    final firestore = FirebaseFirestore.instance;
     var query = await firestore
         .collection('users')
         .where('email', isEqualTo: email)
         .get();
     if (query.docs.length == 1) {
-      Map<String, dynamic> accountInfo = query.docs.first.data();
+      final accountInfo = query.docs.first.data();
       var uid = accountInfo['uid'];
-      firestore.collection('lists').doc(user.currentList).set(
+      await firestore.collection('lists').doc(user.currentList).set(
         {
           'sharedWith': {email: uid},
           'allowedUsers': {uid: true},

@@ -53,14 +53,16 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
                       Text('List Sharing'),
                       Text('Shared with:'),
                       Builder(builder: (context) {
-                        List<Widget> sharedTiles = [];
+                        final sharedTiles = <Widget>[];
                         Map<String, String> sharedWith;
                         try {
                           sharedWith = Map<String, String>.from(
                               user.lists[listID]['sharedWith']);
-                        } catch (e) {}
+                        } catch (e) {
+                          // TODO: Error handling.
+                        }
                         // Don't care about the error because we check below.
-                        if (sharedWith != null && sharedWith.length > 0) {
+                        if (sharedWith != null && sharedWith.isNotEmpty) {
                           sharedWith.forEach((key, value) {
                             sharedTiles.add(Text(key));
                           });
@@ -68,12 +70,12 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
                         return Column(children: sharedTiles);
                       }),
                       TextButton(
-                        child: Text('Add person'),
                         onPressed: () {
                           showDialog(
                               context: context,
                               builder: (context) => AddShareDialog());
                         },
+                        child: Text('Add person'),
                       ),
                     ],
                   );
@@ -101,7 +103,7 @@ class AddShareDialog extends StatefulWidget {
 }
 
 class _AddShareDialogState extends State<AddShareDialog> {
-  TextEditingController _shareToEmailController = TextEditingController();
+  final TextEditingController _shareToEmailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +116,13 @@ class _AddShareDialogState extends State<AddShareDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
           onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
         ),
         TextButton(
-          child: Text('Confirm'),
           onPressed: () =>
               shareList(context: context, email: _shareToEmailController.text),
+          child: Text('Confirm'),
         ),
       ],
     );
@@ -153,7 +155,7 @@ class ConfirmListDelete extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirestoreUser user = Provider.of<FirestoreUser>(context, listen: false);
+    final user = Provider.of<FirestoreUser>(context, listen: false);
     var _listName = user.lists[listID]['listName'];
 
     return AlertDialog(
@@ -162,14 +164,14 @@ class ConfirmListDelete extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
           onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
         ),
         TextButton(
-          child: Text('Confirm'),
           onPressed: () {
             deleteList(context: context, listID: listID);
           },
+          child: Text('Confirm'),
         ),
       ],
     );

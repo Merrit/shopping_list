@@ -3,7 +3,7 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 
 /// Holds the state for the current list.
 class ListItems extends ChangeNotifier {
-  Map<String, bool> _checkedItems = {};
+  final Map<String, bool> _checkedItems = {};
 
   /// List items are added here as Map<itemName, isChecked>.
   Map<String, bool> get checkedItems {
@@ -24,7 +24,7 @@ class ListItems extends ChangeNotifier {
 
   /// Set items' complete status.
   void completeItems(FirestoreUser firestoreUser) {
-    Map<String, bool> toBeCompleted = {};
+    final toBeCompleted = <String, bool>{};
     _checkedItems.forEach((itemName, value) {
       if (value) toBeCompleted[itemName] = true;
     });
@@ -34,7 +34,7 @@ class ListItems extends ChangeNotifier {
   }
 
   void deleteItems(FirestoreUser firestoreUser, {bool deleteAll = false}) {
-    List<String> itemsToDelete = [];
+    final itemsToDelete = <String>[];
     if (deleteAll) {
       _checkedItems.forEach((itemName, _) => itemsToDelete.add(itemName));
       _checkedItems.clear();
@@ -52,7 +52,7 @@ class ListItems extends ChangeNotifier {
 
   /// Restore items from the `Completed` list back to the regular list.
   void restoreItems(FirestoreUser firestoreUser) {
-    Map<String, bool> itemsToRestore = {};
+    final itemsToRestore = <String, bool>{};
     _checkedItems.forEach((itemName, isChecked) {
       if (isChecked) {
         itemsToRestore[itemName] = false;

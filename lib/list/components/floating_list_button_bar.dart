@@ -26,21 +26,20 @@ class FloatingListButtonBar extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: FloatingActionButton(
                     heroTag: null,
-                    child: Icon(Icons.clear_all),
                     backgroundColor: Colors.yellow[800],
                     onPressed: () => items.completeItems(firestoreUser),
+                    child: Icon(Icons.clear_all),
                   ),
                 );
               }
               return Container(height: 0);
             }),
             Consumer<ListItems>(builder: (context, items, widget) {
-              if (firestoreUser.completedItems.length > 0) {
+              if (firestoreUser.completedItems.isNotEmpty) {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: FloatingActionButton(
                     heroTag: null,
-                    child: Icon(Icons.done_all),
                     backgroundColor: Colors.blue,
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -49,6 +48,7 @@ class FloatingListButtonBar extends StatelessWidget {
                         },
                       ));
                     },
+                    child: Icon(Icons.done_all),
                   ),
                 );
               }
@@ -57,7 +57,6 @@ class FloatingListButtonBar extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: FloatingActionButton(
-                child: Icon(Icons.add),
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -65,6 +64,7 @@ class FloatingListButtonBar extends StatelessWidget {
                         return AddItemDialog();
                       });
                 },
+                child: Icon(Icons.add),
               ),
             ),
           ],

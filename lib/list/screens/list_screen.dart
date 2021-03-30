@@ -35,7 +35,7 @@ class _ListScreenState extends State<ListScreen> {
     // Ensure we only initialize once.
     if (!_isInitialized) {
       firestoreUser = Provider.of<FirestoreUser>(context);
-      if (firestoreUser.lists.length > 0) {
+      if (firestoreUser.lists.isNotEmpty) {
         items = firestoreUser.lists[firestoreUser.currentList]['items'];
         _isInitialized = true;
       }
@@ -65,7 +65,7 @@ class _ListScreenState extends State<ListScreen> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (items != null && items.length > 0)
+                  if (items != null && items.isNotEmpty)
                     Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 10,
@@ -97,18 +97,18 @@ class _ListScreenState extends State<ListScreen> {
     return AppBar(
         title: Consumer<FirestoreUser>(builder: (context, user, child) {
           return GestureDetector(
-            child: Text(user.currentListName),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return ListDetailsScreen(listID: user.currentList);
               }));
             },
+            child: Text(user.currentListName),
           );
         }),
         centerTitle: true);
   }
 
-  _hotkey(RawKeyEvent key) {
+  void _hotkey(RawKeyEvent key) {
     if (key.character == 'n') {
       showDialog(
           context: context,

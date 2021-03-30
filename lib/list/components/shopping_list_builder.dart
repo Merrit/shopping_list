@@ -27,7 +27,7 @@ class ShoppingListBuilder extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.active) {
           // Actual shopping list.
-          Map<String, dynamic> listData = snapshot.data.data();
+          final listData = snapshot.data.data();
           return _ShoppingGroupedListView(context, listData);
         }
 

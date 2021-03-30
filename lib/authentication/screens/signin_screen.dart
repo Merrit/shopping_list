@@ -27,7 +27,7 @@ class _SigninScreenState extends State<SigninScreen> {
     // **Now** check if there is a logged in user.
     if (Globals.auth.currentUser != null &&
         Globals.auth.currentUser.emailVerified) {
-      Navigator.pushReplacementNamed(context, Routes.listScreen);
+      await Navigator.pushReplacementNamed(context, Routes.listScreen);
     } else {
       // No saved user loaded, so continue normal sign in.
     }
@@ -55,6 +55,9 @@ class _SigninScreenState extends State<SigninScreen> {
                 height: 50,
                 width: 200,
                 child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.signinEmailScreen);
+                  },
                   child: Row(
                     children: [
                       Icon(Icons.email),
@@ -62,9 +65,6 @@ class _SigninScreenState extends State<SigninScreen> {
                       Text('Sign in with email'),
                     ],
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, Routes.signinEmailScreen);
-                  },
                 ),
               ),
               Container(

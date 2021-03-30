@@ -9,9 +9,7 @@ import 'package:shopping_list/preferences/preferences.dart';
 import 'package:shopping_list/preferences/screens/preferences_screen.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
-  final Map<String, dynamic> item;
-
-  ItemDetailsScreen({@required this.item});
+  static const id = 'item_details_screen';
 
   @override
   _ItemDetailsScreenState createState() => _ItemDetailsScreenState();
@@ -32,19 +30,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   Widget titleTextField;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-    item = widget.item;
+    item = ModalRoute.of(context).settings.arguments;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
     taxRate = _getTaxRate();
     _createTitleWidgets();
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    FirestoreUser user = Provider.of<FirestoreUser>(context);
+    final user = Provider.of<FirestoreUser>(context);
 
     return WillPopScope(
       // When user returns to previous page, notify whether or not the item was
@@ -56,8 +54,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: GestureDetector(
-            child: titleWidget,
             onTap: () => setState(() => titleWidget = titleTextField),
+            child: titleWidget,
           ),
           centerTitle: true,
         ),
@@ -83,7 +81,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     title: 'Quantity',
                     subtitle: item['quantity'],
                     onPressed: (context) async {
-                      String result = await showInputDialog(
+                      final result = await showInputDialog(
                         context: context,
                         title: 'Quantity',
                         type: InputDialogs.onlyInt,
@@ -101,7 +99,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     subtitle:
                         (item['price'] != '0.00') ? item['price'] : 'Not set',
                     onPressed: (context) async {
-                      String result = await showInputDialog(
+                      final result = await showInputDialog(
                         context: context,
                         title: 'Price',
                         type: InputDialogs.onlyDouble,
@@ -133,7 +131,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     title: 'Notes',
                     subtitle: item['notes'] ?? '',
                     onPressed: (context) async {
-                      String result = await showInputDialog(
+                      final result = await showInputDialog(
                         type: InputDialogs.multiLine,
                         context: context,
                         title: 'Notes',
@@ -159,10 +157,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     item['hasTax'] = hasTax;
     // Update the total price for this item.
     if (wasUpdated) {
-      int _quantity = int.tryParse(item['quantity']);
-      double _price = double.tryParse(item['price']);
-      double _taxRate = double.tryParse(Preferences.taxRate) ?? 0.00;
-      double _total = (_quantity * _price);
+      final _quantity = int.tryParse(item['quantity']);
+      final _price = double.tryParse(item['price']);
+      var _taxRate = double.tryParse(Preferences.taxRate) ?? 0.00;
+      var _total = (_quantity * _price);
       if (hasTax && _taxRate > 0.00) {
         _taxRate = _taxRate / 100;
         var _taxAmount = _total * _taxRate;
@@ -186,7 +184,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   }
 
   String _getTaxRate() {
-    String taxRate = '${Preferences.taxRate}%';
+    var taxRate = '${Preferences.taxRate}%';
     if (taxRate == '%') taxRate = 'Not set';
     return taxRate;
   }

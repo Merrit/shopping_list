@@ -35,7 +35,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           if (FirebaseAuth.instance.currentUser != null) {
             // Preload initial data, and wait on the loading screen until
             // the preload is completed.
-            Future<bool> loadingComplete =
+            final loadingComplete =
                 Provider.of<FirestoreUser>(context, listen: false)
                     .setInitialData();
             return FutureBuilder(

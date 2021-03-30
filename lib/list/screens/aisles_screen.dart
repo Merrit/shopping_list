@@ -8,8 +8,7 @@ import 'package:shopping_list/helpers/capitalize_string.dart';
 class AislesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<String> _aisles =
-        Provider.of<FirestoreUser>(context, listen: true).aisles;
+    final _aisles = Provider.of<FirestoreUser>(context, listen: true).aisles;
 
     return Scaffold(
       appBar: AppBar(
@@ -31,13 +30,13 @@ class AislesScreen extends StatelessWidget {
             : Container(),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
         onPressed: () {
           showDialog(
             context: context,
             builder: (context) => AddAisleDialog(),
           );
         },
+        child: Icon(Icons.add),
       ),
     );
   }
@@ -104,18 +103,18 @@ class _AddAisleDialogState extends State<AddAisleDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
           onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
         ),
         TextButton(
-          child: Text('Confirm'),
           onPressed: () => _addAisle(),
+          child: Text('Confirm'),
         )
       ],
     );
   }
 
-  _addAisle() {
+  void _addAisle() {
     setState(() {
       Provider.of<FirestoreUser>(context, listen: false)
           .addAisle(newAisle: aisleNameController.text.capitalizeFirstOfEach);

@@ -108,7 +108,7 @@ class FirestoreUser extends ChangeNotifier {
 
   void populateCompletedItems() {
     Map<String, dynamic> items;
-    if (lists.length > 0) items = lists[currentList]['items'];
+    if (lists.isNotEmpty) items = lists[currentList]['items'];
     if (items != null) {
       items.forEach((key, value) {
         if (value['isComplete'] == true) {
@@ -152,8 +152,8 @@ class FirestoreUser extends ChangeNotifier {
 
   /// Create a new list document in Firebase.
   Future<void> createNewList({@required String listName}) async {
-    String uid = Globals.user.uid;
-    FirebaseFirestore.instance.collection('lists').doc().set(
+    final uid = Globals.user.uid;
+    await FirebaseFirestore.instance.collection('lists').doc().set(
       {
         'listName': listName,
         'owner': uid,
@@ -264,13 +264,13 @@ class FirestoreUser extends ChangeNotifier {
     await fetchListsData();
     _loadInitialCurrentList();
     _setListStream();
-    _getAislesData();
+    await _getAislesData();
     return true;
   }
 
   /// On startup, if any lists exist we set one as 'current' or active.
   void _loadInitialCurrentList() {
-    if (lists.length > 0) {
+    if (lists.isNotEmpty) {
       // Check for a stored 'last used list'.
       var lastUsedList = Preferences.lastUsedList;
       var listIDs = [];
@@ -293,7 +293,7 @@ class FirestoreUser extends ChangeNotifier {
   /// Enable settings so the app will use the local Firebase emulator.
   // ignore: unused_element
   Future<void> _setEmulator() async {
-    String host = defaultTargetPlatform == TargetPlatform.android
+    final host = defaultTargetPlatform == TargetPlatform.android
         ? '10.0.2.2:8080'
         : 'localhost:8080';
     FirebaseFirestore.instance.settings =

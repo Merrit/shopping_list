@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 /// Easily prettify input, eg 'bulk barn' => 'Bulk Barn'
 /// or 'grapes' => 'Grapes'.
 extension Capitalize on String {

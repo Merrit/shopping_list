@@ -32,11 +32,11 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 1),
       child: InkWell(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ItemDetailsScreen(item: item),
-            )),
+        onTap: () => Navigator.pushNamed(
+          context,
+          ItemDetailsScreen.id,
+          arguments: item,
+        ),
         child: Padding(
           padding: const EdgeInsets.only(left: 13), // Match CheckBox padding.
           child: Column(

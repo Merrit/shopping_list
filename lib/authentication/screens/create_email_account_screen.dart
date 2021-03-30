@@ -83,8 +83,8 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
                         'sent to the address you provide'),
                   ),
                   ElevatedButton(
-                    child: Text('Sign up'),
                     onPressed: () => _signUp(context: context),
+                    child: Text('Sign up'),
                   ),
                 ],
               ),
@@ -121,7 +121,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
       setState(() => isLoading = false);
       switch (result) {
         case 'success':
-          notifyEmailSent(context);
+          await notifyEmailSent(context);
           break;
         case 'weak-password':
           // This should never run since we require 12 characters.

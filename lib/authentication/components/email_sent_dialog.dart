@@ -11,8 +11,8 @@ class EmailSentDialog extends StatelessWidget {
           'Please check your email.'),
       actions: [
         TextButton(
-          child: Text('Ok'),
           onPressed: () => RestartWidget.restartApp(context),
+          child: Text('Ok'),
         ),
       ],
     );
