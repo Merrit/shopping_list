@@ -7,12 +7,11 @@ import 'package:shopping_list/globals.dart';
 /// Save and load local user preferences and state.
 class Preferences {
   static SharedPreferences? prefs;
-  static final String _uid = Globals.user.uid;
+  static final String _uid = Globals.user!.uid;
 
   /// Initialize shared_preferences, returns true to indicate finished.
   static Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    return true;
   }
 
   /// Get the name of the most recently used list.

@@ -17,7 +17,7 @@ class ListDetailsScreen extends StatefulWidget {
 
 class _ListDetailsScreenState extends State<ListDetailsScreen> {
   late FirestoreUser firestoreUser;
-  String listID;
+  late final String listID = widget.listID;
   late Map<String, dynamic> listInfo;
   late String listName;
 
@@ -25,7 +25,6 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
   void initState() {
     super.initState();
     firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-    listID = widget.listID;
     listInfo = firestoreUser.lists[listID];
     listName = listInfo['listName'];
   }

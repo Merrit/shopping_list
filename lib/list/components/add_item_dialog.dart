@@ -72,12 +72,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   void _addItem() {
-    final _aisle = aisle ?? 'Unsorted';
     var _quantity =
         (quantityController.text != '') ? quantityController.text : '1';
     final item = {
       'itemName': addItemController.text.capitalizeFirst,
-      'aisle': _aisle,
+      'aisle': aisle,
       'isComplete': false,
       'quantity': _quantity,
       'price': '0.00',

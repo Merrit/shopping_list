@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:shopping_list/globals.dart';
@@ -13,7 +11,7 @@ Future<String> signInWithEmail(
     userCredential = await Globals.auth
         .signInWithEmailAndPassword(email: email, password: password);
     result = 'success';
-  } catch (e) {
+  } on FirebaseAuthException catch (e) {
     result = e.code.toString();
   }
 
@@ -26,7 +24,6 @@ Future<String> signInWithEmail(
         await Globals.auth.signOut();
         return 'email-not-verified';
       }
-      break;
     default:
       return result;
   }

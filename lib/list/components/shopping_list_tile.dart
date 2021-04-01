@@ -15,17 +15,10 @@ class ShoppingListTile extends StatefulWidget {
 }
 
 class _ShoppingListTileState extends State<ShoppingListTile> {
-  late FirestoreUser firestoreUser;
-  Map<String, dynamic> item;
-  String itemName;
-
-  @override
-  void initState() {
-    super.initState();
-    item = widget.item;
-    itemName = item['itemName'];
-    firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-  }
+  late final FirestoreUser firestoreUser =
+      Provider.of<FirestoreUser>(context, listen: false);
+  late final Map<String, dynamic> item = widget.item;
+  late final String itemName = item['itemName'];
 
   @override
   Widget build(BuildContext context) {

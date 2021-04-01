@@ -8,11 +8,10 @@ import 'package:shopping_list/globals.dart';
 
 /// Check if the provided email is associated with an existing user account, if
 /// yes then give that account permission to use this list.
-// ignore: missing_return
 Future<String> shareList(
     {required BuildContext context, required String email}) async {
   // Check not current user
-  final currentUserEmail = Globals.user.email;
+  final currentUserEmail = Globals.user!.email;
   if ((currentUserEmail != null) && (email != currentUserEmail)) {
     final user = Provider.of<FirestoreUser>(context, listen: false);
     final firestore = FirebaseFirestore.instance;
@@ -35,4 +34,5 @@ Future<String> shareList(
       return 'multiple-accounts';
     }
   }
+  throw Exception(); // TODO: What the heck is happening here?
 }

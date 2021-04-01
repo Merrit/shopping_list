@@ -83,8 +83,9 @@ class _ShoppingGroupedListView extends StatelessWidget {
             );
           }
           if (item['isComplete'] != true) {
-            return ShoppingListTile(item: item);
+            return ShoppingListTile(item: item, key: UniqueKey());
           }
+          return Container();
         },
         // separator: Divider(),
         // itemComparator: , // optional
