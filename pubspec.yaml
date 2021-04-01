@@ -23,13 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^1.0.1
+  cloud_firestore: ^1.0.3
   cupertino_icons: ^1.0.2
   firebase_auth: ^1.0.1
-  firebase_core: ^1.0.1
-  grouped_list: ^3.7.1
+  firebase_core: ^1.0.2
+  grouped_list: ^4.0.0
   provider: ^5.0.0
-  settings_ui: ^0.6.0
+  settings_ui: ^1.0.0-nullsafety.2
   shared_preferences: ^2.0.5
 
 dev_dependencies:
