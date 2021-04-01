@@ -7,7 +7,7 @@ import 'package:shopping_list/list/delete_list.dart';
 import 'package:shopping_list/list/share_list.dart';
 
 class ListDetailsScreen extends StatefulWidget {
-  final String listID;
+  final String/*!*/ listID;
 
   ListDetailsScreen({@required this.listID});
 
@@ -17,9 +17,9 @@ class ListDetailsScreen extends StatefulWidget {
 
 class _ListDetailsScreenState extends State<ListDetailsScreen> {
   FirestoreUser firestoreUser;
-  String listID;
-  Map<String, dynamic> listInfo;
-  String listName;
+  String/*!*/ listID;
+  Map<String, dynamic>/*!*/ listInfo;
+  String/*!*/ listName;
 
   @override
   void initState() {
@@ -130,7 +130,7 @@ class _AddShareDialogState extends State<AddShareDialog> {
 }
 
 class SettingsTile extends StatelessWidget {
-  final List<Widget> children;
+  final List<Widget>/*!*/ children;
 
   const SettingsTile({this.children});
 

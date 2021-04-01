@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AisleHeader extends StatelessWidget {
-  final String aisle;
+  final String/*!*/ aisle;
 
   AisleHeader({@required this.aisle});
 

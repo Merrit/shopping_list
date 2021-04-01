@@ -8,16 +8,16 @@ import 'package:shopping_list/list/screens/list_items.dart';
 class ShoppingListTile extends StatefulWidget {
   final Map<String, dynamic> item;
 
-  ShoppingListTile({Key key, @required this.item}) : super(key: key);
+  ShoppingListTile({Key /*!*/ key, @required this.item}) : super(key: key);
 
   @override
   _ShoppingListTileState createState() => _ShoppingListTileState();
 }
 
 class _ShoppingListTileState extends State<ShoppingListTile> {
-  FirestoreUser firestoreUser;
-  Map<String, dynamic> item;
-  String itemName;
+  FirestoreUser /*!*/ firestoreUser;
+  Map<String, dynamic>/*!*/ item;
+  String/*!*/ itemName;
 
   @override
   void initState() {

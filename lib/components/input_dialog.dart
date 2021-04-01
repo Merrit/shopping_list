@@ -63,7 +63,7 @@ Future<String> showInputDialog({
   // and '5' becomes '5.00'.
   if (type == InputDialogs.onlyDouble) {
     var _asDouble = double.tryParse(result);
-    result = _asDouble.toStringAsFixed(2).toString();
+    if (_asDouble != null) result = _asDouble.toStringAsFixed(2).toString();
   }
 
   return result;
@@ -73,7 +73,7 @@ class InputDialog extends StatelessWidget {
   InputDialog({
     this.context,
     this.type,
-    this.title,
+    this.title = '',
     this.hintText,
     this.keyboardType,
     this.formatter,
@@ -82,9 +82,9 @@ class InputDialog extends StatelessWidget {
     controller.text = initialValue;
   }
 
-  final BuildContext context;
+  final BuildContext /*!*/ context;
   final InputDialogs type;
-  final String title;
+  final String/*!*/ title;
   final String hintText;
   final int maxLines;
   final TextInputType keyboardType;
@@ -99,7 +99,7 @@ class InputDialog extends StatelessWidget {
       focusNode: hotkeyFocusNode,
       onKey: (RawKeyEvent event) => hotkey(event),
       child: AlertDialog(
-        title: (title != null) ? Text(title) : null,
+        title: Text(title),
         content: TextFormField(
           controller: controller,
           focusNode: textFieldFocusNode,

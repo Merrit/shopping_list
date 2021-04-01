@@ -61,16 +61,16 @@ class _ShoppingGroupedListView extends StatelessWidget {
   }
 
   final ListItems listItemState;
-  final Map<String, dynamic> listData;
+  final Map<String, dynamic>/*!*/ listData;
   final List<Map<String, dynamic>> listItems = [];
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GroupedListView<dynamic, String>(
+      child: GroupedListView<dynamic, String/*!*/>(
         elements: listItems,
         groupBy: (item) => item['aisle'],
-        groupSeparatorBuilder: (String groupByValue) =>
+        groupSeparatorBuilder: (String/*!*/ groupByValue) =>
             AisleHeader(aisle: groupByValue),
         // ignore: missing_return
         itemBuilder: (context, dynamic item) {

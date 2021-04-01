@@ -14,7 +14,7 @@ Future<String> signInWithEmail(
         .signInWithEmailAndPassword(email: email, password: password);
     result = 'success';
   } catch (e) {
-    result = e.code;
+    result = e.code.toString();
   }
 
   switch (result) {

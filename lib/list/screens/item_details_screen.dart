@@ -18,7 +18,7 @@ class ItemDetailsScreen extends StatefulWidget {
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   FirestoreUser firestoreUser;
   bool wasUpdated = false;
-  Map<String, dynamic> item;
+  Map<String, dynamic>/*!*/ item;
   String selectedAisle;
   bool hasTax;
   String taxRate;

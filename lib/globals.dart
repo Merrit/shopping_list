@@ -10,5 +10,5 @@ class Routes {
 
 class Globals {
   static FirebaseAuth auth;
-  static User user;
+  static User/*!*/ user;
 }

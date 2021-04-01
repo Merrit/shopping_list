@@ -10,7 +10,7 @@ class PreferencesScreen extends StatefulWidget {
 }
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
-  SharedPreferences prefs;
+  SharedPreferences/*!*/ prefs;
   String taxRate;
 
   final TextEditingController taxRateController = TextEditingController();
