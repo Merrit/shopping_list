@@ -6,7 +6,7 @@ import 'package:shopping_list/globals.dart';
 
 /// Save and load local user preferences and state.
 class Preferences {
-  static SharedPreferences prefs;
+  static SharedPreferences? prefs;
   static final String _uid = Globals.user.uid;
 
   /// Initialize shared_preferences, returns true to indicate finished.
@@ -16,12 +16,12 @@ class Preferences {
   }
 
   /// Get the name of the most recently used list.
-  static String get lastUsedList {
-    final prefsStringyMap = prefs.getString(_uid);
+  static String? get lastUsedList {
+    final prefsStringyMap = prefs!.getString(_uid);
     if (prefsStringyMap != null) {
       // shared_preferences can't save maps, so we convert from saved String.
       Map prefsMap = json.decode(prefsStringyMap);
-      String lastList = prefsMap['lastUsedList'];
+      String? lastList = prefsMap['lastUsedList'];
       return lastList;
     } else {
       // Will be null if the saved value doesn't exist yet.
@@ -30,11 +30,11 @@ class Preferences {
   }
 
   /// Save the name of the most recently used list.
-  static set lastUsedList(String lastUsedList) {
+  static set lastUsedList(String? lastUsedList) {
     final lastListMap = {'lastUsedList': lastUsedList};
     // shared_preferences can't save maps, so we convert to String first.
-    prefs.setString(_uid, json.encode(lastListMap));
+    prefs!.setString(_uid, json.encode(lastListMap));
   }
 
-  static String get taxRate => prefs.get('taxRate') ?? '';
+  static String get taxRate => prefs!.get('taxRate') as String? ?? '';
 }

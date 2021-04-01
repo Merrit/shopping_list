@@ -23,12 +23,12 @@ void main() async {
 /// RestartWidget wraps everything, and its `restartApp` method allows us to
 /// call a restart on the app easily with `RestartWidget.restartApp(context)`.
 class RestartWidget extends StatefulWidget {
-  final Widget/*!*/ child;
+  final Widget child;
 
-  RestartWidget({this.child});
+  RestartWidget({required this.child});
 
   static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>().restartApp();
+    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
   }
 
   @override

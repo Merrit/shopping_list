@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 
 class AdvancedTextField extends StatelessWidget {
   AdvancedTextField({
-    @required this.callback,
-    @required this.width,
-    @required String initialValue,
+    required this.callback,
+    required this.width,
+    required String initialValue,
   }) {
     controller.text = initialValue;
   }

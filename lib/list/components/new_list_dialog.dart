@@ -11,7 +11,7 @@ class NewListDialog extends StatefulWidget {
 
 class _NewListDialogState extends State<NewListDialog> {
   TextEditingController newListController = TextEditingController();
-  String newListErrorText;
+  String? newListErrorText;
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ class AddItemDialog extends StatefulWidget {
 class _AddItemDialogState extends State<AddItemDialog> {
   final TextEditingController addItemController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
-  FirestoreUser firestoreUser;
+  late FirestoreUser firestoreUser;
   String aisle = 'Unsorted';
 
   @override

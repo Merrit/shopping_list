@@ -5,7 +5,7 @@ import 'package:shopping_list/globals.dart';
 
 Future<void> notifyEmailSent(BuildContext context) async {
   final uid = Globals.user.uid;
-  await Globals.auth.currentUser.sendEmailVerification();
+  await Globals.auth.currentUser!.sendEmailVerification();
   // Set the user Document.
   // We do so here so it doesn't happen at every sign in.
   await FirebaseFirestore.instance.collection('users').doc(uid).set({

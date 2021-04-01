@@ -21,7 +21,7 @@ class FirestoreUser extends ChangeNotifier {
       'items': {itemName: item}
     }, SetOptions(merge: true));
     // Add to local cache.
-    lists[currentList]['items'][itemName] = item;
+    lists[currentList!]['items'][itemName] = item;
     // Make sure this isn't in completedItems already.
     // This could be necessary if the user adds a list item of something
     // they had previously checked off their list.
@@ -30,16 +30,16 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// `Map<itemName, bool>` with `bool` representing complete or not.
-  Map<String, dynamic> completedItems = {};
+  Map<String?, dynamic> completedItems = {};
 
   /// Set the `isComplete` status for completedItems.
-  void setIsComplete({@required Map<String, bool> items}) {
+  void setIsComplete({required Map<String?, bool> items}) {
     // Update local cache of items.
     items.forEach((itemName, value) {
-      lists[currentList]['items'][itemName]['isComplete'] = value;
+      lists[currentList!]['items'][itemName]['isComplete'] = value;
     });
     // Update completedItems.
-    var _listItems = lists[currentList]['items'];
+    var _listItems = lists[currentList!]['items'];
     _listItems.forEach((item, value) {
       if (value['isComplete'] == true) {
         completedItems[value['itemName']] = value;
@@ -57,7 +57,7 @@ class FirestoreUser extends ChangeNotifier {
   void updateItem(Map<String, dynamic> item) {
     var itemName = item['itemName'];
     // Update the local cache.
-    lists[currentList]['items'][itemName] = item;
+    lists[currentList!]['items'][itemName] = item;
     // Update the Firebase data.
     // .set() is required, .update() will replace the entire 'items' field.
     FirebaseFirestore.instance.collection('lists').doc(currentList).set({
@@ -66,17 +66,17 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// Update the entire collection of items at once.
-  void updateAllItems({@required Map<String, dynamic> items}) {
+  void updateAllItems({required Map<String, dynamic>? items}) {
     FirebaseFirestore.instance
         .collection('lists')
         .doc(currentList)
         .update({'items': items});
   }
 
-  void deleteItems({@required List<String> items}) {
-    Map<String, dynamic> _currentItems = lists[currentList]['items'];
+  void deleteItems({required List<String?> items}) {
+    Map<String, dynamic>? _currentItems = lists[currentList!]['items'];
     items.forEach((item) {
-      _currentItems.remove(item);
+      _currentItems!.remove(item);
       completedItems.remove(item);
     });
     updateAllItems(items: _currentItems);
@@ -84,13 +84,13 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// The unique id for the current list.
-  String get currentList {
+  String? get currentList {
     return _currentList;
   }
 
-  static String _currentList = '';
+  static String? _currentList = '';
 
-  set currentList(String listID) {
+  set currentList(String? listID) {
     if (listID == '' && lists.isNotEmpty) {
       _currentList = lists.keys.first;
     } else if (listID == '' && lists.isEmpty) {
@@ -107,8 +107,8 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   void populateCompletedItems() {
-    Map<String, dynamic> items;
-    if (lists.isNotEmpty) items = lists[currentList]['items'];
+    Map<String, dynamic>? items;
+    if (lists.isNotEmpty) items = lists[currentList!]['items'];
     if (items != null) {
       items.forEach((key, value) {
         if (value['isComplete'] == true) {
@@ -119,18 +119,18 @@ class FirestoreUser extends ChangeNotifier {
   }
 
   /// Name of the currently active list, for example: `Costco`.
-  String get currentListName {
+  String? get currentListName {
     if (lists.isNotEmpty && lists.keys.contains(currentList)) {
-      _currentListName = lists[currentList]['listName'];
+      _currentListName = lists[currentList!]['listName'];
     } else {
       _currentListName = 'No lists yet';
     }
     return _currentListName;
   }
 
-  String _currentListName = '';
+  String? _currentListName = '';
 
-  set currentListName(String listName) {
+  set currentListName(String? listName) {
     _currentListName = listName;
     notifyListeners();
   }
@@ -144,14 +144,14 @@ class FirestoreUser extends ChangeNotifier {
         .get();
     lists.clear();
     query.docs.forEach((doc) {
-      lists[doc.id] = Map<String, dynamic>.from(doc.data());
+      lists[doc.id] = Map<String, dynamic>.from(doc.data()!);
     });
     notifyListeners();
     return null;
   }
 
   /// Create a new list document in Firebase.
-  Future<void> createNewList({@required String listName}) async {
+  Future<void> createNewList({required String listName}) async {
     final uid = Globals.user.uid;
     await FirebaseFirestore.instance.collection('lists').doc().set(
       {
@@ -180,7 +180,7 @@ class FirestoreUser extends ChangeNotifier {
 
   /// The stream `ListScreen()`'s StreamBuilder listens to in order
   /// to build the main list UI. Updates automatically with new items.
-  Stream<DocumentSnapshot> listStream;
+  Stream<DocumentSnapshot>? listStream;
 
   void _setListStream() {
     listStream = (_currentList != 'No lists yet')
@@ -200,14 +200,14 @@ class FirestoreUser extends ChangeNotifier {
   Future<void> _getAislesData() async {
     if (lists.isNotEmpty) {
       _aisles.clear();
-      var currentListAisles = List<String>.from(lists[currentList]['aisles']);
+      var currentListAisles = List<String>.from(lists[currentList!]['aisles']);
       if (currentListAisles != null) _aisles = currentListAisles;
     }
     if (_aisles.isEmpty) _aisles.add('Unsorted');
     return null;
   }
 
-  void addAisle({@required String newAisle}) {
+  void addAisle({required String newAisle}) {
     if (!_aisles.contains(newAisle)) {
       _aisles.add(newAisle);
       _aisles.sort();
@@ -219,8 +219,8 @@ class FirestoreUser extends ChangeNotifier {
     }
   }
 
-  void updateAisle({@required String item, String aisle}) {
-    lists[currentList]['items'][item]['aisle'] = aisle;
+  void updateAisle({required String? item, String? aisle}) {
+    lists[currentList!]['items'][item]['aisle'] = aisle;
     FirebaseFirestore.instance.collection('lists').doc(currentList).set(
       {
         'items': {
@@ -232,10 +232,10 @@ class FirestoreUser extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeAisle({@required String aisle}) {
+  void removeAisle({required String aisle}) {
     _aisles.remove(aisle);
     // Grab the item data with correct type so we can update all item aisles.
-    var items = lists[currentList]['items'];
+    var items = lists[currentList!]['items'];
     items.forEach((key, value) {
       if (!_aisles.contains(value['aisle'])) value['aisle'] = 'Unsorted';
     });

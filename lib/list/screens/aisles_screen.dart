@@ -43,7 +43,7 @@ class AislesScreen extends StatelessWidget {
 }
 
 class AisleTile extends StatelessWidget {
-  const AisleTile({@required this.aisle});
+  const AisleTile({required this.aisle});
 
   final String aisle;
 

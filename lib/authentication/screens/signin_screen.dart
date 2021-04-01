@@ -11,7 +11,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkIfSignedIn());
+    WidgetsBinding.instance!.addPostFrameCallback((_) => _checkIfSignedIn());
   }
 
   /// Workaround because the initial SteamBuilder's snapshot.hasData never
@@ -26,7 +26,7 @@ class _SigninScreenState extends State<SigninScreen> {
     await Future.delayed(Duration(milliseconds: 500));
     // **Now** check if there is a logged in user.
     if (Globals.auth.currentUser != null &&
-        Globals.auth.currentUser.emailVerified) {
+        Globals.auth.currentUser!.emailVerified) {
       await Navigator.pushReplacementNamed(context, Routes.listScreen);
     } else {
       // No saved user loaded, so continue normal sign in.

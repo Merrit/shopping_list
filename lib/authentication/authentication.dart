@@ -8,7 +8,7 @@ void initAuth() {
 }
 
 void subscribeAuth() {
-  Globals.auth.authStateChanges().listen((User user) {
+  Globals.auth.authStateChanges().listen((User? user) {
     if (user == null) {
       print('User is currently signed out!');
       Globals.user = null;

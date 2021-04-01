@@ -3,17 +3,17 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 
 /// Holds the state for the current list.
 class ListItems extends ChangeNotifier {
-  final Map<String, bool> _checkedItems = {};
+  final Map<String?, bool?> _checkedItems = {};
 
   /// List items are added here as Map<itemName, isChecked>.
-  Map<String, bool> get checkedItems {
+  Map<String?, bool?> get checkedItems {
     return _checkedItems;
   }
 
   /// Track whether the item's checkbox is checked or not.
   void setItemState(
-      {@required String itemName,
-      @required bool isChecked,
+      {required String? itemName,
+      required bool? isChecked,
       bool isUpdate = false}) {
     assert(itemName != null && isChecked != null);
     _checkedItems[itemName] = isChecked;
@@ -24,9 +24,9 @@ class ListItems extends ChangeNotifier {
 
   /// Set items' complete status.
   void completeItems(FirestoreUser firestoreUser) {
-    final toBeCompleted = <String, bool>{};
+    final toBeCompleted = <String?, bool>{};
     _checkedItems.forEach((itemName, value) {
-      if (value) toBeCompleted[itemName] = true;
+      if (value!) toBeCompleted[itemName] = true;
     });
     firestoreUser.setIsComplete(items: toBeCompleted);
     _checkedItems.clear();
@@ -34,13 +34,13 @@ class ListItems extends ChangeNotifier {
   }
 
   void deleteItems(FirestoreUser firestoreUser, {bool deleteAll = false}) {
-    final itemsToDelete = <String>[];
+    final itemsToDelete = <String?>[];
     if (deleteAll) {
       _checkedItems.forEach((itemName, _) => itemsToDelete.add(itemName));
       _checkedItems.clear();
     } else {
       _checkedItems.forEach((itemName, isChecked) {
-        if (isChecked) {
+        if (isChecked!) {
           itemsToDelete.add(itemName);
         }
       });
@@ -52,9 +52,9 @@ class ListItems extends ChangeNotifier {
 
   /// Restore items from the `Completed` list back to the regular list.
   void restoreItems(FirestoreUser firestoreUser) {
-    final itemsToRestore = <String, bool>{};
+    final itemsToRestore = <String?, bool>{};
     _checkedItems.forEach((itemName, isChecked) {
-      if (isChecked) {
+      if (isChecked!) {
         itemsToRestore[itemName] = false;
         _checkedItems[itemName] = false;
       }

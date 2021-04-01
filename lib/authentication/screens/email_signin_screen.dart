@@ -13,8 +13,8 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String _emailErrorText;
-  String _passwordErrorText;
+  String? _emailErrorText;
+  String? _passwordErrorText;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +134,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
           content: Text('Email address has not been verified.\n'
               '\n'
               'Follow the link in the verification email that was sent to the '
-              'address you provided (${Globals.auth.currentUser.email}), '
+              'address you provided (${Globals.auth.currentUser!.email}), '
               'then try again.'),
           actions: [
             TextButton(

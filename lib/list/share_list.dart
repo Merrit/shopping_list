@@ -10,7 +10,7 @@ import 'package:shopping_list/globals.dart';
 /// yes then give that account permission to use this list.
 // ignore: missing_return
 Future<String> shareList(
-    {@required BuildContext context, @required String email}) async {
+    {required BuildContext context, required String email}) async {
   // Check not current user
   final currentUserEmail = Globals.user.email;
   if ((currentUserEmail != null) && (email != currentUserEmail)) {
@@ -21,7 +21,7 @@ Future<String> shareList(
         .where('email', isEqualTo: email)
         .get();
     if (query.docs.length == 1) {
-      final accountInfo = query.docs.first.data();
+      final accountInfo = query.docs.first.data()!;
       var uid = accountInfo['uid'];
       await firestore.collection('lists').doc(user.currentList).set(
         {

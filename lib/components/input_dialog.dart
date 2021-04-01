@@ -12,15 +12,15 @@ enum InputDialogs {
 /// Convenience function to show a dialog with a TextFormField so that the user
 /// can enter some data. Return is the String entered, or an empty string if the
 /// field was left blank.
-Future<String> showInputDialog({
-  @required BuildContext context,
-  InputDialogs type,
-  String title,
-  String hintText,
-  String initialValue,
+Future<String?> showInputDialog({
+  required BuildContext context,
+  InputDialogs? type,
+  String? title,
+  String? hintText,
+  String? initialValue,
 }) async {
   TextInputType keyboardType;
-  List<TextInputFormatter> formatter;
+  List<TextInputFormatter>? formatter;
 
   switch (type) {
     case InputDialogs.onlyInt:
@@ -48,11 +48,11 @@ Future<String> showInputDialog({
       return InputDialog(
         context: context,
         type: type,
-        title: title,
+        title: title!,
         hintText: hintText,
         keyboardType: keyboardType,
         formatter: formatter,
-        initialValue: initialValue,
+        initialValue: initialValue!,
       );
     },
   );
@@ -71,24 +71,24 @@ Future<String> showInputDialog({
 
 class InputDialog extends StatelessWidget {
   InputDialog({
-    this.context,
+    required this.context,
     this.type,
     this.title = '',
     this.hintText,
     this.keyboardType,
     this.formatter,
-    String initialValue,
+    required String initialValue,
   }) : maxLines = (type == InputDialogs.multiLine) ? 5 : 1 {
     controller.text = initialValue;
   }
 
-  final BuildContext /*!*/ context;
-  final InputDialogs type;
-  final String/*!*/ title;
-  final String hintText;
+  final BuildContext context;
+  final InputDialogs? type;
+  final String title;
+  final String? hintText;
   final int maxLines;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter> formatter;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? formatter;
   final FocusNode hotkeyFocusNode = FocusNode();
   final FocusNode textFieldFocusNode = FocusNode();
   final TextEditingController controller = TextEditingController();

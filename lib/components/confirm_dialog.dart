@@ -5,7 +5,7 @@ class ConfirmDialog extends StatelessWidget {
   /// Text to display to the user in the dialog.
   final String content;
 
-  ConfirmDialog({@required this.content});
+  ConfirmDialog({required this.content});
 
   @override
   Widget build(BuildContext context) {
