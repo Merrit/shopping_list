@@ -85,17 +85,9 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
         email: _emailController.text, password: _passwordController.text);
     switch (result) {
       case 'success':
-        var _msg = 'Success! You will now be logged in.';
-        var _successSnack = SnackBar(
-          content: Text(_msg),
-          duration: Duration(seconds: 2),
-        );
-        await ScaffoldMessenger.of(context)
-            .showSnackBar(_successSnack)
-            .closed
-            .then((SnackBarClosedReason reason) {
-          Navigator.pushReplacementNamed(context, Routes.listScreen);
-        });
+        final snackBar = SnackBar(content: Text('Logged in successfully'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        await Navigator.pushReplacementNamed(context, Routes.listScreen);
         break;
       case 'email-not-verified':
         await _notifyEmailNotVerified();
