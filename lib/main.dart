@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/app.dart';
 
 import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
@@ -77,6 +78,7 @@ class ListApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<App>(create: (_) => App.instance),
         ChangeNotifierProvider<FirestoreUser>(
           create: (context) => FirestoreUser(),
         ),

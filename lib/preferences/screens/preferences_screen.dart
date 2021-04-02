@@ -18,7 +18,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   @override
   void initState() {
     super.initState();
-    prefs = Preferences.prefs!;
+    prefs = Preferences.prefs;
     taxRate = prefs.get('taxRate') as String? ?? '';
   }
 
@@ -82,8 +82,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     );
   }
 
-  void _setStringPref() {
-    prefs.setString('taxRate', taxRateController.text);
+  Future<void> _setStringPref() async {
+    await Preferences.setTaxRate(taxRateController.text);
     taxRate = taxRateController.text;
     setState(() => Navigator.pop(context));
   }

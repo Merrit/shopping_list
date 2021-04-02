@@ -39,7 +39,7 @@ class _ListScreenState extends State<ListScreen> {
     if (!_isInitialized) {
       firestoreUser = Provider.of<FirestoreUser>(context);
       if (firestoreUser.lists.isNotEmpty) {
-        items = firestoreUser.lists[firestoreUser.currentList!]['items'];
+        items = firestoreUser.lists[firestoreUser.currentList]['items'];
         _isInitialized = true;
       }
     }
@@ -99,7 +99,7 @@ class _ListScreenState extends State<ListScreen> {
           return GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ListDetailsScreen(listID: user.currentList!);
+                return ListDetailsScreen(listID: user.currentList);
               }));
             },
             child: Text(user.currentListName!),
