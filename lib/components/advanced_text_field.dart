@@ -18,21 +18,41 @@ class AdvancedTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      child: RawKeyboardListener(
-        focusNode: FocusNode(),
-        onKey: (RawKeyEvent event) => _hotkey(event),
-        child: TextField(
-          controller: controller,
-          autofocus: true,
-          onSubmitted: (value) => callback(controller.text),
+      child: Shortcuts(
+        shortcuts: shortcuts,
+        child: Actions(
+          actions: actions,
+          child: Focus(
+            autofocus: true,
+            child: TextField(
+              controller: controller,
+              autofocus: true,
+              onSubmitted: (value) => callback(controller.text),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  void _hotkey(RawKeyEvent event) {
-    if (event.isKeyPressed(LogicalKeyboardKey.escape)) {
-      callback('');
-    }
-  }
+  /// Hotkey actions.
+  ///
+  /// Escape key to cancel editing.
+  late final actions = <Type, Action<Intent>>{
+    EscapeIntent: CallbackAction<EscapeIntent>(
+      onInvoke: (EscapeIntent intent) {
+        callback('');
+      },
+    ),
+  };
+
+  /// Hotkeys.
+  final shortcuts = <LogicalKeySet, Intent>{
+    LogicalKeySet(LogicalKeyboardKey.escape): const EscapeIntent(),
+  };
+}
+
+/// Part of the hotkeys.
+class EscapeIntent extends Intent {
+  const EscapeIntent();
 }

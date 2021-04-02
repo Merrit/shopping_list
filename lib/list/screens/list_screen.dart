@@ -18,16 +18,13 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  FocusNode hotkeyFocusNode = FocusNode();
   late FirestoreUser firestoreUser;
   Map<String, dynamic>? items;
   bool _isInitialized = false;
-  bool mainListHasFocus = false;
 
   @override
   void didChangeDependencies() {
     _initFirestoreUser();
-    _initHotkey();
     super.didChangeDependencies();
   }
 
@@ -42,51 +39,48 @@ class _ListScreenState extends State<ListScreen> {
     }
   }
 
-  void _initHotkey() {
-    // Start the Add Item ('N') hotkey.
-    hotkeyFocusNode.addListener(() {
-      setState(() => mainListHasFocus = hotkeyFocusNode.hasFocus);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ListItems(),
-      child: RawKeyboardListener(
-        focusNode: hotkeyFocusNode,
-        autofocus: true,
-        onKey: (mainListHasFocus) ? (RawKeyEvent key) => _hotkey(key) : null,
-        child: Scaffold(
-          appBar: _appBar(),
-          drawer: ShoppingDrawer(),
-          body: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
+      child: Shortcuts(
+        shortcuts: shortcuts,
+        child: Actions(
+          actions: actions,
+          child: Focus(
+            autofocus: true,
+            child: Scaffold(
+              appBar: _appBar(),
+              drawer: ShoppingDrawer(),
+              body: Stack(
                 children: [
-                  if (items != null && items!.isNotEmpty)
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      // List header. TODO: Improve / fix / remove this..
-                      child: Row(
-                        children: [
-                          Expanded(flex: 3, child: Text('Item')),
-                          Expanded(flex: 1, child: Text('#')),
-                          Expanded(flex: 1, child: Text('\$ ea.')),
-                          Expanded(flex: 1, child: Text('\$ total')),
-                          Expanded(flex: 1, child: Container()),
-                        ],
-                      ),
-                    ),
-                  ShoppingListBuilder(context),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (items != null && items!.isNotEmpty)
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          // List header. TODO: Improve / fix / remove this..
+                          child: Row(
+                            children: [
+                              Expanded(flex: 3, child: Text('Item')),
+                              Expanded(flex: 1, child: Text('#')),
+                              Expanded(flex: 1, child: Text('\$ ea.')),
+                              Expanded(flex: 1, child: Text('\$ total')),
+                              Expanded(flex: 1, child: Container()),
+                            ],
+                          ),
+                        ),
+                      ShoppingListBuilder(context),
+                    ],
+                  ),
+                  FloatingListButtonBar(context),
                 ],
               ),
-              FloatingListButtonBar(context),
-            ],
+            ),
           ),
         ),
       ),
@@ -108,13 +102,29 @@ class _ListScreenState extends State<ListScreen> {
         centerTitle: true);
   }
 
-  void _hotkey(RawKeyEvent key) {
-    if (key.character == 'n') {
-      showDialog(
+  /// Hotkey actions.
+  ///
+  /// [N] key opens [AddItemDialog].
+  late final actions = <Type, Action<Intent>>{
+    NewItemIntent: CallbackAction<NewItemIntent>(
+      onInvoke: (NewItemIntent intent) {
+        showDialog(
           context: context,
           builder: (BuildContext context) {
             return AddItemDialog();
-          });
-    }
-  }
+          },
+        );
+      },
+    ),
+  };
+
+  /// Hotkeys
+  final shortcuts = <LogicalKeySet, Intent>{
+    LogicalKeySet(LogicalKeyboardKey.keyN): const NewItemIntent(),
+  };
+}
+
+/// Part of the hotkeys.
+class NewItemIntent extends Intent {
+  const NewItemIntent();
 }

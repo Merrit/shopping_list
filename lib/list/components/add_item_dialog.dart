@@ -47,14 +47,14 @@ class _AddItemDialogState extends State<AddItemDialog> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            // child: SettingsTile(
-            //   title: 'Aisle',
-            //   subtitle: aisle,
-            //   onPressed: (context) async {
-            //     var _aisle = await setAisle(context);
-            //     setState(() => aisle = _aisle);
-            //   },
-            // ),
+            child: SettingsTile(
+              title: 'Aisle',
+              subtitle: aisle,
+              onPressed: (context) async {
+                var _aisle = await setAisle(context);
+                setState(() => aisle = _aisle);
+              },
+            ),
           ),
         ],
       ),

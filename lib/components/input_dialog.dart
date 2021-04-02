@@ -95,47 +95,43 @@ class InputDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      focusNode: hotkeyFocusNode,
-      onKey: (RawKeyEvent event) => hotkey(event),
-      child: AlertDialog(
-        title: Text(title),
-        content: TextFormField(
-          controller: controller,
-          focusNode: textFieldFocusNode,
+    return Shortcuts(
+      shortcuts: shortcuts,
+      child: Actions(
+        actions: actions,
+        child: Focus(
           autofocus: true,
-          decoration: InputDecoration(hintText: hintText),
-          keyboardType: keyboardType,
-          inputFormatters: formatter,
-          minLines: 1,
-          maxLines: maxLines,
-          textInputAction: TextInputAction.newline,
-          // For non-multiline fields onFieldSubmitted has enter => submit.
-          // For multiline fields the hotkey Ctrl + Enter works instead.
-          onFieldSubmitted: (value) =>
-              (type == InputDialogs.multiLine) ? null : _onSubmitted(),
+          child: AlertDialog(
+            title: Text(title),
+            content: TextFormField(
+              controller: controller,
+              focusNode: textFieldFocusNode,
+              autofocus: true,
+              decoration: InputDecoration(hintText: hintText),
+              keyboardType: keyboardType,
+              inputFormatters: formatter,
+              minLines: 1,
+              maxLines: maxLines,
+              textInputAction: TextInputAction.newline,
+              // For non-multiline fields onFieldSubmitted has enter => submit.
+              // For multiline fields the hotkey Ctrl + Enter works instead.
+              onFieldSubmitted: (value) =>
+                  (type == InputDialogs.multiLine) ? null : _onSubmitted(),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, controller.text),
+                child: Text('Confirm'),
+              ),
+            ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, controller.text),
-            child: Text('Confirm'),
-          ),
-        ],
       ),
     );
-  }
-
-  void hotkey(RawKeyEvent event) {
-    // Ctrl + Enter submits for multiline.
-    if (event.data.isModifierPressed(ModifierKey.controlModifier)) {
-      if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
-        Navigator.pop(context, controller.text);
-      }
-    }
   }
 
   void _onSubmitted() {
@@ -145,4 +141,28 @@ class InputDialog extends StatelessWidget {
       Navigator.pop(context, controller.text);
     }
   }
+
+  /// Hotkey actions.
+  ///
+  /// Ctrl + Enter hotkey to submit when focused on multi-line input.
+  late final actions = <Type, Action<Intent>>{
+    SubmitIntent: CallbackAction<SubmitIntent>(
+      onInvoke: (SubmitIntent intent) {
+        Navigator.pop(context, controller.text);
+      },
+    ),
+  };
+
+  /// Hotkeys.
+  final shortcuts = <LogicalKeySet, Intent>{
+    LogicalKeySet(
+      LogicalKeyboardKey.control,
+      LogicalKeyboardKey.enter,
+    ): const SubmitIntent(),
+  };
+}
+
+/// Part of the hotkeys.
+class SubmitIntent extends Intent {
+  const SubmitIntent();
 }
