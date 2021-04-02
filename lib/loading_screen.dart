@@ -10,6 +10,8 @@ import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 
 class LoadingScreen extends StatefulWidget {
+  static const id = 'LoadingScreen';
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }

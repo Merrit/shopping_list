@@ -9,7 +9,6 @@ import 'package:shopping_list/authentication/screens/create_email_account_screen
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/loading_screen.dart';
@@ -90,15 +89,14 @@ class ListApp extends StatelessWidget {
           appBarTheme: AppBarTheme(centerTitle: true),
         ),
         routes: {
-          Routes.signinScreen: (context) => SigninScreen(),
-          Routes.signinEmailScreen: (context) => EmailSigninScreen(),
-          Routes.createEmailAccountScreen: (context) =>
-              CreateEmailAccountScreen(),
-          Routes.listScreen: (context) => ListScreen(),
-          Routes.loadingScreen: (context) => LoadingScreen(),
+          SigninScreen.id: (context) => SigninScreen(),
+          EmailSigninScreen.id: (context) => EmailSigninScreen(),
+          CreateEmailAccountScreen.id: (context) => CreateEmailAccountScreen(),
+          ListScreen.id: (context) => ListScreen(),
+          LoadingScreen.id: (context) => LoadingScreen(),
           ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
         },
-        initialRoute: Routes.loadingScreen,
+        initialRoute: LoadingScreen.id,
       ),
     );
   }

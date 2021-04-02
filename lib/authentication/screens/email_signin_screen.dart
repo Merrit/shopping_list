@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/authentication/notify_email_sent.dart';
+import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
 import 'package:shopping_list/authentication/sign_in.dart';
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/list/screens/list_screen.dart';
 
 class EmailSigninScreen extends StatefulWidget {
+  static const id = 'EmailSigninScreen';
+
   @override
   _EmailSigninScreenState createState() => _EmailSigninScreenState();
 }
@@ -70,7 +74,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
             TextButton(
               onPressed: () => Navigator.pushNamed(
                 context,
-                Routes.createEmailAccountScreen,
+                CreateEmailAccountScreen.id,
               ),
               child: Text('Create account'),
             ),
@@ -87,7 +91,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
       case 'success':
         final snackBar = SnackBar(content: Text('Logged in successfully'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        await Navigator.pushReplacementNamed(context, Routes.listScreen);
+        await Navigator.pushReplacementNamed(context, ListScreen.id);
         break;
       case 'email-not-verified':
         await _notifyEmailNotVerified();

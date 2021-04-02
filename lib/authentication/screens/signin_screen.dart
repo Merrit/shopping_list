@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
 
 import 'package:shopping_list/globals.dart';
+import 'package:shopping_list/list/screens/list_screen.dart';
 
 class SigninScreen extends StatefulWidget {
+  static const id = 'SigninScreen';
+
   @override
   _SigninScreenState createState() => _SigninScreenState();
 }
@@ -27,7 +31,7 @@ class _SigninScreenState extends State<SigninScreen> {
     // **Now** check if there is a logged in user.
     if (Globals.auth.currentUser != null &&
         Globals.auth.currentUser!.emailVerified) {
-      await Navigator.pushReplacementNamed(context, Routes.listScreen);
+      await Navigator.pushReplacementNamed(context, ListScreen.id);
     } else {
       // No saved user loaded, so continue normal sign in.
     }
@@ -56,7 +60,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 width: 200,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, Routes.signinEmailScreen);
+                    Navigator.pushNamed(context, EmailSigninScreen.id);
                   },
                   child: Row(
                     children: [

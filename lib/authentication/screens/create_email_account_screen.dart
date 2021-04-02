@@ -4,6 +4,8 @@ import 'package:shopping_list/authentication/create_email_account.dart';
 import 'package:shopping_list/authentication/notify_email_sent.dart';
 
 class CreateEmailAccountScreen extends StatefulWidget {
+  static const id = 'CreateEmailAccountScreen';
+
   @override
   _CreateEmailAccountScreenState createState() =>
       _CreateEmailAccountScreenState();

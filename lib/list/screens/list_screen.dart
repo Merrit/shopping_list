@@ -14,6 +14,8 @@ import 'package:shopping_list/list/screens/list_items.dart';
 
 /// The main app screen that contains the shopping list.
 class ListScreen extends StatefulWidget {
+  static const id = 'ListScreen';
+
   @override
   _ListScreenState createState() => _ListScreenState();
 }
