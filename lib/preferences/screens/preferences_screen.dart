@@ -10,16 +10,16 @@ class PreferencesScreen extends StatefulWidget {
 }
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
-  SharedPreferences prefs;
-  String taxRate;
+  late SharedPreferences prefs;
+  String? taxRate;
 
   final TextEditingController taxRateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    prefs = Preferences.prefs;
-    taxRate = prefs.get('taxRate') ?? '';
+    prefs = Preferences.prefs!;
+    taxRate = prefs.get('taxRate') as String? ?? '';
   }
 
   @override

@@ -14,7 +14,7 @@ class AddItemDialog extends StatefulWidget {
 class _AddItemDialogState extends State<AddItemDialog> {
   final TextEditingController addItemController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
-  FirestoreUser firestoreUser;
+  late FirestoreUser firestoreUser;
   String aisle = 'Unsorted';
 
   @override
@@ -47,14 +47,14 @@ class _AddItemDialogState extends State<AddItemDialog> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: SettingsTile(
-              title: 'Aisle',
-              subtitle: aisle,
-              onPressed: (context) async {
-                var _aisle = await setAisle(context);
-                setState(() => aisle = _aisle);
-              },
-            ),
+            // child: SettingsTile(
+            //   title: 'Aisle',
+            //   subtitle: aisle,
+            //   onPressed: (context) async {
+            //     var _aisle = await setAisle(context);
+            //     setState(() => aisle = _aisle);
+            //   },
+            // ),
           ),
         ],
       ),
@@ -72,12 +72,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   void _addItem() {
-    final _aisle = aisle ?? 'Unsorted';
     var _quantity =
         (quantityController.text != '') ? quantityController.text : '1';
     final item = {
       'itemName': addItemController.text.capitalizeFirst,
-      'aisle': _aisle,
+      'aisle': aisle,
       'isComplete': false,
       'quantity': _quantity,
       'price': '0.00',

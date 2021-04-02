@@ -11,7 +11,7 @@ class CompletedItemsScreen extends StatefulWidget {
 }
 
 class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
-  ListItems listItems;
+  late ListItems listItems;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                 var firestoreUser =
                     Provider.of<FirestoreUser>(context, listen: false);
                 var currentList = firestoreUser.currentList;
-                var item = firestoreUser.lists[currentList]['items']
+                var item = firestoreUser.lists[currentList!]['items']
                     [firestoreUser.completedItems.keys.toList()[index]];
                 // Set the state for the tiles' checkboxes.
                 listItems.setItemState(

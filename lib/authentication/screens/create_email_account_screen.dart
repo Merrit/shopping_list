@@ -17,9 +17,9 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
   final TextEditingController _passwordConfirmController =
       TextEditingController();
 
-  String _emailErrorText;
-  String _passwordErrorText;
-  String _passwordConfirmErrorText;
+  String? _emailErrorText;
+  String? _passwordErrorText;
+  String? _passwordConfirmErrorText;
 
   String email = '';
   String password = '';
@@ -102,7 +102,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
     );
   }
 
-  void _signUp({@required BuildContext context}) async {
+  void _signUp({required BuildContext context}) async {
     if (email == '') {
       setState(() {
         _emailErrorText = 'Email is required';

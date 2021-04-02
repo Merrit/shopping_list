@@ -25,10 +25,10 @@ void main() async {
 class RestartWidget extends StatefulWidget {
   final Widget child;
 
-  RestartWidget({this.child});
+  RestartWidget({required this.child});
 
   static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>().restartApp();
+    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
   }
 
   @override

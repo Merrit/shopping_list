@@ -27,7 +27,7 @@ class ShoppingListBuilder extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.active) {
           // Actual shopping list.
-          final listData = snapshot.data.data();
+          final listData = snapshot.data!.data()!;
           return _ShoppingGroupedListView(context, listData);
         }
 
@@ -83,8 +83,9 @@ class _ShoppingGroupedListView extends StatelessWidget {
             );
           }
           if (item['isComplete'] != true) {
-            return ShoppingListTile(item: item);
+            return ShoppingListTile(item: item, key: UniqueKey());
           }
+          return Container();
         },
         // separator: Divider(),
         // itemComparator: , // optional

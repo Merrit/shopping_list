@@ -23,10 +23,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User>(
+    return StreamBuilder<User?>(
       // Listen to the auth stream from Firebase.
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         // Wait for the stream to be active.
         if (snapshot.connectionState == ConnectionState.active) {
           // Check if there is a user.
@@ -42,7 +42,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
               future: loadingComplete,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (Globals.auth.currentUser.emailVerified) {
+                  if (Globals.auth.currentUser!.emailVerified) {
                     return ListScreen();
                   } else {
                     return SigninScreen();

@@ -16,23 +16,23 @@ class ItemDetailsScreen extends StatefulWidget {
 }
 
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
-  FirestoreUser firestoreUser;
+  late FirestoreUser firestoreUser;
   bool wasUpdated = false;
-  Map<String, dynamic> item;
-  String selectedAisle;
-  bool hasTax;
-  String taxRate;
-  String originalName;
+  late Map<String, dynamic> item;
+  String? selectedAisle;
+  bool? hasTax;
+  String? taxRate;
+  String? originalName;
 
-  Widget titleWidget;
-  Text _defaultTitleWidget;
+  Widget? titleWidget;
+  Text? _defaultTitleWidget;
   final titleController = TextEditingController();
-  Widget titleTextField;
+  Widget? titleTextField;
 
   @override
   void didChangeDependencies() {
     firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-    item = ModalRoute.of(context).settings.arguments;
+    item = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     hasTax = item['hasTax'] ?? false;
     selectedAisle = (item['aisle'] == 'Unsorted') ? null : item['aisle'];
     taxRate = _getTaxRate();
@@ -157,11 +157,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     item['hasTax'] = hasTax;
     // Update the total price for this item.
     if (wasUpdated) {
-      final _quantity = int.tryParse(item['quantity']);
-      final _price = double.tryParse(item['price']);
+      final _quantity = int.tryParse(item['quantity'])!;
+      final _price = double.tryParse(item['price'])!;
       var _taxRate = double.tryParse(Preferences.taxRate) ?? 0.00;
       var _total = (_quantity * _price);
-      if (hasTax && _taxRate > 0.00) {
+      if (hasTax! && _taxRate > 0.00) {
         _taxRate = _taxRate / 100;
         var _taxAmount = _total * _taxRate;
         _total = _total + _taxAmount;

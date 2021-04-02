@@ -17,17 +17,15 @@ class AislesScreen extends StatelessWidget {
       ),
       body: Container(
         padding: EdgeInsets.all(20),
-        child: (_aisles != null)
-            ? ListView.separated(
-                itemCount: _aisles.length,
-                itemBuilder: (context, int index) {
-                  return AisleTile(aisle: _aisles[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return Divider();
-                },
-              )
-            : Container(),
+        child: ListView.separated(
+          itemCount: _aisles.length,
+          itemBuilder: (context, int index) {
+            return AisleTile(aisle: _aisles[index]);
+          },
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -43,10 +41,7 @@ class AislesScreen extends StatelessWidget {
 }
 
 class AisleTile extends StatelessWidget {
-  const AisleTile({
-    Key key,
-    @required this.aisle,
-  }) : super(key: key);
+  const AisleTile({required this.aisle});
 
   final String aisle;
 

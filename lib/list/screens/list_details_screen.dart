@@ -9,23 +9,22 @@ import 'package:shopping_list/list/share_list.dart';
 class ListDetailsScreen extends StatefulWidget {
   final String listID;
 
-  ListDetailsScreen({@required this.listID});
+  ListDetailsScreen({required this.listID});
 
   @override
   _ListDetailsScreenState createState() => _ListDetailsScreenState();
 }
 
 class _ListDetailsScreenState extends State<ListDetailsScreen> {
-  FirestoreUser firestoreUser;
-  String listID;
-  Map<String, dynamic> listInfo;
-  String listName;
+  late FirestoreUser firestoreUser;
+  late final String listID = widget.listID;
+  late Map<String, dynamic> listInfo;
+  late String listName;
 
   @override
   void initState() {
     super.initState();
     firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-    listID = widget.listID;
     listInfo = firestoreUser.lists[listID];
     listName = listInfo['listName'];
   }
@@ -54,7 +53,7 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
                       Text('Shared with:'),
                       Builder(builder: (context) {
                         final sharedTiles = <Widget>[];
-                        Map<String, String> sharedWith;
+                        Map<String, String>? sharedWith;
                         try {
                           sharedWith = Map<String, String>.from(
                               user.lists[listID]['sharedWith']);
@@ -132,7 +131,7 @@ class _AddShareDialogState extends State<AddShareDialog> {
 class SettingsTile extends StatelessWidget {
   final List<Widget> children;
 
-  const SettingsTile({this.children});
+  const SettingsTile({required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +150,7 @@ class SettingsTile extends StatelessWidget {
 class ConfirmListDelete extends StatelessWidget {
   final String listID;
 
-  ConfirmListDelete({@required this.listID});
+  ConfirmListDelete({required this.listID});
 
   @override
   Widget build(BuildContext context) {

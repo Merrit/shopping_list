@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 Future<String> createEmailAccount(
-    {@required String email, @required String password}) async {
+    {required String email, required String password}) async {
   try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
