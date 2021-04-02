@@ -264,10 +264,12 @@ packages:
   settings_ui:
     dependency: "direct main"
     description:
-      name: settings_ui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0-nullsafety.2"
+      path: "."
+      ref: "31121cbd7c28567ecff5b864c7a23840375727b6"
+      resolved-ref: "31121cbd7c28567ecff5b864c7a23840375727b6"
+      url: "git@github.com:Merrit/flutter-settings-ui.git"
+    source: git
+    version: "1.0.0-nullsafety.1"
   shared_preferences:
     dependency: "direct main"
     description:
