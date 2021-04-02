@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shopping_list/firestore/firestore_user.dart';
@@ -13,19 +14,25 @@ import 'package:shopping_list/list/screens/list_items.dart';
 /// Once active returns the list view.
 class ShoppingListBuilder extends StatelessWidget {
   ShoppingListBuilder(BuildContext context)
-      : firestoreUser = Provider.of(context, listen: false);
+      : firestoreUser = Provider.of(context, listen: false) {
+    _log.info('Initialized');
+  }
 
   final FirestoreUser firestoreUser;
+  late final Stream<DocumentSnapshot>? listStream;
+  final _log = Logger('ShoppingListBuilder');
 
   @override
   Widget build(BuildContext context) {
+    listStream = Provider.of<FirestoreUser>(context, listen: false).listStream;
     return StreamBuilder<DocumentSnapshot>(
-      stream: firestoreUser.listStream,
+      stream: listStream,
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) return Text('Something went wrong');
 
         if (snapshot.connectionState == ConnectionState.active) {
+          _log.info('listStream is active');
           // Actual shopping list.
           final listData = snapshot.data!.data()!;
           return _ShoppingGroupedListView(context, listData);

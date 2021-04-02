@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shopping_list/firestore/firestore_user.dart';
@@ -18,9 +19,14 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  _ListScreenState() {
+    _log.info('Initialized');
+  }
+
   late FirestoreUser firestoreUser;
   Map<String, dynamic>? items;
   bool _isInitialized = false;
+  final _log = Logger('ListScreen');
 
   @override
   void didChangeDependencies() {
