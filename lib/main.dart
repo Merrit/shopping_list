@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
@@ -17,7 +18,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  initLogger();
+
   runApp(RestartWidget(child: ListApp()));
+}
+
+/// Initialize the logger.
+///
+/// The logger will listen and print any logs statements.
+void initLogger() {
+  Logger.root.onRecord.listen((record) {
+    var msg = '${record.level.name}: ${record.time}: '
+        '${record.loggerName}: ${record.message}';
+    if (record.error != null) msg += '\nError: ${record.error}';
+    print(msg);
+  });
 }
 
 /// RestartWidget wraps everything, and its `restartApp` method allows us to
@@ -60,8 +75,12 @@ class SomethingWentWrong extends StatelessWidget {
 class ListApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FirestoreUser(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FirestoreUser>(
+          create: (context) => FirestoreUser(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

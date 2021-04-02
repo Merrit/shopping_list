@@ -9,17 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  settings_ui:
+    git:
+      url: git@github.com:Merrit/flutter-settings-ui.git
+      ref: 31121cbd7c28567ecff5b864c7a23840375727b6
   cloud_firestore: ^1.0.3
   cupertino_icons: ^1.0.2
   firebase_auth: ^1.0.1
   firebase_core: ^1.0.2
   grouped_list: ^4.0.0
+  logging: ^1.0.1
   provider: ^5.0.0
-  # settings_ui: ^1.0.0-nullsafety.2
-  settings_ui:
-    git:
-      url: git@github.com:Merrit/flutter-settings-ui.git
-      ref: 31121cbd7c28567ecff5b864c7a23840375727b6
   shared_preferences: ^2.0.5
 
 dev_dependencies:
