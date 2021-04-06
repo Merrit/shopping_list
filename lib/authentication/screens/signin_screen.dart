@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:shopping_list/app.dart';
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
-import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 
 class SigninScreen extends StatefulWidget {

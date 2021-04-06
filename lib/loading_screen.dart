@@ -1,16 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/app.dart';
-
-import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/components/circular_loading_widget.dart';
 import 'package:shopping_list/database/list_manager.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 
 enum LoadingType {

@@ -3,7 +3,6 @@ import 'package:shopping_list/app.dart';
 import 'package:shopping_list/authentication/authenticator.dart';
 import 'package:shopping_list/authentication/notify_email_sent.dart';
 import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
-import 'package:shopping_list/list/screens/list_screen.dart';
 
 class EmailSigninScreen extends StatefulWidget {
   static const id = 'EmailSigninScreen';

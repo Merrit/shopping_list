@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_list/app.dart';
-import 'package:shopping_list/list/shopping_list.dart';
+// import 'package:shopping_list/list/shopping_list.dart';
 
 class ListManager {
-  static final instance = ListManager._singleton();
-  final List<ShoppingList> _lists = [];
+  // final List<ShoppingList> _lists = [];
   final _uid = App.instance.user.uid;
 
   ListManager._singleton();
+
+  static final instance = ListManager._singleton();
 
   // Future<List<ShoppingList>> lists() async {
   //   await _getListsFromFirebase();
@@ -83,10 +84,10 @@ class ListManager {
   //   });
   // }
 
-  Future<void> _buildListFromNew() async {
-    // final newList = await createList(listName: 'My List');
-    // _lists.add(newList);
-  }
+  // Future<void> _buildListFromNew() async {
+  //   // final newList = await createList(listName: 'My List');
+  //   // _lists.add(newList);
+  // }
 
   /// Create a new list document in Firebase.
   Future<DocumentSnapshot> createList({required String listName}) async {

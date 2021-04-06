@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/item.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
-import 'package:shopping_list/list/screens/list_items.dart';
 
 /// The tile that represents each item in the main list screen.
 class ShoppingListTile extends StatefulWidget {
@@ -37,7 +35,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                     flex: 1,
                     child: Consumer<Item>(
                       builder: (context, item, child) {
-                        return (item.quantity != 1)
+                        return (item.quantity != '1')
                             ? Text('${item.quantity}')
                             : Container();
                       },
@@ -47,7 +45,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                     flex: 1,
                     child: Consumer<Item>(
                       builder: (context, item, child) {
-                        return (item.price != 0.00)
+                        return (item.price != '0.00')
                             ? Text('\$${item.price}')
                             : Container();
                       },
@@ -57,7 +55,7 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                     flex: 1,
                     child: Consumer<Item>(
                       builder: (context, item, child) {
-                        return (item.total != 0.00)
+                        return (item.total != '0.00')
                             ? Text('\$${item.total}')
                             : Container();
                       },
