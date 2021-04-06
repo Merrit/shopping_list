@@ -96,7 +96,7 @@ class ListApp extends StatelessWidget {
           LoadingScreen.id: (context) => LoadingScreen(),
           ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
         },
-        initialRoute: LoadingScreen.id,
+        initialRoute: SigninScreen.id,
       ),
     );
   }

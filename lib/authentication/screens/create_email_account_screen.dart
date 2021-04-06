@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/authentication/authenticator.dart';
 
-import 'package:shopping_list/authentication/create_email_account.dart';
 import 'package:shopping_list/authentication/notify_email_sent.dart';
 
 class CreateEmailAccountScreen extends StatefulWidget {
@@ -119,7 +119,8 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
     }
     if (password == confirmedPassword) {
       setState(() => isLoading = true);
-      var result = await createEmailAccount(email: email, password: password);
+      var result = await Authenticator.instance
+          .createEmailAccount(email: email, password: password);
       setState(() => isLoading = false);
       switch (result) {
         case 'success':

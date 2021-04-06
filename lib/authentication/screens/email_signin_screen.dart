@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/app.dart';
+import 'package:shopping_list/authentication/authenticator.dart';
 import 'package:shopping_list/authentication/notify_email_sent.dart';
 import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
-import 'package:shopping_list/authentication/sign_in.dart';
-import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 
 class EmailSigninScreen extends StatefulWidget {
@@ -85,13 +85,15 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
   }
 
   void _signIn(BuildContext context) async {
-    final result = await signInWithEmail(
+    final result = await Authenticator.instance.signInWithEmail(
         email: _emailController.text, password: _passwordController.text);
     switch (result) {
       case 'success':
-        final snackBar = SnackBar(content: Text('Logged in successfully'));
+        final snackBar = SnackBar(
+          content: Text('Logged in successfully'),
+          behavior: SnackBarBehavior.fixed,
+        );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        await Navigator.pushReplacementNamed(context, ListScreen.id);
         break;
       case 'email-not-verified':
         await _notifyEmailNotVerified();
@@ -130,7 +132,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
           content: Text('Email address has not been verified.\n'
               '\n'
               'Follow the link in the verification email that was sent to the '
-              'address you provided (${Globals.auth.currentUser!.email}), '
+              'address you provided (${App.instance.user.email}), '
               'then try again.'),
           actions: [
             TextButton(

@@ -2,12 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shopping_list/app.dart';
 
-import 'package:shopping_list/globals.dart';
 import 'package:shopping_list/preferences/preferences.dart';
 
 /// [FirestoreUser] is the Provider-powered hub that handles Firebase data.
 class FirestoreUser extends ChangeNotifier {
+  final _app = App.instance;
+
   /// All lists the user has access to.
   ///
   /// Takes the form of `{listUID: dynamic}`.
@@ -103,7 +105,7 @@ class FirestoreUser extends ChangeNotifier {
     _getAislesData();
     _setListStream();
     notifyListeners();
-    Preferences.setLastUsedList(listID);
+    Preferences.instance.setLastUsedList(listID);
   }
 
   void populateCompletedItems() {
@@ -137,7 +139,7 @@ class FirestoreUser extends ChangeNotifier {
 
   /// Fetch data from Firebase for every list user has access to.
   Future<void> fetchListsData() async {
-    var uid = Globals.user!.uid;
+    var uid = _app.user.uid;
     var query = await FirebaseFirestore.instance
         .collection('lists')
         .where('allowedUsers.$uid', isEqualTo: true)
@@ -152,7 +154,7 @@ class FirestoreUser extends ChangeNotifier {
 
   /// Create a new list document in Firebase.
   Future<void> createNewList({required String listName}) async {
-    final uid = Globals.user!.uid;
+    final uid = _app.user.uid;
     await FirebaseFirestore.instance.collection('lists').doc().set(
       {
         'listName': listName,
@@ -259,7 +261,7 @@ class FirestoreUser extends ChangeNotifier {
   /// This is called on app startup to pre-load important data.
   Future<bool> setInitialData() async {
     // await _setEmulator();  // Enable to use local Firebase emulator.
-    await Preferences.initPrefs();
+    await Preferences.instance.initPrefs();
     // Check what lists the user has, if any.
     await fetchListsData();
     _loadInitialCurrentList();
@@ -272,7 +274,7 @@ class FirestoreUser extends ChangeNotifier {
   void _loadInitialCurrentList() {
     if (lists.isNotEmpty) {
       // Check for a stored 'last used list'.
-      var lastUsedList = Preferences.lastUsedList();
+      var lastUsedList = Preferences.instance.lastUsedListName();
       var listIDs = [];
       lists.forEach((key, value) => listIDs.add(key));
       if (listIDs.contains(lastUsedList)) {

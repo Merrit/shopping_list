@@ -34,7 +34,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
                 // Set the state for the tiles' checkboxes.
                 listItems.setItemState(
                     itemName: item['itemName'], isChecked: false);
-                return ShoppingListTile(key: Key(item['itemName']), item: item);
+                return ShoppingListTile(key: Key(item['itemName']));
               },
             ),
             bottomNavigationBar: BottomAppBar(

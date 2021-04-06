@@ -159,7 +159,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     if (wasUpdated) {
       final _quantity = int.tryParse(item['quantity'])!;
       final _price = double.tryParse(item['price'])!;
-      var _taxRate = double.tryParse(Preferences.taxRate) ?? 0.00;
+      var _taxRate = double.tryParse(Preferences.instance.taxRate) ?? 0.00;
       var _total = (_quantity * _price);
       if (hasTax! && _taxRate > 0.00) {
         _taxRate = _taxRate / 100;
@@ -184,7 +184,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   }
 
   String _getTaxRate() {
-    var taxRate = '${Preferences.taxRate}%';
+    var taxRate = '${Preferences.instance.taxRate}%';
     if (taxRate == '%') taxRate = 'Not set';
     return taxRate;
   }

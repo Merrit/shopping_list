@@ -1,71 +1,79 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shopping_list/list/shopping_list.dart';
+import 'package:logging/logging.dart';
+import 'package:money2/money2.dart';
+import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/preferences/preferences.dart';
 
 class App extends ChangeNotifier {
-  // App is a singleton.
-  App._privateConstructor();
-  static final App instance = App._privateConstructor();
+  // late ShoppingList currentList;
+  final currency = Currency.create('USD', 2);
+  String? currentList = '';
+  // final Query database = ListManager.instance.lists();
+  static final App instance = App._singleton();
+  // List<String> lists = [];
+  // late Future<List<ShoppingList>> _lists;
+  final _log = Logger('App');
+  late User user;
 
-  late ShoppingList currentList;
-
-  List<ShoppingList> lists = [];
-
-  late final User user;
+  App._singleton() {
+    _log.info('Initialized');
+  }
 
   /// Populate the inital data the app will need.
   Future<void> init() async {
     // await _setEmulator();  // Enable to use local Firebase emulator.
-    await Preferences.initPrefs();
-    await fetchListsData();
-    currentList = _initCurrentList();
+    await Preferences.instance.initPrefs();
+    // await _fetchListsData();
+    await _setCurrentList();
+    // _listenToDatabase();
+    // _log.info('currentList: $currentList');
   }
+
+  // void _listenToDatabase() {
+  //   database.snapshots().listen((event) {
+  //     event.docChanges.forEach((doc) {
+  //       if (doc.type == DocumentChangeType.added) {
+  //         final listId = doc.doc.id;
+  //         _addToLists(listId);
+  //       }
+  //     });
+  //   });
+  // }
+
+//   ONLY GET LIST OF LISTS ON DEMAND, MAKE A METHOD FOR THAT
+
+//   IF SAVED CURRENT LIST IS NOT AVAILABLE, ONLY THEN GET LIST OF LISTS AND USE FIRST
+
+//   void _addToLists(String listId) {
+// firstListPopulated = Future.value(true);
+//     lists.add(listId);
+//   }
+
+  // Future<List<ShoppingList>> lists() async {
+
+  // }
+
+  // Future<void> _fetchListsData() async {
+  //   _lists = await ListManager().lists();
+  //   notifyListeners();
+  // }
 
   /// Populate [currentList] on app startup.
-  ShoppingList _initCurrentList() {
-    final lastUsedList = Preferences.lastUsedList();
-    return lists.firstWhere(
-      (list) => list.name == lastUsedList,
-      orElse: () => lists.first,
-    );
+  Future<void> _setCurrentList() async {
+    currentList = Preferences.instance.lastUsedListName();
+    _log.info('lastUsedListName: $currentList');
   }
 
-  /// Fetch data from Firebase for every list user has access to.
-  Future<void> fetchListsData() async {
-    final uid = user.uid;
-    //
-    // TODO: If no lists exist, probably create an empty list here?
-    //
-    final query = await FirebaseFirestore.instance
-        .collection('lists')
-        .where('allowedUsers.$uid', isEqualTo: true)
-        .get();
-    lists.clear();
-    if (query.docs.isNotEmpty) {
-      // Add as objects to lists.
-      query.docs.forEach((doc) {
-        lists.add(ShoppingList.fromJson(doc.data()!));
-        // lists[doc.id] = Map<String, dynamic>.from(doc.data());
-      });
-    } else {
-      // If no lists yet exist,
-      // Create new default list in Firebase & also add as object to lists.
-      final newList = await createList(listName: 'My List');
-      lists.add(ShoppingList.fromJson(newList));
-    }
-    notifyListeners();
-  }
-
-  /// The StreamBuilder for [ListScreen] listens to this in order
-  /// to build the main list UI. Updates automatically with new items.
-  Stream<DocumentSnapshot> listStream() {
-    return FirebaseFirestore.instance
-        .collection('lists')
-        .doc(currentList.name)
-        .snapshots();
-  }
+  // /// The StreamBuilder for [ListScreen] listens to this in order
+  // /// to build the main list UI. Updates automatically with new items.
+  // Stream<DocumentSnapshot> listStream() {
+  //   return FirebaseFirestore.instance
+  //       .collection('lists')
+  //       .doc(currentList.name)
+  //       .snapshots();
+  // }
 
   /// Create a new list document in Firebase.
   Future<Map<String, dynamic>> createList({required String listName}) async {

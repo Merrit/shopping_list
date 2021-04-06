@@ -1,7 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
+import 'dart:async';
 
-import 'package:shopping_list/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+import 'package:shopping_list/app.dart';
+import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
+import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -12,29 +16,14 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) => _checkIfSignedIn());
-  }
+  final app = App.instance;
+  Widget authWidget = SignInButtons();
+  late final StreamSubscription<User?> authStream;
+  final _log = Logger('SigninScreen');
 
-  /// Workaround because the initial SteamBuilder's snapshot.hasData never
-  /// triggers on the web version.
-  /// May have something to do with this bug that was just fixed,
-  /// but will need verification:
-  /// https://github.com/FirebaseExtended/flutterfire/pull/4312
-  void _checkIfSignedIn() async {
-    // Slight delay for any potential user info to actually populate.
-    // We can't do this directly in the StreamBuilder since it
-    // doesn't work with async.
-    await Future.delayed(Duration(milliseconds: 500));
-    // **Now** check if there is a logged in user.
-    if (Globals.auth.currentUser != null &&
-        Globals.auth.currentUser!.emailVerified) {
-      await Navigator.pushReplacementNamed(context, ListScreen.id);
-    } else {
-      // No saved user loaded, so continue normal sign in.
-    }
+  _SigninScreenState() {
+    _log.info('Initialized');
+    listenToAuthStream();
   }
 
   @override
@@ -42,56 +31,112 @@ class _SigninScreenState extends State<SigninScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Sign in')),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(width: double.infinity),
-              Container(
-                height: 100,
-                width: 100,
-                child: Placeholder(),
-              ),
-              SizedBox(height: 80),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                height: 50,
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, EmailSigninScreen.id);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.email),
-                      SizedBox(width: 20),
-                      Text('Sign in with email'),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                height: 50,
-                width: 200,
-                child: Placeholder(),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                height: 50,
-                width: 200,
-                child: Placeholder(),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                height: 50,
-                width: 200,
-                child: Placeholder(),
-              ),
-            ],
+        child: authWidget,
+      ),
+    );
+  }
+
+  void listenToAuthStream() {
+    authStream = FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        _log.info('No user is signed in.');
+      } else {
+        logIn(user);
+      }
+    });
+  }
+
+  void showLoadingDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  Future<void> logIn(User user) async {
+    await authStream.cancel();
+    showLoadingDialog();
+    _log.info('${user.email} is signed in.');
+    await app.init();
+    setUser(user);
+    await goToListScreen();
+  }
+
+  Future<void> goToListScreen() async {
+    // final listSnapshot = await ListManager.instance.getCurrentList();
+    await Navigator.pushReplacementNamed(
+      context,
+      ListScreen.id,
+      // arguments: listSnapshot,
+    );
+  }
+
+  void setUser(User user) {
+    app.user = user;
+  }
+
+  @override
+  void dispose() {
+    authStream.cancel();
+    super.dispose();
+  }
+}
+
+class SignInButtons extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(width: double.infinity),
+          Container(
+            height: 100,
+            width: 100,
+            child: Placeholder(),
           ),
-        ),
+          SizedBox(height: 80),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            height: 50,
+            width: 200,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, EmailSigninScreen.id);
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.email),
+                  SizedBox(width: 20),
+                  Text('Sign in with email'),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            height: 50,
+            width: 200,
+            child: Placeholder(),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            height: 50,
+            width: 200,
+            child: Placeholder(),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            height: 50,
+            width: 200,
+            child: Placeholder(),
+          ),
+        ],
       ),
     );
   }

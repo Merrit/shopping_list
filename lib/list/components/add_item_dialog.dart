@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shopping_list/helpers/capitalize_string.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/aisle.dart';
+import 'package:shopping_list/list/item.dart';
+import 'package:shopping_list/list/shopping_list.dart';
 
 class AddItemDialog extends StatefulWidget {
+  final ShoppingList list;
+
+  AddItemDialog(this.list);
+
   @override
   _AddItemDialogState createState() => _AddItemDialogState();
 }
 
 class _AddItemDialogState extends State<AddItemDialog> {
-  final TextEditingController addItemController = TextEditingController();
-  final TextEditingController quantityController = TextEditingController();
-  late FirestoreUser firestoreUser;
+  final addItemController = TextEditingController();
   String aisle = 'Unsorted';
+  final quantityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-
     return AlertDialog(
       title: Text('Add item'),
       content: Column(
@@ -72,18 +73,18 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   void _addItem() {
-    var _quantity =
+    final _quantity =
         (quantityController.text != '') ? quantityController.text : '1';
-    final item = {
-      'itemName': addItemController.text.capitalizeFirst,
-      'aisle': aisle,
-      'isComplete': false,
-      'quantity': _quantity,
-      'price': '0.00',
-      'total': '0.00',
-      'hasTax': false
-    };
-    firestoreUser.addListItem(item);
+    final item = Item(
+        aisle: aisle,
+        hasTax: false,
+        isComplete: false,
+        name: addItemController.text.capitalizeFirst,
+        notes: '',
+        price: '0.00',
+        quantity: _quantity,
+        total: '0.00');
+    widget.list.createNewItem(item);
     Navigator.pop(context);
   }
 }
