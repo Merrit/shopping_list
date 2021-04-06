@@ -122,7 +122,7 @@ class _ListScreenState extends State<ListScreen> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AddItemDialog(list);
+            return AddItemDialog();
           },
         );
       },

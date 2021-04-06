@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shopping_list/helpers/capitalize_string.dart';
 import 'package:shopping_list/list/aisle.dart';
@@ -7,10 +8,6 @@ import 'package:shopping_list/list/item.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 
 class AddItemDialog extends StatefulWidget {
-  final ShoppingList list;
-
-  AddItemDialog(this.list);
-
   @override
   _AddItemDialogState createState() => _AddItemDialogState();
 }
@@ -84,7 +81,8 @@ class _AddItemDialogState extends State<AddItemDialog> {
         price: '0.00',
         quantity: _quantity,
         total: '0.00');
-    widget.list.createNewItem(item);
+    final list = Provider.of<ShoppingList>(context, listen: false);
+    list.createNewItem(item);
     Navigator.pop(context);
   }
 }

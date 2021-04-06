@@ -58,10 +58,13 @@ class FloatingListButtonBar extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
+                      return ChangeNotifierProvider.value(
+                        value: list,
+                        child: AddItemDialog(),
+                      );
                       // final currency = App.instance.currency;
                       // final cost = currency.parse('0.00', pattern: '0.00');
                       // print('cost: $cost');
-                      return AddItemDialog(list);
                     },
                   );
                 },
