@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shopping_list/list/shopping_list.dart';
 
 part 'item.g.dart';
 
@@ -14,6 +15,11 @@ class Item extends ChangeNotifier {
   String quantity;
   String total;
 
+  Map<String, Map<String, dynamic>>? originalJsonData;
+
+  @JsonKey(ignore: true)
+  late ShoppingList parentList;
+
   Item({
     required this.aisle,
     required this.hasTax,
@@ -23,14 +29,10 @@ class Item extends ChangeNotifier {
     required this.price,
     required this.quantity,
     required this.total,
+    this.originalJsonData,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$ItemToJson(this);
-
-  void setIsComplete(bool value) {
-    isComplete = value;
-    notifyListeners();
-  }
 }

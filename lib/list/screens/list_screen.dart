@@ -9,6 +9,7 @@ import 'package:shopping_list/list/components/add_item_dialog.dart';
 import 'package:shopping_list/list/components/drawer.dart';
 import 'package:shopping_list/list/components/floating_list_button_bar.dart';
 import 'package:shopping_list/list/components/shopping_list_builder.dart';
+import 'package:shopping_list/list/item/list_items_state.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 
@@ -22,7 +23,7 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   late final ShoppingList list;
-  final listFuture = ListManager.instance.getCurrentList();
+  final listFuture = ListManager.instance.getCurrentListAtStartup();
   final _log = Logger('ListScreen');
 
   _ListScreenState() {
@@ -37,11 +38,21 @@ class _ListScreenState extends State<ListScreen> {
         if (snapshot.hasData) {
           final listSnapshot = snapshot.data!;
           final snapshotData = listSnapshot.data()!;
-          return ChangeNotifierProvider<ShoppingList>(
-            create: (_) => ShoppingList(
-              listSnapshot: listSnapshot,
-              snapshotData: snapshotData,
-            ),
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider<ShoppingList>(
+                create: (_) => ShoppingList(
+                  listSnapshot: listSnapshot,
+                  snapshotData: snapshotData,
+                ),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => CheckedItems(),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => ListItemsState(listSnapshot.reference),
+              ),
+            ],
             builder: (context, child) {
               list = Provider.of<ShoppingList>(context, listen: false);
               return Shortcuts(
@@ -133,4 +144,28 @@ class _ListScreenState extends State<ListScreen> {
 /// Part of the hotkeys.
 class NewItemIntent extends Intent {
   const NewItemIntent();
+}
+
+class CheckedItems extends ChangeNotifier {
+  bool containsCheckedItems = false;
+
+  final List<String> itemList = [];
+
+  List<String> get items => itemList;
+
+  bool isItemChecked(String name) => itemList.contains(name);
+
+  void toggleCheckedStatus(String name) {
+    if (itemList.contains(name)) {
+      itemList.remove(name);
+    } else {
+      itemList.add(name);
+    }
+    _setContainsCheckedItems();
+    notifyListeners();
+  }
+
+  void _setContainsCheckedItems() {
+    containsCheckedItems = itemList.isEmpty ? false : true;
+  }
 }

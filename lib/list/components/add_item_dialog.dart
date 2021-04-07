@@ -70,18 +70,19 @@ class _AddItemDialogState extends State<AddItemDialog> {
   }
 
   void _addItem() {
+    final list = Provider.of<ShoppingList>(context, listen: false);
     final _quantity =
         (quantityController.text != '') ? quantityController.text : '1';
     final item = Item(
-        aisle: aisle,
-        hasTax: false,
-        isComplete: false,
-        name: addItemController.text.capitalizeFirst,
-        notes: '',
-        price: '0.00',
-        quantity: _quantity,
-        total: '0.00');
-    final list = Provider.of<ShoppingList>(context, listen: false);
+      aisle: aisle,
+      hasTax: false,
+      isComplete: false,
+      name: addItemController.text.capitalizeFirst,
+      notes: '',
+      price: '0.00',
+      quantity: _quantity,
+      total: '0.00',
+    );
     list.createNewItem(item);
     Navigator.pop(context);
   }

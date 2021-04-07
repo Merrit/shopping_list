@@ -9,6 +9,7 @@ import 'package:shopping_list/authentication/screens/create_email_account_screen
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
+import 'package:shopping_list/list/screens/completed_items_screen.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/loading_screen.dart';
@@ -89,12 +90,13 @@ class ListApp extends StatelessWidget {
           appBarTheme: AppBarTheme(centerTitle: true),
         ),
         routes: {
-          SigninScreen.id: (context) => SigninScreen(),
-          EmailSigninScreen.id: (context) => EmailSigninScreen(),
+          CompletedItemsScreen.id: (context) => CompletedItemsScreen(),
           CreateEmailAccountScreen.id: (context) => CreateEmailAccountScreen(),
+          EmailSigninScreen.id: (context) => EmailSigninScreen(),
+          ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
           ListScreen.id: (context) => ListScreen(),
           LoadingScreen.id: (context) => LoadingScreen(),
-          ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
+          SigninScreen.id: (context) => SigninScreen(),
         },
         initialRoute: SigninScreen.id,
       ),

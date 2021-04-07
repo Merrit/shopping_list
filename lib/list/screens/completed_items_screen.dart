@@ -6,6 +6,8 @@ import 'package:shopping_list/list/components/shopping_list_tile.dart';
 import 'package:shopping_list/list/screens/list_items.dart';
 
 class CompletedItemsScreen extends StatefulWidget {
+  static const id = 'completed_items_screen';
+
   @override
   _CompletedItemsScreenState createState() => _CompletedItemsScreenState();
 }

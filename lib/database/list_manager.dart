@@ -1,31 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_list/app.dart';
-// import 'package:shopping_list/list/shopping_list.dart';
+import 'package:shopping_list/list/item.dart';
 
 class ListManager {
-  // final List<ShoppingList> _lists = [];
+  final _app = App.instance;
   final _uid = App.instance.user.uid;
 
   ListManager._singleton();
 
   static final instance = ListManager._singleton();
 
-  // Future<List<ShoppingList>> lists() async {
-  //   await _getListsFromFirebase();
-  //   firebaseHasLists = _firebaseListData.docs.isNotEmpty;
-  //   await _buildListObjects();
-  //   return _lists;
-  // }
+  String get currentList => _app.currentList!;
 
-  Future<DocumentSnapshot> getCurrentList() {
-    final currentList = App.instance.currentList;
+  DocumentReference get currentListReference {
+    return FirebaseFirestore.instance.collection('lists').doc(currentList);
+  }
+
+  Future<DocumentSnapshot> getCurrentListAtStartup() {
+    final currentList = _app.currentList;
     final Future<DocumentSnapshot> snapshot;
     if (currentList != null) {
       snapshot = getListById(currentList);
     } else {
       snapshot = getFirstList();
     }
+    _setCurrentListAtStartup(snapshot);
     return snapshot;
+  }
+
+  void _setCurrentListAtStartup(Future<DocumentSnapshot> snapshot) async {
+    _app.currentList = await snapshot.then((value) => value.get('name'));
   }
 
   Future<DocumentSnapshot> getListById(String id) async {
@@ -52,43 +56,6 @@ class ListManager {
       .collection('lists')
       .where('allowedUsers.$_uid', isEqualTo: true);
 
-  // Future<void> _getListsFromFirebase() async {
-  //   var lists = FirebaseFirestore.instance
-  //     .collection('lists')
-  //     .where('allowedUsers.${App.instance.user.uid}', isEqualTo: true);
-  //     lists.
-  //   // _firebaseListData = await FirebaseFirestore.instance
-  //   //     .collection('lists')
-  //   //     .where('allowedUsers.$_uid', isEqualTo: true)
-  //   //     .get();
-  //   //
-  //   // var myTest =      FirebaseFirestore.instance
-  //   // .collection('lists')
-  //   // .where('allowedUsers.$_uid', isEqualTo: true).snapshots();
-  //   // myTest.s
-  // }
-
-  // Future<void> _buildListObjects() async {
-  //   if (firebaseHasLists) {
-  //     _buildListFromFirebase();
-  //   } else {
-  //     await _buildListFromNew();
-  //   }
-  // }
-
-  // void _buildListFromFirebase() {
-  //   _firebaseListData.docs.
-  //   _firebaseListData.docs.forEach((doc) {
-  //     _lists.add(ShoppingList.fromJson(doc.data()!));
-  //     doc.
-  //   });
-  // }
-
-  // Future<void> _buildListFromNew() async {
-  //   // final newList = await createList(listName: 'My List');
-  //   // _lists.add(newList);
-  // }
-
   /// Create a new list document in Firebase.
   Future<DocumentSnapshot> createList({required String listName}) async {
     final listMap = <String, dynamic>{
@@ -106,5 +73,11 @@ class ListManager {
     );
     final listSnapshot = listReference.snapshots().first;
     return listSnapshot;
+  }
+
+  void updateItems(List<Item> items, DocumentReference listReference) {
+    final itemsMap = <String, dynamic>{};
+    items.forEach((item) => itemsMap[item.name] = item.toJson());
+    listReference.set({'items': itemsMap}, SetOptions(merge: true));
   }
 }

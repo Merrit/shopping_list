@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/list/item.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
+import 'package:shopping_list/list/screens/list_screen.dart';
+import 'package:shopping_list/list/shopping_list.dart';
 
 /// The tile that represents each item in the main list screen.
 class ShoppingListTile extends StatefulWidget {
@@ -12,6 +14,9 @@ class ShoppingListTile extends StatefulWidget {
 }
 
 class _ShoppingListTileState extends State<ShoppingListTile> {
+  late final item = Provider.of<Item>(context, listen: false);
+  late final list = Provider.of<ShoppingList>(context, listen: false);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -63,11 +68,13 @@ class _ShoppingListTileState extends State<ShoppingListTile> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Consumer<Item>(
-                      builder: (context, item, widget) {
+                    child: Consumer<CheckedItems>(
+                      builder: (context, items, widget) {
                         return Checkbox(
-                          value: item.isComplete,
-                          onChanged: (value) => item.setIsComplete(value!),
+                          value: items.isItemChecked(item.name),
+                          onChanged: (value) {
+                            items.toggleCheckedStatus(item.name);
+                          },
                         );
                       },
                     ),
