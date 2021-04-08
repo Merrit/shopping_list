@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/list/item.dart';
+import 'package:shopping_list/list/state/checked_items.dart';
 
 class ListItemsState extends ChangeNotifier {
-  final Map<String, bool> checkedItems = {};
+  late CheckedItems checkedItems;
   final List<Item> completedItems = [];
   bool hasCompletedItems = false;
   final List<Item> items = [];
@@ -42,6 +43,7 @@ class ListItemsState extends ChangeNotifier {
       itemsToChange.add(item);
     });
     listManager.updateItems(itemsToChange, listReference);
+    checkedItems.clearCheckedItems();
     _waitForFirebaseThenNotify();
   }
 

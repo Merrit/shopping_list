@@ -9,7 +9,8 @@ import 'package:shopping_list/list/components/add_item_dialog.dart';
 import 'package:shopping_list/list/components/drawer.dart';
 import 'package:shopping_list/list/components/floating_list_button_bar.dart';
 import 'package:shopping_list/list/components/shopping_list_builder.dart';
-import 'package:shopping_list/list/item/list_items_state.dart';
+import 'package:shopping_list/list/state/checked_items.dart';
+import 'package:shopping_list/list/state/list_items_state.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 
@@ -46,11 +47,16 @@ class _ListScreenState extends State<ListScreen> {
                   snapshotData: snapshotData,
                 ),
               ),
-              ChangeNotifierProvider(
+              ChangeNotifierProvider<CheckedItems>(
                 create: (_) => CheckedItems(),
               ),
-              ChangeNotifierProvider(
+              ChangeNotifierProxyProvider0<ListItemsState>(
                 create: (_) => ListItemsState(listSnapshot.reference),
+                update: (context, result) {
+                  final checkedItems = context.watch<CheckedItems>();
+                  result!.checkedItems = checkedItems;
+                  return result;
+                },
               ),
             ],
             builder: (context, child) {
@@ -133,7 +139,10 @@ class _ListScreenState extends State<ListScreen> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AddItemDialog();
+            return ChangeNotifierProvider.value(
+              value: list,
+              child: AddItemDialog(),
+            );
           },
         );
       },
@@ -144,28 +153,4 @@ class _ListScreenState extends State<ListScreen> {
 /// Part of the hotkeys.
 class NewItemIntent extends Intent {
   const NewItemIntent();
-}
-
-class CheckedItems extends ChangeNotifier {
-  bool containsCheckedItems = false;
-
-  final List<String> itemList = [];
-
-  List<String> get items => itemList;
-
-  bool isItemChecked(String name) => itemList.contains(name);
-
-  void toggleCheckedStatus(String name) {
-    if (itemList.contains(name)) {
-      itemList.remove(name);
-    } else {
-      itemList.add(name);
-    }
-    _setContainsCheckedItems();
-    notifyListeners();
-  }
-
-  void _setContainsCheckedItems() {
-    containsCheckedItems = itemList.isEmpty ? false : true;
-  }
 }

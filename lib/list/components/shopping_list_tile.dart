@@ -4,6 +4,7 @@ import 'package:shopping_list/list/item.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
+import 'package:shopping_list/list/state/checked_items.dart';
 
 /// The tile that represents each item in the main list screen.
 class ShoppingListTile extends StatefulWidget {

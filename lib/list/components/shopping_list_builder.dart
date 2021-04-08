@@ -7,7 +7,7 @@ import 'package:shopping_list/components/circular_loading_widget.dart';
 import 'package:shopping_list/list/components/aisle_header.dart';
 import 'package:shopping_list/list/components/shopping_list_tile.dart';
 import 'package:shopping_list/list/item.dart';
-import 'package:shopping_list/list/item/list_items_state.dart';
+import 'package:shopping_list/list/state/list_items_state.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 
 /// Displays a loading indicator until the list stream is active.

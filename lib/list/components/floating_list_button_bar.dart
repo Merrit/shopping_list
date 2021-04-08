@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/list/components/add_item_dialog.dart';
-import 'package:shopping_list/list/item/list_items_state.dart';
+import 'package:shopping_list/list/state/checked_items.dart';
+import 'package:shopping_list/list/state/list_items_state.dart';
 import 'package:shopping_list/list/screens/completed_items_screen.dart';
-import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 
 class FloatingListButtonBar extends StatelessWidget {
