@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/components/confirm_dialog.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/list/components/shopping_list_tile.dart';
+import 'package:shopping_list/list/item.dart';
+import 'package:shopping_list/list/shopping_list.dart';
 import 'package:shopping_list/list/state/list_items_state.dart';
-import 'package:shopping_list/list/screens/list_items.dart';
 
 class CompletedItemsScreen extends StatefulWidget {
   static const id = 'completed_items_screen';
@@ -14,57 +14,71 @@ class CompletedItemsScreen extends StatefulWidget {
 }
 
 class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
-  late final listItemsState = Provider.of<ListItemsState>(context);
+  final List<String> checkedItems = [];
+  late final list = ModalRoute.of(context)!.settings.arguments as ShoppingList;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView.builder(
-        itemCount: listItemsState.completedItems.length,
-        itemBuilder: (context, index) {
-          final item = listItemsState.completedItems[index];
-          return ListTile(
-            key: Key(item.name),
-            title: Text(item.name),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: [
-            Spacer(),
-            Consumer<ListItems>(
-              builder: (context, listItems, widget) {
-                return ElevatedButton(
-                  onPressed: (listItems.checkedItems.containsValue(true))
-                      ? _restoreItems
-                      : null,
+    return ChangeNotifierProvider.value(
+      value: list,
+      builder: (context, child) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: ListView.builder(
+            itemCount: list.listItemsState.completedItems.length,
+            itemBuilder: (context, index) {
+              final item = list.listItemsState.completedItems[index];
+              return ListTile(
+                key: Key(item.name),
+                title: Text(item.name),
+                trailing: Checkbox(
+                  value: checkedItems.contains(item.name),
+                  onChanged: (value) {
+                    _toggleCheckbox(item);
+                  },
+                ),
+              );
+            },
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: Row(
+              children: [
+                Spacer(),
+                ElevatedButton(
+                  // onPressed: null,
+                  onPressed: (checkedItems.isNotEmpty) ? _restoreItems : null,
                   child: Text('Restore checked'),
-                );
-              },
-            ),
-            Spacer(),
-            Consumer<ListItems>(
-              builder: (context, listItems, widget) {
-                return ElevatedButton(
-                  onPressed: (listItems.checkedItems.containsValue(true))
+                ),
+                Spacer(),
+                ElevatedButton(
+                  // onPressed: null,
+                  onPressed: (checkedItems.isNotEmpty)
                       ? () => _deleteItems(deleteAll: false)
                       : null,
                   child: Text('Delete checked'),
-                );
-              },
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () => _deleteItems(deleteAll: true),
+                  child: Text('Delete all'),
+                ),
+                Spacer(),
+              ],
             ),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () => _deleteItems(deleteAll: true),
-              child: Text('Delete all'),
-            ),
-            Spacer(),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
+  }
+
+  void _toggleCheckbox(Item item) {
+    setState(() {
+      if (checkedItems.contains(item.name)) {
+        checkedItems.remove(item.name);
+      } else {
+        checkedItems.add(item.name);
+      }
+    });
   }
 
   /// If `deleteAll` is false, only delete checked items.
@@ -88,7 +102,17 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
       builder: (context) => ConfirmDialog(content: 'Confirm: Restore items?'),
     );
     if (confirmed == false) return;
-    var firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
-    // listItems.restoreItems(firestoreUser);
+    final itemsToRestore = list.listItemsState.completedItems
+        .where((item) => checkedItems.contains(item.name))
+        .toList();
+    assert(itemsToRestore.isNotEmpty);
+    itemsToRestore.forEach((item) {
+      // list.listItemsState.completedItems.removeWhere((element) {
+      //   return element.name == item.name;
+      // });
+      item.isComplete = false;
+    });
+    setState(() {});
+    list.updateItems(itemsToRestore);
   }
 }

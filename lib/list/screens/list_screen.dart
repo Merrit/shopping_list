@@ -41,12 +41,12 @@ class _ListScreenState extends State<ListScreen> {
           final snapshotData = listSnapshot.data()!;
           return MultiProvider(
             providers: [
-              ChangeNotifierProvider<ShoppingList>(
-                create: (_) => ShoppingList(
-                  listSnapshot: listSnapshot,
-                  snapshotData: snapshotData,
-                ),
-              ),
+              // ChangeNotifierProvider<ShoppingList>(
+              //   create: (_) => ShoppingList(
+              //     listSnapshot: listSnapshot,
+              //     snapshotData: snapshotData,
+              //   ),
+              // ),
               ChangeNotifierProvider<CheckedItems>(
                 create: (_) => CheckedItems(),
               ),
@@ -55,6 +55,17 @@ class _ListScreenState extends State<ListScreen> {
                 update: (context, result) {
                   final checkedItems = context.watch<CheckedItems>();
                   result!.checkedItems = checkedItems;
+                  return result;
+                },
+              ),
+              ChangeNotifierProxyProvider0<ShoppingList>(
+                create: (_) => ShoppingList(
+                  listSnapshot: listSnapshot,
+                  snapshotData: snapshotData,
+                ),
+                update: (context, result) {
+                  final listItemState = context.watch<ListItemsState>();
+                  result!.listItemsState = listItemState;
                   return result;
                 },
               ),

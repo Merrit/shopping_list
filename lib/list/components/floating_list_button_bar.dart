@@ -22,29 +22,28 @@ class FloatingListButtonBar extends StatelessWidget {
           FutureBuilder(
               future: completedButtonFuture,
               builder: (context, snapshot) {
-                return Consumer<ListItemsState>(
-                  builder: (context, state, child) {
-                    if (state.hasCompletedItems) {
-                      return Align(
-                        alignment: Alignment.bottomCenter,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) => Colors.grey,
-                          )),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, CompletedItemsScreen.id);
-                          },
-                          child: Text('Completed items'),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                );
+                if (context.watch<ListItemsState>().hasCompletedItems) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: TextButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) => Colors.grey,
+                      )),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          CompletedItemsScreen.id,
+                          arguments: list,
+                        );
+                      },
+                      child: Text('Completed items'),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
               }),
           Align(
             alignment: Alignment.bottomCenter,

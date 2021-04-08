@@ -6,7 +6,7 @@ import 'package:shopping_list/preferences/preferences.dart';
 
 class App extends ChangeNotifier {
   final Currency currency;
-  String? currentList;
+  String? currentListId;
   late User user;
   final Logger _log;
 
@@ -25,9 +25,9 @@ class App extends ChangeNotifier {
     await _setCurrentList();
   }
 
-  /// Populate [currentList] on app startup.
+  /// Populate [currentListId] on app startup.
   Future<void> _setCurrentList() async {
-    currentList = Preferences.instance.lastUsedListName();
-    _log.info('lastUsedListName: $currentList');
+    currentListId = Preferences.instance.lastUsedListName();
+    _log.info('lastUsedListName: $currentListId');
   }
 }

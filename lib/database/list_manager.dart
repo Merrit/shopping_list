@@ -10,17 +10,17 @@ class ListManager {
 
   static final instance = ListManager._singleton();
 
-  String get currentList => _app.currentList!;
+  String get currentList => _app.currentListId!;
 
-  DocumentReference get currentListReference {
-    return FirebaseFirestore.instance.collection('lists').doc(currentList);
-  }
+  // DocumentReference get currentListReference {
+  //   return FirebaseFirestore.instance.collection('lists').doc(currentList);
+  // }
 
   Future<DocumentSnapshot> getCurrentListAtStartup() {
-    final currentList = _app.currentList;
+    final currentListId = _app.currentListId;
     final Future<DocumentSnapshot> snapshot;
-    if (currentList != null) {
-      snapshot = getListById(currentList);
+    if (currentListId != null) {
+      snapshot = getListById(currentListId);
     } else {
       snapshot = getFirstList();
     }
@@ -29,7 +29,7 @@ class ListManager {
   }
 
   void _setCurrentListAtStartup(Future<DocumentSnapshot> snapshot) async {
-    _app.currentList = await snapshot.then((value) => value.get('name'));
+    _app.currentListId = await snapshot.then((value) => value.get('name'));
   }
 
   Future<DocumentSnapshot> getListById(String id) async {
@@ -76,6 +76,9 @@ class ListManager {
   }
 
   void updateItems(List<Item> items, DocumentReference listReference) {
+    if (items.isEmpty) {
+      throw Exception('List of items to update must not be empty.');
+    }
     final itemsMap = <String, dynamic>{};
     items.forEach((item) => itemsMap[item.name] = item.toJson());
     listReference.set({'items': itemsMap}, SetOptions(merge: true));

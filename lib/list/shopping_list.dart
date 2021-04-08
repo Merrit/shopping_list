@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/list/item.dart';
+import 'package:shopping_list/list/state/list_items_state.dart';
 
 class ShoppingList extends ChangeNotifier {
   final List<String> aisles;
   final String id;
+  late ListItemsState listItemsState;
   final ListManager listManager;
   final DocumentReference listReference;
   String name = '';
@@ -25,5 +27,9 @@ class ShoppingList extends ChangeNotifier {
     FirebaseFirestore.instance.collection('lists').doc(id).set({
       'items': {item.name: item.toJson()}
     }, SetOptions(merge: true));
+  }
+
+  void updateItems(List<Item> items) {
+    listManager.updateItems(items, listReference);
   }
 }
