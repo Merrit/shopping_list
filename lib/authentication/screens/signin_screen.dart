@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:shopping_list/app.dart';
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
+import 'package:shopping_list/main.dart';
 
 class SigninScreen extends StatefulWidget {
   static const id = 'SigninScreen';
@@ -66,12 +67,11 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   Future<void> goToListScreen() async {
-    // final listSnapshot = await ListManager.instance.getCurrentList();
-    await Navigator.pushReplacementNamed(
-      context,
-      ListScreen.id,
-      // arguments: listSnapshot,
-    );
+    RestartWidget.restartApp(context);
+    // await Navigator.pushReplacementNamed(
+    //   context,
+    //   ListScreen.id,
+    // );
   }
 
   void setUser(User user) {

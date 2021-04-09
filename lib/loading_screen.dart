@@ -22,7 +22,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  final listFuture = ListManager.instance.getCurrentListAtStartup();
+  final listFuture = ListManager.instance.getCurrentList();
   final _log = Logger('LoadingScreen');
 
   _LoadingScreenState() {

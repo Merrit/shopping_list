@@ -15,61 +15,112 @@ class CompletedItemsScreen extends StatefulWidget {
 
 class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
   final List<String> checkedItems = [];
-  late final list = ModalRoute.of(context)!.settings.arguments as ShoppingList;
+  // late final list = ModalRoute.of(context)!.settings.arguments as ShoppingList;
+  late final ShoppingList list = context.read<ShoppingList>();
+  late final ListItemsState listItemsState = context.watch<ListItemsState>();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: list,
-      builder: (context, child) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: ListView.builder(
-            itemCount: list.listItemsState.completedItems.length,
-            itemBuilder: (context, index) {
-              final item = list.listItemsState.completedItems[index];
-              return ListTile(
-                key: Key(item.name),
-                title: Text(item.name),
-                trailing: Checkbox(
-                  value: checkedItems.contains(item.name),
-                  onChanged: (value) {
-                    _toggleCheckbox(item);
-                  },
-                ),
-              );
-            },
-          ),
-          bottomNavigationBar: BottomAppBar(
-            child: Row(
-              children: [
-                Spacer(),
-                ElevatedButton(
-                  // onPressed: null,
-                  onPressed: (checkedItems.isNotEmpty) ? _restoreItems : null,
-                  child: Text('Restore checked'),
-                ),
-                Spacer(),
-                ElevatedButton(
-                  // onPressed: null,
-                  onPressed: (checkedItems.isNotEmpty)
-                      ? () => _deleteItems(deleteAll: false)
-                      : null,
-                  child: Text('Delete checked'),
-                ),
-                Spacer(),
-                ElevatedButton(
-                  onPressed: () => _deleteItems(deleteAll: true),
-                  child: Text('Delete all'),
-                ),
-                Spacer(),
-              ],
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView.builder(
+        itemCount: listItemsState.completedItems.length,
+        itemBuilder: (context, index) {
+          final item = listItemsState.completedItems[index];
+          return ListTile(
+            key: Key(item.name),
+            title: Text(item.name),
+            trailing: Checkbox(
+              value: checkedItems.contains(item.name),
+              onChanged: (value) {
+                _toggleCheckbox(item);
+              },
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            Spacer(),
+            ElevatedButton(
+              // onPressed: null,
+              onPressed: (checkedItems.isNotEmpty) ? _restoreItems : null,
+              child: Text('Restore checked'),
+            ),
+            Spacer(),
+            ElevatedButton(
+              // onPressed: null,
+              onPressed: (checkedItems.isNotEmpty)
+                  ? () => _deleteItems(deleteAll: false)
+                  : null,
+              child: Text('Delete checked'),
+            ),
+            Spacer(),
+            ElevatedButton(
+              onPressed: () => _deleteItems(deleteAll: true),
+              child: Text('Delete all'),
+            ),
+            Spacer(),
+          ],
+        ),
+      ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ChangeNotifierProvider.value(
+  //     value: list,
+  //     builder: (context, child) {
+  //       return Scaffold(
+  //         appBar: AppBar(),
+  //         body: ListView.builder(
+  //           itemCount: list.listItemsState.completedItems.length,
+  //           itemBuilder: (context, index) {
+  //             final item = list.listItemsState.completedItems[index];
+  //             return ListTile(
+  //               key: Key(item.name),
+  //               title: Text(item.name),
+  //               trailing: Checkbox(
+  //                 value: checkedItems.contains(item.name),
+  //                 onChanged: (value) {
+  //                   _toggleCheckbox(item);
+  //                 },
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //         bottomNavigationBar: BottomAppBar(
+  //           child: Row(
+  //             children: [
+  //               Spacer(),
+  //               ElevatedButton(
+  //                 // onPressed: null,
+  //                 onPressed: (checkedItems.isNotEmpty) ? _restoreItems : null,
+  //                 child: Text('Restore checked'),
+  //               ),
+  //               Spacer(),
+  //               ElevatedButton(
+  //                 // onPressed: null,
+  //                 onPressed: (checkedItems.isNotEmpty)
+  //                     ? () => _deleteItems(deleteAll: false)
+  //                     : null,
+  //                 child: Text('Delete checked'),
+  //               ),
+  //               Spacer(),
+  //               ElevatedButton(
+  //                 onPressed: () => _deleteItems(deleteAll: true),
+  //                 child: Text('Delete all'),
+  //               ),
+  //               Spacer(),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void _toggleCheckbox(Item item) {
     setState(() {
@@ -102,7 +153,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
       builder: (context) => ConfirmDialog(content: 'Confirm: Restore items?'),
     );
     if (confirmed == false) return;
-    final itemsToRestore = list.listItemsState.completedItems
+    final itemsToRestore = listItemsState.completedItems
         .where((item) => checkedItems.contains(item.name))
         .toList();
     assert(itemsToRestore.isNotEmpty);
@@ -112,7 +163,8 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
       // });
       item.isComplete = false;
     });
-    setState(() {});
-    list.updateItems(itemsToRestore);
+    listItemsState.setItemsCompletion(
+        itemsToRestore.map((item) => item.name).toList(), false);
+    // list.updateItems(itemsToRestore);
   }
 }

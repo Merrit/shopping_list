@@ -131,7 +131,7 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
           content: Text('Email address has not been verified.\n'
               '\n'
               'Follow the link in the verification email that was sent to the '
-              'address you provided (${App.instance.user.email}), '
+              'address you provided (${App.instance.user!.email}), '
               'then try again.'),
           actions: [
             TextButton(

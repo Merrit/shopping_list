@@ -139,7 +139,7 @@ class FirestoreUser extends ChangeNotifier {
 
   /// Fetch data from Firebase for every list user has access to.
   Future<void> fetchListsData() async {
-    var uid = _app.user.uid;
+    var uid = _app.user!.uid;
     var query = await FirebaseFirestore.instance
         .collection('lists')
         .where('allowedUsers.$uid', isEqualTo: true)
@@ -154,7 +154,7 @@ class FirestoreUser extends ChangeNotifier {
 
   /// Create a new list document in Firebase.
   Future<void> createNewList({required String listName}) async {
-    final uid = _app.user.uid;
+    final uid = _app.user!.uid;
     await FirebaseFirestore.instance.collection('lists').doc().set(
       {
         'listName': listName,

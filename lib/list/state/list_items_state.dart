@@ -2,17 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/list/item.dart';
+import 'package:shopping_list/list/shopping_list.dart';
 import 'package:shopping_list/list/state/checked_items.dart';
 
 class ListItemsState extends ChangeNotifier {
-  late CheckedItems checkedItems;
   final List<Item> completedItems = [];
   bool hasCompletedItems = false;
   final List<Item> items = [];
   final ListManager listManager = ListManager.instance;
-  final DocumentReference listReference;
+  late final DocumentReference listReference;
 
-  ListItemsState(this.listReference);
+  ListItemsState._singleton() : listReference = ShoppingList.listReference;
+  static final instance = ListItemsState._singleton();
 
   void trackItem(Item item) {
     if (item.isComplete) {
@@ -35,16 +36,33 @@ class ListItemsState extends ChangeNotifier {
 
   bool _checkForCompleted() => completedItems.isNotEmpty;
 
-  void setItemsCompletion(List<String> names, bool value) {
+  void setItemsCompletion(List<String> names, bool setComplete) {
+    final itemsToChange =
+        (setComplete) ? _setCompleted(names) : _setNotCompleted(names);
+    listManager.updateItems(itemsToChange, listReference);
+    _waitForFirebaseThenNotify();
+  }
+
+  List<Item> _setCompleted(List<String> names) {
     final itemsToChange = <Item>[];
     names.forEach((name) {
       var item = items.firstWhere((element) => element.name == name);
-      item.isComplete = value;
+      item.isComplete = true;
       itemsToChange.add(item);
     });
-    listManager.updateItems(itemsToChange, listReference);
-    checkedItems.clearCheckedItems();
-    _waitForFirebaseThenNotify();
+    CheckedItems.instance.clearCheckedItems();
+    return itemsToChange;
+  }
+
+  List<Item> _setNotCompleted(List<String> names) {
+    final itemsToChange = <Item>[];
+    names.forEach((name) {
+      var item = completedItems.firstWhere((element) => element.name == name);
+      item.isComplete = false;
+      itemsToChange.add(item);
+      completedItems.removeWhere((element) => element.name == name);
+    });
+    return itemsToChange;
   }
 
   Future<void> _waitForFirebaseThenNotify() async {

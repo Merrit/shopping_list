@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 
 class CheckedItems extends ChangeNotifier {
   bool containsCheckedItems = false;
-
   final List<String> itemList = [];
+
+  CheckedItems._singleton();
+  static final instance = CheckedItems._singleton();
 
   List<String> get items => itemList;
 

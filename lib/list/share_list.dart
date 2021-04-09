@@ -11,7 +11,7 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 Future<String> shareList(
     {required BuildContext context, required String email}) async {
   // Check not current user
-  final currentUserEmail = App.instance.user.email;
+  final currentUserEmail = App.instance.user!.email;
   if ((currentUserEmail != null) && (email != currentUserEmail)) {
     final user = Provider.of<FirestoreUser>(context, listen: false);
     final firestore = FirebaseFirestore.instance;

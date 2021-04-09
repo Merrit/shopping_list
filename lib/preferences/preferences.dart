@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Save and load local user preferences and state.
 class Preferences {
   static final instance = Preferences._singleton();
-  late final SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   final _log = Logger('Preferences');
 

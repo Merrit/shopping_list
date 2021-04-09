@@ -18,13 +18,23 @@ import 'package:shopping_list/list/shopping_list.dart';
 class ListScreen extends StatefulWidget {
   static const id = 'ListScreen';
 
+  // ListScreen() {
+  //   ListItemsState.instance.listReference = ShoppingList.listReference;
+  // }
+
   @override
   _ListScreenState createState() => _ListScreenState();
 }
 
 class _ListScreenState extends State<ListScreen> {
-  late final ShoppingList list;
-  final listFuture = ListManager.instance.getCurrentListAtStartup();
+  // late final ShoppingList list;
+  //
+  //
+  //
+  late final list = context.read<ShoppingList>();
+  // final listFuture = ListManager.instance.getCurrentList();
+  //
+  //
   final _log = Logger('ListScreen');
 
   _ListScreenState() {
@@ -33,93 +43,137 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot>(
-      future: listFuture,
-      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasData) {
-          final listSnapshot = snapshot.data!;
-          final snapshotData = listSnapshot.data()!;
-          return MultiProvider(
-            providers: [
-              // ChangeNotifierProvider<ShoppingList>(
-              //   create: (_) => ShoppingList(
-              //     listSnapshot: listSnapshot,
-              //     snapshotData: snapshotData,
-              //   ),
-              // ),
-              ChangeNotifierProvider<CheckedItems>(
-                create: (_) => CheckedItems(),
-              ),
-              ChangeNotifierProxyProvider0<ListItemsState>(
-                create: (_) => ListItemsState(listSnapshot.reference),
-                update: (context, result) {
-                  final checkedItems = context.watch<CheckedItems>();
-                  result!.checkedItems = checkedItems;
-                  return result;
-                },
-              ),
-              ChangeNotifierProxyProvider0<ShoppingList>(
-                create: (_) => ShoppingList(
-                  listSnapshot: listSnapshot,
-                  snapshotData: snapshotData,
-                ),
-                update: (context, result) {
-                  final listItemState = context.watch<ListItemsState>();
-                  result!.listItemsState = listItemState;
-                  return result;
-                },
-              ),
-            ],
-            builder: (context, child) {
-              list = Provider.of<ShoppingList>(context, listen: false);
-              return Shortcuts(
-                shortcuts: shortcuts,
-                child: Actions(
-                  actions: actions,
-                  child: Focus(
-                    autofocus: true,
-                    child: Scaffold(
-                      appBar: _appBar(),
-                      drawer: ShoppingDrawer(),
-                      body: Stack(
+    return Shortcuts(
+      shortcuts: shortcuts,
+      child: Actions(
+        actions: actions,
+        child: Focus(
+          autofocus: true,
+          child: Scaffold(
+            appBar: _appBar(),
+            drawer: ShoppingDrawer(),
+            body: Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      // List header. TODO: Improve / fix / remove this..
+                      child: Row(
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 5,
-                                ),
-                                // List header. TODO: Improve / fix / remove this..
-                                child: Row(
-                                  children: [
-                                    Expanded(flex: 3, child: Text('Item')),
-                                    Expanded(flex: 1, child: Text('#')),
-                                    Expanded(flex: 1, child: Text('\$ ea.')),
-                                    Expanded(flex: 1, child: Text('\$ total')),
-                                    Expanded(flex: 1, child: Container()),
-                                  ],
-                                ),
-                              ),
-                              ShoppingListBuilder(),
-                            ],
-                          ),
-                          FloatingListButtonBar(),
+                          Expanded(flex: 3, child: Text('Item')),
+                          Expanded(flex: 1, child: Text('#')),
+                          Expanded(flex: 1, child: Text('\$ ea.')),
+                          Expanded(flex: 1, child: Text('\$ total')),
+                          Expanded(flex: 1, child: Container()),
                         ],
                       ),
                     ),
-                  ),
+                    ShoppingListBuilder(),
+                  ],
                 ),
-              );
-            },
-          );
-        } else {
-          return CircularLoadingWidget();
-        }
-      },
+                FloatingListButtonBar(),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return FutureBuilder<DocumentSnapshot>(
+  //     future: listFuture,
+  //     builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  //       if (snapshot.hasData) {
+  //         final listSnapshot = snapshot.data!;
+  //         final snapshotData = listSnapshot.data()!;
+  //         return MultiProvider(
+  //           providers: [
+  //             ChangeNotifierProvider<ShoppingList>(
+  //               create: (_) => ShoppingList(
+  //                 listSnapshot: listSnapshot,
+  //                 snapshotData: snapshotData,
+  //               ),
+  //             ),
+  //             ChangeNotifierProvider<CheckedItems>(
+  //               create: (_) => CheckedItems(),
+  //             ),
+  //             ChangeNotifierProxyProvider0<ListItemsState>(
+  //               create: (_) => ListItemsState(listSnapshot.reference),
+  //               update: (context, result) {
+  //                 final checkedItems = context.watch<CheckedItems>();
+  //                 result!.checkedItems = checkedItems;
+  //                 return result;
+  //               },
+  //             ),
+  //             // ChangeNotifierProxyProvider0<ShoppingList>(
+  //             //   create: (_) => ShoppingList(
+  //             //     listSnapshot: listSnapshot,
+  //             //     snapshotData: snapshotData,
+  //             //   ),
+  //             //   update: (context, result) {
+  //             //     final listItemState = context.watch<ListItemsState>();
+  //             //     result!.listItemsState = listItemState;
+  //             //     return result;
+  //             //   },
+  //             // ),
+  //           ],
+  //           builder: (context, child) {
+  //             list = Provider.of<ShoppingList>(context, listen: false);
+  //             return Shortcuts(
+  //               shortcuts: shortcuts,
+  //               child: Actions(
+  //                 actions: actions,
+  //                 child: Focus(
+  //                   autofocus: true,
+  //                   child: Scaffold(
+  //                     appBar: _appBar(),
+  //                     drawer: ShoppingDrawer(),
+  //                     body: Stack(
+  //                       children: [
+  //                         Column(
+  //                           mainAxisSize: MainAxisSize.min,
+  //                           children: [
+  //                             Container(
+  //                               padding: EdgeInsets.symmetric(
+  //                                 horizontal: 10,
+  //                                 vertical: 5,
+  //                               ),
+  //                               // List header. TODO: Improve / fix / remove this..
+  //                               child: Row(
+  //                                 children: [
+  //                                   Expanded(flex: 3, child: Text('Item')),
+  //                                   Expanded(flex: 1, child: Text('#')),
+  //                                   Expanded(flex: 1, child: Text('\$ ea.')),
+  //                                   Expanded(flex: 1, child: Text('\$ total')),
+  //                                   Expanded(flex: 1, child: Container()),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                             ShoppingListBuilder(),
+  //                           ],
+  //                         ),
+  //                         FloatingListButtonBar(),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       } else {
+  //         return CircularLoadingWidget();
+  //       }
+  //     },
+  //   );
+  // }
 
   AppBar _appBar() {
     return AppBar(
@@ -150,10 +204,16 @@ class _ListScreenState extends State<ListScreen> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return ChangeNotifierProvider.value(
-              value: list,
-              child: AddItemDialog(),
-            );
+            // return ChangeNotifierProvider.value(
+            //   value: list,
+            //   child: AddItemDialog(),
+            // );
+            //
+            return AddItemDialog();
+            //
+            //
+            //
+            //
           },
         );
       },

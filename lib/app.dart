@@ -7,7 +7,7 @@ import 'package:shopping_list/preferences/preferences.dart';
 class App extends ChangeNotifier {
   final Currency currency;
   String? currentListId;
-  late User user;
+  User? user;
   final Logger _log;
 
   App._singleton()

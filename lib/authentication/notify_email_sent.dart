@@ -6,7 +6,7 @@ import 'package:shopping_list/authentication/components/email_sent_dialog.dart';
 Future<void> notifyEmailSent(BuildContext context) async {
   final app = App.instance;
   final user = app.user;
-  final uid = user.uid;
+  final uid = user!.uid;
   await user.sendEmailVerification();
   // Set the user Document.
   // We do so here so it doesn't happen at every sign in.

@@ -4,31 +4,29 @@ import 'package:shopping_list/list/item.dart';
 
 class ListManager {
   final _app = App.instance;
-  final _uid = App.instance.user.uid;
+  final _uid = App.instance.user!.uid;
 
   ListManager._singleton();
 
   static final instance = ListManager._singleton();
 
-  String get currentList => _app.currentListId!;
-
   // DocumentReference get currentListReference {
   //   return FirebaseFirestore.instance.collection('lists').doc(currentList);
   // }
 
-  Future<DocumentSnapshot> getCurrentListAtStartup() {
+  Future<DocumentSnapshot> getCurrentList() {
     final currentListId = _app.currentListId;
     final Future<DocumentSnapshot> snapshot;
     if (currentListId != null) {
       snapshot = getListById(currentListId);
     } else {
       snapshot = getFirstList();
+      _setCurrentListId(snapshot);
     }
-    _setCurrentListAtStartup(snapshot);
     return snapshot;
   }
 
-  void _setCurrentListAtStartup(Future<DocumentSnapshot> snapshot) async {
+  void _setCurrentListId(Future<DocumentSnapshot> snapshot) async {
     _app.currentListId = await snapshot.then((value) => value.get('name'));
   }
 
