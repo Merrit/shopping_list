@@ -1,16 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/components/circular_loading_widget.dart';
-import 'package:shopping_list/database/list_manager.dart';
 import 'package:shopping_list/list/components/add_item_dialog.dart';
 import 'package:shopping_list/list/components/drawer.dart';
 import 'package:shopping_list/list/components/floating_list_button_bar.dart';
 import 'package:shopping_list/list/components/shopping_list_builder.dart';
-import 'package:shopping_list/list/state/checked_items.dart';
-import 'package:shopping_list/list/state/list_items_state.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 

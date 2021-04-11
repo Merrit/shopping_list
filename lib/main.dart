@@ -11,14 +11,12 @@ import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
 import 'package:shopping_list/authentication/screens/signin_screen.dart';
 import 'package:shopping_list/components/circular_loading_widget.dart';
 import 'package:shopping_list/database/list_manager.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/screens/completed_items_screen.dart';
 import 'package:shopping_list/list/screens/item_details_screen.dart';
 import 'package:shopping_list/list/screens/list_screen.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 import 'package:shopping_list/list/state/checked_items.dart';
 import 'package:shopping_list/list/state/list_items_state.dart';
-import 'package:shopping_list/loading_screen.dart';
 
 void main() async {
   // Ensure setup is finished.

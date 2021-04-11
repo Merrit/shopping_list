@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/components/confirm_dialog.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/item.dart';
 import 'package:shopping_list/list/shopping_list.dart';
 import 'package:shopping_list/list/state/list_items_state.dart';
@@ -139,7 +138,7 @@ class _CompletedItemsScreenState extends State<CompletedItemsScreen> {
       builder: (context) => ConfirmDialog(content: 'Confirm: delete items?'),
     );
     if (confirmed == false) return;
-    var firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
+    // var firestoreUser = Provider.of<FirestoreUser>(context, listen: false);
     // listItems.deleteItems(
     //   firestoreUser,
     //   deleteAll: deleteAll,
