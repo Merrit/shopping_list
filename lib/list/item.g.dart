@@ -16,6 +16,9 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
     price: json['price'] as String,
     quantity: json['quantity'] as String,
     total: json['total'] as String,
+    originalJsonData: (json['originalJsonData'] as Map<String, dynamic>?)?.map(
+      (k, e) => MapEntry(k, e as Map<String, dynamic>),
+    ),
   );
 }
 
@@ -28,4 +31,5 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'price': instance.price,
       'quantity': instance.quantity,
       'total': instance.total,
+      'originalJsonData': instance.originalJsonData,
     };

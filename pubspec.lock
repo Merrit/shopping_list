@@ -190,6 +190,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  dartz:
+    dependency: "direct main"
+    description:
+      name: dartz
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0-nullsafety.1"
   fake_async:
     dependency: transitive
     description:
@@ -275,6 +282,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed:
+    dependency: "direct dev"
+    description:
+      name: freezed
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.1+2"
+  freezed_annotation:
+    dependency: "direct main"
+    description:
+      name: freezed_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.1"
   glob:
     dependency: transitive
     description:
