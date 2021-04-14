@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/authentication/authenticator.dart';
 
-import 'package:shopping_list/authentication/notify_email_sent.dart';
+// import 'package:shopping_list/authentication/notify_email_sent.dart';
 
 class CreateEmailAccountScreen extends StatefulWidget {
   static const id = 'CreateEmailAccountScreen';
@@ -124,7 +124,7 @@ class _CreateEmailAccountScreenState extends State<CreateEmailAccountScreen> {
       setState(() => isLoading = false);
       switch (result) {
         case 'success':
-          await notifyEmailSent(context);
+          // await notifyEmailSent(context);
           break;
         case 'weak-password':
           // This should never run since we require 12 characters.

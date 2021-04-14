@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shopping_list/app.dart';
+// import 'package:shopping_list/app.dart';
 
 class Authenticator {
   Authenticator._singleton();
   static final Authenticator instance = Authenticator._singleton();
 
-  final _app = App.instance;
+  // final _app = App.instance;
   final _auth = FirebaseAuth.instance;
 
   Future<String> createEmailAccount({
@@ -25,12 +25,12 @@ class Authenticator {
 
   Future<String> signInWithEmail(
       {required String email, required String password}) async {
-    late UserCredential userCredential;
+    // late UserCredential userCredential;
     String result;
 
     try {
-      userCredential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      // userCredential = await _auth.signInWithEmailAndPassword(
+      //     email: email, password: password);
       result = 'success';
     } on FirebaseAuthException catch (e) {
       result = e.code.toString();
@@ -39,7 +39,7 @@ class Authenticator {
     switch (result) {
       case 'success':
         if (_auth.currentUser!.emailVerified) {
-          _app.user = userCredential.user!;
+          // _app.user = userCredential.user!;
           return result;
         } else {
           await _auth.signOut();

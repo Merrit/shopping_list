@@ -1,0 +1,1 @@
+enum FormStatus { modified, unmodified }

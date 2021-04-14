@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shopping_list/app.dart';
+// import 'package:shopping_list/app.dart';
 import 'package:shopping_list/list/item.dart';
 
 class ListManager {
-  final _app = App.instance;
-  final _uid = App.instance.user!.uid;
+  // final _app = App.instance;
+  // final _uid = App.instance.user!.uid;
+  var _app;
+  var _uid;
 
   ListManager._singleton();
 

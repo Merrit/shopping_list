@@ -2,13 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shopping_list/app.dart';
+// import 'package:shopping_list/app.dart';
 
 import 'package:shopping_list/preferences/preferences.dart';
 
 /// [FirestoreUser] is the Provider-powered hub that handles Firebase data.
 class FirestoreUser extends ChangeNotifier {
-  final _app = App.instance;
+  var _app;
+  // final _app = App.instance;
 
   /// All lists the user has access to.
   ///

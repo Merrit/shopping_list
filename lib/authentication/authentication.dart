@@ -1,3 +1,8 @@
+export 'bloc/authentication_bloc.dart';
+export 'login/login.dart';
+export 'models/models.dart';
+export 'sign_up/sign_up.dart';
+
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:shopping_list/globals.dart';
 

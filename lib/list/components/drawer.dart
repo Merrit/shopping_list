@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/firestore/firestore_user.dart';
 import 'package:shopping_list/list/components/new_list_dialog.dart';
 import 'package:shopping_list/list/screens/list_details_screen.dart';
-import 'package:shopping_list/main.dart';
+// import 'package:shopping_list/main.dart';
 import 'package:shopping_list/preferences/screens/preferences_screen.dart';
 
 class ShoppingDrawer extends StatefulWidget {
@@ -81,7 +81,7 @@ class _ShoppingDrawerState extends State<ShoppingDrawer> {
                 ),
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
-                  RestartWidget.restartApp(context);
+                  // RestartWidget.restartApp(context);
                 },
               ),
               IconButton(

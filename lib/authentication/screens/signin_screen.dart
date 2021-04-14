@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:shopping_list/app.dart';
+// import 'package:shopping_list/app.dart';
 import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
-import 'package:shopping_list/main.dart';
+// import 'package:shopping_list/main.dart';
 
 class SigninScreen extends StatefulWidget {
   static const id = 'SigninScreen';
@@ -15,7 +15,7 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  final app = App.instance;
+  // final app = App.instance;
   Widget authWidget = SignInButtons();
   late final StreamSubscription<User?> authStream;
   final _log = Logger('SigninScreen');
@@ -60,13 +60,13 @@ class _SigninScreenState extends State<SigninScreen> {
     await authStream.cancel();
     showLoadingDialog();
     _log.info('${user.email} is signed in.');
-    await app.init();
+    // await app.init();
     setUser(user);
     await goToListScreen();
   }
 
   Future<void> goToListScreen() async {
-    RestartWidget.restartApp(context);
+    // RestartWidget.restartApp(context);
     // await Navigator.pushReplacementNamed(
     //   context,
     //   ListScreen.id,
@@ -74,7 +74,7 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void setUser(User user) {
-    app.user = user;
+    // app.user = user;
   }
 
   @override

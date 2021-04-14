@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/app.dart';
+// import 'package:shopping_list/app.dart';
 
 import 'package:shopping_list/firestore/firestore_user.dart';
 
@@ -11,7 +11,8 @@ import 'package:shopping_list/firestore/firestore_user.dart';
 Future<String> shareList(
     {required BuildContext context, required String email}) async {
   // Check not current user
-  final currentUserEmail = App.instance.user!.email;
+  // final currentUserEmail = App.instance.user!.email;
+  var currentUserEmail;
   if ((currentUserEmail != null) && (email != currentUserEmail)) {
     final user = Provider.of<FirestoreUser>(context, listen: false);
     final firestore = FirebaseFirestore.instance;

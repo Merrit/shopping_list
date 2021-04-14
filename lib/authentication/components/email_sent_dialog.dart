@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/main.dart';
+// import 'package:shopping_list/main.dart';
 
 class EmailSentDialog extends StatelessWidget {
   @override
@@ -10,10 +10,10 @@ class EmailSentDialog extends StatelessWidget {
           '\n'
           'Please check your email.'),
       actions: [
-        TextButton(
-          onPressed: () => RestartWidget.restartApp(context),
-          child: Text('Ok'),
-        ),
+        // TextButton(
+        //   onPressed: () => RestartWidget.restartApp(context),
+        //   child: Text('Ok'),
+        // ),
       ],
     );
   }

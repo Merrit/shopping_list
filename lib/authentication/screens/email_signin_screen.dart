@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/app.dart';
+// import 'package:shopping_list/app.dart';
 import 'package:shopping_list/authentication/authenticator.dart';
-import 'package:shopping_list/authentication/notify_email_sent.dart';
+// import 'package:shopping_list/authentication/notify_email_sent.dart';
 import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
 
 class EmailSigninScreen extends StatefulWidget {
@@ -131,13 +131,13 @@ class _EmailSigninScreenState extends State<EmailSigninScreen> {
           content: Text('Email address has not been verified.\n'
               '\n'
               'Follow the link in the verification email that was sent to the '
-              'address you provided (${App.instance.user!.email}), '
+              // 'address you provided (${App.instance.user!.email}), '
               'then try again.'),
           actions: [
-            TextButton(
-              onPressed: () => notifyEmailSent(context),
-              child: Text('Resend Verification Email'),
-            ),
+            // TextButton(
+            //   onPressed: () => notifyEmailSent(context),
+            //   child: Text('Resend Verification Email'),
+            // ),
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text('Ok'),
