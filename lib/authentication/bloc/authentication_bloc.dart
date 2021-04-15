@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pedantic/pedantic.dart';
 
+import '../authentication.dart';
+
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
@@ -21,8 +23,6 @@ class AuthenticationBloc
       (user) => add(AuthenticationUserChanged(user)),
     );
   }
-
-  void logOut() {}
 
   @override
   Stream<AuthenticationState> mapEventToState(

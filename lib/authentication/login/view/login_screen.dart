@@ -1,13 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/authentication/login/login.dart';
+
+import '../../authentication.dart';
 
 class LoginScreen extends StatelessWidget {
   static const id = 'login_screen';
-  // static Route route() {
-  //   return MaterialPageRoute<void>(builder: (_) => LoginScreen());
-  // }
 
   @override
   Widget build(BuildContext context) {

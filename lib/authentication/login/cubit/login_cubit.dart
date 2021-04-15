@@ -1,15 +1,11 @@
-import 'dart:js';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shopping_list/authentication/authentication.dart';
-import 'package:shopping_list/authentication/core/core.dart';
-import 'package:shopping_list/core/form_status.dart';
+import 'package:shopping_list/core/enums/form_status.dart';
+
+import '../../authentication.dart';
 
 part 'login_state.dart';
-
-enum FormType { login, signup }
 
 class LoginCubit extends Cubit<LoginState> {
   final AuthenticationRepository _authenticationRepository;
@@ -86,13 +82,9 @@ class LoginCubit extends Cubit<LoginState> {
         email: state.email.value,
         password: state.password.value,
       );
-      emit(state.copyWith(status: LoginStatus.verificationEmailSent));
+      emit(state.copyWith(status: LoginStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: LoginStatus.submissionFailure));
     }
-  }
-
-  void returnToLogInButtonPressed() {
-    _authenticationRepository.logOut();
   }
 }

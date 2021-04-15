@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/authentication/core/login_status.dart';
-import 'package:shopping_list/authentication/login/login.dart';
-import 'package:shopping_list/core/widgets/widgets.dart';
+import 'package:shopping_list/core/core.dart';
+
+import '../../authentication.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -16,9 +16,6 @@ class LoginForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(content: Text('Authentication Failure')),
             );
-        }
-        if (state.status == LoginStatus.verificationEmailSent) {
-          _showSuccessDialog(context);
         }
       },
       child: Align(
@@ -109,40 +106,4 @@ class _SignUpButton extends StatelessWidget {
       ),
     );
   }
-}
-
-class _SuccessfulSignUpDialog extends StatelessWidget {
-  const _SuccessfulSignUpDialog({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Text('A verification email has been sent to '
-          'the address provided.\n'
-          '\n'
-          'Please verify your email, then sign in.'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Confirm'),
-        ),
-      ],
-    );
-  }
-}
-
-Future<void> _showSuccessDialog(BuildContext context) async {
-  final loginCubit = context.read<LoginCubit>();
-  await showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (context) {
-      return BlocProvider.value(
-        value: loginCubit,
-        child: _SuccessfulSignUpDialog(),
-      );
-    },
-  );
 }
