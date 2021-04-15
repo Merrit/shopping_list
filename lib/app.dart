@@ -52,20 +52,12 @@ class _AppViewState extends State<AppView> {
               case AuthenticationStatus.authenticated:
                 if (state.user.emailIsVerified) {
                   _navigator.pushReplacementNamed(HomeScreen.id);
-                  // _navigator.pushAndRemoveUntil<void>(
-                  //   HomeScreen.route(),
-                  //   (route) => false,
-                  // );
                 } else {
                   _navigator.pushReplacementNamed(VerifyEmailScreen.id);
                 }
                 break;
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushReplacementNamed(LoginScreen.id);
-                // _navigator.pushAndRemoveUntil<void>(
-                //   LoginScreen.route(),
-                //   (route) => false,
-                // );
                 break;
               default:
                 break;
