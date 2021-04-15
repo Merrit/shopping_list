@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/core/core.dart';
 
 import '../../authentication.dart';
 
@@ -30,11 +31,12 @@ class SignUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign Up')),
-      body: Align(
-        alignment: const Alignment(0, -1 / 3),
+      body: SingleColumnLayoutBuilder(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const AppIcon(size: 120),
+            const SizedBox(height: 16.0),
             EmailInput(FormType.signup),
             const SizedBox(height: 8.0),
             PasswordInput(FormType.signup),

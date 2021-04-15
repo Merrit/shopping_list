@@ -10,14 +10,7 @@ class VerifyEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.home),
-          onPressed: () => context
-              .read<AuthenticationBloc>()
-              .add(AuthenticationLogoutRequested()),
-        ),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -28,6 +21,13 @@ class VerifyEmailScreen extends StatelessWidget {
                 'the address provided.\n'
                 '\n'
                 'Please verify your email, then sign in.'),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () => context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested()),
+              child: Text('BACK'),
+            ),
           ],
         ),
       ),

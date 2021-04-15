@@ -34,12 +34,13 @@ class LoginView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  final _spacer = const SizedBox(height: 10.0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
-      body: Align(
-        alignment: const Alignment(0, -1 / 3),
+      body: SingleColumnLayoutBuilder(
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -47,13 +48,13 @@ class LoginView extends StatelessWidget {
               const AppIcon(size: 120),
               const SizedBox(height: 16.0),
               EmailInput(FormType.login),
-              const SizedBox(height: 8.0),
+              _spacer,
               PasswordInput(FormType.login),
-              const SizedBox(height: 8.0),
+              _spacer,
               _LoginButton(),
-              const SizedBox(height: 8.0),
+              _spacer,
               _GoogleLoginButton(),
-              const SizedBox(height: 4.0),
+              _spacer,
               _SignUpButton(),
             ],
           ),

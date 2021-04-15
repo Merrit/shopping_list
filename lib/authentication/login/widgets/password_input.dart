@@ -17,7 +17,8 @@ class PasswordInput extends StatelessWidget {
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
-            helperText: 'Minimum 12 characters',
+            helperText:
+                (formType == FormType.signup) ? 'Minimum 12 characters' : null,
             errorText: state.passwordFieldErrorText(),
           ),
           onSubmitted: (_) => context.read<LoginCubit>().submitForm(formType),

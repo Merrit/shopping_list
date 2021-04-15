@@ -6,5 +6,6 @@ class AppTheme {
     textTheme: TextTheme(subtitle2: TextStyle(color: Colors.blue)),
     brightness: Brightness.dark,
     toggleableActiveColor: Colors.lightBlueAccent,
+    inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
   );
 }
