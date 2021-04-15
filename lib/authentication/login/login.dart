@@ -1,4 +1,4 @@
 export 'cubit/login_cubit.dart';
 export 'enums/enums.dart';
-export 'view/view.dart';
+export 'screens/screens.dart';
 export 'widgets/widgets.dart';

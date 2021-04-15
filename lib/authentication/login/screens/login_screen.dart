@@ -1,24 +1,44 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/core/core.dart';
 
 import '../../authentication.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
+  static const id = 'login_screen';
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
-      listenWhen: (previous, current) => previous.status != current.status,
-      listener: (context, state) {
-        if (state.status == LoginStatus.submissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
-            );
-        }
-      },
-      child: Align(
+    return BlocProvider(
+      create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
+      child: BlocListener<LoginCubit, LoginState>(
+        listenWhen: (previous, current) => previous.status != current.status,
+        listener: (context, state) {
+          if (state.status == LoginStatus.submissionFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(content: Text('Authentication Failure')),
+              );
+          }
+        },
+        child: LoginView(),
+      ),
+    );
+  }
+}
+
+class LoginView extends StatelessWidget {
+  const LoginView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Align(
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
           child: Column(

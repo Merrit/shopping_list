@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/splash/splash.dart';
 import 'package:shopping_list/theme.dart';
+
+import 'splash/splash_screen.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;

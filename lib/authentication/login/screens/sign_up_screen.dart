@@ -1,19 +1,36 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../authentication.dart';
-import '../login.dart';
 
-class SignUpForm extends StatelessWidget {
+class SignUpScreen extends StatelessWidget {
+  static const id = 'sign_up_screen';
+
+  const SignUpScreen();
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
-      listener: (context, state) {
-        if (state.status == LoginStatus.submissionFailure) {
-          _showSignUpFailureSnackbar(context);
-        }
-      },
-      child: Align(
+    return BlocProvider<LoginCubit>(
+      create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status == LoginStatus.submissionFailure) {
+            _showSignUpFailureSnackbar(context);
+          }
+        },
+        child: SignUpView(),
+      ),
+    );
+  }
+}
+
+class SignUpView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sign Up')),
+      body: Align(
         alignment: const Alignment(0, -1 / 3),
         child: Column(
           mainAxisSize: MainAxisSize.min,
