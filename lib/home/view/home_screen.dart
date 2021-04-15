@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/home/widgets/widgets.dart';
 
-class HomePage extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage());
-  }
+class HomeScreen extends StatelessWidget {
+  static const id = 'home_screen';
+  // static Route route() {
+  //   return MaterialPageRoute<void>(builder: (_) => HomeScreen());
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -3,4 +3,5 @@ enum LoginStatus {
   submissionInProgress,
   submissionFailure,
   submissionSuccess,
+  verificationEmailSent,
 }

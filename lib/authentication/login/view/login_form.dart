@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/authentication/core/core.dart';
-import 'package:shopping_list/authentication/login/cubit/login_cubit.dart';
-import 'package:shopping_list/authentication/sign_up/sign_up.dart';
-import 'package:shopping_list/core/form_status.dart';
+import 'package:shopping_list/authentication/core/login_status.dart';
+import 'package:shopping_list/authentication/login/login.dart';
+import 'package:shopping_list/core/widgets/widgets.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -18,6 +17,9 @@ class LoginForm extends StatelessWidget {
               const SnackBar(content: Text('Authentication Failure')),
             );
         }
+        if (state.status == LoginStatus.verificationEmailSent) {
+          _showSuccessDialog(context);
+        }
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
@@ -25,15 +27,11 @@ class LoginForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.shopping_bag_outlined,
-                color: Colors.blue[300],
-                size: 120,
-              ),
+              const AppIcon(size: 120),
               const SizedBox(height: 16.0),
-              _EmailInput(),
+              EmailInput(FormType.login),
               const SizedBox(height: 8.0),
-              _PasswordInput(),
+              PasswordInput(FormType.login),
               const SizedBox(height: 8.0),
               _LoginButton(),
               const SizedBox(height: 8.0),
@@ -45,61 +43,6 @@ class LoginForm extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _EmailInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-      builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_emailInput_textField'),
-          onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            labelText: 'email',
-            helperText: '',
-            errorText: _emailFieldErrorText(state),
-          ),
-          onSubmitted: (_) => context.read<LoginCubit>().logInWithCredentials(),
-        );
-      },
-    );
-  }
-}
-
-String? _emailFieldErrorText(LoginState state) {
-  if (state.formStatus == FormStatus.modified) {
-    return state.email.isValid ? null : 'invalid email';
-  }
-}
-
-class _PasswordInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-      builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<LoginCubit>().passwordChanged(password),
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
-            errorText: _passwordFieldErrorText(state),
-          ),
-          onSubmitted: (_) => context.read<LoginCubit>().logInWithCredentials(),
-        );
-      },
-    );
-  }
-}
-
-String? _passwordFieldErrorText(LoginState state) {
-  if (state.formStatus == FormStatus.modified) {
-    return state.password.isValid ? null : 'invalid password';
   }
 }
 
@@ -120,7 +63,8 @@ class _LoginButton extends StatelessWidget {
               ),
               primary: const Color(0xFFFFD600),
             ),
-            onPressed: () => context.read<LoginCubit>().logInWithCredentials(),
+            onPressed: () =>
+                context.read<LoginCubit>().submitForm(FormType.login),
             child: const Text('LOGIN'),
           );
         }
@@ -157,11 +101,48 @@ class _SignUpButton extends StatelessWidget {
     final theme = Theme.of(context);
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
-      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+      // onPressed: () => Navigator.of(context).push<void>(SignUpScreen.route()),
+      onPressed: () => Navigator.pushNamed(context, SignUpScreen.id),
       child: Text(
         'CREATE ACCOUNT',
         style: theme.textTheme.subtitle2,
       ),
     );
   }
+}
+
+class _SuccessfulSignUpDialog extends StatelessWidget {
+  const _SuccessfulSignUpDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Text('A verification email has been sent to '
+          'the address provided.\n'
+          '\n'
+          'Please verify your email, then sign in.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Confirm'),
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> _showSuccessDialog(BuildContext context) async {
+  final loginCubit = context.read<LoginCubit>();
+  await showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return BlocProvider.value(
+        value: loginCubit,
+        child: _SuccessfulSignUpDialog(),
+      );
+    },
+  );
 }

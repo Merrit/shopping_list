@@ -1,12 +1,15 @@
+import 'dart:js';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/authentication/core/core.dart';
 import 'package:shopping_list/core/form_status.dart';
-import 'package:shopping_list/core/validators/validators.dart';
 
 part 'login_state.dart';
+
+enum FormType { login, signup }
 
 class LoginCubit extends Cubit<LoginState> {
   final AuthenticationRepository _authenticationRepository;
@@ -26,6 +29,14 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       password: password,
     ));
+  }
+
+  void submitForm(FormType formType) {
+    if (formType == FormType.login) {
+      logInWithCredentials();
+    } else {
+      signUpFormSubmitted();
+    }
   }
 
   Future<void> logInWithCredentials() async {
@@ -53,5 +64,35 @@ class LoginCubit extends Cubit<LoginState> {
     } on Exception {
       emit(state.copyWith(status: LoginStatus.submissionFailure));
     }
+  }
+
+/* ---------------------------- Sign up specific ---------------------------- */
+
+  void confirmedPasswordChanged(String value) {
+    final confirmedPassword = Password(value);
+    emit(state.copyWith(
+      confirmedPassword: confirmedPassword,
+    ));
+  }
+
+  Future<void> signUpFormSubmitted() async {
+    if (state.credentialsAreValid() == false) {
+      emit(state.copyWith(formStatus: FormStatus.modified));
+      return;
+    }
+    emit(state.copyWith(status: LoginStatus.submissionInProgress));
+    try {
+      await _authenticationRepository.signUp(
+        email: state.email.value,
+        password: state.password.value,
+      );
+      emit(state.copyWith(status: LoginStatus.verificationEmailSent));
+    } on Exception {
+      emit(state.copyWith(status: LoginStatus.submissionFailure));
+    }
+  }
+
+  void returnToLogInButtonPressed() {
+    _authenticationRepository.logOut();
   }
 }

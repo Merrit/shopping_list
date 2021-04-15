@@ -40,10 +40,11 @@ class AuthenticationRepository {
     required String password,
   }) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      await userCredential.user?.sendEmailVerification();
     } on Exception {
       throw SignUpFailure();
     }
@@ -92,6 +93,10 @@ class AuthenticationRepository {
 
 extension on firebase_auth.User {
   User get toUser {
-    return User(email: email!, id: uid);
+    return User(
+      id: uid,
+      email: email!,
+      emailIsVerified: emailVerified,
+    );
   }
 }

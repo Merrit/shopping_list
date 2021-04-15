@@ -1,1 +1,1 @@
-export 'src/login_status.dart';
+export 'login_status.dart';

@@ -49,16 +49,22 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  HomePage.route(),
-                  (route) => false,
-                );
+                if (state.user.emailIsVerified) {
+                  _navigator.pushReplacementNamed(HomeScreen.id);
+                  // _navigator.pushAndRemoveUntil<void>(
+                  //   HomeScreen.route(),
+                  //   (route) => false,
+                  // );
+                } else {
+                  _navigator.pushReplacementNamed(VerifyEmailScreen.id);
+                }
                 break;
               case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
-                );
+                _navigator.pushReplacementNamed(LoginScreen.id);
+                // _navigator.pushAndRemoveUntil<void>(
+                //   LoginScreen.route(),
+                //   (route) => false,
+                // );
                 break;
               default:
                 break;
@@ -67,41 +73,16 @@ class _AppViewState extends State<AppView> {
           child: child,
         );
       },
-      onGenerateRoute: (_) => SplashPage.route(),
+      routes: {
+        HomeScreen.id: (_) => HomeScreen(),
+        LoginScreen.id: (_) => LoginScreen(),
+        SignUpScreen.id: (_) => SignUpScreen(),
+        SplashScreen.id: (_) => SplashScreen(),
+        VerifyEmailScreen.id: (_) => VerifyEmailScreen(),
+      },
+      onGenerateRoute: (_) => MaterialPageRoute(
+        builder: (context) => SplashScreen(),
+      ),
     );
   }
 }
-
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/foundation.dart';
-// import 'package:logging/logging.dart';
-// import 'package:money2/money2.dart';
-// import 'package:shopping_list/preferences/preferences.dart';
-
-// class App extends ChangeNotifier {
-//   final Currency currency;
-//   String? currentListId;
-//   User? user;
-//   final Logger _log;
-
-//   App._singleton()
-//       : currency = Currency.create('USD', 2),
-//         _log = Logger('App') {
-//     _log.info('Initialized');
-//   }
-
-//   static final App instance = App._singleton();
-
-//   /// Populate the inital data the app will need.
-//   Future<void> init() async {
-//     // await _setEmulator();  // Enable to use local Firebase emulator.
-//     await Preferences.instance.initPrefs();
-//     await _setCurrentList();
-//   }
-
-//   /// Populate [currentListId] on app startup.
-//   Future<void> _setCurrentList() async {
-//     currentListId = Preferences.instance.lastUsedListName();
-//     _log.info('lastUsedListName: $currentListId');
-//   }
-// }

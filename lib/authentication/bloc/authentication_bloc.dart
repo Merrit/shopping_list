@@ -22,6 +22,8 @@ class AuthenticationBloc
     );
   }
 
+  void logOut() {}
+
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
