@@ -1,12 +1,13 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:shopping_list/core/core.dart';
 
 import '../../authentication.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const id = 'login_screen';
+class LoginPage extends StatelessWidget {
+  static const id = 'login_page';
 
   @override
   Widget build(BuildContext context) {
@@ -34,30 +35,28 @@ class LoginView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final _spacer = const SizedBox(height: 10.0);
+  final _spacer = const SizedBox(height: 12.0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
-      body: SingleColumnLayoutBuilder(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const AppIcon(size: 120),
-              const SizedBox(height: 16.0),
-              EmailInput(FormType.login),
-              _spacer,
-              PasswordInput(FormType.login),
-              _spacer,
-              _LoginButton(),
-              _spacer,
-              _GoogleLoginButton(),
-              _spacer,
-              _SignUpButton(),
-            ],
-          ),
+      body: SingleColumnPagePadding(
+        child: ScrollableWithExpanded(
+          children: [
+            const AppIcon(size: 120),
+            const SizedBox(height: 16.0),
+            EmailInput(FormType.login),
+            _spacer,
+            PasswordInput(FormType.login),
+            _spacer,
+            _LoginButton(),
+            _spacer,
+            _GoogleLoginButton(),
+            Spacer(),
+            _SignUpButton(),
+            const SizedBox(height: 20.0),
+          ],
         ),
       ),
     );
@@ -73,17 +72,11 @@ class _LoginButton extends StatelessWidget {
         if (state.status == LoginStatus.submissionInProgress) {
           return const CircularProgressIndicator();
         } else {
-          return ElevatedButton(
-            key: const Key('loginForm_continue_raisedButton'),
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              primary: const Color(0xFFFFD600),
-            ),
+          return SignInButton(
+            Buttons.Email,
+            padding: EdgeInsets.symmetric(vertical: 16),
             onPressed: () =>
                 context.read<LoginCubit>().submitForm(FormType.login),
-            child: const Text('LOGIN'),
           );
         }
       },
@@ -94,20 +87,8 @@ class _LoginButton extends StatelessWidget {
 class _GoogleLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ElevatedButton.icon(
-      key: const Key('loginForm_googleLogin_raisedButton'),
-      label: const Text(
-        'SIGN IN WITH GOOGLE',
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        primary: theme.accentColor,
-      ),
-      icon: const Icon(Icons.hot_tub),
+    return SignInButton(
+      Buttons.GoogleDark,
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
     );
   }
@@ -119,8 +100,7 @@ class _SignUpButton extends StatelessWidget {
     final theme = Theme.of(context);
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
-      // onPressed: () => Navigator.of(context).push<void>(SignUpScreen.route()),
-      onPressed: () => Navigator.pushNamed(context, SignUpScreen.id),
+      onPressed: () => Navigator.pushNamed(context, SignUpPage.id),
       child: Text(
         'CREATE ACCOUNT',
         style: theme.textTheme.subtitle2,

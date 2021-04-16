@@ -4,8 +4,8 @@ import 'package:shopping_list/authentication/authentication.dart';
 
 import '../home.dart';
 
-class HomeScreen extends StatelessWidget {
-  static const id = 'home_screen';
+class HomePage extends StatelessWidget {
+  static const id = 'home_page';
 
   @override
   Widget build(BuildContext context) {

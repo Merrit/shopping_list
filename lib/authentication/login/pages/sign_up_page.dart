@@ -5,10 +5,10 @@ import 'package:shopping_list/core/core.dart';
 
 import '../../authentication.dart';
 
-class SignUpScreen extends StatelessWidget {
-  static const id = 'sign_up_screen';
+class SignUpPage extends StatelessWidget {
+  static const id = 'sign_up_page';
 
-  const SignUpScreen();
+  const SignUpPage();
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +27,25 @@ class SignUpScreen extends StatelessWidget {
 }
 
 class SignUpView extends StatelessWidget {
+  final _spacer = const SizedBox(height: 12.0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign Up')),
-      body: SingleColumnLayoutBuilder(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      body: SingleColumnPagePadding(
+        child: ScrollableWithExpanded(
           children: [
             const AppIcon(size: 120),
             const SizedBox(height: 16.0),
             EmailInput(FormType.signup),
-            const SizedBox(height: 8.0),
+            _spacer,
             PasswordInput(FormType.signup),
-            const SizedBox(height: 8.0),
+            _spacer,
             _ConfirmPasswordInput(),
-            const SizedBox(height: 8.0),
+            Spacer(),
             _SignUpButton(),
+            const SizedBox(height: 20.0),
           ],
         ),
       ),
@@ -65,7 +67,7 @@ class _ConfirmPasswordInput extends StatelessWidget {
               .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'confirm password',
+            labelText: 'Confirm password',
             helperText: '',
             errorText: state.confirmPasswordFieldErrorText(),
           ),
@@ -85,16 +87,13 @@ class _SignUpButton extends StatelessWidget {
         return (state.status == LoginStatus.submissionInProgress)
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('signUpForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  primary: Colors.orangeAccent,
+                  minimumSize: Size(200, 50),
+                  elevation: 4.0,
                 ),
                 onPressed: () =>
                     context.read<LoginCubit>().submitForm(FormType.signup),
-                child: const Text('SIGN UP'),
+                child: const Text('Register'),
               );
       },
     );

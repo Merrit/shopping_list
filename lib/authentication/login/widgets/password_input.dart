@@ -16,7 +16,7 @@ class PasswordInput extends StatelessWidget {
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'password',
+            labelText: 'Password',
             helperText:
                 (formType == FormType.signup) ? 'Minimum 12 characters' : null,
             errorText: state.passwordFieldErrorText(),

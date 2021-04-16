@@ -1,11 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/authentication/authentication.dart';
-import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/theme.dart';
 
+import 'authentication/authentication.dart';
+import 'home/home.dart';
 import 'splash/splash_screen.dart';
+import 'theme.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
@@ -51,13 +51,13 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 if (state.user.emailIsVerified) {
-                  _navigator.pushReplacementNamed(HomeScreen.id);
+                  _navigator.pushReplacementNamed(HomePage.id);
                 } else {
-                  _navigator.pushReplacementNamed(VerifyEmailScreen.id);
+                  _navigator.pushReplacementNamed(VerifyEmailPage.id);
                 }
                 break;
               case AuthenticationStatus.unauthenticated:
-                _navigator.pushReplacementNamed(LoginScreen.id);
+                _navigator.pushReplacementNamed(LoginPage.id);
                 break;
               default:
                 break;
@@ -67,14 +67,14 @@ class _AppViewState extends State<AppView> {
         );
       },
       routes: {
-        HomeScreen.id: (_) => HomeScreen(),
-        LoginScreen.id: (_) => LoginScreen(),
-        SignUpScreen.id: (_) => SignUpScreen(),
-        SplashScreen.id: (_) => SplashScreen(),
-        VerifyEmailScreen.id: (_) => VerifyEmailScreen(),
+        HomePage.id: (_) => HomePage(),
+        LoginPage.id: (_) => LoginPage(),
+        SignUpPage.id: (_) => SignUpPage(),
+        SplashPage.id: (_) => SplashPage(),
+        VerifyEmailPage.id: (_) => VerifyEmailPage(),
       },
       onGenerateRoute: (_) => MaterialPageRoute(
-        builder: (context) => SplashScreen(),
+        builder: (context) => SplashPage(),
       ),
     );
   }

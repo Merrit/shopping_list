@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "117835173986-u966ag9mup009npeg2h6nvoq178pv3e7.apps.googleusercontent.com",
+          "client_id": "117835173986-4grntgvsku9a62lomhmlmbtl1r58i29b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.github.merrit.shopping_list",
-            "certificate_hash": "4c70c111d0c14812148862fb3c0d17110264258d"
+            "certificate_hash": "480730faec87efcac7a4579861c0b21993ef675d"
           }
         },
         {

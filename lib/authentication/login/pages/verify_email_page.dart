@@ -4,8 +4,8 @@ import 'package:shopping_list/core/core.dart';
 
 import '../../authentication.dart';
 
-class VerifyEmailScreen extends StatelessWidget {
-  static const id = 'verify_email_screen';
+class VerifyEmailPage extends StatelessWidget {
+  static const id = 'verify_email_page';
 
   @override
   Widget build(BuildContext context) {

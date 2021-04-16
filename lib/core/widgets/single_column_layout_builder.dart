@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-class SingleColumnLayoutBuilder extends StatelessWidget {
+/// Padding for pages that are only ever a single column, like the login page.
+///
+/// Adaptive to large and small screens.
+class SingleColumnPagePadding extends StatelessWidget {
   final Widget child;
 
-  const SingleColumnLayoutBuilder({required this.child});
+  const SingleColumnPagePadding({required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,10 @@ class SingleColumnLayoutBuilder extends StatelessWidget {
             child: child,
           );
         } else {
-          return Padding(padding: EdgeInsets.all(8.0));
+          return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: child,
+          );
         }
       },
     );

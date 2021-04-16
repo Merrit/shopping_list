@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/core/widgets/app_icon.dart';
 
-class SplashScreen extends StatelessWidget {
-  static const id = 'splash_screen';
-  // static Route route() {
-  //   return MaterialPageRoute<void>(builder: (_) => SplashScreen());
-  // }
+class SplashPage extends StatelessWidget {
+  static const id = 'splash_page';
 
   @override
   Widget build(BuildContext context) {
