@@ -91,6 +91,7 @@ class AuthenticationRepository {
   }
 }
 
+/// Returns our version of `User` from the Firebase version.
 extension on firebase_auth.User {
   User get toUser {
     return User(
