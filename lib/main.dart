@@ -1,84 +1,164 @@
-import 'package:flutter/material.dart';
-
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
-
-import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
-import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
-import 'package:shopping_list/authentication/screens/signin_screen.dart';
-import 'package:shopping_list/firestore/firestore_user.dart';
-import 'package:shopping_list/globals.dart';
-import 'package:shopping_list/list/screens/item_details_screen.dart';
-import 'package:shopping_list/list/screens/list_screen.dart';
-import 'package:shopping_list/loading_screen.dart';
+import 'package:shopping_list/app.dart';
+import 'package:shopping_list/simple_bloc_observer.dart';
 
 void main() async {
-  // Ensure setup is finished.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  runApp(RestartWidget(child: ListApp()));
+  EquatableConfig.stringify = kDebugMode;
+  Bloc.observer = SimpleBlocObserver();
+  runApp(App(authenticationRepository: AuthenticationRepository()));
 }
 
-/// RestartWidget wraps everything, and its `restartApp` method allows us to
-/// call a restart on the app easily with `RestartWidget.restartApp(context)`.
-class RestartWidget extends StatefulWidget {
-  final Widget child;
 
-  RestartWidget({required this.child});
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
 
-  static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
-  }
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:logging/logging.dart';
+// import 'package:provider/provider.dart';
+// import 'package:shopping_list/app.dart';
 
-  @override
-  _RestartWidgetState createState() => _RestartWidgetState();
-}
+// import 'package:shopping_list/authentication/screens/create_email_account_screen.dart';
+// import 'package:shopping_list/authentication/screens/email_signin_screen.dart';
+// import 'package:shopping_list/authentication/screens/signin_screen.dart';
+// import 'package:shopping_list/components/circular_loading_widget.dart';
+// import 'package:shopping_list/database/list_manager.dart';
+// import 'package:shopping_list/list/screens/completed_items_screen.dart';
+// import 'package:shopping_list/list/screens/item_details_screen.dart';
+// import 'package:shopping_list/list/screens/list_screen.dart';
+// import 'package:shopping_list/list/shopping_list.dart';
+// import 'package:shopping_list/list/state/checked_items.dart';
+// import 'package:shopping_list/list/state/list_items_state.dart';
 
-class _RestartWidgetState extends State<RestartWidget> {
-  Key key = UniqueKey();
+// void main() async {
+//   // Ensure setup is finished.
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
 
-  void restartApp() {
-    setState(() {
-      key = UniqueKey();
-    });
-  }
+//   initLogger();
 
-  @override
-  Widget build(BuildContext context) {
-    return KeyedSubtree(key: key, child: widget.child);
-  }
-}
+//   runApp(RestartWidget(child: ListApp()));
+// }
 
-class SomethingWentWrong extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(child: Text('Something went wrong'));
-  }
-}
+// /// Initialize the logger.
+// ///
+// /// The logger will listen and print any logs statements.
+// void initLogger() {
+//   Logger.root.onRecord.listen((record) {
+//     var msg = '${record.level.name}: ${record.time}: '
+//         '${record.loggerName}: ${record.message}';
+//     if (record.error != null) msg += '\nError: ${record.error}';
+//     print(msg);
+//   });
+// }
 
-class ListApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FirestoreUser(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          appBarTheme: AppBarTheme(centerTitle: true),
-        ),
-        routes: {
-          Routes.signinScreen: (context) => SigninScreen(),
-          Routes.signinEmailScreen: (context) => EmailSigninScreen(),
-          Routes.createEmailAccountScreen: (context) =>
-              CreateEmailAccountScreen(),
-          Routes.listScreen: (context) => ListScreen(),
-          Routes.loadingScreen: (context) => LoadingScreen(),
-          ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
-        },
-        initialRoute: Routes.loadingScreen,
-      ),
-    );
-  }
-}
+// /// RestartWidget wraps everything, and its `restartApp` method allows us to
+// /// call a restart on the app easily with `RestartWidget.restartApp(context)`.
+// class RestartWidget extends StatefulWidget {
+//   final Widget child;
+
+//   RestartWidget({required this.child});
+
+//   static void restartApp(BuildContext context) {
+//     context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
+//   }
+
+//   @override
+//   _RestartWidgetState createState() => _RestartWidgetState();
+// }
+
+// class _RestartWidgetState extends State<RestartWidget> {
+//   Key key = UniqueKey();
+
+//   void restartApp() {
+//     setState(() {
+//       key = UniqueKey();
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return KeyedSubtree(key: key, child: widget.child);
+//   }
+// }
+
+// class SomethingWentWrong extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(child: Text('Something went wrong'));
+//   }
+// }
+
+// class ListApp extends StatelessWidget {
+//   final app = App.instance;
+//   // final Future<void> appInit = App.instance.init();
+//   final _log = Logger('ListApp');
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (app.user == null) {
+//       return MaterialApp(
+//         debugShowCheckedModeBanner: false,
+//         theme: ThemeData(
+//           brightness: Brightness.dark,
+//           appBarTheme: AppBarTheme(centerTitle: true),
+//         ),
+//         routes: {
+//           CreateEmailAccountScreen.id: (context) => CreateEmailAccountScreen(),
+//           EmailSigninScreen.id: (context) => EmailSigninScreen(),
+//           SigninScreen.id: (context) => SigninScreen(),
+//         },
+//         initialRoute: SigninScreen.id,
+//       );
+//     } else {
+//       final futureListSnapshot = ListManager.instance.getCurrentList();
+//       return FutureBuilder<DocumentSnapshot>(
+//         future: futureListSnapshot,
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             _log.info('futureListSnapshot completed');
+//             final listSnapshot = snapshot.data!;
+//             return MultiProvider(
+//               providers: [
+//                 ChangeNotifierProvider<ShoppingList>(
+//                   create: (_) => ShoppingList(
+//                     listSnapshot: listSnapshot,
+//                     snapshotData: listSnapshot.data()!,
+//                   ),
+//                   lazy: false,
+//                 ),
+//                 ChangeNotifierProvider<CheckedItems>(
+//                   create: (_) => CheckedItems.instance,
+//                 ),
+//                 ChangeNotifierProvider<ListItemsState>(
+//                   create: (_) => ListItemsState.instance,
+//                 ),
+//               ],
+//               child: MaterialApp(
+//                 debugShowCheckedModeBanner: false,
+//                 theme: ThemeData(
+//                   brightness: Brightness.dark,
+//                   appBarTheme: AppBarTheme(centerTitle: true),
+//                 ),
+//                 routes: {
+//                   CompletedItemsScreen.id: (context) => CompletedItemsScreen(),
+//                   ItemDetailsScreen.id: (context) => ItemDetailsScreen(),
+//                   ListScreen.id: (context) => ListScreen(),
+//                 },
+//                 initialRoute: ListScreen.id,
+//               ),
+//             );
+//           } else {
+//             return CircularLoadingWidget();
+//           }
+//         },
+//       );
+//     }
+//   }
+// }
