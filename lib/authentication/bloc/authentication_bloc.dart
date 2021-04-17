@@ -10,6 +10,7 @@ import '../authentication.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
+/// Monitor user authentication status.
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
