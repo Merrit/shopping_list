@@ -11,14 +11,9 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
-  settings_ui:
-    git:
-      url: git@github.com:Merrit/flutter-settings-ui.git
-      ref: 31121cbd7c28567ecff5b864c7a23840375727b6
   bloc: ^7.0.0
   cloud_firestore: ^1.0.3
   cupertino_icons: ^1.0.2
-  dartz: ^0.10.0-nullsafety.1
   equatable: ^2.0.0
   firebase_auth: ^1.0.1
   firebase_core: ^1.0.2
