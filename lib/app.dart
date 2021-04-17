@@ -7,6 +7,7 @@ import 'home/home.dart';
 import 'splash/splash_screen.dart';
 import 'theme.dart';
 
+/// Provides the Bloc that listens to the authentication state.
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
 
@@ -29,6 +30,7 @@ class App extends StatelessWidget {
   }
 }
 
+/// Entryway to the main UI, decides initial page from authentication bloc.
 class AppView extends StatefulWidget {
   @override
   _AppViewState createState() => _AppViewState();
