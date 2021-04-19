@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'authentication/authentication.dart';
 import 'home/home.dart';
+import 'shopping_list/shopping_list.dart';
 import 'splash/splash_screen.dart';
 import 'theme.dart';
 
@@ -71,6 +72,7 @@ class _AppViewState extends State<AppView> {
       routes: {
         HomePage.id: (_) => HomePage(),
         LoginPage.id: (_) => LoginPage(),
+        ShoppingListPage.id: (_) => ShoppingListPage(),
         SignUpPage.id: (_) => SignUpPage(),
         SplashPage.id: (_) => SplashPage(),
         VerifyEmailPage.id: (_) => VerifyEmailPage(),
