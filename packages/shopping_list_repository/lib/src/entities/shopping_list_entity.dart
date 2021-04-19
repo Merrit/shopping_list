@@ -43,12 +43,12 @@ class ShoppingListEntity extends Equatable {
   static ShoppingListEntity fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data();
     return ShoppingListEntity(
-      name: data?['name'],
-      aisles: data?['aisles'],
-      items: data?['items'],
+      name: data?['name'] as String,
+      aisles: List<String>.from(data?['aisles']),
+      items: List<Map<String, Object>>.from(data?['items']),
       id: snapshot.id,
-      owner: data?['owner'],
-      allowedUsers: data?['allowedUsers'],
+      owner: data?['owner'] as String,
+      allowedUsers: List<String>.from(data?['allowedUsers']),
     );
   }
 

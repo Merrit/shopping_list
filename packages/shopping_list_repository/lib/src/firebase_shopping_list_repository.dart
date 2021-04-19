@@ -6,6 +6,9 @@ import 'shopping_list_repository.dart';
 
 class FirebaseShoppingListRepository implements ShoppingListRepository {
   final shoppingListCollection = FirebaseFirestore.instance.collection('lists');
+  final String userId;
+
+  FirebaseShoppingListRepository(this.userId);
 
   @override
   Future<void> createNewShoppingList(ShoppingList shoppingList) {
@@ -14,7 +17,8 @@ class FirebaseShoppingListRepository implements ShoppingListRepository {
 
   @override
   Stream<List<ShoppingList>> shoppingLists() {
-    return shoppingListCollection.snapshots().map((snapshot) {
+    final listsQuery = shoppingListCollection.where('owner', isEqualTo: userId);
+    return listsQuery.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         return ShoppingList.fromEntity(
           ShoppingListEntity.fromSnapshot(doc),
