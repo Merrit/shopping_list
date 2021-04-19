@@ -42,7 +42,7 @@ class LoginView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: SingleColumnPagePadding(
-        child: ScrollableWithExpanded(
+        child: SingleChildScrollViewWithExpanded(
           children: [
             const AppIcon(size: 120),
             const SizedBox(height: 16.0),

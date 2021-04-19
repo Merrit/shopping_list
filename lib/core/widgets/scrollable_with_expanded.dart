@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 /// Widget that provides a SingleChildScrollView which can also contain
 /// items like Expanded(), Spacer(), Flexible(), etc.
-class ScrollableWithExpanded extends StatelessWidget {
+class SingleChildScrollViewWithExpanded extends StatelessWidget {
   final List<Widget> children;
 
-  const ScrollableWithExpanded({required this.children});
+  const SingleChildScrollViewWithExpanded({required this.children});
 
   @override
   Widget build(BuildContext context) {
