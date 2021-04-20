@@ -42,10 +42,11 @@ class ShoppingListEntity extends Equatable {
 
   static ShoppingListEntity fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data();
+
     return ShoppingListEntity(
       name: data?['name'] as String,
       aisles: List<String>.from(data?['aisles']),
-      items: List<Map<String, Object>>.from(data?['items']),
+      items: _convertItemsTypes(data?['items']),
       id: snapshot.id,
       owner: data?['owner'] as String,
       allowedUsers: List<String>.from(data?['allowedUsers']),
@@ -76,4 +77,11 @@ class ShoppingListEntity extends Equatable {
         allowedUsers: $allowedUsers,
         }''';
   }
+}
+
+/// Converting from Firebase Array of Maps to a dart List of Maps.
+List<Map<String, Object>> _convertItemsTypes(List<dynamic> itemsData) {
+  return itemsData.map((item) {
+    return Map<String, Object>.from(item);
+  }).toList();
 }
