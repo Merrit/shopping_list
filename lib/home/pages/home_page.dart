@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/shopping_list/shopping_list.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 import '../home.dart';
@@ -25,44 +26,45 @@ class HomePage extends StatelessWidget {
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: AppDrawer(),
-      body: ShoppingListGridView(),
-      floatingActionButton: FloatingCreateListButton(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SafeArea(
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(kToolbarHeight),
+              child: ShoppingListAppBar(),
+            ),
+            drawer: (constraints.maxWidth > 600)
+                ? null
+                : Drawer(child: ListDrawer()),
+            body: constraints.maxWidth > 600
+                ? ShoppingListTwoColumnView()
+                : ShoppingListPage(),
+            // floatingActionButton: FloatingCreateListButton(),
+          ),
+        );
+      },
     );
   }
 }
 
-class ShoppingListGridView extends StatelessWidget {
-  const ShoppingListGridView({
-    Key? key,
-  }) : super(key: key);
-
+class ShoppingListTwoColumnView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      buildWhen: (previous, current) =>
-          previous.shoppingLists != current.shoppingLists,
-      builder: (context, state) {
-        return LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return GridView.count(
-              padding: const EdgeInsets.all(16.0),
-              childAspectRatio: 1.0 / 1.3,
-              crossAxisCount: constraints.maxWidth > 600 ? 5 : 2,
-              crossAxisSpacing: 20.0,
-              mainAxisSpacing: 40.0,
-              children: state.shoppingLists
-                  .map((list) => ShoppingListCard(
-                        key: ValueKey(list.id),
-                        list: list,
-                      ))
-                  .toList(),
-            );
-          },
-        );
-      },
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 200,
+          child: ListDrawer(),
+        ),
+        VerticalDivider(
+          width: 0,
+        ),
+        Flexible(
+          child: ShoppingListPage(),
+        ),
+      ],
     );
   }
 }

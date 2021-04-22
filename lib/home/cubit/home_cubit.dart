@@ -8,16 +8,15 @@ import 'package:shopping_list_repository/shopping_list_repository.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final ShoppingListRepository _shoppingListRepository;
-  late StreamSubscription _shoppingListSubscription;
+  final ShoppingListRepository shoppingListRepository;
+  late StreamSubscription shoppingListSubscription;
   final User user;
 
   HomeCubit({
-    required ShoppingListRepository shoppingListRepository,
+    required this.shoppingListRepository,
     required this.user,
-  })  : _shoppingListRepository = shoppingListRepository,
-        super(HomeState()) {
-    _shoppingListSubscription = _shoppingListRepository
+  }) : super(HomeState()) {
+    shoppingListSubscription = shoppingListRepository
         .shoppingLists()
         .listen((shoppingLists) => _listsChanged(shoppingLists));
   }
@@ -28,8 +27,9 @@ class HomeCubit extends Cubit<HomeState> {
     ));
   }
 
-  void createList({required String name}) {
-    _shoppingListRepository.createNewShoppingList(
+  void createList({required String? name}) {
+    if (name == null || name == '') return;
+    shoppingListRepository.createNewShoppingList(
       ShoppingList(
         name: name,
         owner: user.id,
@@ -37,9 +37,15 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  void setCurrentList(String listId) {
+    emit(state.copyWith(
+      currentListId: listId,
+    ));
+  }
+
   @override
   Future<void> close() {
-    _shoppingListSubscription.cancel();
+    shoppingListSubscription.cancel();
     return super.close();
   }
 }

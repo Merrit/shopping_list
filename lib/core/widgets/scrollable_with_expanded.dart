@@ -19,6 +19,7 @@ class SingleChildScrollViewWithExpanded extends StatelessWidget {
             child: IntrinsicHeight(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: children,
               ),
             ),

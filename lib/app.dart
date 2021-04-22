@@ -71,8 +71,8 @@ class _AppViewState extends State<AppView> {
       },
       routes: {
         HomePage.id: (_) => HomePage(),
+        ListSettingsPage.id: (_) => ListSettingsPage(),
         LoginPage.id: (_) => LoginPage(),
-        ShoppingListPage.id: (_) => ShoppingListPage(),
         SignUpPage.id: (_) => SignUpPage(),
         SplashPage.id: (_) => SplashPage(),
         VerifyEmailPage.id: (_) => VerifyEmailPage(),
