@@ -24,6 +24,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
           .firstWhere((element) => element.id == currentListId);
       _listChanged(shoppingList);
     }
+    _listenToHomeCubit(homeCubit);
+  }
+
+  void _listenToHomeCubit(HomeCubit homeCubit) {
     _homeCubitSubscription = homeCubit.stream.listen((HomeState event) {
       final currentList = event.shoppingLists.firstWhereOrNull(
         (list) => list.id == event.currentListId,
@@ -36,7 +40,6 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   void _listChanged(ShoppingList list) {
     _shoppingList = list;
-    print('emitting');
     emit(ShoppingListState(
       name: list.name,
       items: list.items,
@@ -48,6 +51,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   }) {
     final newItem = Item(name: name);
     _shoppingList.items.add(newItem);
+    _shoppingListRepository.updateShoppingList(_shoppingList);
+  }
+
+  void deleteItem(Item item) {
+    _shoppingList.items.removeWhere((element) => element == item);
     _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 

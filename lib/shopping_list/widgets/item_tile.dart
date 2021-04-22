@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
+
+import '../shopping_list.dart';
 
 class ItemTile extends StatelessWidget {
   final Item item;
@@ -27,6 +30,9 @@ class ItemTile extends StatelessWidget {
             ),
           ],
         ),
+        onTap: () {
+          context.read<ShoppingListCubit>().deleteItem(item);
+        },
       ),
     );
   }

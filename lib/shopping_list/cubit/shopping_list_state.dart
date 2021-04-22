@@ -16,8 +16,18 @@ class ShoppingListState extends Equatable {
     );
   }
 
+  ShoppingListState copyWith({
+    String? name,
+    List<Item>? items,
+  }) {
+    return ShoppingListState(
+      name: name ?? this.name,
+      items: items ?? this.items,
+    );
+  }
+
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [name, items];
 
   @override
   String toString() => 'ShoppingListState: name: $name';

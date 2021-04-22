@@ -2,7 +2,7 @@ part of 'home_cubit.dart';
 
 /// Represents the state of the home page which shows all of
 /// the user's existing lists and allows creating new ones.
-class HomeState extends Equatable {
+class HomeState {
   final String currentListId;
   final List<ShoppingList> shoppingLists;
 
@@ -19,8 +19,12 @@ class HomeState extends Equatable {
     );
   }
 
-  @override
-  List<Object> get props => [currentListId, shoppingLists];
+  // !!
+  // New state is not emitted with Equatable.
+  // It considers changed list to be equatable.
+  //
+  // @override
+  // List<Object> get props => [currentListId, shoppingLists];
 
   @override
   String toString() =>
