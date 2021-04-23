@@ -40,7 +40,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   void _listChanged(ShoppingList list) {
     _shoppingList = list;
-    emit(ShoppingListState(
+    emit(state.copyWith(
       name: list.name,
       items: list.items,
     ));
@@ -73,6 +73,16 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   void deleteItem(Item item) {
     _shoppingList.items.removeWhere((element) => element == item);
     _shoppingListRepository.updateShoppingList(_shoppingList);
+  }
+
+  void toggleItemChecked(Item item) {
+    final isChecked = state.checkedItems.contains(item);
+    if (isChecked) {
+      state.checkedItems.remove(item);
+    } else {
+      state.checkedItems.add(item);
+    }
+    emit(state.copyWith());
   }
 
   @override

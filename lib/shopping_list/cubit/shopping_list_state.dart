@@ -1,33 +1,35 @@
 part of 'shopping_list_cubit.dart';
 
-class ShoppingListState extends Equatable {
+class ShoppingListState {
   final String name;
   final List<Item> items;
+  final List<Item> checkedItems;
 
-  const ShoppingListState({
+  ShoppingListState({
     required this.name,
     required this.items,
+    required this.checkedItems,
   });
 
   factory ShoppingListState.initial() {
     return ShoppingListState(
       name: '',
       items: [],
+      checkedItems: [],
     );
   }
 
   ShoppingListState copyWith({
     String? name,
     List<Item>? items,
+    List<Item>? checkedItems,
   }) {
     return ShoppingListState(
       name: name ?? this.name,
       items: items ?? this.items,
+      checkedItems: checkedItems ?? this.checkedItems,
     );
   }
-
-  @override
-  List<Object> get props => [name, items];
 
   @override
   String toString() => 'ShoppingListState: name: $name';

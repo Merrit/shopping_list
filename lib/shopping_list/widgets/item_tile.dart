@@ -14,6 +14,7 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ShoppingListCubit>();
     return Card(
       child: ListTile(
         title: Text(
@@ -29,6 +30,15 @@ class ItemTile extends StatelessWidget {
               backgroundColor: Colors.blueGrey,
             ),
           ],
+        ),
+        trailing: BlocBuilder<ShoppingListCubit, ShoppingListState>(
+          builder: (context, state) {
+            return Checkbox(
+              key: UniqueKey(),
+              value: state.checkedItems.contains(item),
+              onChanged: (value) => cubit.toggleItemChecked(item),
+            );
+          },
         ),
         onTap: () {
           _goToItemDetails(context);
