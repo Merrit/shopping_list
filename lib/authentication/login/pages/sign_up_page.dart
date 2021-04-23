@@ -34,7 +34,7 @@ class SignUpView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign Up')),
       body: SingleColumnPagePadding(
-        child: ScrollableWithExpanded(
+        child: SingleChildScrollViewWithExpanded(
           children: [
             const AppIcon(size: 120),
             const SizedBox(height: 16.0),

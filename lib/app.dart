@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'authentication/authentication.dart';
 import 'home/home.dart';
+import 'shopping_list/shopping_list.dart';
 import 'splash/splash_screen.dart';
 import 'theme.dart';
 
+/// Provides the Bloc that listens to the authentication state.
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
 
@@ -29,6 +31,7 @@ class App extends StatelessWidget {
   }
 }
 
+/// Entryway to the main UI, decides initial page from authentication bloc.
 class AppView extends StatefulWidget {
   @override
   _AppViewState createState() => _AppViewState();
@@ -68,6 +71,7 @@ class _AppViewState extends State<AppView> {
       },
       routes: {
         HomePage.id: (_) => HomePage(),
+        ListSettingsPage.id: (_) => ListSettingsPage(),
         LoginPage.id: (_) => LoginPage(),
         SignUpPage.id: (_) => SignUpPage(),
         SplashPage.id: (_) => SplashPage(),

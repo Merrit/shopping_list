@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Shopping List's own icon.
 class AppIcon extends StatelessWidget {
   final double? size;
 

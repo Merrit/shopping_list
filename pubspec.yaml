@@ -11,16 +11,12 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
-  bloc: ^7.0.0
-  cloud_firestore: ^1.0.3
-  cupertino_icons: ^1.0.2
+  shopping_list_repository:
+    path: packages/shopping_list_repository
   equatable: ^2.0.0
-  firebase_auth: ^1.0.1
-  firebase_core: ^1.0.2
   flutter_bloc: ^7.0.0
   flutter_signin_button: ^2.0.0
   grouped_list: ^4.0.0
-  json_annotation: ^4.0.1
   logging: ^1.0.1
   money2: ^2.0.2
   pedantic: ^1.11.0
@@ -31,8 +27,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^8.0.0
-  build_runner: ^1.11.0
-  json_serializable: ^4.1.0
   mockito: ^5.0.3
 
 flutter:

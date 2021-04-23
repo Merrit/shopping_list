@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 
+/// Log authentication state changes.
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
