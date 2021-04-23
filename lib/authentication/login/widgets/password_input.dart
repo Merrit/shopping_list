@@ -12,6 +12,7 @@ class PasswordInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return TextField(
+          autofillHints: [AutofillHints.password],
           onChanged: (password) =>
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
