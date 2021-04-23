@@ -46,6 +46,16 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     ));
   }
 
+  void updateListName(String value) {
+    _shoppingListRepository.updateShoppingList(
+      _shoppingList.copyWith(name: value),
+    );
+  }
+
+  void deleteList() {
+    _shoppingListRepository.deleteShoppingList(_shoppingList);
+  }
+
   void createItem({
     required String name,
   }) {
@@ -54,13 +64,15 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
-  void deleteItem(Item item) {
-    _shoppingList.items.removeWhere((element) => element == item);
+  void updateItem({required Item oldItem, required Item newItem}) {
+    _shoppingList.items.remove(oldItem);
+    _shoppingList.items.add(newItem);
     _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
-  void deleteList() {
-    _shoppingListRepository.deleteShoppingList(_shoppingList);
+  void deleteItem(Item item) {
+    _shoppingList.items.removeWhere((element) => element == item);
+    _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
   @override

@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
+  shopping_list_repository:
+    path: packages/shopping_list_repository
   equatable: ^2.0.0
   flutter_bloc: ^7.0.0
   flutter_signin_button: ^2.0.0
@@ -18,9 +20,8 @@ dependencies:
   logging: ^1.0.1
   money2: ^2.0.2
   pedantic: ^1.11.0
+  provider: ^5.0.0
   shared_preferences: ^2.0.5
-  shopping_list_repository:
-    path: packages/shopping_list_repository
 
 dev_dependencies:
   flutter_test:

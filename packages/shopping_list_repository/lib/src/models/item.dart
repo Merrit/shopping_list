@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:shopping_list_repository/src/validators/item/quantity_validator.dart';
 
 @immutable
 class Item extends Equatable {
@@ -18,10 +19,10 @@ class Item extends Equatable {
     this.notes = '',
     this.isComplete = false,
     this.hasTax = false,
-    this.quantity = '1',
+    String quantity = '1',
     this.price = '0.00',
     this.total = '0.00',
-  });
+  }) : quantity = QuantityValidator(quantity).validate();
 
   Item copyWith({
     String? name,

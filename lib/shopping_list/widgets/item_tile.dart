@@ -19,21 +19,34 @@ class ItemTile extends StatelessWidget {
         title: Text(
           item.name,
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
           ),
         ),
         subtitle: Row(
           children: [
             Chip(
-              label: Text('2'),
+              label: Text(item.quantity),
               backgroundColor: Colors.blueGrey,
             ),
           ],
         ),
         onTap: () {
-          context.read<ShoppingListCubit>().deleteItem(item);
+          _goToItemDetails(context);
         },
       ),
     );
+  }
+
+  Future<void> _goToItemDetails(BuildContext context) async {
+    final newItem = await Navigator.push<Item>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ItemDetailsPage(item: item),
+      ),
+    );
+    if (newItem != null) {
+      final cubit = context.read<ShoppingListCubit>();
+      cubit.updateItem(oldItem: item, newItem: newItem);
+    }
   }
 }
