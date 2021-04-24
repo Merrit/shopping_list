@@ -81,7 +81,7 @@ Future<void> _showCreateListDialog(BuildContext context) async {
         title: Text('Create list'),
         content: TextField(
           controller: _controller,
-          autofocus: false,
+          autofocus: Platform.isIOS ? false : true,
           decoration: InputDecoration(
             hintText: 'Name',
           ),
