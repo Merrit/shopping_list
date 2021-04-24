@@ -21,24 +21,11 @@ class ListDrawer extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              ElevatedButton(
-                onPressed: () => _showCreateListDialog(context),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Create list',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Icon(Icons.add),
-                  ],
-                ),
-              ),
+              _CreateListButton(),
               Expanded(
                 child: ListView(
                   children: state.shoppingLists
-                      .map((list) => ListNameTile(list: list))
+                      .map((list) => _ListNameTile(list: list))
                       .toList(),
                 ),
               ),
@@ -51,6 +38,33 @@ class ListDrawer extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _CreateListButton extends StatelessWidget {
+  const _CreateListButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: ElevatedButton(
+        onPressed: () => _showCreateListDialog(context),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Create list',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Icon(Icons.add),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -90,10 +104,10 @@ Future<void> _showCreateListDialog(BuildContext context) async {
   context.read<HomeCubit>().createList(name: newListName);
 }
 
-class ListNameTile extends StatelessWidget {
+class _ListNameTile extends StatelessWidget {
   final ShoppingList list;
 
-  const ListNameTile({
+  const _ListNameTile({
     Key? key,
     required this.list,
   }) : super(key: key);
@@ -104,9 +118,8 @@ class ListNameTile extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return ListTile(
-          leading: SizedBox(width: 1),
           selected: (state.currentListId == list.id),
-          title: Text(list.name),
+          title: Center(child: Text(list.name)),
           onTap: () {
             context.read<HomeCubit>().setCurrentList(list.id);
             if (mediaQuery.size.width < 600) {
