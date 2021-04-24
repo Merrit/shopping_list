@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/core/validators/validators.dart';
 
 import '../shopping_list.dart';
 
@@ -46,7 +45,7 @@ class _CreateItemButton extends StatelessWidget {
               title: Text('Create item'),
               content: TextField(
                 controller: _controller,
-                autofocus: Platform.isIOS ? false : true,
+                autofocus: platformIsWebMobile(context) ? false : true,
                 onSubmitted: (_) {
                   cubit.createItem(name: _controller.value.text);
                   Navigator.pop(context);

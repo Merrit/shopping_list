@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
+import 'package:shopping_list/core/validators/validators.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
@@ -81,7 +80,7 @@ Future<void> _showCreateListDialog(BuildContext context) async {
         title: Text('Create list'),
         content: TextField(
           controller: _controller,
-          autofocus: Platform.isIOS ? false : true,
+          autofocus: platformIsWebMobile(context) ? false : true,
           decoration: InputDecoration(
             hintText: 'Name',
           ),
