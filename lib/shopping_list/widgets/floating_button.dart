@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,7 +46,7 @@ class _CreateItemButton extends StatelessWidget {
               title: Text('Create item'),
               content: TextField(
                 controller: _controller,
-                autofocus: true,
+                autofocus: false,
                 onSubmitted: (_) {
                   cubit.createItem(name: _controller.value.text);
                   Navigator.pop(context);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
@@ -79,7 +81,7 @@ Future<void> _showCreateListDialog(BuildContext context) async {
         title: Text('Create list'),
         content: TextField(
           controller: _controller,
-          autofocus: true,
+          autofocus: false,
           decoration: InputDecoration(
             hintText: 'Name',
           ),
