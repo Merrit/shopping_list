@@ -7,7 +7,32 @@ import '../shopping_list.dart';
 class ItemTile extends StatelessWidget {
   final Item item;
 
+  final bool isCompleted;
+
   const ItemTile({
+    Key? key,
+    required this.item,
+  })  : isCompleted = false,
+        super(key: key);
+
+  const ItemTile.completed({
+    Key? key,
+    required this.item,
+  })  : isCompleted = true,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return (isCompleted)
+        ? _CompletedItemTile(item: item)
+        : _ActiveItemTile(item: item);
+  }
+}
+
+class _ActiveItemTile extends StatelessWidget {
+  final Item item;
+
+  const _ActiveItemTile({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -58,5 +83,35 @@ class ItemTile extends StatelessWidget {
       final cubit = context.read<ShoppingListCubit>();
       cubit.updateItem(oldItem: item, newItem: newItem);
     }
+  }
+}
+
+class _CompletedItemTile extends StatelessWidget {
+  final Item item;
+
+  const _CompletedItemTile({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<ShoppingListCubit>();
+    return ListTile(
+      title: Text(
+        item.name,
+        style: TextStyle(
+          decoration: TextDecoration.lineThrough,
+        ),
+      ),
+      enabled: false,
+      trailing: Checkbox(
+        value: true,
+        onChanged: (_) => cubit.updateItem(
+          oldItem: item,
+          newItem: item.copyWith(isComplete: false),
+        ),
+      ),
+    );
   }
 }

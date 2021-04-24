@@ -19,6 +19,14 @@ class ShoppingListState {
     );
   }
 
+  List<Item> activeItems() {
+    return items.where((item) => !item.isComplete).toList();
+  }
+
+  List<Item> completedItems() {
+    return items.where((item) => item.isComplete).toList();
+  }
+
   ShoppingListState copyWith({
     String? name,
     List<Item>? items,

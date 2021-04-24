@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
@@ -46,8 +45,12 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     ));
   }
 
+  void _updateList(ShoppingList list) {
+    _shoppingListRepository.updateShoppingList(list);
+  }
+
   void updateListName(String value) {
-    _shoppingListRepository.updateShoppingList(
+    _updateList(
       _shoppingList.copyWith(name: value),
     );
   }
@@ -83,6 +86,24 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       state.checkedItems.add(item);
     }
     emit(state.copyWith());
+  }
+
+  void setCheckedItemsCompleted() {
+    final changedItems = <Item>[];
+    state.checkedItems.forEach(
+      (item) {
+        changedItems.add(item.copyWith(isComplete: true));
+        _shoppingList.items.remove(item);
+      },
+    );
+    state.checkedItems.clear();
+    _shoppingList.items.addAll(changedItems);
+    _updateList(_shoppingList);
+  }
+
+  void deleteCompletedItems() {
+    _shoppingList.items.removeWhere((item) => item.isComplete);
+    _updateList(_shoppingList);
   }
 
   @override

@@ -13,14 +13,32 @@ class ShoppingList extends Equatable {
   final String owner;
   final List<String> allowedUsers;
 
-  const ShoppingList({
+  const ShoppingList._internal({
     required this.name,
-    this.aisles = const [],
-    this.items = const [],
-    this.id = '',
+    required this.aisles,
+    required this.items,
+    required this.id,
     required this.owner,
-    this.allowedUsers = const [],
+    required this.allowedUsers,
   });
+
+  factory ShoppingList({
+    required String name,
+    List<String> aisles = const [],
+    List<Item> items = const [],
+    String id = '',
+    required String owner,
+    List<String> allowedUsers = const [],
+  }) {
+    return ShoppingList._internal(
+      name: name,
+      aisles: aisles,
+      items: items.toSet().toList(), // Ensure no duplicates.
+      id: id,
+      owner: owner,
+      allowedUsers: allowedUsers,
+    );
+  }
 
   ShoppingList copyWith({
     String? name,
