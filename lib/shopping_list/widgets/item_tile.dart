@@ -50,10 +50,11 @@ class _ActiveItemTile extends StatelessWidget {
         ),
         subtitle: Row(
           children: [
-            Chip(
-              label: Text(item.quantity),
-              backgroundColor: Colors.blueGrey,
-            ),
+            if (int.tryParse(item.quantity)! > 1)
+              Chip(
+                label: Text(item.quantity),
+                backgroundColor: Colors.blue,
+              ),
           ],
         ),
         trailing: BlocBuilder<ShoppingListCubit, ShoppingListState>(
