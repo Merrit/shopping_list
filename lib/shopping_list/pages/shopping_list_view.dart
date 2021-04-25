@@ -30,7 +30,7 @@ class _ScrollingShoppingList extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.symmetric(
             vertical: 30,
-            horizontal: 50,
+            horizontal: 8,
           ),
           children: _listWidgets(context, state),
         );
