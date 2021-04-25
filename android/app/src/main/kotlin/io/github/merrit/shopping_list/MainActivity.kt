@@ -1,4 +1,4 @@
-package io.github.merrit.shopping_list
+package codes.merritt.shopping
 
 import io.flutter.embedding.android.FlutterActivity
 

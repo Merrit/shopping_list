@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:117835173986:android:1426df64b2ff59f92f013b",
         "android_client_info": {
-          "package_name": "io.github.merrit.shopping_list"
+          "package_name": "codes.merritt.shopping"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "117835173986-4grntgvsku9a62lomhmlmbtl1r58i29b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "io.github.merrit.shopping_list",
+            "package_name": "codes.merritt.shopping",
             "certificate_hash": "480730faec87efcac7a4579861c0b21993ef675d"
           }
         },
