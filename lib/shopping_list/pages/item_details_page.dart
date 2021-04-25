@@ -48,13 +48,13 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
               SettingsTile(
                 label: 'Name',
                 title: item.name,
-                onSubmitted: (value) => item = item.copyWith(name: value),
+                onChanged: (value) => item = item.copyWith(name: value),
               ),
               SizedBox(height: 40),
               SettingsTile(
                 label: 'Quantity',
                 title: item.quantity,
-                onSubmitted: (value) => item = item.copyWith(quantity: value),
+                onChanged: (value) => item = item.copyWith(quantity: value),
               ),
             ],
           ),

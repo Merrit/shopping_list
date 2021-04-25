@@ -31,7 +31,7 @@ class ListSettingsView extends StatelessWidget {
             SettingsTile(
               label: 'List name',
               title: state.name,
-              onSubmitted: (value) => cubit.updateListName(value),
+              onChanged: (value) => cubit.updateListName(value),
             ),
             SizedBox(height: 30),
             TextButton(
