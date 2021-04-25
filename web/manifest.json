@@ -1,11 +1,11 @@
 {
-    "name": "shopping_list",
-    "short_name": "shopping_list",
+    "name": "Shopping List",
+    "short_name": "Shopping List",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A shopping list that syncronizes seamlessly",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
