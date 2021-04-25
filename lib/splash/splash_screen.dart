@@ -8,7 +8,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: AppIcon(size: 150),
+        child: AppIcon(),
       ),
     );
   }

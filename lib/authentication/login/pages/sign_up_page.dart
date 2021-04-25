@@ -36,7 +36,7 @@ class SignUpView extends StatelessWidget {
       body: SingleColumnPagePadding(
         child: SingleChildScrollViewWithExpanded(
           children: [
-            const AppIcon(size: 120),
+            const AppIcon(),
             const SizedBox(height: 16.0),
             EmailInput(FormType.signup),
             _spacer,
