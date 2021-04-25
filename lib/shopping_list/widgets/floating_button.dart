@@ -45,6 +45,9 @@ class _CreateItemButton extends StatelessWidget {
               title: Text('Create item'),
               content: TextField(
                 controller: _controller,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                ),
                 autofocus: platformIsWebMobile(context) ? false : true,
                 onSubmitted: (_) {
                   cubit.createItem(name: _controller.value.text);
