@@ -23,7 +23,7 @@ class SingleColumnPagePadding extends StatelessWidget {
           );
         } else {
           return Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: child,
           );
         }
