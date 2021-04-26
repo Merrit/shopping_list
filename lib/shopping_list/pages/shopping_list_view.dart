@@ -10,15 +10,27 @@ class ShoppingListView extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return (state.currentListId == '')
-            ? Container()
-            : Stack(
-                children: [
-                  _ScrollingShoppingList(),
-                  FloatingButton(),
-                ],
-              );
+            ? _NoActiveListView()
+            : _ScrollingShoppingList();
       },
     );
+  }
+}
+
+class _NoActiveListView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: BlocListener<HomeCubit, HomeState>(
+      listener: (context, state) {
+        if (state.currentListId == '') {
+          // Show the drawer if there is no active list so that
+          // the user can select or create a list.
+          Scaffold.of(context).openDrawer();
+        }
+      },
+      child: Container(),
+    ));
   }
 }
 
@@ -27,12 +39,17 @@ class _ScrollingShoppingList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
-        return ListView(
-          padding: const EdgeInsets.symmetric(
-            vertical: 30,
-            horizontal: 8,
-          ),
-          children: _listWidgets(context, state),
+        return Stack(
+          children: [
+            ListView(
+              padding: const EdgeInsets.symmetric(
+                vertical: 30,
+                horizontal: 8,
+              ),
+              children: _listWidgets(context, state),
+            ),
+            FloatingButton(),
+          ],
         );
       },
     );
