@@ -65,7 +65,6 @@ class _ScrollingShoppingList extends StatelessWidget {
   List<ItemTile> _activeItemWidgets(ShoppingListState state) {
     return state.activeItems().map((item) {
       return ItemTile(
-        // key: ValueKey(item),
         key: UniqueKey(),
         item: item,
       );
@@ -78,7 +77,6 @@ class _ScrollingShoppingList extends StatelessWidget {
     completedItems.addAll(state
         .completedItems()
         .map((item) => ItemTile.completed(
-              // key: ValueKey(item),
               key: UniqueKey(),
               item: item,
             ))
