@@ -40,7 +40,6 @@ class HomeView extends StatelessWidget {
             body: constraints.maxWidth > 600
                 ? ShoppingListTwoColumnView()
                 : ShoppingListPage(),
-            // floatingActionButton: FloatingCreateListButton(),
           ),
         );
       },
