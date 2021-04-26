@@ -10,8 +10,7 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   final AuthenticationRepository _authenticationRepository;
 
-  LoginCubit(this._authenticationRepository)
-      : super(const LoginState.initial());
+  LoginCubit(this._authenticationRepository) : super(LoginState.initial());
 
   void emailChanged(String value) {
     final email = Email(value);
@@ -40,25 +39,30 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(formStatus: FormStatus.modified));
       return;
     }
-    emit(state.copyWith(status: LoginStatus.submissionInProgress));
+    emit(state.copyWith(status: SubmissionInProgress()));
     try {
       await _authenticationRepository.logInWithEmailAndPassword(
         email: state.email.value,
         password: state.password.value,
       );
-      emit(state.copyWith(status: LoginStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: LoginStatus.submissionFailure));
+      emit(state.copyWith(status: SubmissionSuccess()));
+    } on LogInWithEmailAndPasswordFailure catch (e) {
+      emit(state.copyWith(
+          status: SubmissionFailure(
+        code: e.code,
+        message: e.message,
+        email: e.email,
+      )));
     }
   }
 
   Future<void> logInWithGoogle() async {
-    emit(state.copyWith(status: LoginStatus.submissionInProgress));
+    emit(state.copyWith(status: SubmissionInProgress()));
     try {
       await _authenticationRepository.logInWithGoogle();
-      emit(state.copyWith(status: LoginStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: LoginStatus.submissionFailure));
+      emit(state.copyWith(status: SubmissionSuccess()));
+    } on LogInWithGoogleFailure catch (e) {
+      emit(state.copyWith(status: SubmissionFailure(code: e.code)));
     }
   }
 
@@ -76,15 +80,15 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(formStatus: FormStatus.modified));
       return;
     }
-    emit(state.copyWith(status: LoginStatus.submissionInProgress));
+    emit(state.copyWith(status: SubmissionInProgress()));
     try {
       await _authenticationRepository.signUp(
         email: state.email.value,
         password: state.password.value,
       );
-      emit(state.copyWith(status: LoginStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: LoginStatus.submissionFailure));
+      emit(state.copyWith(status: SubmissionSuccess()));
+    } on SignUpFailure catch (e) {
+      emit(state.copyWith(status: SubmissionFailure(code: e.code)));
     }
   }
 }

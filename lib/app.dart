@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'authentication/authentication.dart';
+import 'authentication/enums/enums.dart';
 import 'home/home.dart';
 import 'shopping_list/shopping_list.dart';
 import 'splash/splash_screen.dart';

@@ -16,8 +16,15 @@ class SignUpPage extends StatelessWidget {
       create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state.status == LoginStatus.submissionFailure) {
-            _showSignUpFailureSnackbar(context);
+          if (state.status is SubmissionFailure) {
+            final failure = state.status as SubmissionFailure;
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Sign Up Failure: ${failure.code}'),
+                ),
+              );
           }
         },
         child: SignUpView(),
@@ -27,27 +34,43 @@ class SignUpPage extends StatelessWidget {
 }
 
 class SignUpView extends StatelessWidget {
-  final _spacer = const SizedBox(height: 12.0);
+  final children = <Widget>[
+    AppIcon(height: 100),
+    const SizedBox(height: 16.0),
+    EmailInput(FormType.signup),
+    const SizedBox(height: 12.0),
+    PasswordInput(FormType.signup),
+    const SizedBox(height: 12.0),
+    _ConfirmPasswordInput(),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Sign Up')),
-      body: SingleColumnPagePadding(
-        child: SingleChildScrollViewWithExpanded(
-          children: [
-            const AppIcon(),
-            const SizedBox(height: 16.0),
-            EmailInput(FormType.signup),
-            _spacer,
-            PasswordInput(FormType.signup),
-            _spacer,
-            _ConfirmPasswordInput(),
-            Spacer(),
-            _SignUpButton(),
-            const SizedBox(height: 20.0),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          const SliverPadding(padding: EdgeInsets.only(top: 10)),
+          for (var child in children)
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                horizontal: (mediaQuery.size.width < 600) ? 8 : 400,
+              ),
+              sliver: SliverToBoxAdapter(child: child),
+            ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: _SignUpButton(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -84,7 +107,7 @@ class _SignUpButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return (state.status == LoginStatus.submissionInProgress)
+        return (state.status is SubmissionInProgress)
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -98,12 +121,4 @@ class _SignUpButton extends StatelessWidget {
       },
     );
   }
-}
-
-void _showSignUpFailureSnackbar(BuildContext context) {
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(
-      const SnackBar(content: Text('Sign Up Failure')),
-    );
 }
