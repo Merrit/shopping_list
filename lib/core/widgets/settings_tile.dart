@@ -1,48 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'widgets.dart';
 
 class SettingsTile extends StatelessWidget {
   final void Function(String value) onChanged;
+  final Widget? child;
+  final String hintText;
   final String label;
-  final String title;
 
   SettingsTile({
     Key? key,
     required this.onChanged,
+    this.child,
+    this.hintText = '',
     this.label = '',
-    this.title = '',
   }) : super(key: key);
 
-  final _controller = TextEditingController();
+  // SettingsTile.custom({
+  //   Key? key,
+  //   required this.onChanged,
+  //   required this.child,
+  //   this.hintText = '',
+  //   this.label = '',
+  // }) : super(key: key);
+
+  late final _controller = TextEditingController();
   final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = title;
-    return ChangeNotifierProvider(
-      create: (context) => SettingsTileState(),
-      builder: (context, child) {
-        // final state = context.watch<SettingsTileState>();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label),
-            SizedBox(height: 10),
-            Focus(
-              focusNode: _focusNode,
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  hintText: title,
-                ),
-                onChanged: (value) => onChanged(value),
-              ),
-            ),
-          ],
-        );
-      },
+    _controller.text = hintText;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label),
+        SizedBox(height: 10),
+        Focus(
+            focusNode: _focusNode,
+            child: child ??
+                TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                  ),
+                  onChanged: (value) => onChanged(value),
+                )),
+      ],
     );
   }
 }

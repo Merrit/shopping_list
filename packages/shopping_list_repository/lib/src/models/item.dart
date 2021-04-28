@@ -15,7 +15,7 @@ class Item extends Equatable {
 
   Item({
     required this.name,
-    this.aisle = 'Unsorted',
+    this.aisle = 'None',
     this.notes = '',
     this.isComplete = false,
     this.hasTax = false,

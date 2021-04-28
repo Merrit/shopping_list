@@ -34,6 +34,7 @@ class _CreateItemButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final shouldAutofocus = platformIsWebMobile(context) ? false : true;
     final cubit = context.read<ShoppingListCubit>();
     return FloatingActionButton(
       onPressed: () {
@@ -48,7 +49,7 @@ class _CreateItemButton extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: 'Name',
                 ),
-                autofocus: platformIsWebMobile(context) ? false : true,
+                autofocus: shouldAutofocus,
                 onSubmitted: (_) {
                   cubit.createItem(name: _controller.value.text);
                   Navigator.pop(context);

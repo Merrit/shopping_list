@@ -42,21 +42,39 @@ class _ActiveItemTile extends StatelessWidget {
     final cubit = context.read<ShoppingListCubit>();
     return Card(
       child: ListTile(
-        title: Text(
-          item.name,
-          style: TextStyle(
-            fontSize: 24,
-          ),
-        ),
-        subtitle: Row(
+        title: Row(
+          // mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (int.tryParse(item.quantity)! > 1)
-              Chip(
-                label: Text(item.quantity),
-                backgroundColor: Colors.blue,
+            Flexible(
+              child: Text(
+                item.name,
+                style: TextStyle(
+                  fontSize: 24,
+                ),
               ),
+            ),
+            if (int.tryParse(item.quantity)! > 1)
+              Flexible(
+                child: Chip(
+                  label: Text(item.quantity),
+                  backgroundColor: Colors.blue,
+                ),
+              ),
+            Flexible(child: Container()),
+            Flexible(child: Container()),
+            Flexible(child: Container()),
           ],
         ),
+        // subtitle: Row(
+        //   children: [
+        //     if (int.tryParse(item.quantity)! > 1)
+        //       Chip(
+        //         label: Text(item.quantity),
+        //         backgroundColor: Colors.blue,
+        //       ),
+        //   ],
+        // ),
         trailing: BlocBuilder<ShoppingListCubit, ShoppingListState>(
           builder: (context, state) {
             return Checkbox(

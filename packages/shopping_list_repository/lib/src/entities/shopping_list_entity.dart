@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class ShoppingListEntity extends Equatable {
   final String name;
-  final List<String> aisles;
+  final List<Map<String, String>> aisles;
   final List<Map<String, Object>> items;
   final String id;
   final String owner;
@@ -32,7 +32,7 @@ class ShoppingListEntity extends Equatable {
   static ShoppingListEntity fromJson(Map<String, Object> json) {
     return ShoppingListEntity(
       name: json['name'] as String,
-      aisles: json['aisles'] as List<String>,
+      aisles: json['aisles'] as List<Map<String, String>>,
       items: json['items'] as List<Map<String, Object>>,
       id: json['id'] as String,
       owner: json['owner'] as String,
@@ -45,8 +45,8 @@ class ShoppingListEntity extends Equatable {
 
     return ShoppingListEntity(
       name: data?['name'] as String,
-      aisles: List<String>.from(data?['aisles']),
-      items: _convertItemsTypes(data?['items']),
+      aisles: _convertAisles(data?['aisles']),
+      items: _convertItems(data?['items']),
       id: snapshot.id,
       owner: data?['owner'] as String,
       allowedUsers: List<String>.from(data?['allowedUsers']),
@@ -80,8 +80,15 @@ class ShoppingListEntity extends Equatable {
 }
 
 /// Converting from Firebase Array of Maps to a dart List of Maps.
-List<Map<String, Object>> _convertItemsTypes(List<dynamic> itemsData) {
+List<Map<String, Object>> _convertItems(List<dynamic> itemsData) {
   return itemsData.map((item) {
     return Map<String, Object>.from(item);
+  }).toList();
+}
+
+/// Converting from Firebase Array of Maps to a dart List of Maps.
+List<Map<String, String>> _convertAisles(List<dynamic> aislesData) {
+  return aislesData.map((aisle) {
+    return Map<String, String>.from(aisle);
   }).toList();
 }

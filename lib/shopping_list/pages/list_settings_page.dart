@@ -30,7 +30,7 @@ class ListSettingsView extends StatelessWidget {
           children: [
             SettingsTile(
               label: 'List name',
-              title: state.name,
+              hintText: state.name,
               onChanged: (value) => cubit.updateListName(value),
             ),
             SizedBox(height: 30),

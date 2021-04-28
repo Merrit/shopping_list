@@ -41,6 +41,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _shoppingList = list;
     emit(state.copyWith(
       name: list.name,
+      aisles: list.aisles,
       items: list.items,
     ));
   }
@@ -88,6 +89,17 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     emit(state.copyWith());
   }
 
+  void toggleAllItemsChecked() {
+    final anyAreChecked = state.checkedItems.isNotEmpty;
+    if (anyAreChecked) {
+      state.checkedItems.clear();
+    } else {
+      state.checkedItems.clear();
+      state.checkedItems.addAll(state.items);
+    }
+    emit(state.copyWith());
+  }
+
   void setCheckedItemsCompleted() {
     final changedItems = <Item>[];
     state.checkedItems.forEach(
@@ -105,6 +117,42 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _shoppingList.items.removeWhere((item) => item.isComplete);
     _updateList(_shoppingList);
   }
+
+  void createAisle({required String name, String? color}) {
+    _shoppingList.aisles.add(Aisle(name: name));
+    _updateList(_shoppingList);
+  }
+
+  String verifyAisle({required String aisle}) {
+    if (aisle == 'None') return '';
+    final aisleExists = (state.aisles.any(
+      (element) => element.name == aisle,
+    ));
+    if (aisleExists) {
+      return aisle;
+    } else {
+      return '';
+    }
+  }
+
+  void deleteAisle({required Aisle aisle}) {
+    _shoppingList.aisles.remove(aisle);
+    // final updatedItems = _removeDeletedAisle(aisle.name);
+    // _updateList(_shoppingList.copyWith(items: updatedItems));
+    _updateList(_shoppingList);
+  }
+
+  // List<Item> _removeDeletedAisle(String deletedAisle) {
+  //   final items = <Item>[];
+  //   _shoppingList.items.forEach((item) {
+  //     if (item.aisle == deletedAisle) {
+  //       items.add(item.copyWith(aisle: 'None'));
+  //     } else {
+  //       items.add(item);
+  //     }
+  //   });
+  //   return items;
+  // }
 
   @override
   Future<void> close() {

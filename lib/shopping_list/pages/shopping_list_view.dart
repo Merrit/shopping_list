@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/shopping_list/item_details/item_details.dart';
+import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list_repository/src/models/item.dart';
 
 import '../shopping_list.dart';
 
@@ -11,7 +15,7 @@ class ShoppingListView extends StatelessWidget {
       builder: (context, state) {
         return (state.currentListId == '')
             ? _NoActiveListView()
-            : _ScrollingShoppingList();
+            : _ActiveListView();
       },
     );
   }
@@ -34,77 +38,189 @@ class _NoActiveListView extends StatelessWidget {
   }
 }
 
-class _ScrollingShoppingList extends StatelessWidget {
+class _ActiveListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        _ScrollingShoppingList(),
+        FloatingButton(),
+      ],
+    );
+  }
+}
+
+class _ScrollingShoppingList extends StatelessWidget {
+  final wideHeaders = <String>[
+    'Item',
+    'Quantity',
+    'Aisle',
+    'Price each',
+    'Price total',
+  ];
+
+  final narrowHeaders = <String>[
+    'Items',
+    '',
+    '',
+    '',
+    '',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<ShoppingListCubit>();
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
-        return Stack(
-          children: [
-            ListView(
-              padding: const EdgeInsets.symmetric(
-                vertical: 30,
-                horizontal: 8,
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            var isWide = (constraints.maxWidth > 600);
+            var headers = (isWide) ? wideHeaders : narrowHeaders;
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: (isWide) ? 0 : constraints.maxWidth,
+                      ),
+                      child: DataTable(
+                        columnSpacing: (constraints.maxWidth > 600) ? null : 20,
+                        onSelectAll: (_) => cubit.toggleAllItemsChecked(),
+                        columns: headers
+                            .map((header) => DataColumn(label: Text(header)))
+                            .toList(),
+                        rows: state.items
+                            .where((element) => !element.isComplete)
+                            .map(
+                              (Item item) => DataRow(
+                                selected: state.checkedItems.contains(item),
+                                onSelectChanged: (_) {
+                                  cubit.toggleItemChecked(item);
+                                },
+                                cells: [
+                                  DataCell(
+                                    Text(item.name),
+                                    onTap: () =>
+                                        _goToItemDetails(context, item),
+                                  ),
+                                  DataCell(
+                                    Text(item.quantity),
+                                    onTap: () =>
+                                        _goToItemDetails(context, item),
+                                  ),
+                                  DataCell(
+                                    Text(cubit.verifyAisle(aisle: item.aisle)),
+                                    onTap: () =>
+                                        _goToItemDetails(context, item),
+                                  ),
+                                  DataCell(
+                                    Text(''),
+                                    onTap: () =>
+                                        _goToItemDetails(context, item),
+                                  ),
+                                  DataCell(
+                                    Text(''),
+                                    onTap: () =>
+                                        _goToItemDetails(context, item),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    if (state.completedItems().isNotEmpty)
+                      _CompletedItemsButton(),
+                  ],
+                ),
               ),
-              children: _listWidgets(context, state),
-            ),
-            FloatingButton(),
-          ],
+            );
+          },
         );
       },
     );
   }
+}
 
-  List<Widget> _listWidgets(BuildContext context, ShoppingListState state) {
-    final displayList = <Widget>[];
-    displayList.addAll(_activeItemWidgets(state));
-    displayList.add(_completedItemWidgets(context, state));
-    return displayList;
-  }
-
-  List<ItemTile> _activeItemWidgets(ShoppingListState state) {
-    return state.activeItems().map((item) {
-      return ItemTile(
-        key: UniqueKey(),
-        item: item,
-      );
-    }).toList();
-  }
-
-  Widget _completedItemWidgets(BuildContext context, ShoppingListState state) {
+Future<void> _goToItemDetails(BuildContext context, Item item) async {
+  final cubit = context.read<ShoppingListCubit>();
+  final newItem = await Navigator.push<Item>(
+    context,
+    MaterialPageRoute(
+      builder: (context) => BlocProvider.value(
+        value: cubit,
+        child: ItemDetailsPage(item: item),
+      ),
+    ),
+  );
+  if (newItem != null) {
     final cubit = context.read<ShoppingListCubit>();
-    final completedItems = <Widget>[];
-    completedItems.addAll(state
-        .completedItems()
-        .map((item) => ItemTile.completed(
-              key: UniqueKey(),
-              item: item,
-            ))
-        .toList());
-    if (completedItems.isNotEmpty) {
-      completedItems.add(
-        TextButton(
-          onPressed: () => cubit.deleteCompletedItems(),
-          child: Text('Delete all completed'),
-        ),
-      );
-      return Theme(
-        // Hide ExpansionTile's dividers.
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          key: PageStorageKey<String>('completed_items'),
-          title: Text(
-            'Completed items',
-            style: TextStyle(
-              color: Colors.grey,
+    cubit.updateItem(oldItem: item, newItem: newItem);
+  }
+}
+
+class _CompletedItemsButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: OutlinedButton(
+        onPressed: () => showSlideInSidePanel(
+          context: context,
+          child: BlocProvider.value(
+            value: context.read<ShoppingListCubit>(),
+            child: BlocBuilder<ShoppingListCubit, ShoppingListState>(
+              builder: (context, state) {
+                final cubit = context.read<ShoppingListCubit>();
+                return StatefulBuilder(
+                  builder: (BuildContext context, setState) {
+                    return Column(
+                      children: [
+                        OutlinedButton(
+                          onPressed: (state.completedItems().isNotEmpty)
+                              ? () {
+                                  cubit.deleteCompletedItems();
+                                  setState(() {});
+                                }
+                              : null,
+                          child: Text('Delete all completed'),
+                        ),
+                        Column(
+                          children: state.items
+                              .where((element) => element.isComplete)
+                              .map((item) => ListTile(
+                                    leading: Checkbox(
+                                      value: true,
+                                      onChanged: (_) {
+                                        cubit.updateItem(
+                                          oldItem: item,
+                                          newItem:
+                                              item.copyWith(isComplete: false),
+                                        );
+                                        setState(() {});
+                                      },
+                                    ),
+                                    title: Text(item.name),
+                                  ))
+                              .toList(),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
-            textAlign: TextAlign.center,
           ),
-          children: completedItems,
         ),
-      );
-    } else {
-      return Container();
-    }
+        child: Text(
+          'Completed items',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+          ),
+        ),
+      ),
+    );
   }
 }

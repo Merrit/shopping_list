@@ -31,6 +31,7 @@ class HomeCubit extends Cubit<HomeState> {
     shoppingListRepository.createNewShoppingList(
       ShoppingList(
         name: name,
+        aisles: [Aisle(name: 'None')],
         owner: user.id,
       ),
     );

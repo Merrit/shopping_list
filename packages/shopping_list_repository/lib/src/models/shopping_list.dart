@@ -1,13 +1,13 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import 'item.dart';
 import '../entities/entities.dart';
+import 'models.dart';
 
 @immutable
 class ShoppingList extends Equatable {
   final String name;
-  final List<String> aisles;
+  final List<Aisle> aisles;
   final List<Item> items;
   final String id;
   final String owner;
@@ -24,7 +24,7 @@ class ShoppingList extends Equatable {
 
   factory ShoppingList({
     required String name,
-    List<String> aisles = const [],
+    List<Aisle> aisles = const [],
     List<Item> items = const [],
     String id = '',
     required String owner,
@@ -32,7 +32,7 @@ class ShoppingList extends Equatable {
   }) {
     return ShoppingList._internal(
       name: name,
-      aisles: aisles,
+      aisles: aisles.toSet().toList(), // Ensure no duplicates.
       items: items.toSet().toList(), // Ensure no duplicates.
       id: id,
       owner: owner,
@@ -42,7 +42,7 @@ class ShoppingList extends Equatable {
 
   ShoppingList copyWith({
     String? name,
-    List<String>? aisles,
+    List<Aisle>? aisles,
     List<Item>? items,
     String? id,
     String? owner,
@@ -61,7 +61,7 @@ class ShoppingList extends Equatable {
   ShoppingListEntity toEntity() {
     return ShoppingListEntity(
       name: name,
-      aisles: aisles,
+      aisles: aisles.map((aisle) => aisle.toJson()).toList(),
       items: items.map((item) => item.toJson()).toList(),
       id: id,
       owner: owner,
@@ -72,7 +72,7 @@ class ShoppingList extends Equatable {
   static ShoppingList fromEntity(ShoppingListEntity entity) {
     return ShoppingList(
         name: entity.name,
-        aisles: entity.aisles,
+        aisles: entity.aisles.map((json) => Aisle.fromJson(json)).toList(),
         items: entity.items.map((json) => Item.fromJson(json)).toList(),
         id: entity.id,
         owner: entity.owner,

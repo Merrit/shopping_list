@@ -8,6 +8,14 @@ class AppTheme {
     textTheme: TextTheme(
       subtitle2: TextStyle(color: Colors.blue),
     ),
+    // dataTableTheme: DataTableThemeData(
+    //   dataTextStyle: TextStyle(
+    //     fontSize: 18,
+    //   ),
+    //   headingTextStyle: TextStyle(
+    //     fontSize: 20,
+    //   ),
+    // ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(),
     ),
