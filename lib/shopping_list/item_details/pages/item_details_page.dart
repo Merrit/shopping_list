@@ -84,7 +84,7 @@ class ItemDetailsView extends StatelessWidget {
               label: 'Aisle',
               hintText: '',
               onChanged: (value) => itemDetailsCubit.updateAisle(value),
-              child: OutlinedButton(
+              child: TextButton(
                 onPressed: () => showSlideInSidePanel(
                   context: context,
                   child: MultiBlocProvider(

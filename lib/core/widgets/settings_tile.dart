@@ -14,14 +14,6 @@ class SettingsTile extends StatelessWidget {
     this.label = '',
   }) : super(key: key);
 
-  // SettingsTile.custom({
-  //   Key? key,
-  //   required this.onChanged,
-  //   required this.child,
-  //   this.hintText = '',
-  //   this.label = '',
-  // }) : super(key: key);
-
   late final _controller = TextEditingController();
   final _focusNode = FocusNode();
 
