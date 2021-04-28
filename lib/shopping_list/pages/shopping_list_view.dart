@@ -85,7 +85,8 @@ class _ScrollingShoppingList extends StatelessWidget {
                         minWidth: (isWide) ? 0 : constraints.maxWidth,
                       ),
                       child: DataTable(
-                        columnSpacing: (constraints.maxWidth > 600) ? null : 20,
+                        columnSpacing: (isWide) ? null : 20,
+                        horizontalMargin: (isWide) ? null : 5,
                         onSelectAll: (_) => cubit.toggleAllItemsChecked(),
                         columns: headers
                             .map((header) => DataColumn(label: Text(header)))
