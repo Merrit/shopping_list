@@ -57,9 +57,16 @@ class ItemDetailsView extends StatelessWidget {
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
         final shoppingCubit = context.read<ShoppingListCubit>();
+        final mediaQuery = MediaQuery.of(context);
+        final isWide = (mediaQuery.size.width > 600);
 
         return ListView(
-          padding: const EdgeInsets.all(40),
+          padding: (isWide)
+              ? EdgeInsets.symmetric(
+                  vertical: 40,
+                  horizontal: mediaQuery.size.width / 3,
+                )
+              : const EdgeInsets.all(40),
           children: [
             SettingsTile(
               label: 'Name',
