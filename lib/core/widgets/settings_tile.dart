@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SettingsTile extends StatelessWidget {
   final void Function(String value) onChanged;
   final Widget? child;
+  final String defaultText;
   final String hintText;
   final String label;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   SettingsTile({
     Key? key,
     required this.onChanged,
     this.child,
+    this.defaultText = '',
     this.hintText = '',
     this.label = '',
+    this.inputFormatters,
+    this.keyboardType,
   }) : super(key: key);
 
   late final _controller = TextEditingController();
@@ -19,7 +26,7 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = hintText;
+    _controller.text = defaultText;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,6 +40,8 @@ class SettingsTile extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: hintText,
                   ),
+                  inputFormatters: inputFormatters,
+                  keyboardType: keyboardType,
                   onChanged: (value) => onChanged(value),
                 )),
       ],

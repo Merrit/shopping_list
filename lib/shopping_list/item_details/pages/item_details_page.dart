@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
+
+import 'package:shopping_list/core/widgets/text_input_formatter.dart';
 
 import '../item_details.dart';
 
@@ -53,10 +56,12 @@ class ItemDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-      buildWhen: (previous, current) => previous.aisle != current.aisle,
+      buildWhen: (previous, current) =>
+          (previous.aisle != current.aisle) ||
+          (previous.hasTax != current.hasTax),
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
-        final shoppingCubit = context.read<ShoppingListCubit>();
+        final shoppingCubit = context.watch<ShoppingListCubit>();
         final mediaQuery = MediaQuery.of(context);
         final isWide = (mediaQuery.size.width > 600);
 
@@ -82,9 +87,14 @@ class ItemDetailsView extends StatelessWidget {
             const SizedBox(height: 40),
             SettingsTile(
               label: 'Aisle',
-              hintText: '',
               onChanged: (value) => itemDetailsCubit.updateAisle(value),
-              child: OutlinedButton(
+              child: ActionChip(
+                label: Text(
+                  _verifyAisle(
+                    shoppingCubit: shoppingCubit,
+                    aisle: state.aisle,
+                  ),
+                ),
                 onPressed: () => showSlideInSidePanel(
                   context: context,
                   child: MultiBlocProvider(
@@ -99,12 +109,68 @@ class ItemDetailsView extends StatelessWidget {
                     child: AisleSidePanel(),
                   ),
                 ),
-                child: Text(
-                  _verifyAisle(
-                    shoppingCubit: shoppingCubit,
-                    aisle: state.aisle,
+              ),
+              // child: OutlinedButton(
+              //   onPressed: () => showSlideInSidePanel(
+              //     context: context,
+              //     child: MultiBlocProvider(
+              //       providers: [
+              //         BlocProvider.value(
+              //           value: context.read<ShoppingListCubit>(),
+              //         ),
+              //         BlocProvider.value(
+              //           value: context.read<ItemDetailsCubit>(),
+              //         ),
+              //       ],
+              //       child: AisleSidePanel(),
+              //     ),
+              //   ),
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       Text(
+              //         _verifyAisle(
+              //           shoppingCubit: shoppingCubit,
+              //           aisle: state.aisle,
+              //         ),
+              //       ),
+              //       Icon(Icons.arrow_drop_down),
+              //     ],
+              //   ),
+              // ),
+            ),
+            const SizedBox(height: 40),
+            SettingsTile(
+              label: 'Price',
+              hintText: state.price,
+              inputFormatters: [BetterTextInputFormatter.doubleOnly],
+              keyboardType: TextInputType.number,
+              onChanged: (value) => itemDetailsCubit.updatePrice(value),
+            ),
+            const SizedBox(height: 40),
+            SettingsTile(
+              label: 'Has Tax',
+              onChanged: (value) {},
+              child: Column(
+                children: [
+                  if (state.hasTax &&
+                      ((shoppingCubit.updateTaxRate() == '0.0') ||
+                          (shoppingCubit.updateTaxRate() == '0')))
+                    TextButton(
+                      onPressed: () async {
+                        await Navigator.pushNamed(
+                          context,
+                          SettingsPage.id,
+                        );
+                        shoppingCubit.updateTaxRate();
+                      },
+                      child: Text('Set tax rate'),
+                    ),
+                  Switch(
+                    value: state.hasTax,
+                    onChanged: (value) => itemDetailsCubit.updateHasTax(value),
                   ),
-                ),
+                ],
               ),
             ),
           ],

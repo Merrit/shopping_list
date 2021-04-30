@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/core/validators/validators.dart';
 import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 class ListDrawer extends StatelessWidget {
@@ -31,9 +32,21 @@ class ListDrawer extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              TextButton(
-                onPressed: () => _auth.add(AuthenticationLogoutRequested()),
-                child: Text('Sign out'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => _auth.add(AuthenticationLogoutRequested()),
+                    child: Text('Sign out'),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      SettingsPage.id,
+                    ),
+                    icon: Icon(Icons.settings),
+                  )
+                ],
               ),
             ],
           ),

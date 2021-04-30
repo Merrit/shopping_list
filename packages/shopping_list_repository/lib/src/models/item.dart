@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:shopping_list_repository/src/validators/item/quantity_validator.dart';
+
+import '../../shopping_list_repository.dart';
 
 @immutable
 class Item extends Equatable {

@@ -2,19 +2,22 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 part 'shopping_list_state.dart';
 
 class ShoppingListCubit extends Cubit<ShoppingListState> {
+  final HomeCubit _homeCubit;
   late StreamSubscription _homeCubitSubscription;
   late ShoppingList _shoppingList;
   final ShoppingListRepository _shoppingListRepository;
 
   ShoppingListCubit({
     required HomeCubit homeCubit,
-  })  : _shoppingList = ShoppingList(name: '', owner: homeCubit.user.id),
+  })  : _homeCubit = homeCubit,
+        _shoppingList = ShoppingList(name: '', owner: homeCubit.user.id),
         _shoppingListRepository = homeCubit.shoppingListRepository,
         super(ShoppingListState.initial()) {
     final currentListId = homeCubit.state.currentListId;
@@ -26,6 +29,8 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _listenToHomeCubit(homeCubit);
   }
 
+  SharedPreferences? prefs;
+
   void _listenToHomeCubit(HomeCubit homeCubit) {
     _homeCubitSubscription = homeCubit.stream.listen((HomeState event) {
       final currentList = event.shoppingLists.firstWhereOrNull(
@@ -33,6 +38,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       );
       if (currentList != null && currentList != _shoppingList) {
         _listChanged(currentList);
+      }
+      if (prefs == null && (event.prefs != null)) {
+        prefs = event.prefs;
+        updateTaxRate();
       }
     });
   }
@@ -153,6 +162,12 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   //   });
   //   return items;
   // }
+
+  String updateTaxRate() {
+    final taxRate = _homeCubit.state.prefs!.getString('taxRate') ?? '0.0';
+    emit(state.copyWith(taxRate: taxRate));
+    return taxRate;
+  }
 
   @override
   Future<void> close() {

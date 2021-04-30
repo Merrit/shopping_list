@@ -13,9 +13,13 @@ class ShoppingListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        return (state.currentListId == '')
-            ? _NoActiveListView()
-            : _ActiveListView();
+        final haveActiveList = (state.currentListId != '');
+        final prefsInitialized = (state.prefs != null);
+        if (haveActiveList && prefsInitialized) {
+          return _ActiveListView();
+        } else {
+          return _NoActiveListView();
+        }
       },
     );
   }
@@ -111,17 +115,22 @@ class _ScrollingShoppingList extends StatelessWidget {
                                         _goToItemDetails(context, item),
                                   ),
                                   DataCell(
-                                    Text(cubit.verifyAisle(aisle: item.aisle)),
+                                    _AisleWidget(item: item),
                                     onTap: () =>
                                         _goToItemDetails(context, item),
                                   ),
                                   DataCell(
-                                    Text(''),
+                                    Text((item.price == '0.00')
+                                        ? ''
+                                        : item.price),
                                     onTap: () =>
                                         _goToItemDetails(context, item),
                                   ),
                                   DataCell(
-                                    Text(''),
+                                    Text((item.total == '0.00') ||
+                                            (item.total == '0.0')
+                                        ? ''
+                                        : item.total),
                                     onTap: () =>
                                         _goToItemDetails(context, item),
                                   ),
@@ -141,6 +150,23 @@ class _ScrollingShoppingList extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class _AisleWidget extends StatelessWidget {
+  final Item item;
+
+  const _AisleWidget({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<ShoppingListCubit>();
+    final aisle = cubit.verifyAisle(aisle: item.aisle);
+    return (aisle == '')
+        ? const Text('')
+        : Chip(
+            label: Text(aisle),
+          );
   }
 }
 
