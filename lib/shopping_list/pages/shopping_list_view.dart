@@ -64,11 +64,11 @@ class _ScrollingShoppingList extends StatelessWidget {
   ];
 
   final narrowHeaders = <String>[
-    'Items',
-    '',
-    '',
-    '',
-    '',
+    'Item',
+    '#',
+    'Aisle',
+    '\$ ea',
+    '\$ total',
   ];
 
   @override
@@ -79,16 +79,22 @@ class _ScrollingShoppingList extends StatelessWidget {
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             var isWide = (constraints.maxWidth > 600);
-            var headers = (isWide) ? wideHeaders : narrowHeaders;
+            // var headers = (isWide) ? wideHeaders : narrowHeaders;
+            var headers = wideHeaders;
             return SingleChildScrollView(
               child: Center(
                 child: Column(
                   children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: (isWide) ? 0 : constraints.maxWidth,
-                      ),
+                    // ConstrainedBox(
+                    //   constraints: BoxConstraints(
+                    //     minWidth: (isWide) ? 0 : constraints.maxWidth,
+                    //   ),
+                    //   child: ,
+                    // ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: DataTable(
+                        sortColumnIndex: 0,
                         columnSpacing: (isWide) ? null : 20,
                         horizontalMargin: (isWide) ? null : 5,
                         onSelectAll: (_) => cubit.toggleAllItemsChecked(),
