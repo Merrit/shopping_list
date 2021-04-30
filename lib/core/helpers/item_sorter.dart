@@ -14,10 +14,22 @@ class ItemSorter {
         );
         if (ascending) items = items.reversed.toList();
         break;
+      case 'quantity':
+        items.sort((a, b) => a.quantity.compareTo(b.quantity));
+        if (ascending) items = items.reversed.toList();
+        break;
       case 'aisle':
         items.sort(
           (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
         );
+        if (ascending) items = items.reversed.toList();
+        break;
+      case 'price':
+        items.sort((a, b) => a.price.compareTo(b.price));
+        if (ascending) items = items.reversed.toList();
+        break;
+      case 'total':
+        items.sort((a, b) => a.total.compareTo(b.total));
         if (ascending) items = items.reversed.toList();
         break;
       default:

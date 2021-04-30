@@ -113,6 +113,13 @@ class _ScrollingShoppingList extends StatelessWidget {
                           DataColumn(
                             label: Text('#'),
                             numeric: true,
+                            onSort: (columnIndex, ascending) {
+                              cubit.updateTableSorting(
+                                ascending: ascending,
+                                columnIndex: columnIndex,
+                                sortBy: 'quantity',
+                              );
+                            },
                           ),
                           DataColumn(
                             label: Text('Aisle'),
@@ -127,10 +134,24 @@ class _ScrollingShoppingList extends StatelessWidget {
                           DataColumn(
                             label: Text('Price each'),
                             numeric: true,
+                            onSort: (columnIndex, ascending) {
+                              cubit.updateTableSorting(
+                                ascending: ascending,
+                                columnIndex: columnIndex,
+                                sortBy: 'price',
+                              );
+                            },
                           ),
                           DataColumn(
                             label: Text('Price total'),
                             numeric: true,
+                            onSort: (columnIndex, ascending) {
+                              cubit.updateTableSorting(
+                                ascending: ascending,
+                                columnIndex: columnIndex,
+                                sortBy: 'total',
+                              );
+                            },
                           ),
                         ],
                         // columns: headers
