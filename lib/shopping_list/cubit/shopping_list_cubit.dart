@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_list/core/helpers/money_handler.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
@@ -79,7 +80,12 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   void updateItem({required Item oldItem, required Item newItem}) {
     _shoppingList.items.remove(oldItem);
-    _shoppingList.items.add(newItem);
+    final updatedTotal = MoneyHandler().totalPrice(
+      price: newItem.price,
+      quantity: newItem.quantity,
+      taxRate: (newItem.hasTax) ? taxRate : null,
+    );
+    _shoppingList.items.add(newItem.copyWith(total: updatedTotal));
     _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
@@ -163,10 +169,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   //   return items;
   // }
 
-  String updateTaxRate() {
-    final taxRate = _homeCubit.state.prefs!.getString('taxRate') ?? '0.0';
+  String get taxRate => _homeCubit.state.prefs!.getString('taxRate') ?? '0.0';
+
+  void updateTaxRate() {
     emit(state.copyWith(taxRate: taxRate));
-    return taxRate;
   }
 
   @override

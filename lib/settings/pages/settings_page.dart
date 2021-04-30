@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/home/home.dart';
 
 import '../settings.dart';
 
@@ -9,20 +10,32 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: BlocProvider(
-        create: (context) => SettingsCubit(),
-        child: BlocBuilder<SettingsCubit, SettingsState>(
-          buildWhen: (previous, current) =>
-              previous.runtimeType != current.runtimeType,
-          builder: (context, state) {
-            if (state is SettingsInitial) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              return SettingsView();
-            }
-          },
+    final homeCubit = context.read<HomeCubit>();
+    late SettingsCubit settingsCubit;
+
+    Future<bool> _onWillPop(SettingsCubit settingsCubit) async {
+      await settingsCubit.updateTaxRate();
+      return true;
+    }
+
+    return WillPopScope(
+      onWillPop: () => _onWillPop(settingsCubit),
+      child: Scaffold(
+        appBar: AppBar(),
+        body: BlocProvider(
+          create: (context) => SettingsCubit(homeCubit: homeCubit),
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            buildWhen: (previous, current) =>
+                previous.runtimeType != current.runtimeType,
+            builder: (context, state) {
+              settingsCubit = context.read<SettingsCubit>();
+              if (state is SettingsInitial) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return SettingsView();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -47,7 +60,7 @@ class SettingsView extends StatelessWidget {
                 label: 'Tax rate',
                 hintText: '${state.taxRate}%',
                 keyboardType: TextInputType.number,
-                onChanged: (value) => cubit.updateTaxRate(value),
+                onChanged: (value) => cubit.recordTaxRateState(value),
               ),
             ],
           ),

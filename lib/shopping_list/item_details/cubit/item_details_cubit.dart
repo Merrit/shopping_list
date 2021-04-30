@@ -29,7 +29,8 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
   }
 
   void updatePrice(String price) {
-    emit(state.copyWith(price: price));
+    final asDouble = double.tryParse(price);
+    emit(state.copyWith(price: asDouble.toString()));
   }
 
   void updateTotal() {

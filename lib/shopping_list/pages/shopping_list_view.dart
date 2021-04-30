@@ -122,7 +122,7 @@ class _ScrollingShoppingList extends StatelessWidget {
                                   DataCell(
                                     Text((item.price == '0.00')
                                         ? ''
-                                        : item.price),
+                                        : '\$${item.price}'),
                                     onTap: () =>
                                         _goToItemDetails(context, item),
                                   ),
@@ -130,7 +130,7 @@ class _ScrollingShoppingList extends StatelessWidget {
                                     Text((item.total == '0.00') ||
                                             (item.total == '0.0')
                                         ? ''
-                                        : item.total),
+                                        : '\$${item.total}'),
                                     onTap: () =>
                                         _goToItemDetails(context, item),
                                   ),

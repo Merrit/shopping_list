@@ -14,6 +14,7 @@ class ListDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _auth = context.read<AuthenticationBloc>();
+    final homeCubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (previous, current) =>
           (previous.shoppingLists != current.shoppingLists) ||
@@ -40,10 +41,19 @@ class ListDrawer extends StatelessWidget {
                     child: Text('Sign out'),
                   ),
                   IconButton(
-                    onPressed: () => Navigator.pushNamed(
-                      context,
-                      SettingsPage.id,
-                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return BlocProvider.value(
+                              value: homeCubit,
+                              child: SettingsPage(),
+                            );
+                          },
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.settings),
                   )
                 ],

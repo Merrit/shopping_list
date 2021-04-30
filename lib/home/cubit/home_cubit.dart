@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_list/core/helpers/money_handler.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 part 'home_state.dart';
@@ -18,7 +19,7 @@ class HomeCubit extends Cubit<HomeState> {
   }) : super(HomeState()) {
     _initPrefs();
     shoppingListSubscription = shoppingListRepository
-        .shoppingLists()
+        .shoppingListsStream()
         .listen((shoppingLists) => _listsChanged(shoppingLists));
   }
 
@@ -50,9 +51,46 @@ class HomeCubit extends Cubit<HomeState> {
     ));
   }
 
+  Future<void> updateListItemTotals(String taxRate) async {
+    final updater = MassListUpdater(shoppingListRepository);
+    await updater.updateTotals(taxRate);
+  }
+
   @override
   Future<void> close() {
     shoppingListSubscription.cancel();
     return super.close();
+  }
+}
+
+class MassListUpdater {
+  final ShoppingListRepository shoppingListRepository;
+
+  const MassListUpdater(this.shoppingListRepository);
+
+  Future<void> updateTotals(String taxRate) async {
+    final lists = await shoppingListRepository.shoppingLists();
+    lists.forEach((list) async {
+      await _updateListItemTotals(list: list, taxRate: taxRate);
+    });
+  }
+
+  Future<void> _updateListItemTotals({
+    required ShoppingList list,
+    required String taxRate,
+  }) async {
+    final updatedItems = <Item>[];
+    list.items.forEach((item) {
+      final updatedTotal = MoneyHandler().totalPrice(
+        price: item.price,
+        quantity: item.quantity,
+        taxRate: (item.hasTax) ? taxRate : null,
+      );
+      final updatedItem = item.copyWith(total: updatedTotal);
+      updatedItems.add(updatedItem);
+    });
+    await shoppingListRepository.updateShoppingList(
+      list.copyWith(items: updatedItems),
+    );
   }
 }

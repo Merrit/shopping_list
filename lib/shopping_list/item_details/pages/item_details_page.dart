@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shopping_list/core/core.dart';
@@ -110,41 +111,13 @@ class ItemDetailsView extends StatelessWidget {
                   ),
                 ),
               ),
-              // child: OutlinedButton(
-              //   onPressed: () => showSlideInSidePanel(
-              //     context: context,
-              //     child: MultiBlocProvider(
-              //       providers: [
-              //         BlocProvider.value(
-              //           value: context.read<ShoppingListCubit>(),
-              //         ),
-              //         BlocProvider.value(
-              //           value: context.read<ItemDetailsCubit>(),
-              //         ),
-              //       ],
-              //       child: AisleSidePanel(),
-              //     ),
-              //   ),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       Text(
-              //         _verifyAisle(
-              //           shoppingCubit: shoppingCubit,
-              //           aisle: state.aisle,
-              //         ),
-              //       ),
-              //       Icon(Icons.arrow_drop_down),
-              //     ],
-              //   ),
-              // ),
             ),
             const SizedBox(height: 40),
             SettingsTile(
               label: 'Price',
               hintText: state.price,
-              inputFormatters: [BetterTextInputFormatter.doubleOnly],
-              keyboardType: TextInputType.number,
+              inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (value) => itemDetailsCubit.updatePrice(value),
             ),
             const SizedBox(height: 40),
@@ -154,8 +127,8 @@ class ItemDetailsView extends StatelessWidget {
               child: Column(
                 children: [
                   if (state.hasTax &&
-                      ((shoppingCubit.updateTaxRate() == '0.0') ||
-                          (shoppingCubit.updateTaxRate() == '0')))
+                      ((shoppingCubit.taxRate == '0.0') ||
+                          (shoppingCubit.taxRate == '0')))
                     TextButton(
                       onPressed: () async {
                         await Navigator.pushNamed(
