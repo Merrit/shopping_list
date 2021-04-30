@@ -87,15 +87,16 @@ class Item extends Equatable {
 
   @override
   String toString() {
-    return '''Item {
-        name: $name,
-        aisle: $aisle,
-        notes: $notes,
-        isComplete: $isComplete,
-        hasTax: $hasTax,
-        quantity: $quantity,
-        price: $price,
-        total: $total,
-        }''';
+    return '''\n
+Item {
+  name: $name,
+  aisle: $aisle,
+  notes: $notes,
+  isComplete: $isComplete,
+  hasTax: $hasTax,
+  quantity: $quantity,
+  price: $price,
+  total: $total,
+}\n''';
   }
 }

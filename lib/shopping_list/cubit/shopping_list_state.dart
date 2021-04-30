@@ -4,15 +4,21 @@ class ShoppingListState {
   final String name;
   final List<Aisle> aisles;
   final List<Item> items;
-  final List<Item> checkedItems;
   final String taxRate;
+
+  // State specific to the running app instance, rather than the ShoppingList.
+  final List<Item> checkedItems;
+  final int columnSortIndex;
+  final bool sortAscending;
 
   ShoppingListState({
     required this.name,
     required this.aisles,
     required this.items,
-    required this.checkedItems,
     required this.taxRate,
+    required this.checkedItems,
+    required this.columnSortIndex,
+    required this.sortAscending,
   });
 
   factory ShoppingListState.initial() {
@@ -20,8 +26,10 @@ class ShoppingListState {
       name: '',
       aisles: [],
       items: [],
-      checkedItems: [],
       taxRate: '0',
+      checkedItems: [],
+      columnSortIndex: 0,
+      sortAscending: false,
     );
   }
 
@@ -37,15 +45,19 @@ class ShoppingListState {
     String? name,
     List<Aisle>? aisles,
     List<Item>? items,
-    List<Item>? checkedItems,
     String? taxRate,
+    List<Item>? checkedItems,
+    int? columnSortIndex,
+    bool? sortAscending,
   }) {
     return ShoppingListState(
       name: name ?? this.name,
       aisles: aisles ?? this.aisles,
       items: items ?? this.items,
-      checkedItems: checkedItems ?? this.checkedItems,
       taxRate: taxRate ?? this.taxRate,
+      checkedItems: checkedItems ?? this.checkedItems,
+      columnSortIndex: columnSortIndex ?? this.columnSortIndex,
+      sortAscending: sortAscending ?? this.sortAscending,
     );
   }
 

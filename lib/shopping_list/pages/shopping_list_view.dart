@@ -94,13 +94,41 @@ class _ScrollingShoppingList extends StatelessWidget {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
-                        sortColumnIndex: 0,
+                        sortColumnIndex: state.columnSortIndex,
+                        sortAscending: state.sortAscending,
                         columnSpacing: (isWide) ? null : 20,
                         horizontalMargin: (isWide) ? null : 5,
                         onSelectAll: (_) => cubit.toggleAllItemsChecked(),
-                        columns: headers
-                            .map((header) => DataColumn(label: Text(header)))
-                            .toList(),
+                        columns: [
+                          DataColumn(
+                            label: Text('Name'),
+                            onSort: (columnIndex, ascending) {
+                              cubit.updateTableSorting(
+                                ascending: ascending,
+                                columnIndex: columnIndex,
+                                sortBy: 'name',
+                              );
+                            },
+                          ),
+                          DataColumn(
+                            label: Text('#'),
+                            numeric: true,
+                          ),
+                          DataColumn(
+                            label: Text('Aisle'),
+                          ),
+                          DataColumn(
+                            label: Text('Price each'),
+                            numeric: true,
+                          ),
+                          DataColumn(
+                            label: Text('Price total'),
+                            numeric: true,
+                          ),
+                        ],
+                        // columns: headers
+                        //     .map((header) => DataColumn(label: Text(header)))
+                        //     .toList(),
                         rows: state.items
                             .where((element) => !element.isComplete)
                             .map(

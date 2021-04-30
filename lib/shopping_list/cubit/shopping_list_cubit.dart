@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
@@ -155,6 +156,24 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     // final updatedItems = _removeDeletedAisle(aisle.name);
     // _updateList(_shoppingList.copyWith(items: updatedItems));
     _updateList(_shoppingList);
+  }
+
+  void updateTableSorting({
+    required bool ascending,
+    required int columnIndex,
+    required String sortBy,
+  }) {
+    final sortedItems = ItemSorter().sort(
+      ascending: ascending,
+      currentItems: _shoppingList.items,
+      sortBy: sortBy,
+    );
+    _updateList(_shoppingList.copyWith(items: sortedItems));
+    emit(state.copyWith(
+      items: sortedItems,
+      columnSortIndex: columnIndex,
+      sortAscending: ascending,
+    ));
   }
 
   // List<Item> _removeDeletedAisle(String deletedAisle) {
