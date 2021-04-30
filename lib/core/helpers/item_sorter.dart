@@ -6,21 +6,23 @@ class ItemSorter {
     required List<Item> currentItems,
     required String sortBy,
   }) {
-    var sortedList = List<Item>.from(currentItems);
+    var items = List<Item>.from(currentItems);
     switch (sortBy) {
       case 'name':
-        sortedList.sort(
+        items.sort(
           (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
         );
-        if (ascending) sortedList = sortedList.reversed.toList();
+        if (ascending) items = items.reversed.toList();
+        break;
+      case 'aisle':
+        items.sort(
+          (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
+        );
+        if (ascending) items = items.reversed.toList();
         break;
       default:
         print('Error sorting items');
     }
-    print('oldList:\n'
-        '$currentItems');
-    print('newList:\n'
-        '$sortedList');
-    return sortedList;
+    return items;
   }
 }
