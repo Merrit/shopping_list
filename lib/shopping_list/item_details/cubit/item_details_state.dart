@@ -8,6 +8,7 @@ class ItemDetailsState extends Equatable {
   final String price;
   final String total;
   final bool hasTax;
+  final String notes;
 
   const ItemDetailsState({
     required Item item,
@@ -17,6 +18,7 @@ class ItemDetailsState extends Equatable {
     required this.price,
     required this.total,
     required this.hasTax,
+    required this.notes,
   }) : _item = item;
 
   @override
@@ -28,6 +30,7 @@ class ItemDetailsState extends Equatable {
         price,
         total,
         hasTax,
+        notes,
       ];
 
   @override
@@ -40,6 +43,7 @@ class ItemDetailsState extends Equatable {
     String? price,
     String? total,
     bool? hasTax,
+    String? notes,
   }) {
     return ItemDetailsState(
       item: _item,
@@ -49,6 +53,7 @@ class ItemDetailsState extends Equatable {
       price: price ?? this.price,
       total: total ?? this.total,
       hasTax: hasTax ?? this.hasTax,
+      notes: notes ?? this.notes,
     );
   }
 }

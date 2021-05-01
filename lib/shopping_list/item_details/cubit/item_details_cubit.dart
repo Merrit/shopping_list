@@ -14,6 +14,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           price: item.price,
           total: item.total,
           hasTax: item.hasTax,
+          notes: item.notes,
         ));
 
   void updateName(String name) {
@@ -44,6 +45,10 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
     emit(state.copyWith(hasTax: hasTax));
   }
 
+  void updateNotes(String notes) {
+    emit(state.copyWith(notes: notes));
+  }
+
   Item updatedItem() {
     return state._item.copyWith(
       aisle: state.aisle,
@@ -52,6 +57,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       price: state.price,
       total: state.total,
       hasTax: state.hasTax,
+      notes: state.notes,
     );
   }
 }

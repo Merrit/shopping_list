@@ -9,6 +9,7 @@ class SettingsTile extends StatelessWidget {
   final String label;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
+  final int? maxLines;
 
   SettingsTile({
     Key? key,
@@ -19,6 +20,7 @@ class SettingsTile extends StatelessWidget {
     this.label = '',
     this.inputFormatters,
     this.keyboardType,
+    this.maxLines,
   }) : super(key: key);
 
   late final _controller = TextEditingController();
@@ -36,6 +38,7 @@ class SettingsTile extends StatelessWidget {
             focusNode: _focusNode,
             child: child ??
                 TextField(
+                  maxLines: maxLines,
                   controller: _controller,
                   decoration: InputDecoration(
                     hintText: hintText,

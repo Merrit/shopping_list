@@ -74,6 +74,8 @@ class ItemDetailsView extends StatelessWidget {
                 )
               : const EdgeInsets.all(40),
           children: [
+            // TODO: Create a custom `Settings` section with built-in
+            // padding between items and what-not.
             SettingsTile(
               label: 'Name',
               hintText: itemDetailsCubit.state.name,
@@ -145,6 +147,14 @@ class ItemDetailsView extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: 40),
+            SettingsTile(
+              label: 'Notes',
+              defaultText: state.notes,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              onChanged: (value) => itemDetailsCubit.updateNotes(value),
             ),
           ],
         );
