@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
+import 'package:shopping_list/core/validators/validators.dart';
 import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 class ListDrawer extends StatelessWidget {
@@ -12,6 +14,7 @@ class ListDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _auth = context.read<AuthenticationBloc>();
+    final homeCubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (previous, current) =>
           (previous.shoppingLists != current.shoppingLists) ||
@@ -21,36 +24,71 @@ class ListDrawer extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              ElevatedButton(
-                onPressed: () => _showCreateListDialog(context),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Create list',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Icon(Icons.add),
-                  ],
-                ),
-              ),
+              _CreateListButton(),
               Expanded(
                 child: ListView(
                   children: state.shoppingLists
-                      .map((list) => ListNameTile(list: list))
+                      .map((list) => _ListNameTile(list: list))
                       .toList(),
                 ),
               ),
               Spacer(),
-              TextButton(
-                onPressed: () => _auth.add(AuthenticationLogoutRequested()),
-                child: Text('Sign out'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => _auth.add(AuthenticationLogoutRequested()),
+                    child: Text('Sign out'),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return BlocProvider.value(
+                              value: homeCubit,
+                              child: SettingsPage(),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.settings),
+                  )
+                ],
               ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class _CreateListButton extends StatelessWidget {
+  const _CreateListButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: ElevatedButton(
+        onPressed: () => _showCreateListDialog(context),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Create list',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Icon(Icons.add),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -65,7 +103,7 @@ Future<void> _showCreateListDialog(BuildContext context) async {
         title: Text('Create list'),
         content: TextField(
           controller: _controller,
-          autofocus: true,
+          autofocus: platformIsWebMobile(context) ? false : true,
           decoration: InputDecoration(
             hintText: 'Name',
           ),
@@ -90,10 +128,10 @@ Future<void> _showCreateListDialog(BuildContext context) async {
   context.read<HomeCubit>().createList(name: newListName);
 }
 
-class ListNameTile extends StatelessWidget {
+class _ListNameTile extends StatelessWidget {
   final ShoppingList list;
 
-  const ListNameTile({
+  const _ListNameTile({
     Key? key,
     required this.list,
   }) : super(key: key);
@@ -104,9 +142,8 @@ class ListNameTile extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return ListTile(
-          leading: SizedBox(width: 1),
           selected: (state.currentListId == list.id),
-          title: Text(list.name),
+          title: Center(child: Text(list.name)),
           onTap: () {
             context.read<HomeCubit>().setCurrentList(list.id);
             if (mediaQuery.size.width < 600) {

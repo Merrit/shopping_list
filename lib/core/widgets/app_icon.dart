@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 
 /// Shopping List's own icon.
 class AppIcon extends StatelessWidget {
-  final double? size;
+  final double? height;
+  final double? width;
 
-  const AppIcon({this.size});
+  const AppIcon({
+    Key? key,
+    this.height,
+    this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      Icons.shopping_bag_outlined,
-      color: Colors.blue[300],
-      size: size,
+    return Image.asset(
+      'assets/icon/icon.png',
+      height: height,
+      width: width,
     );
   }
 }

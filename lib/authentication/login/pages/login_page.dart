@@ -16,11 +16,14 @@ class LoginPage extends StatelessWidget {
       child: BlocListener<LoginCubit, LoginState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
-          if (state.status == LoginStatus.submissionFailure) {
+          if (state.status is SubmissionFailure) {
+            final failure = state.status as SubmissionFailure;
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(content: Text('Authentication Failure')),
+                SnackBar(
+                  content: Text('Authentication Failure: ${failure.code}'),
+                ),
               );
           }
         },
@@ -31,31 +34,49 @@ class LoginPage extends StatelessWidget {
 }
 
 class LoginView extends StatelessWidget {
-  const LoginView({
+  LoginView({
     Key? key,
   }) : super(key: key);
 
-  final _spacer = const SizedBox(height: 12.0);
+  final children = <Widget>[
+    AppIcon(height: 100),
+    const SizedBox(height: 16.0),
+    EmailInput(FormType.login),
+    const SizedBox(height: 12.0),
+    PasswordInput(FormType.login),
+    const SizedBox(height: 12.0),
+    _LoginButton(),
+    const SizedBox(height: 12.0),
+    _GoogleLoginButton(),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
-      body: SingleColumnPagePadding(
-        child: SingleChildScrollViewWithExpanded(
-          children: [
-            const AppIcon(size: 120),
-            const SizedBox(height: 16.0),
-            EmailInput(FormType.login),
-            _spacer,
-            PasswordInput(FormType.login),
-            _spacer,
-            _LoginButton(),
-            _spacer,
-            _GoogleLoginButton(),
-            Spacer(),
-            _SignUpButton(),
-            const SizedBox(height: 20.0),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            const SliverPadding(padding: EdgeInsets.only(top: 10)),
+            for (var child in children)
+              SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: (mediaQuery.size.width < 600) ? 8 : 400,
+                ),
+                sliver: SliverToBoxAdapter(child: child),
+              ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: _SignUpButton(),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -69,8 +90,14 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status == LoginStatus.submissionInProgress) {
-          return const CircularProgressIndicator();
+        if (state.status is SubmissionInProgress) {
+          return const Center(
+            child: SizedBox(
+              height: 52,
+              width: 52,
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else {
           return SignInButton(
             Buttons.Email,

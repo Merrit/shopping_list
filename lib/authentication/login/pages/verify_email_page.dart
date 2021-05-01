@@ -15,7 +15,7 @@ class VerifyEmailPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Center(child: AppIcon(size: 150)),
+            Center(child: AppIcon()),
             const SizedBox(height: 50),
             const Text('A verification email has been sent to '
                 'the address provided.\n'

@@ -1,8 +1,10 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/settings/settings.dart';
 
 import 'authentication/authentication.dart';
+import 'authentication/enums/enums.dart';
 import 'home/home.dart';
 import 'shopping_list/shopping_list.dart';
 import 'splash/splash_screen.dart';
@@ -73,6 +75,7 @@ class _AppViewState extends State<AppView> {
         HomePage.id: (_) => HomePage(),
         ListSettingsPage.id: (_) => ListSettingsPage(),
         LoginPage.id: (_) => LoginPage(),
+        SettingsPage.id: (_) => SettingsPage(),
         SignUpPage.id: (_) => SignUpPage(),
         SplashPage.id: (_) => SplashPage(),
         VerifyEmailPage.id: (_) => VerifyEmailPage(),

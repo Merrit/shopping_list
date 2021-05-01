@@ -4,8 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pedantic/pedantic.dart';
-
-import '../authentication.dart';
+import 'package:shopping_list/authentication/enums/enums.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -18,7 +17,7 @@ class AuthenticationBloc
 
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-  })   : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState.unknown()) {
     _userSubscription = _authenticationRepository.user.listen(
       (user) => add(AuthenticationUserChanged(user)),
@@ -49,6 +48,6 @@ AuthenticationState _mapAuthenticationUserChangedToState(
   if (event.user != User.empty) {
     return AuthenticationState.authenticated(event.user);
   } else {
-    return const AuthenticationState.unauthenticated();
+    return AuthenticationState.unauthenticated();
   }
 }

@@ -16,7 +16,18 @@ class FirebaseShoppingListRepository implements ShoppingListRepository {
   }
 
   @override
-  Stream<List<ShoppingList>> shoppingLists() {
+  Future<List<ShoppingList>> shoppingLists() async {
+    final query = shoppingListCollection.where('owner', isEqualTo: userId);
+    final snapshot = await query.get();
+    return snapshot.docs.map((doc) {
+      return ShoppingList.fromEntity(
+        ShoppingListEntity.fromSnapshot(doc),
+      );
+    }).toList();
+  }
+
+  @override
+  Stream<List<ShoppingList>> shoppingListsStream() {
     final listsQuery = shoppingListCollection.where('owner', isEqualTo: userId);
     return listsQuery.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {

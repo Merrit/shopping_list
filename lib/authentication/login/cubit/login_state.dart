@@ -16,12 +16,12 @@ class LoginState extends Equatable {
     this.formStatus = FormStatus.unmodified,
   });
 
-  const LoginState.initial()
+  LoginState.initial()
       : email = const Email.initial(),
         password = const Password.initial(),
         confirmedPassword = const Password.initial(),
         formStatus = FormStatus.unmodified,
-        status = LoginStatus.none;
+        status = SignedOut();
 
   bool credentialsAreValid() {
     if (email.isValid && password.isValid) {

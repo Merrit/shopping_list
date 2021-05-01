@@ -3,7 +3,9 @@ import 'package:shopping_list_repository/shopping_list_repository.dart';
 abstract class ShoppingListRepository {
   Future<void> createNewShoppingList(ShoppingList shoppingList);
 
-  Stream<List<ShoppingList>> shoppingLists();
+  Future<List<ShoppingList>> shoppingLists();
+
+  Stream<List<ShoppingList>> shoppingListsStream();
 
   Future<void> updateShoppingList(ShoppingList shoppingList);
 

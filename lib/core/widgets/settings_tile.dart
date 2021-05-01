@@ -1,64 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'widgets.dart';
+import 'package:flutter/services.dart';
 
 class SettingsTile extends StatelessWidget {
-  final void Function(String value) onSubmitted;
+  final void Function(String value) onChanged;
+  final Widget? child;
+  final String defaultText;
+  final String hintText;
   final String label;
-  final String title;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   SettingsTile({
     Key? key,
-    required this.onSubmitted,
+    required this.onChanged,
+    this.child,
+    this.defaultText = '',
+    this.hintText = '',
     this.label = '',
-    this.title = '',
+    this.inputFormatters,
+    this.keyboardType,
   }) : super(key: key);
 
-  final _controller = TextEditingController();
+  late final _controller = TextEditingController();
   final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = title;
-    return ChangeNotifierProvider(
-      create: (context) => SettingsTileState(),
-      builder: (context, child) {
-        final state = context.watch<SettingsTileState>();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label),
-            SizedBox(height: 10),
-            Focus(
-              focusNode: _focusNode,
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  hintText: title,
-                  suffixIcon: (state.hasChanged)
-                      ? IconButton(
-                          onPressed: () => _submit(state),
-                          icon: Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
-                        )
-                      : null,
-                ),
-                onChanged: (_) => state.setChanged(true),
-                onSubmitted: (value) => _submit(state),
-              ),
-            ),
-          ],
-        );
-      },
+    _controller.text = defaultText;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label),
+        SizedBox(height: 10),
+        Focus(
+            focusNode: _focusNode,
+            child: child ??
+                TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                  ),
+                  inputFormatters: inputFormatters,
+                  keyboardType: keyboardType,
+                  onChanged: (value) => onChanged(value),
+                )),
+      ],
     );
-  }
-
-  void _submit(SettingsTileState state) {
-    onSubmitted(_controller.value.text);
-    state.setChanged(false);
-    _focusNode.unfocus();
   }
 }

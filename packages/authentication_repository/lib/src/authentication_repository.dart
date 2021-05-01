@@ -1,15 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'models/models.dart';
-
-class SignUpFailure implements Exception {}
-
-class LogInWithEmailAndPasswordFailure implements Exception {}
-
-class LogInWithGoogleFailure implements Exception {}
-
-class LogOutFailure implements Exception {}
+import '../authentication_repository.dart';
 
 class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -45,23 +38,25 @@ class AuthenticationRepository {
         password: password,
       );
       await userCredential.user?.sendEmailVerification();
-    } on Exception {
-      throw SignUpFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw SignUpFailure(e.code);
     }
   }
 
   Future<void> logInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) throw LogInWithGoogleFailure();
+      if (googleUser == null) {
+        throw LogInWithGoogleFailure('Sign in with Google aborted');
+      }
       final googleAuth = await googleUser.authentication;
       final credential = firebase_auth.GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
-    } on Exception {
-      throw LogInWithGoogleFailure();
+    } on PlatformException catch (e) {
+      throw LogInWithGoogleFailure(e.code);
     }
   }
 
@@ -74,8 +69,8 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on Exception {
-      throw LogInWithEmailAndPasswordFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw LogInWithEmailAndPasswordFailure(e);
     }
   }
 
@@ -86,7 +81,7 @@ class AuthenticationRepository {
         if (_googleSignIn.currentUser != null) _googleSignIn.signOut(),
       ]);
     } on Exception {
-      throw LogOutFailure();
+      throw LogOutFailure(code: 'Logout failed');
     }
   }
 }

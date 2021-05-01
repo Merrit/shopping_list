@@ -6,27 +6,28 @@ class HomeState {
   final String currentListId;
   final List<ShoppingList> shoppingLists;
 
-  const HomeState({
+  HomeState({
     this.currentListId = '',
     this.shoppingLists = const [],
+    this.prefs,
   });
 
-  HomeState copyWith(
-      {String? currentListId, List<ShoppingList>? shoppingLists}) {
+  SharedPreferences? prefs;
+
+  HomeState copyWith({
+    String? currentListId,
+    List<ShoppingList>? shoppingLists,
+    SharedPreferences? prefs,
+  }) {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
       shoppingLists: shoppingLists ?? this.shoppingLists,
+      prefs: prefs ?? this.prefs,
     );
   }
 
-  // !!
-  // New state is not emitted with Equatable.
-  // It considers changed list to be equatable.
-  //
-  // @override
-  // List<Object> get props => [currentListId, shoppingLists];
-
   @override
-  String toString() =>
-      'HomeState: currentListId: $currentListId, shoppingLists: $shoppingLists';
+  String toString() => 'HomeState: currentListId: $currentListId, '
+      'shoppingLists: $shoppingLists '
+      'prefs: $prefs';
 }

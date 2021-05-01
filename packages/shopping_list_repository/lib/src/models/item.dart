@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:shopping_list_repository/src/validators/item/quantity_validator.dart';
+
+import '../../shopping_list_repository.dart';
 
 @immutable
 class Item extends Equatable {
@@ -15,7 +16,7 @@ class Item extends Equatable {
 
   Item({
     required this.name,
-    this.aisle = 'Unsorted',
+    this.aisle = 'None',
     this.notes = '',
     this.isComplete = false,
     this.hasTax = false,
@@ -86,15 +87,16 @@ class Item extends Equatable {
 
   @override
   String toString() {
-    return '''Item {
-        name: $name,
-        aisle: $aisle,
-        notes: $notes,
-        isComplete: $isComplete,
-        hasTax: $hasTax,
-        quantity: $quantity,
-        price: $price,
-        total: $total,
-        }''';
+    return '''\n
+Item {
+  name: $name,
+  aisle: $aisle,
+  notes: $notes,
+  isComplete: $isComplete,
+  hasTax: $hasTax,
+  quantity: $quantity,
+  price: $price,
+  total: $total,
+}\n''';
   }
 }
