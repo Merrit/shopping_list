@@ -5,6 +5,7 @@ class ShoppingListState {
   final List<Aisle> aisles;
   final List<Item> items;
   final String taxRate;
+  final List<Label> labels;
 
   // State specific to the running app instance, rather than the ShoppingList.
   final List<Item> checkedItems;
@@ -16,6 +17,7 @@ class ShoppingListState {
     required this.aisles,
     required this.items,
     required this.taxRate,
+    required this.labels,
     required this.checkedItems,
     required this.columnSortIndex,
     required this.sortAscending,
@@ -27,6 +29,7 @@ class ShoppingListState {
       aisles: [],
       items: [],
       taxRate: '0',
+      labels: [],
       checkedItems: [],
       columnSortIndex: 0,
       sortAscending: false,
@@ -46,6 +49,7 @@ class ShoppingListState {
     List<Aisle>? aisles,
     List<Item>? items,
     String? taxRate,
+    List<Label>? labels,
     List<Item>? checkedItems,
     int? columnSortIndex,
     bool? sortAscending,
@@ -55,6 +59,7 @@ class ShoppingListState {
       aisles: aisles ?? this.aisles,
       items: items ?? this.items,
       taxRate: taxRate ?? this.taxRate,
+      labels: labels ?? this.labels,
       checkedItems: checkedItems ?? this.checkedItems,
       columnSortIndex: columnSortIndex ?? this.columnSortIndex,
       sortAscending: sortAscending ?? this.sortAscending,
@@ -62,7 +67,12 @@ class ShoppingListState {
   }
 
   @override
-  String toString() => 'ShoppingListState: name: $name, '
-      'aisles: $aisles, items: $items, checkedItems: $checkedItems '
-      'taxRate: $taxRate';
+  String toString() => '''\n
+ShoppingListState: name: $name,
+'aisles: $aisles,
+items: $items,
+labels: $labels,
+checkedItems: $checkedItems,
+taxRate: $taxRate
+\n''';
 }

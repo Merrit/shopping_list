@@ -29,7 +29,7 @@ class ListSettingsView extends StatelessWidget {
           padding: const EdgeInsets.all(30),
           children: [
             SettingsTile(
-              label: 'List name',
+              label: Text('List name'),
               hintText: state.name,
               onChanged: (value) => cubit.updateListName(value),
             ),

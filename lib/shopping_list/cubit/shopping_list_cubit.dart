@@ -54,6 +54,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       name: list.name,
       aisles: list.aisles,
       items: list.items,
+      labels: list.labels,
     ));
   }
 
@@ -192,6 +193,19 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   void updateTaxRate() {
     emit(state.copyWith(taxRate: taxRate));
+  }
+
+  void addLabel({required String name, String color = ''}) {
+    final newLabel = Label(name: name, color: color);
+    _shoppingList.labels.add(newLabel);
+    _updateList(_shoppingList);
+    emit(state.copyWith(labels: _shoppingList.labels));
+  }
+
+  void deleteLabel(Label label) {
+    _shoppingList.labels.remove(label);
+    _updateList(_shoppingList);
+    emit(state.copyWith(labels: _shoppingList.labels));
   }
 
   @override

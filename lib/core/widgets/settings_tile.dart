@@ -6,7 +6,7 @@ class SettingsTile extends StatelessWidget {
   final Widget? child;
   final String defaultText;
   final String hintText;
-  final String label;
+  final Widget label;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
   final int? maxLines;
@@ -17,7 +17,7 @@ class SettingsTile extends StatelessWidget {
     this.child,
     this.defaultText = '',
     this.hintText = '',
-    this.label = '',
+    this.label = const Text(''),
     this.inputFormatters,
     this.keyboardType,
     this.maxLines,
@@ -32,7 +32,7 @@ class SettingsTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label),
+        label,
         SizedBox(height: 10),
         Focus(
             focusNode: _focusNode,

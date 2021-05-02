@@ -1,9 +1,13 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
 import '../../shopping_list_repository.dart';
 
+part 'item.g.dart';
+
 @immutable
+@JsonSerializable()
 class Item extends Equatable {
   final String name;
   final String aisle;
@@ -14,6 +18,9 @@ class Item extends Equatable {
   final String price;
   final String total;
 
+  @JsonKey(defaultValue: <String>[])
+  final List<String> labels;
+
   Item({
     required this.name,
     this.aisle = 'None',
@@ -23,6 +30,7 @@ class Item extends Equatable {
     String quantity = '1',
     this.price = '0.00',
     this.total = '0.00',
+    this.labels = const [],
   }) : quantity = QuantityValidator(quantity).validate();
 
   Item copyWith({
@@ -34,6 +42,7 @@ class Item extends Equatable {
     String? quantity,
     String? price,
     String? total,
+    List<String>? labels,
   }) {
     return Item(
       name: name ?? this.name,
@@ -44,34 +53,13 @@ class Item extends Equatable {
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       total: total ?? this.total,
+      labels: labels ?? this.labels,
     );
   }
 
-  Map<String, Object> toJson() {
-    return {
-      'name': name,
-      'aisle': aisle,
-      'notes': notes,
-      'isComplete': isComplete,
-      'hasTax': hasTax,
-      'quantity': quantity,
-      'price': price,
-      'total': total,
-    };
-  }
+  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
-  static Item fromJson(Map<String, Object> json) {
-    return Item(
-      name: json['name'] as String,
-      aisle: json['aisle'] as String,
-      notes: json['notes'] as String,
-      isComplete: json['isComplete'] as bool,
-      hasTax: json['hasTax'] as bool,
-      quantity: json['quantity'] as String,
-      price: json['price'] as String,
-      total: json['total'] as String,
-    );
-  }
+  Map<String, dynamic> toJson() => _$ItemToJson(this);
 
   @override
   List<Object?> get props => [
@@ -83,6 +71,7 @@ class Item extends Equatable {
         quantity,
         price,
         total,
+        labels,
       ];
 
   @override
@@ -97,6 +86,7 @@ Item {
   quantity: $quantity,
   price: $price,
   total: $total,
+  labels: $labels,
 }\n''';
   }
 }

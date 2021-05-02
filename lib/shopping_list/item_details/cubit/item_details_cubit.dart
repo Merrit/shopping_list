@@ -15,6 +15,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           total: item.total,
           hasTax: item.hasTax,
           notes: item.notes,
+          labels: item.labels,
         ));
 
   void updateName(String name) {
@@ -47,6 +48,16 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
 
   void updateNotes(String notes) {
     emit(state.copyWith(notes: notes));
+  }
+
+  void toggleLabel(String label) {
+    final labels = state.labels;
+    if (labels.contains(label)) {
+      labels.remove(label);
+    } else {
+      labels.add(label);
+    }
+    emit(state.copyWith(labels: labels));
   }
 
   Item updatedItem() {

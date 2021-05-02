@@ -59,7 +59,8 @@ class ItemDetailsView extends StatelessWidget {
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       buildWhen: (previous, current) =>
           (previous.aisle != current.aisle) ||
-          (previous.hasTax != current.hasTax),
+          (previous.hasTax != current.hasTax) ||
+          (previous.labels != current.labels),
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
         final shoppingCubit = context.watch<ShoppingListCubit>();
@@ -77,19 +78,19 @@ class ItemDetailsView extends StatelessWidget {
             // TODO: Create a custom `Settings` section with built-in
             // padding between items and what-not.
             SettingsTile(
-              label: 'Name',
+              label: Text('Name'),
               hintText: itemDetailsCubit.state.name,
               onChanged: (value) => itemDetailsCubit.updateName(value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Quantity',
+              label: Text('Quantity'),
               hintText: state.quantity,
               onChanged: (value) => itemDetailsCubit.updateQuantity(value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Aisle',
+              label: Text('Aisle'),
               onChanged: (value) => itemDetailsCubit.updateAisle(value),
               child: ActionChip(
                 label: Text(
@@ -116,7 +117,7 @@ class ItemDetailsView extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Price',
+              label: Text('Price'),
               hintText: state.price,
               inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
               keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -124,7 +125,7 @@ class ItemDetailsView extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Has Tax',
+              label: Text('Has Tax'),
               onChanged: (value) {},
               child: Column(
                 children: [
@@ -148,9 +149,50 @@ class ItemDetailsView extends StatelessWidget {
                 ],
               ),
             ),
+            _Buffer(),
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 6.0,
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.label),
+                  title: Text('Labels'),
+                  subtitle: BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+                    builder: (context, state) {
+                      return Wrap(
+                        // spacing: 10,
+                        children: state.labels
+                            .map((label) => Chip(label: Text(label)))
+                            .toList(),
+                      );
+                    },
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(value: itemDetailsCubit),
+                              BlocProvider.value(value: shoppingCubit),
+                            ],
+                            child: ChooseLabelsPage(),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Notes',
+              label: Text('Notes'),
               defaultText: state.notes,
               keyboardType: TextInputType.multiline,
               maxLines: null,
@@ -172,5 +214,16 @@ class ItemDetailsView extends StatelessWidget {
     } else {
       return verifiedAisle;
     }
+  }
+}
+
+class _Buffer extends StatelessWidget {
+  const _Buffer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(height: 40);
   }
 }

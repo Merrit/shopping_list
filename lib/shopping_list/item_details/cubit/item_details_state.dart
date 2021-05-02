@@ -1,6 +1,6 @@
 part of 'item_details_cubit.dart';
 
-class ItemDetailsState extends Equatable {
+class ItemDetailsState {
   final Item _item;
   final String name;
   final String quantity;
@@ -9,6 +9,7 @@ class ItemDetailsState extends Equatable {
   final String total;
   final bool hasTax;
   final String notes;
+  final List<String> labels;
 
   const ItemDetailsState({
     required Item item,
@@ -19,22 +20,8 @@ class ItemDetailsState extends Equatable {
     required this.total,
     required this.hasTax,
     required this.notes,
+    required this.labels,
   }) : _item = item;
-
-  @override
-  List<Object> get props => [
-        _item,
-        name,
-        quantity,
-        aisle,
-        price,
-        total,
-        hasTax,
-        notes,
-      ];
-
-  @override
-  bool get stringify => true;
 
   ItemDetailsState copyWith({
     String? name,
@@ -44,6 +31,7 @@ class ItemDetailsState extends Equatable {
     String? total,
     bool? hasTax,
     String? notes,
+    List<String>? labels,
   }) {
     return ItemDetailsState(
       item: _item,
@@ -54,6 +42,7 @@ class ItemDetailsState extends Equatable {
       total: total ?? this.total,
       hasTax: hasTax ?? this.hasTax,
       notes: notes ?? this.notes,
+      labels: labels ?? this.labels,
     );
   }
 }

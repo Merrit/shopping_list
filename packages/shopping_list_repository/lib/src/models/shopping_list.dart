@@ -12,6 +12,7 @@ class ShoppingList extends Equatable {
   final String id;
   final String owner;
   final List<String> allowedUsers;
+  final List<Label> labels;
 
   const ShoppingList._internal({
     required this.name,
@@ -20,6 +21,7 @@ class ShoppingList extends Equatable {
     required this.id,
     required this.owner,
     required this.allowedUsers,
+    required this.labels,
   });
 
   factory ShoppingList({
@@ -29,6 +31,7 @@ class ShoppingList extends Equatable {
     String id = '',
     required String owner,
     List<String> allowedUsers = const [],
+    List<Label> labels = const [],
   }) {
     return ShoppingList._internal(
       name: name,
@@ -37,6 +40,7 @@ class ShoppingList extends Equatable {
       id: id,
       owner: owner,
       allowedUsers: allowedUsers,
+      labels: labels.toSet().toList(),
     );
   }
 
@@ -47,6 +51,7 @@ class ShoppingList extends Equatable {
     String? id,
     String? owner,
     List<String>? allowedUsers,
+    List<Label>? labels,
   }) {
     return ShoppingList(
       name: name ?? this.name,
@@ -55,6 +60,7 @@ class ShoppingList extends Equatable {
       id: id ?? this.id,
       owner: owner ?? this.owner,
       allowedUsers: allowedUsers ?? this.allowedUsers,
+      labels: labels ?? this.labels,
     );
   }
 
@@ -66,17 +72,20 @@ class ShoppingList extends Equatable {
       id: id,
       owner: owner,
       allowedUsers: allowedUsers,
+      labels: labels.map((label) => label.toJson()).toList(),
     );
   }
 
   static ShoppingList fromEntity(ShoppingListEntity entity) {
     return ShoppingList(
-        name: entity.name,
-        aisles: entity.aisles.map((json) => Aisle.fromJson(json)).toList(),
-        items: entity.items.map((json) => Item.fromJson(json)).toList(),
-        id: entity.id,
-        owner: entity.owner,
-        allowedUsers: entity.allowedUsers);
+      name: entity.name,
+      aisles: entity.aisles.map((json) => Aisle.fromJson(json)).toList(),
+      items: entity.items.map((json) => Item.fromJson(json)).toList(),
+      id: entity.id,
+      owner: entity.owner,
+      allowedUsers: entity.allowedUsers,
+      labels: entity.labels.map((json) => Label.fromJson(json)).toList(),
+    );
   }
 
   @override

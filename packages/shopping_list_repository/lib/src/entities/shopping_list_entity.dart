@@ -4,10 +4,11 @@ import 'package:equatable/equatable.dart';
 class ShoppingListEntity extends Equatable {
   final String name;
   final List<Map<String, String>> aisles;
-  final List<Map<String, Object>> items;
+  final List<Map<String, dynamic>> items;
   final String id;
   final String owner;
   final List<String> allowedUsers;
+  final List<Map<String, dynamic>> labels;
 
   const ShoppingListEntity({
     required this.name,
@@ -16,6 +17,7 @@ class ShoppingListEntity extends Equatable {
     required this.id,
     required this.owner,
     required this.allowedUsers,
+    required this.labels,
   });
 
   Map<String, Object> toJson() {
@@ -26,6 +28,7 @@ class ShoppingListEntity extends Equatable {
       'id': id,
       'owner': owner,
       'allowedUsers': allowedUsers,
+      'labels': labels,
     };
   }
 
@@ -37,6 +40,7 @@ class ShoppingListEntity extends Equatable {
       id: json['id'] as String,
       owner: json['owner'] as String,
       allowedUsers: json['allowedUsers'] as List<String>,
+      labels: json['labels'] as List<Map<String, String>>,
     );
   }
 
@@ -50,6 +54,7 @@ class ShoppingListEntity extends Equatable {
       id: snapshot.id,
       owner: data?['owner'] as String,
       allowedUsers: List<String>.from(data?['allowedUsers']),
+      labels: _convertLabels(data),
     );
   }
 
@@ -60,11 +65,20 @@ class ShoppingListEntity extends Equatable {
       'items': items,
       'owner': owner,
       'allowedUsers': allowedUsers,
+      'labels': labels,
     };
   }
 
   @override
-  List<Object> get props => [name, aisles, items, id, owner, allowedUsers];
+  List<Object> get props => [
+        name,
+        aisles,
+        items,
+        id,
+        owner,
+        allowedUsers,
+        labels,
+      ];
 
   @override
   String toString() {
@@ -75,6 +89,7 @@ class ShoppingListEntity extends Equatable {
         id: $id,
         owner: $owner,
         allowedUsers: $allowedUsers,
+        labels: $labels,
         }''';
   }
 }
@@ -88,7 +103,19 @@ List<Map<String, Object>> _convertItems(List<dynamic> itemsData) {
 
 /// Converting from Firebase Array of Maps to a dart List of Maps.
 List<Map<String, String>> _convertAisles(List<dynamic> aislesData) {
-  return aislesData.map((aisle) {
-    return Map<String, String>.from(aisle);
+  return aislesData.map((e) {
+    return Map<String, String>.from(e);
   }).toList();
+}
+
+/// Converting from Firebase Array of Maps to a dart List of Maps.
+List<Map<String, dynamic>> _convertLabels(Map<String, dynamic>? data) {
+  if (data!.containsKey('labels')) {
+    final rawLabels = data['labels'] as List<dynamic>;
+    return rawLabels.map((e) {
+      return Map<String, dynamic>.from(e);
+    }).toList();
+  } else {
+    return <Map<String, dynamic>>[];
+  }
 }
