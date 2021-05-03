@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_list/core/validators/validators.dart';
 
 import '../shopping_list.dart';
@@ -13,14 +14,21 @@ class FloatingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
-        return Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: (state.checkedItems.isEmpty)
-                ? const _CreateItemButton()
-                : const _SetCompletedButton(),
-          ),
+        return Consumer<ActiveListState>(
+          builder: (context, value, child) {
+            return Visibility(
+              visible: value.showFloatingButton,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: (state.checkedItems.isEmpty)
+                      ? const _CreateItemButton()
+                      : const _SetCompletedButton(),
+                ),
+              ),
+            );
+          },
         );
       },
     );

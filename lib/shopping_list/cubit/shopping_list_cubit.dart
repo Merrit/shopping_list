@@ -28,6 +28,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
           .firstWhere((element) => element.id == currentListId);
       _listChanged(shoppingList);
     }
+    homeCubit.updateShoppingListCubit(this);
     _listenToHomeCubit(homeCubit);
   }
 
@@ -89,6 +90,13 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     );
     _shoppingList.items.add(newItem.copyWith(total: updatedTotal));
     _shoppingListRepository.updateShoppingList(_shoppingList);
+  }
+
+  void setItemNotCompleted(Item item) {
+    _shoppingList.items.remove(item);
+    _shoppingList.items.add(item.copyWith(isComplete: false));
+    _updateList(_shoppingList);
+    emit(state.copyWith(items: _shoppingList.items));
   }
 
   void deleteItem(Item item) {

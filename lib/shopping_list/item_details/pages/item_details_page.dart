@@ -151,6 +151,7 @@ class ItemDetailsView extends StatelessWidget {
             ),
             _Buffer(),
             Card(
+              elevation: 4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
@@ -166,7 +167,11 @@ class ItemDetailsView extends StatelessWidget {
                       return Wrap(
                         // spacing: 10,
                         children: state.labels
-                            .map((label) => Chip(label: Text(label)))
+                            .map(
+                              (label) => Chip(
+                                label: Text(label),
+                              ),
+                            )
                             .toList(),
                       );
                     },

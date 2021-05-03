@@ -10,24 +10,29 @@ class HomeState {
     this.currentListId = '',
     this.shoppingLists = const [],
     this.prefs,
+    this.shoppingListCubit,
   });
 
   SharedPreferences? prefs;
+  ShoppingListCubit? shoppingListCubit;
 
   HomeState copyWith({
     String? currentListId,
     List<ShoppingList>? shoppingLists,
     SharedPreferences? prefs,
+    ShoppingListCubit? shoppingListCubit,
   }) {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
       shoppingLists: shoppingLists ?? this.shoppingLists,
       prefs: prefs ?? this.prefs,
+      shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
     );
   }
 
   @override
   String toString() => 'HomeState: currentListId: $currentListId, '
       'shoppingLists: $shoppingLists '
-      'prefs: $prefs';
+      'prefs: $prefs'
+      'shoppingListCubit: $shoppingListCubit';
 }
