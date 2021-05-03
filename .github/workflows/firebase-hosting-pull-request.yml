@@ -13,7 +13,8 @@ jobs:
           channel: dev
       - run: flutter config --enable-web
       - run: flutter pub get
-      # - run: flutter test
+      - run: flutter pub run build_runner build
+      - run: flutter test
       - run: flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
