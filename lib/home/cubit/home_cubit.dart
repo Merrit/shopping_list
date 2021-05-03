@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
+import 'package:shopping_list/repositories/authentication_repository/repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 part 'home_state.dart';
 

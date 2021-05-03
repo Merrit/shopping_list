@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
-import '../../shopping_list_repository.dart';
+import '../repository.dart';
 
 part 'item.g.dart';
 

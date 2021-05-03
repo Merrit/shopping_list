@@ -1,4 +1,4 @@
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class ItemSorter {
   List<Item> sort({

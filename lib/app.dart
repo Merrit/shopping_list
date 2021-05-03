@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/settings/settings.dart';
@@ -6,6 +5,7 @@ import 'package:shopping_list/settings/settings.dart';
 import 'authentication/authentication.dart';
 import 'authentication/enums/enums.dart';
 import 'home/home.dart';
+import 'repositories/authentication_repository/repository.dart';
 import 'shopping_list/shopping_list.dart';
 import 'splash/splash_screen.dart';
 import 'theme.dart';

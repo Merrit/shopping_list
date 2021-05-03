@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shopping_list_repository/src/models/shopping_list.dart';
 
-import 'entities/shopping_list_entity.dart';
-import 'shopping_list_repository.dart';
+import 'repository.dart';
 
 class FirebaseShoppingListRepository implements ShoppingListRepository {
   final shoppingListCollection = FirebaseFirestore.instance.collection('lists');

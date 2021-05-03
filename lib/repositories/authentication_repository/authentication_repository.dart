@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../authentication_repository.dart';
+import 'repository.dart';
 
 class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;

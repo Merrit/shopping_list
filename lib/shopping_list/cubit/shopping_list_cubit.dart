@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 part 'shopping_list_state.dart';
 

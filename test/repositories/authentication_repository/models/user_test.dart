@@ -1,5 +1,5 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 void main() {
   final user = User(

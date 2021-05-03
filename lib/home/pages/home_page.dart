@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 import '../home.dart';
 

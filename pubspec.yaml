@@ -9,15 +9,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  authentication_repository:
-    path: packages/authentication_repository
-  shopping_list_repository:
-    path: packages/shopping_list_repository
+  cloud_firestore: ^1.0.5
   equatable: ^2.0.0
+  firebase_auth: ^1.0.3
+  firebase_core: ^1.0.3
   flutter_bloc: ^7.0.0
   flutter_signin_button: ^2.0.0
-  grouped_list: ^4.0.0
+  google_sign_in: ^5.0.1
   logging: ^1.0.1
+  meta: ^1.1.8
   money2: ^2.0.2
   pedantic: ^1.11.0
   provider: ^5.0.0
@@ -27,6 +27,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^8.0.0
+  build_runner: ^1.12.2
   flutter_launcher_icons: ^0.9.0
   mockito: ^5.0.3
 

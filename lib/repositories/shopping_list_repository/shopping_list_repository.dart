@@ -1,4 +1,4 @@
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'repository.dart';
 
 abstract class ShoppingListRepository {
   Future<void> createNewShoppingList(ShoppingList shoppingList);
