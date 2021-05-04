@@ -1,3 +1,4 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/core/core.dart';
@@ -12,7 +13,9 @@ class ListSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text('List settings'),
+        ),
         body: ListSettingsView(),
       ),
     );
@@ -20,9 +23,15 @@ class ListSettingsPage extends StatelessWidget {
 }
 
 class ListSettingsView extends StatelessWidget {
+  late final ShoppingListCubit cubit;
+
+  void _updateColor(Color color) => cubit.updateColor(color.value);
+
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ShoppingListCubit>();
+    cubit = context.read<ShoppingListCubit>();
+    final black = Colors.white.value;
+    print('black: $black');
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
         return ListView(
@@ -33,8 +42,48 @@ class ListSettingsView extends StatelessWidget {
               hintText: state.name,
               onChanged: (value) => cubit.updateListName(value),
             ),
-            SizedBox(height: 30),
-            TextButton(
+            const SizedBox(height: 30),
+            Card(
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 16,
+                ),
+                title: const Text('List name color'),
+                trailing: ColorIndicator(
+                  width: 44,
+                  height: 44,
+                  borderRadius: 4,
+                  color: Color(state.color),
+                ),
+                onTap: () async {
+                  final colorBeforeDialog = state.color;
+                  final confirmed = await ColorPicker(
+                    // Current color is pre-selected.
+                    color: Color(state.color),
+                    onColorChanged: (Color color) => _updateColor(color),
+                    // width: 40,
+                    // height: 30,
+                    // borderRadius: 4,
+                    // spacing: 5,
+                    // runSpacing: 5,
+                    heading: Text('Select color'),
+                    subheading: Text('Select color shade'),
+                    pickersEnabled: const <ColorPickerType, bool>{
+                      ColorPickerType.primary: true,
+                      ColorPickerType.accent: false,
+                    },
+                  ).showPickerDialog(
+                    context,
+                    // constraints: const BoxConstraints(
+                    //     minHeight: 460, minWidth: 300, maxWidth: 320),
+                  );
+                  if (!confirmed) cubit.updateColor(colorBeforeDialog);
+                },
+              ),
+            ),
+            const SizedBox(height: 100),
+            OutlinedButton(
               onPressed: () => _deleteList(cubit, context),
               child: Text(
                 'Delete list',

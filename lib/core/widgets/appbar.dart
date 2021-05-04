@@ -11,12 +11,21 @@ class ShoppingListAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
+        var shoppingCubit = state.shoppingListCubit;
+        var listColor = (shoppingCubit == null)
+            ? Colors.white.value
+            : shoppingCubit.state.color;
         final _shoppingList = state.shoppingLists
             .firstWhereOrNull((list) => list.id == state.currentListId);
         return (_shoppingList == null)
             ? AppBar()
             : AppBar(
-                title: Text(_shoppingList.name),
+                title: Text(
+                  _shoppingList.name,
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: Color(listColor),
+                      ),
+                ),
                 actions: [
                   PopupMenuButton(
                     itemBuilder: (context) {

@@ -6,6 +6,8 @@ import 'models.dart';
 
 part 'shopping_list.g.dart';
 
+const _defaultListColor = 4294967295; // White
+
 @immutable
 @JsonSerializable(explicitToJson: true)
 class ShoppingList extends Equatable {
@@ -17,6 +19,9 @@ class ShoppingList extends Equatable {
   final String name;
   final String owner;
 
+  @JsonKey(defaultValue: _defaultListColor)
+  final int color;
+
   @JsonKey(defaultValue: 'Name')
   final String sortBy;
 
@@ -26,6 +31,7 @@ class ShoppingList extends Equatable {
   const ShoppingList._internal({
     required this.name,
     required this.aisles,
+    required this.color,
     required this.items,
     required this.id,
     required this.owner,
@@ -39,6 +45,7 @@ class ShoppingList extends Equatable {
     required String name,
     List<Aisle> aisles = const [],
     List<Item> items = const [],
+    int color = _defaultListColor,
     String id = '',
     required String owner,
     List<String> allowedUsers = const [],
@@ -50,6 +57,7 @@ class ShoppingList extends Equatable {
       name: name,
       aisles: aisles.toSet().toList(), // Ensure no duplicates.
       items: items.toSet().toList(), // Ensure no duplicates.
+      color: color,
       id: id,
       owner: owner,
       allowedUsers: allowedUsers,
@@ -62,6 +70,7 @@ class ShoppingList extends Equatable {
   ShoppingList copyWith({
     String? name,
     List<Aisle>? aisles,
+    int? color,
     List<Item>? items,
     String? id,
     String? owner,
@@ -73,6 +82,7 @@ class ShoppingList extends Equatable {
     return ShoppingList(
       name: name ?? this.name,
       aisles: aisles ?? this.aisles,
+      color: color ?? this.color,
       items: items ?? this.items,
       id: id ?? this.id,
       owner: owner ?? this.owner,
@@ -89,7 +99,18 @@ class ShoppingList extends Equatable {
   Map<String, dynamic> toJson() => _$ShoppingListToJson(this);
 
   @override
-  List<Object> get props => [name, aisles, items, id, owner, allowedUsers];
+  List<Object> get props => [
+        name,
+        aisles,
+        items,
+        id,
+        owner,
+        allowedUsers,
+        color,
+        labels,
+        sortBy,
+        sortAscending,
+      ];
 
   @override
   String toString() {
@@ -100,6 +121,10 @@ class ShoppingList extends Equatable {
         id: $id,
         owner: $owner,
         allowedUsers: $allowedUsers,
+        color: $color,
+        labels: $labels,
+        sortBy: $sortBy,
+        sortAscending: $sortAscending,
         }''';
   }
 }

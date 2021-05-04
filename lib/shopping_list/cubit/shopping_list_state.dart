@@ -6,6 +6,7 @@ class ShoppingListState {
   final List<Item> items;
   final String taxRate;
   final List<Label> labels;
+  final int color;
 
   // State specific to the running app instance, rather than the ShoppingList.
   final List<Item> checkedItems;
@@ -21,6 +22,7 @@ class ShoppingListState {
     required this.checkedItems,
     required this.sortBy,
     required this.sortAscending,
+    required this.color,
   });
 
   factory ShoppingListState.initial() {
@@ -33,6 +35,7 @@ class ShoppingListState {
       checkedItems: [],
       sortBy: 'Name',
       sortAscending: false,
+      color: Colors.white.value,
     );
   }
 
@@ -53,6 +56,7 @@ class ShoppingListState {
     List<Item>? checkedItems,
     String? sortBy,
     bool? sortAscending,
+    int? color,
   }) {
     return ShoppingListState(
       name: name ?? this.name,
@@ -63,6 +67,7 @@ class ShoppingListState {
       checkedItems: checkedItems ?? this.checkedItems,
       sortBy: sortBy ?? this.sortBy,
       sortAscending: sortAscending ?? this.sortAscending,
+      color: color ?? this.color,
     );
   }
 
@@ -75,5 +80,6 @@ labels: $labels,
 checkedItems: $checkedItems,
 sortBy: $sortBy,
 taxRate: $taxRate
+color: $color,
 \n''';
 }

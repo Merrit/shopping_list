@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
@@ -72,6 +73,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
         checkedItems: state.checkedItems,
         sortBy: list.sortBy,
         sortAscending: list.sortAscending,
+        color: list.color,
       ),
     );
   }
@@ -230,6 +232,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _shoppingList.labels.remove(label);
     _updateList(_shoppingList);
     emit(state.copyWith(labels: _shoppingList.labels));
+  }
+
+  void updateColor(int color) {
+    _updateList(_shoppingList.copyWith(color: color));
   }
 
   @override

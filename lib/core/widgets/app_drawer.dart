@@ -143,7 +143,14 @@ class _ListNameTile extends StatelessWidget {
       builder: (context, state) {
         return ListTile(
           selected: (state.currentListId == list.id),
-          title: Center(child: Text(list.name)),
+          title: Center(
+            child: Text(
+              list.name,
+              style: Theme.of(context).textTheme.headline6!.copyWith(
+                    color: Color(list.color),
+                  ),
+            ),
+          ),
           onTap: () {
             context.read<HomeCubit>().setCurrentList(list.id);
             if (mediaQuery.size.width < 600) {
