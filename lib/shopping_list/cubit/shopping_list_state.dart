@@ -9,7 +9,7 @@ class ShoppingListState {
 
   // State specific to the running app instance, rather than the ShoppingList.
   final List<Item> checkedItems;
-  final int columnSortIndex;
+  final String sortBy;
   final bool sortAscending;
 
   ShoppingListState({
@@ -19,7 +19,7 @@ class ShoppingListState {
     required this.taxRate,
     required this.labels,
     required this.checkedItems,
-    required this.columnSortIndex,
+    required this.sortBy,
     required this.sortAscending,
   });
 
@@ -31,7 +31,7 @@ class ShoppingListState {
       taxRate: '0',
       labels: [],
       checkedItems: [],
-      columnSortIndex: 0,
+      sortBy: 'Name',
       sortAscending: false,
     );
   }
@@ -51,7 +51,7 @@ class ShoppingListState {
     String? taxRate,
     List<Label>? labels,
     List<Item>? checkedItems,
-    int? columnSortIndex,
+    String? sortBy,
     bool? sortAscending,
   }) {
     return ShoppingListState(
@@ -61,7 +61,7 @@ class ShoppingListState {
       taxRate: taxRate ?? this.taxRate,
       labels: labels ?? this.labels,
       checkedItems: checkedItems ?? this.checkedItems,
-      columnSortIndex: columnSortIndex ?? this.columnSortIndex,
+      sortBy: sortBy ?? this.sortBy,
       sortAscending: sortAscending ?? this.sortAscending,
     );
   }
@@ -73,6 +73,7 @@ ShoppingListState: name: $name,
 items: $items,
 labels: $labels,
 checkedItems: $checkedItems,
+sortBy: $sortBy,
 taxRate: $taxRate
 \n''';
 }

@@ -11,10 +11,14 @@ Future<Object?> showSlideInSidePanel({
     barrierDismissible: true,
     barrierLabel: 'slideInSidePanelBarrier',
     pageBuilder: (context, animation, secondaryAnimation) {
-      return MultiBlocProvider(
-        providers: providers,
-        child: SlideInSidePanel(child: child),
-      );
+      if (providers.isNotEmpty) {
+        return MultiBlocProvider(
+          providers: providers,
+          child: SlideInSidePanel(child: child),
+        );
+      } else {
+        return SlideInSidePanel(child: child);
+      }
     },
   );
 }

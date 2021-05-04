@@ -1,18 +1,27 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 
-import '../entities/entities.dart';
 import 'models.dart';
 
+part 'shopping_list.g.dart';
+
 @immutable
+@JsonSerializable(explicitToJson: true)
 class ShoppingList extends Equatable {
-  final String name;
   final List<Aisle> aisles;
-  final List<Item> items;
-  final String id;
-  final String owner;
   final List<String> allowedUsers;
+  final String id;
+  final List<Item> items;
   final List<Label> labels;
+  final String name;
+  final String owner;
+
+  @JsonKey(defaultValue: 'Name')
+  final String sortBy;
+
+  @JsonKey(defaultValue: true)
+  final bool sortAscending;
 
   const ShoppingList._internal({
     required this.name,
@@ -22,6 +31,8 @@ class ShoppingList extends Equatable {
     required this.owner,
     required this.allowedUsers,
     required this.labels,
+    required this.sortBy,
+    required this.sortAscending,
   });
 
   factory ShoppingList({
@@ -32,6 +43,8 @@ class ShoppingList extends Equatable {
     required String owner,
     List<String> allowedUsers = const [],
     List<Label> labels = const [],
+    String sortBy = 'Name',
+    bool sortAscending = true,
   }) {
     return ShoppingList._internal(
       name: name,
@@ -40,7 +53,9 @@ class ShoppingList extends Equatable {
       id: id,
       owner: owner,
       allowedUsers: allowedUsers,
-      labels: labels.toSet().toList(),
+      labels: labels.toSet().toList(), // Ensure no duplicates.
+      sortBy: sortBy,
+      sortAscending: sortAscending,
     );
   }
 
@@ -52,6 +67,8 @@ class ShoppingList extends Equatable {
     String? owner,
     List<String>? allowedUsers,
     List<Label>? labels,
+    String? sortBy,
+    bool? sortAscending,
   }) {
     return ShoppingList(
       name: name ?? this.name,
@@ -61,32 +78,15 @@ class ShoppingList extends Equatable {
       owner: owner ?? this.owner,
       allowedUsers: allowedUsers ?? this.allowedUsers,
       labels: labels ?? this.labels,
+      sortBy: sortBy ?? this.sortBy,
+      sortAscending: sortAscending ?? this.sortAscending,
     );
   }
 
-  ShoppingListEntity toEntity() {
-    return ShoppingListEntity(
-      name: name,
-      aisles: aisles.map((aisle) => aisle.toJson()).toList(),
-      items: items.map((item) => item.toJson()).toList(),
-      id: id,
-      owner: owner,
-      allowedUsers: allowedUsers,
-      labels: labels.map((label) => label.toJson()).toList(),
-    );
-  }
+  factory ShoppingList.fromJson(Map<String, dynamic> json) =>
+      _$ShoppingListFromJson(json);
 
-  static ShoppingList fromEntity(ShoppingListEntity entity) {
-    return ShoppingList(
-      name: entity.name,
-      aisles: entity.aisles.map((json) => Aisle.fromJson(json)).toList(),
-      items: entity.items.map((json) => Item.fromJson(json)).toList(),
-      id: entity.id,
-      owner: entity.owner,
-      allowedUsers: entity.allowedUsers,
-      labels: entity.labels.map((json) => Label.fromJson(json)).toList(),
-    );
-  }
+  Map<String, dynamic> toJson() => _$ShoppingListToJson(this);
 
   @override
   List<Object> get props => [name, aisles, items, id, owner, allowedUsers];
