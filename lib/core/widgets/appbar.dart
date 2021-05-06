@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/shopping_list/pages/completed_items_paged.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
 
 import '../../home/home.dart';
@@ -129,7 +130,7 @@ void _showCompletedItems({required BuildContext context}) {
   AdaptiveViewManager().pushView(
     context: context,
     providers: [shoppingProvider],
-    page: SortByPage(),
-    view: SortByView(),
+    page: CompletedItemsPage(),
+    view: CompletedItemsView(),
   );
 }
