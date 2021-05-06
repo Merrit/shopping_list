@@ -10,6 +10,7 @@ jobs:
           channel: beta
       - run: |
           flutter pub get
+          flutter pub run build_runner build
           flutter build apk
           flutter build appbundle
       - uses: actions/upload-artifact@v2
