@@ -1,13 +1,27 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 import '../../shopping_list.dart';
 
+// ignore: must_be_immutable
 class ChooseLabelsPage extends StatelessWidget {
+  late ItemDetailsCubit itemDetailsCubit;
+  late ShoppingListCubit shoppingCubit;
+
+  void _updateColor(Color color, Label label) {
+    shoppingCubit.updateColor(
+      color: color.value,
+      colorUpdate: ColorUpdate.label,
+      oldLabel: label,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final itemDetailsCubit = context.read<ItemDetailsCubit>();
-    final shoppingCubit = context.read<ShoppingListCubit>();
+    itemDetailsCubit = context.read<ItemDetailsCubit>();
+    shoppingCubit = context.read<ShoppingListCubit>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Labels'),
@@ -17,21 +31,45 @@ class ChooseLabelsPage extends StatelessWidget {
         child: Column(
           children: [
             BlocBuilder<ShoppingListCubit, ShoppingListState>(
-              builder: (context, state) {
+              builder: (context, shoppingListState) {
                 return Wrap(
                   spacing: 15,
-                  children: state.labels
+                  children: shoppingListState.labels
                       .map(
                         (label) =>
                             BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
                           builder: (context, itemDetailsState) {
-                            return FilterChip(
-                              selected:
-                                  itemDetailsState.labels.contains(label.name),
-                              label: Text(label.name),
-                              onSelected: (_) {
-                                itemDetailsCubit.toggleLabel(label.name);
+                            return GestureDetector(
+                              onLongPress: () async {
+                                final colorBeforeDialog = label.color;
+                                final confirmed = await ColorPicker(
+                                  // Current color is pre-selected.
+                                  color: Color(label.color),
+                                  onColorChanged: (Color color) =>
+                                      _updateColor(color, label),
+                                  heading: Text('Select color'),
+                                  subheading: Text('Select color shade'),
+                                  pickersEnabled: const <ColorPickerType, bool>{
+                                    ColorPickerType.primary: true,
+                                    ColorPickerType.accent: false,
+                                  },
+                                ).showPickerDialog(context);
+                                if (!confirmed) {
+                                  _updateColor(Color(colorBeforeDialog), label);
+                                }
                               },
+                              child: FilterChip(
+                                selected: itemDetailsState.labels
+                                    .contains(label.name),
+                                label: Text(label.name),
+                                backgroundColor: Color(label.color),
+                                // TODO: Add opacity or something to help
+                                // differentiate between selected and not color.
+                                selectedColor: Color(label.color),
+                                onSelected: (_) {
+                                  itemDetailsCubit.toggleLabel(label.name);
+                                },
+                              ),
                             );
                           },
                         ),

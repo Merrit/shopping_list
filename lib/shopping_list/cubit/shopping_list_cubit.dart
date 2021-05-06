@@ -221,7 +221,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     emit(state.copyWith(taxRate: taxRate));
   }
 
-  void addLabel({required String name, String color = ''}) {
+  void addLabel({required String name, int color = 0}) {
     final newLabel = Label(name: name, color: color);
     _shoppingList.labels.add(newLabel);
     _updateList(_shoppingList);
@@ -234,8 +234,35 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     emit(state.copyWith(labels: _shoppingList.labels));
   }
 
-  void updateColor(int color) {
-    _updateList(_shoppingList.copyWith(color: color));
+  void updateColor({
+    required int color,
+    required ColorUpdate colorUpdate,
+    Aisle? oldAisle,
+    Label? oldLabel,
+  }) {
+    switch (colorUpdate) {
+      case ColorUpdate.name:
+        _shoppingList = _shoppingList.copyWith(color: color);
+        break;
+      case ColorUpdate.aisle:
+        assert(oldAisle != null);
+        final aisles = _shoppingList.aisles;
+        aisles
+          ..remove(oldAisle)
+          ..add(oldAisle!.copyWith(color: color));
+        _shoppingList = _shoppingList.copyWith(aisles: aisles);
+        break;
+      case ColorUpdate.label:
+        assert(oldLabel != null);
+        final labels = _shoppingList.labels;
+        labels
+          ..remove(oldLabel)
+          ..add(oldLabel!.copyWith(color: color));
+        _shoppingList = _shoppingList.copyWith(labels: labels);
+        break;
+      default:
+    }
+    _updateList(_shoppingList);
   }
 
   @override
@@ -244,3 +271,5 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     return super.close();
   }
 }
+
+enum ColorUpdate { name, aisle, label }

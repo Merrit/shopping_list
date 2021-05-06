@@ -25,7 +25,9 @@ class ListSettingsPage extends StatelessWidget {
 class ListSettingsView extends StatelessWidget {
   late final ShoppingListCubit cubit;
 
-  void _updateColor(Color color) => cubit.updateColor(color.value);
+  void _updateColor(Color color) {
+    cubit.updateColor(color: color.value, colorUpdate: ColorUpdate.name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +80,12 @@ class ListSettingsView extends StatelessWidget {
                     // constraints: const BoxConstraints(
                     //     minHeight: 460, minWidth: 300, maxWidth: 320),
                   );
-                  if (!confirmed) cubit.updateColor(colorBeforeDialog);
+                  if (!confirmed) {
+                    cubit.updateColor(
+                      color: colorBeforeDialog,
+                      colorUpdate: ColorUpdate.name,
+                    );
+                  }
                 },
               ),
             ),

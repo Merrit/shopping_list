@@ -8,7 +8,9 @@ part 'label.g.dart';
 @JsonSerializable()
 class Label extends Equatable {
   final String name;
-  final String color;
+
+  @JsonKey(fromJson: _tmpFix)
+  final int color;
 
   Label({
     required this.name,
@@ -21,7 +23,7 @@ class Label extends Equatable {
 
   Label copyWith({
     String? name,
-    String? color,
+    int? color,
   }) {
     return Label(
       name: name ?? this.name,
@@ -34,4 +36,12 @@ class Label extends Equatable {
 
   @override
   bool get stringify => true;
+
+  static int _tmpFix(dynamic input) {
+    if (input.runtimeType == int) {
+      return input;
+    } else {
+      return 0;
+    }
+  }
 }

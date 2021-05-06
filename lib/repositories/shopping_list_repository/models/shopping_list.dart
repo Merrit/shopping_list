@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 import 'models.dart';
 
@@ -55,7 +56,7 @@ class ShoppingList extends Equatable {
   }) {
     return ShoppingList._internal(
       name: name,
-      aisles: aisles.toSet().toList(), // Ensure no duplicates.
+      aisles: AisleValidator.validate(aisles),
       items: items.toSet().toList(), // Ensure no duplicates.
       color: color,
       id: id,

@@ -99,6 +99,9 @@ class ItemDetailsView extends StatelessWidget {
                     aisle: state.aisle,
                   ),
                 ),
+                backgroundColor: Color(shoppingCubit.state.aisles
+                    .firstWhere((element) => element.name == state.aisle)
+                    .color),
                 onPressed: () => showSlideInSidePanel(
                   context: context,
                   child: MultiBlocProvider(
@@ -170,6 +173,11 @@ class ItemDetailsView extends StatelessWidget {
                             .map(
                               (label) => Chip(
                                 label: Text(label),
+                                backgroundColor: Color(shoppingCubit
+                                    .state.labels
+                                    .firstWhere(
+                                        (element) => element.name == label)
+                                    .color),
                               ),
                             )
                             .toList(),

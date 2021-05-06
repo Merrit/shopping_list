@@ -11,7 +11,7 @@ class ScrollingShoppingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ShoppingListCubit>();
+    final shoppingListCubit = context.read<ShoppingListCubit>();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _scrollController.addListener(() {
@@ -54,7 +54,8 @@ class ScrollingShoppingList extends StatelessWidget {
                       width: 24,
                       child: Checkbox(
                         value: state.checkedItems.contains(item),
-                        onChanged: (value) => cubit.toggleItemChecked(item),
+                        onChanged: (value) =>
+                            shoppingListCubit.toggleItemChecked(item),
                       ),
                     ),
                   ],
@@ -81,7 +82,15 @@ class ScrollingShoppingList extends StatelessWidget {
                                       flex: 2,
                                       child: (item.aisle == 'None')
                                           ? const SizedBox()
-                                          : Chip(label: Text(item.aisle)),
+                                          : Chip(
+                                              label: Text(item.aisle),
+                                              backgroundColor: Color(
+                                                  shoppingListCubit.state.aisles
+                                                      .firstWhere((element) =>
+                                                          element.name ==
+                                                          item.aisle)
+                                                      .color),
+                                            ),
                                     ),
                                     Flexible(
                                       // child: Chip(
@@ -124,7 +133,16 @@ class ScrollingShoppingList extends StatelessWidget {
                                   Wrap(
                                     children: item.labels
                                         .map(
-                                            (label) => Chip(label: Text(label)))
+                                          (label) => Chip(
+                                            label: Text(label),
+                                            backgroundColor: Color(
+                                                shoppingListCubit
+                                                    .state.labels
+                                                    .firstWhere((element) =>
+                                                        element.name == label)
+                                                    .color),
+                                          ),
+                                        )
                                         .toList(),
                                   ),
                                 if (item.notes != '')
