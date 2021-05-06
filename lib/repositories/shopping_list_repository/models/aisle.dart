@@ -1,19 +1,23 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
+part 'aisle.g.dart';
+
 @immutable
+@JsonSerializable()
 class Aisle extends Equatable {
   final String name;
-  final String color;
+  final int color;
 
   Aisle({
     required this.name,
-    this.color = '',
+    this.color = 0,
   });
 
   Aisle copyWith({
     String? name,
-    String? color,
+    int? color,
   }) {
     return Aisle(
       name: name ?? this.name,
@@ -21,19 +25,9 @@ class Aisle extends Equatable {
     );
   }
 
-  Map<String, String> toJson() {
-    return {
-      'name': name,
-      'color': color,
-    };
-  }
+  factory Aisle.fromJson(Map<String, dynamic> json) => _$AisleFromJson(json);
 
-  static Aisle fromJson(Map<String, String> json) {
-    return Aisle(
-      name: json['name'] as String,
-      color: json['color'] as String,
-    );
-  }
+  Map<String, dynamic> toJson() => _$AisleToJson(this);
 
   @override
   List<Object?> get props => [name, color];

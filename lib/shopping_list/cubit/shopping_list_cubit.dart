@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 part 'shopping_list_state.dart';
 
@@ -26,8 +27,9 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     if (currentListId != '') {
       final shoppingList = homeCubit.state.shoppingLists
           .firstWhere((element) => element.id == currentListId);
-      _listChanged(shoppingList);
+      _listUpdatedFromDatabase(shoppingList);
     }
+    homeCubit.updateShoppingListCubit(this);
     _listenToHomeCubit(homeCubit);
   }
 
@@ -39,7 +41,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
         (list) => list.id == event.currentListId,
       );
       if (currentList != null && currentList != _shoppingList) {
-        _listChanged(currentList);
+        _listUpdatedFromDatabase(currentList);
       }
       if (prefs == null && (event.prefs != null)) {
         prefs = event.prefs;
@@ -48,17 +50,32 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     });
   }
 
-  void _listChanged(ShoppingList list) {
-    _shoppingList = list;
-    emit(state.copyWith(
-      name: list.name,
-      aisles: list.aisles,
-      items: list.items,
-    ));
+  void _listUpdatedFromDatabase(ShoppingList list) {
+    final sortedList = _sortItems(list: list);
+    _shoppingList = sortedList;
+    _emitNewState(sortedList);
   }
 
   void _updateList(ShoppingList list) {
-    _shoppingListRepository.updateShoppingList(list);
+    final sortedList = _sortItems(list: list);
+    _shoppingListRepository.updateShoppingList(sortedList);
+    _emitNewState(sortedList);
+  }
+
+  void _emitNewState(ShoppingList list) {
+    emit(
+      ShoppingListState(
+        name: list.name,
+        aisles: list.aisles,
+        items: list.items,
+        taxRate: taxRate,
+        labels: list.labels,
+        checkedItems: state.checkedItems,
+        sortBy: list.sortBy,
+        sortAscending: list.sortAscending,
+        color: list.color,
+      ),
+    );
   }
 
   void updateListName(String value) {
@@ -87,7 +104,14 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       taxRate: (newItem.hasTax) ? taxRate : null,
     );
     _shoppingList.items.add(newItem.copyWith(total: updatedTotal));
-    _shoppingListRepository.updateShoppingList(_shoppingList);
+    _updateList(_shoppingList);
+  }
+
+  void setItemNotCompleted(Item item) {
+    _shoppingList.items.remove(item);
+    _shoppingList.items.add(item.copyWith(isComplete: false));
+    _updateList(_shoppingList);
+    emit(state.copyWith(items: _shoppingList.items));
   }
 
   void deleteItem(Item item) {
@@ -158,20 +182,23 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _updateList(_shoppingList);
   }
 
-  void updateTableSorting({
-    required bool ascending,
-    required int columnIndex,
-    required String sortBy,
+  ShoppingList _sortItems({
+    required ShoppingList list,
   }) {
     final sortedItems = ItemSorter().sort(
-      ascending: ascending,
-      currentItems: _shoppingList.items,
-      sortBy: sortBy,
+      ascending: list.sortAscending,
+      currentItems: list.items,
+      sortBy: list.sortBy,
     );
-    _updateList(_shoppingList.copyWith(items: sortedItems));
-    emit(state.copyWith(
-      items: sortedItems,
-      columnSortIndex: columnIndex,
+    return list.copyWith(items: sortedItems);
+  }
+
+  void updateSortedBy({
+    required bool ascending,
+    required String sortBy,
+  }) {
+    _updateList(_shoppingList.copyWith(
+      sortBy: sortBy,
       sortAscending: ascending,
     ));
   }
@@ -194,9 +221,55 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     emit(state.copyWith(taxRate: taxRate));
   }
 
+  void addLabel({required String name, int color = 0}) {
+    final newLabel = Label(name: name, color: color);
+    _shoppingList.labels.add(newLabel);
+    _updateList(_shoppingList);
+    emit(state.copyWith(labels: _shoppingList.labels));
+  }
+
+  void deleteLabel(Label label) {
+    _shoppingList.labels.remove(label);
+    _updateList(_shoppingList);
+    emit(state.copyWith(labels: _shoppingList.labels));
+  }
+
+  void updateColor({
+    required int color,
+    required ColorUpdate colorUpdate,
+    Aisle? oldAisle,
+    Label? oldLabel,
+  }) {
+    switch (colorUpdate) {
+      case ColorUpdate.name:
+        _shoppingList = _shoppingList.copyWith(color: color);
+        break;
+      case ColorUpdate.aisle:
+        assert(oldAisle != null);
+        final aisles = _shoppingList.aisles;
+        aisles
+          ..remove(oldAisle)
+          ..add(oldAisle!.copyWith(color: color));
+        _shoppingList = _shoppingList.copyWith(aisles: aisles);
+        break;
+      case ColorUpdate.label:
+        assert(oldLabel != null);
+        final labels = _shoppingList.labels;
+        labels
+          ..remove(oldLabel)
+          ..add(oldLabel!.copyWith(color: color));
+        _shoppingList = _shoppingList.copyWith(labels: labels);
+        break;
+      default:
+    }
+    _updateList(_shoppingList);
+  }
+
   @override
   Future<void> close() {
     _homeCubitSubscription.cancel();
     return super.close();
   }
 }
+
+enum ColorUpdate { name, aisle, label }

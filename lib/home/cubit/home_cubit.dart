@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/repositories/authentication_repository/repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
+import 'package:shopping_list/shopping_list/shopping_list.dart';
 
 part 'home_state.dart';
 
@@ -54,6 +55,37 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> updateListItemTotals(String taxRate) async {
     final updater = MassListUpdater(shoppingListRepository);
     await updater.updateTotals(taxRate);
+  }
+
+  void updateShoppingListCubit(ShoppingListCubit shoppingListCubit) {
+    emit(state.copyWith(shoppingListCubit: shoppingListCubit));
+  }
+
+  void moveItemToList({
+    required Item item,
+    required String currentListName,
+    required String newListName,
+  }) {
+    final oldList = state.shoppingLists.firstWhere(
+      (list) => list.name == currentListName,
+    );
+    oldList.items.remove(item);
+    shoppingListRepository.updateShoppingList(oldList);
+    final newList = state.shoppingLists.firstWhere(
+      (list) => list.name == newListName,
+    );
+    newList.items.add(item);
+    if (!newList.aisles.contains(item.aisle)) {
+      newList.aisles.add(
+        oldList.aisles.firstWhere((element) => element.name == item.aisle),
+      );
+    }
+    oldList.labels.forEach((label) {
+      if (!newList.labels.contains(label)) {
+        newList.labels.add(label);
+      }
+    });
+    shoppingListRepository.updateShoppingList(newList);
   }
 
   @override

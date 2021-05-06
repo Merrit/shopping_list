@@ -1,10 +1,10 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 import 'app.dart';
 // import 'simple_bloc_observer.dart';

@@ -1,8 +1,8 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 import '../../authentication.dart';
 

@@ -57,7 +57,7 @@ class SettingsView extends StatelessWidget {
           child: Column(
             children: [
               SettingsTile(
-                label: 'Tax rate',
+                label: Text('Tax rate'),
                 hintText: '${state.taxRate}%',
                 keyboardType: TextInputType.number,
                 onChanged: (value) => cubit.recordTaxRateState(value),

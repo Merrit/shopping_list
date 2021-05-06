@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void showSlideInSidePanel({
+Future<Object?> showSlideInSidePanel({
   required BuildContext context,
   required Widget child,
+  List<BlocProvider> providers = const [],
 }) {
-  showGeneralDialog(
+  return showGeneralDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: 'slideInSidePanelBarrier',
     pageBuilder: (context, animation, secondaryAnimation) {
-      return SlideInSidePanel(child: child);
+      if (providers.isNotEmpty) {
+        return MultiBlocProvider(
+          providers: providers,
+          child: SlideInSidePanel(child: child),
+        );
+      } else {
+        return SlideInSidePanel(child: child);
+      }
     },
   );
 }
@@ -42,10 +51,7 @@ class SlideInSidePanel extends StatelessWidget {
                 child: Container(
                   height: double.infinity,
                   child: Card(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.all(12.0),
-                      child: child,
-                    ),
+                    child: child,
                   ),
                 ),
               ),

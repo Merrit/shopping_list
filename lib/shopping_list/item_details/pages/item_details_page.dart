@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 import 'package:shopping_list/core/widgets/text_input_formatter.dart';
 
@@ -49,17 +50,23 @@ class ItemDetailsPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ItemDetailsView extends StatelessWidget {
-  const ItemDetailsView({
+  ItemDetailsView({
     Key? key,
   }) : super(key: key);
 
+  late HomeCubit homeCubit;
+
   @override
   Widget build(BuildContext context) {
+    homeCubit = context.read<HomeCubit>();
+
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       buildWhen: (previous, current) =>
           (previous.aisle != current.aisle) ||
-          (previous.hasTax != current.hasTax),
+          (previous.hasTax != current.hasTax) ||
+          (previous.labels != current.labels),
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
         final shoppingCubit = context.watch<ShoppingListCubit>();
@@ -74,20 +81,22 @@ class ItemDetailsView extends StatelessWidget {
                 )
               : const EdgeInsets.all(40),
           children: [
+            // TODO: Create a custom `Settings` section with built-in
+            // padding between items and what-not.
             SettingsTile(
-              label: 'Name',
+              label: Text('Name'),
               hintText: itemDetailsCubit.state.name,
               onChanged: (value) => itemDetailsCubit.updateName(value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Quantity',
+              label: Text('Quantity'),
               hintText: state.quantity,
               onChanged: (value) => itemDetailsCubit.updateQuantity(value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Aisle',
+              label: Text('Aisle'),
               onChanged: (value) => itemDetailsCubit.updateAisle(value),
               child: ActionChip(
                 label: Text(
@@ -96,6 +105,9 @@ class ItemDetailsView extends StatelessWidget {
                     aisle: state.aisle,
                   ),
                 ),
+                backgroundColor: Color(shoppingCubit.state.aisles
+                    .firstWhere((element) => element.name == state.aisle)
+                    .color),
                 onPressed: () => showSlideInSidePanel(
                   context: context,
                   child: MultiBlocProvider(
@@ -114,7 +126,7 @@ class ItemDetailsView extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Price',
+              label: Text('Price'),
               hintText: state.price,
               inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
               keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -122,7 +134,7 @@ class ItemDetailsView extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             SettingsTile(
-              label: 'Has Tax',
+              label: Text('Has Tax'),
               onChanged: (value) {},
               child: Column(
                 children: [
@@ -146,6 +158,86 @@ class ItemDetailsView extends StatelessWidget {
                 ],
               ),
             ),
+            _Buffer(),
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 6.0,
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.label),
+                  title: Text('Labels'),
+                  subtitle: BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+                    builder: (context, state) {
+                      return Wrap(
+                        // spacing: 10,
+                        children: state.labels
+                            .map(
+                              (label) => Chip(
+                                label: Text(label),
+                                backgroundColor: Color(shoppingCubit
+                                    .state.labels
+                                    .firstWhere(
+                                        (element) => element.name == label)
+                                    .color),
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(value: itemDetailsCubit),
+                              BlocProvider.value(value: shoppingCubit),
+                            ],
+                            child: ChooseLabelsPage(),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            SettingsTile(
+              label: Text('Notes'),
+              defaultText: state.notes,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              onChanged: (value) => itemDetailsCubit.updateNotes(value),
+            ),
+            const SizedBox(height: 40),
+            DropdownButton<String>(
+              value: shoppingCubit.state.name,
+              items: homeCubit.state.shoppingLists
+                  .map((e) => e.name)
+                  .toList()
+                  .map((value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                homeCubit.moveItemToList(
+                  item: shoppingCubit.state.items
+                      .firstWhere((element) => element.name == state.name),
+                  currentListName: shoppingCubit.state.name,
+                  newListName: value!,
+                );
+                Navigator.pop(context);
+              },
+            ),
           ],
         );
       },
@@ -162,5 +254,16 @@ class ItemDetailsView extends StatelessWidget {
     } else {
       return verifiedAisle;
     }
+  }
+}
+
+class _Buffer extends StatelessWidget {
+  const _Buffer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(height: 40);
   }
 }

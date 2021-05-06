@@ -1,4 +1,4 @@
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class ItemSorter {
   List<Item> sort({
@@ -8,29 +8,29 @@ class ItemSorter {
   }) {
     var items = List<Item>.from(currentItems);
     switch (sortBy) {
-      case 'name':
+      case 'Name':
         items.sort(
           (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
         );
-        if (ascending) items = items.reversed.toList();
+        if (!ascending) items = items.reversed.toList();
         break;
-      case 'quantity':
+      case 'Quantity':
         items.sort((a, b) => a.quantity.compareTo(b.quantity));
-        if (ascending) items = items.reversed.toList();
+        if (!ascending) items = items.reversed.toList();
         break;
-      case 'aisle':
+      case 'Aisle':
         items.sort(
           (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
         );
-        if (ascending) items = items.reversed.toList();
+        if (!ascending) items = items.reversed.toList();
         break;
-      case 'price':
+      case 'Price':
         items.sort((a, b) => a.price.compareTo(b.price));
-        if (ascending) items = items.reversed.toList();
+        if (!ascending) items = items.reversed.toList();
         break;
-      case 'total':
+      case 'Total':
         items.sort((a, b) => a.total.compareTo(b.total));
-        if (ascending) items = items.reversed.toList();
+        if (!ascending) items = items.reversed.toList();
         break;
       default:
         print('Error sorting items');

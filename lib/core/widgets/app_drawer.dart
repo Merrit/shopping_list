@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/core/validators/validators.dart';
 import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/settings/settings.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 class ListDrawer extends StatelessWidget {
   const ListDrawer({
@@ -15,6 +15,8 @@ class ListDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final _auth = context.read<AuthenticationBloc>();
     final homeCubit = context.read<HomeCubit>();
+    final mediaQuery = MediaQuery.of(context);
+
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (previous, current) =>
           (previous.shoppingLists != current.shoppingLists) ||
@@ -26,10 +28,35 @@ class ListDrawer extends StatelessWidget {
             children: [
               _CreateListButton(),
               Expanded(
-                child: ListView(
-                  children: state.shoppingLists
-                      .map((list) => _ListNameTile(list: list))
-                      .toList(),
+                child: ListTileTheme(
+                  // selectedTileColor: Colors.blue.withAlpha(100),
+                  child: ListView(
+                    children: state.shoppingLists
+                        .map(
+                          // (list) => RadioListTile(
+                          //   selected: (state.currentListId == list.id),
+                          //   title: Center(
+                          //     child: Text(
+                          //       list.name,
+                          //       style: Theme.of(context)
+                          //           .textTheme
+                          //           .headline6!
+                          //           .copyWith(
+                          //             color: Color(list.color),
+                          //           ),
+                          //     ),
+                          //   ),
+                          //   onTap: () {
+                          //     context.read<HomeCubit>().setCurrentList(list.id);
+                          //     if (mediaQuery.size.width < 600) {
+                          //       Navigator.pop(context);
+                          //     }
+                          //   },
+                          // ),
+                          (list) => _ListNameTile(list: list),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
               Spacer(),
@@ -143,7 +170,25 @@ class _ListNameTile extends StatelessWidget {
       builder: (context, state) {
         return ListTile(
           selected: (state.currentListId == list.id),
-          title: Center(child: Text(list.name)),
+          title: Center(
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: (state.currentListId == list.id)
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.blue,
+                      ),
+                    )
+                  : null,
+              child: Text(
+                list.name,
+                style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Color(list.color),
+                    ),
+              ),
+            ),
+          ),
           onTap: () {
             context.read<HomeCubit>().setCurrentList(list.id);
             if (mediaQuery.size.width < 600) {

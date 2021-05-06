@@ -1,7 +1,7 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shopping_list/core/enums/form_status.dart';
+import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 import '../../authentication.dart';
 

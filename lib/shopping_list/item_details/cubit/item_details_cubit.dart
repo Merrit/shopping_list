@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 part 'item_details_state.dart';
 
@@ -14,6 +13,8 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           price: item.price,
           total: item.total,
           hasTax: item.hasTax,
+          notes: item.notes,
+          labels: item.labels,
         ));
 
   void updateName(String name) {
@@ -44,6 +45,20 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
     emit(state.copyWith(hasTax: hasTax));
   }
 
+  void updateNotes(String notes) {
+    emit(state.copyWith(notes: notes));
+  }
+
+  void toggleLabel(String label) {
+    final labels = state.labels;
+    if (labels.contains(label)) {
+      labels.remove(label);
+    } else {
+      labels.add(label);
+    }
+    emit(state.copyWith(labels: labels));
+  }
+
   Item updatedItem() {
     return state._item.copyWith(
       aisle: state.aisle,
@@ -52,6 +67,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       price: state.price,
       total: state.total,
       hasTax: state.hasTax,
+      notes: state.notes,
     );
   }
 }
