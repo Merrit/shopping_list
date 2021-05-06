@@ -69,8 +69,12 @@ void _showListSettings(BuildContext context) {
     context,
     MaterialPageRoute(
       builder: (context) {
-        return BlocProvider(
-          create: (context) => ShoppingListCubit(homeCubit: homeCubit),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (_) => ShoppingListCubit(homeCubit: homeCubit)),
+            BlocProvider.value(value: homeCubit),
+          ],
           child: ListSettingsPage(),
         );
       },

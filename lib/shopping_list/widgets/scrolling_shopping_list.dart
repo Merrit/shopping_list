@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 import '../shopping_list.dart';
@@ -171,12 +172,16 @@ class ScrollingShoppingList extends StatelessWidget {
 }
 
 Future<void> _goToItemDetails(BuildContext context, Item item) async {
-  final cubit = context.read<ShoppingListCubit>();
+  final homeCubit = context.read<HomeCubit>();
+  final shoppingListCubit = context.read<ShoppingListCubit>();
   final newItem = await Navigator.push<Item>(
     context,
     MaterialPageRoute(
-      builder: (context) => BlocProvider.value(
-        value: cubit,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: shoppingListCubit),
+          BlocProvider.value(value: homeCubit),
+        ],
         child: ItemDetailsPage(item: item),
       ),
     ),
@@ -186,87 +191,3 @@ Future<void> _goToItemDetails(BuildContext context, Item item) async {
     cubit.updateItem(oldItem: item, newItem: newItem);
   }
 }
-
-// class _Subtitle extends StatelessWidget {
-
-//   final Item item;
-
-//   const _Subtitle({Key? key, required this.item}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
-//       builder: (context, state) {
-//         return Padding(
-//           padding: const EdgeInsets.only(top: 10),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 mainAxisSize: MainAxisSize.max,
-//                 children: [
-//                   Flexible(
-//                     flex: 2,
-//                     child: (item.aisle == 'None')
-//                         ? const SizedBox()
-//                         : Chip(label: Text(item.aisle)),
-//                   ),
-//                   Flexible(
-//                     child: Chip(label: Text('x${state.items[index].quantity}')),
-//                     // child: (item.quantity == '1')
-//                     //     ? const SizedBox()
-//                     //     : Chip(label: Text('x${item.quantity}')),
-//                   ),
-//                   Spacer(),
-//                   Flexible(
-//                     child: (item.price == '0.00')
-//                         ? const SizedBox()
-//                         : Column(
-//                             children: [
-//                               Text('\$${item.price}'),
-//                               Text(
-//                                 'each',
-//                                 style: _priceSubtitleStyle,
-//                               ),
-//                             ],
-//                           ),
-//                   ),
-//                   Flexible(
-//                     child: (item.total == '0.00')
-//                         ? const SizedBox()
-//                         : Column(
-//                             children: [
-//                               Text('\$${item.total}'),
-//                               Text(
-//                                 'total',
-//                                 style: _priceSubtitleStyle,
-//                               ),
-//                             ],
-//                           ),
-//                   ),
-//                 ],
-//               ),
-//               if (item.labels.isNotEmpty)
-//                 Wrap(
-//                   children: item.labels
-//                       .map((label) => Chip(label: Text(label)))
-//                       .toList(),
-//                 ),
-//               if (item.notes != '')
-//                 Container(
-//                   padding: const EdgeInsets.all(8),
-//                   child: Text(item.notes),
-//                 ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   final _priceSubtitleStyle = const TextStyle(
-//     fontSize: 15,
-//     color: Colors.grey,
-//   );
-// }

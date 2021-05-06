@@ -9,7 +9,6 @@ part 'label.g.dart';
 class Label extends Equatable {
   final String name;
 
-  @JsonKey(fromJson: _tmpFix)
   final int color;
 
   Label({
@@ -36,12 +35,4 @@ class Label extends Equatable {
 
   @override
   bool get stringify => true;
-
-  static int _tmpFix(dynamic input) {
-    if (input.runtimeType == int) {
-      return input;
-    } else {
-      return 0;
-    }
-  }
 }

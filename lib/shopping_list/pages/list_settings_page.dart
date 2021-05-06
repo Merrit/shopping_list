@@ -22,16 +22,20 @@ class ListSettingsPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ListSettingsView extends StatelessWidget {
-  late final ShoppingListCubit cubit;
+  late HomeCubit homeCubit;
+  late ShoppingListCubit shoppingListCubit;
 
   void _updateColor(Color color) {
-    cubit.updateColor(color: color.value, colorUpdate: ColorUpdate.name);
+    shoppingListCubit.updateColor(
+        color: color.value, colorUpdate: ColorUpdate.name);
   }
 
   @override
   Widget build(BuildContext context) {
-    cubit = context.read<ShoppingListCubit>();
+    homeCubit = context.read<HomeCubit>();
+    shoppingListCubit = context.read<ShoppingListCubit>();
     final black = Colors.white.value;
     print('black: $black');
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
@@ -42,7 +46,7 @@ class ListSettingsView extends StatelessWidget {
             SettingsTile(
               label: Text('List name'),
               hintText: state.name,
-              onChanged: (value) => cubit.updateListName(value),
+              onChanged: (value) => shoppingListCubit.updateListName(value),
             ),
             const SizedBox(height: 30),
             Card(
@@ -81,7 +85,7 @@ class ListSettingsView extends StatelessWidget {
                     //     minHeight: 460, minWidth: 300, maxWidth: 320),
                   );
                   if (!confirmed) {
-                    cubit.updateColor(
+                    shoppingListCubit.updateColor(
                       color: colorBeforeDialog,
                       colorUpdate: ColorUpdate.name,
                     );
@@ -91,7 +95,7 @@ class ListSettingsView extends StatelessWidget {
             ),
             const SizedBox(height: 100),
             OutlinedButton(
-              onPressed: () => _deleteList(cubit, context),
+              onPressed: () => _deleteList(shoppingListCubit, context),
               child: Text(
                 'Delete list',
                 style: TextStyle(

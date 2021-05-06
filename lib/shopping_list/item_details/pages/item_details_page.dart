@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
@@ -49,13 +50,18 @@ class ItemDetailsPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ItemDetailsView extends StatelessWidget {
-  const ItemDetailsView({
+  ItemDetailsView({
     Key? key,
   }) : super(key: key);
 
+  late HomeCubit homeCubit;
+
   @override
   Widget build(BuildContext context) {
+    homeCubit = context.read<HomeCubit>();
+
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       buildWhen: (previous, current) =>
           (previous.aisle != current.aisle) ||
@@ -210,6 +216,27 @@ class ItemDetailsView extends StatelessWidget {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               onChanged: (value) => itemDetailsCubit.updateNotes(value),
+            ),
+            const SizedBox(height: 40),
+            DropdownButton<String>(
+              value: shoppingCubit.state.name,
+              items: homeCubit.state.shoppingLists
+                  .map((e) => e.name)
+                  .toList()
+                  .map((value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                homeCubit.moveItemToList(
+                  item: shoppingCubit.state.items
+                      .firstWhere((element) => element.name == state.name),
+                  currentListName: shoppingCubit.state.name,
+                  newListName: value!,
+                );
+                Navigator.pop(context);
+              },
             ),
           ],
         );
