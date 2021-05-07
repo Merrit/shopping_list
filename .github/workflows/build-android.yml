@@ -13,7 +13,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
           ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       - run: |
-          echo $KEY_JKS > android/app/key.jks
+          echo $KEY_JKS > key.jks
           flutter pub get
           flutter pub run build_runner build
           flutter test
