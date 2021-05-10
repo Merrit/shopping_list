@@ -21,6 +21,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
+        padding: EdgeInsets.all(20),
       ),
     ),
   );

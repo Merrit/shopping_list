@@ -15,7 +15,6 @@ class ListDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final _auth = context.read<AuthenticationBloc>();
     final homeCubit = context.read<HomeCubit>();
-    final mediaQuery = MediaQuery.of(context);
 
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (previous, current) =>
@@ -26,40 +25,21 @@ class ListDrawer extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              _CreateListButton(),
+              const _CreateListButton(),
               Expanded(
                 child: ListTileTheme(
-                  // selectedTileColor: Colors.blue.withAlpha(100),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  selectedTileColor: Colors.grey.withAlpha(40),
                   child: ListView(
                     children: state.shoppingLists
-                        .map(
-                          // (list) => RadioListTile(
-                          //   selected: (state.currentListId == list.id),
-                          //   title: Center(
-                          //     child: Text(
-                          //       list.name,
-                          //       style: Theme.of(context)
-                          //           .textTheme
-                          //           .headline6!
-                          //           .copyWith(
-                          //             color: Color(list.color),
-                          //           ),
-                          //     ),
-                          //   ),
-                          //   onTap: () {
-                          //     context.read<HomeCubit>().setCurrentList(list.id);
-                          //     if (mediaQuery.size.width < 600) {
-                          //       Navigator.pop(context);
-                          //     }
-                          //   },
-                          // ),
-                          (list) => _ListNameTile(list: list),
-                        )
+                        .map((list) => _ListNameTile(list: list))
                         .toList(),
                   ),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -112,7 +92,7 @@ class _CreateListButton extends StatelessWidget {
               'Create list',
               style: Theme.of(context).textTheme.headline6,
             ),
-            Icon(Icons.add),
+            const Icon(Icons.add),
           ],
         ),
       ),
@@ -173,14 +153,6 @@ class _ListNameTile extends StatelessWidget {
           title: Center(
             child: Container(
               padding: EdgeInsets.all(10),
-              decoration: (state.currentListId == list.id)
-                  ? BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                    )
-                  : null,
               child: Text(
                 list.name,
                 style: Theme.of(context).textTheme.headline6!.copyWith(
