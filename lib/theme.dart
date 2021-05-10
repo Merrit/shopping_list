@@ -4,7 +4,6 @@ class AppTheme {
   static final dark = ThemeData.dark().copyWith(
     brightness: Brightness.dark,
     primaryColorDark: Colors.lightBlue,
-
     // primarySwatch: Colors.lightBlue,
     accentColor: Colors.lightBlueAccent,
     toggleableActiveColor: Colors.lightBlueAccent,
@@ -13,14 +12,6 @@ class AppTheme {
     //     ),
     // cardTheme: CardTheme(
     //   color: Colors.grey[700],
-    // ),
-    // dataTableTheme: DataTableThemeData(
-    //   dataTextStyle: TextStyle(
-    //     fontSize: 18,
-    //   ),
-    //   headingTextStyle: TextStyle(
-    //     fontSize: 20,
-    //   ),
     // ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(),

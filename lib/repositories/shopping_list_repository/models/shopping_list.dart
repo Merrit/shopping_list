@@ -115,17 +115,19 @@ class ShoppingList extends Equatable {
 
   @override
   String toString() {
-    return '''ShoppingList {
-        name: $name,
-        aisles: $aisles,
-        items: $items,
-        id: $id,
-        owner: $owner,
-        allowedUsers: $allowedUsers,
-        color: $color,
-        labels: $labels,
-        sortBy: $sortBy,
-        sortAscending: $sortAscending,
-        }''';
+    return '''\n
+ShoppingList {
+  name: $name,
+  aisles: $aisles,
+  items: $items,
+  id: $id,
+  owner: $owner,
+  allowedUsers: $allowedUsers,
+  color: $color,
+  labels: $labels,
+  sortBy: $sortBy,
+  sortAscending: $sortAscending,
+}
+\n''';
   }
 }
