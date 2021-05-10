@@ -86,18 +86,19 @@ class ItemDetailsView extends StatelessWidget {
             SettingsTile(
               label: Text('Name'),
               hintText: itemDetailsCubit.state.name,
-              onChanged: (value) => itemDetailsCubit.updateName(value),
+              onChanged: (value) => itemDetailsCubit.updateItem(name: value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
               label: Text('Quantity'),
               hintText: state.quantity,
-              onChanged: (value) => itemDetailsCubit.updateQuantity(value),
+              onChanged: (value) =>
+                  itemDetailsCubit.updateItem(quantity: value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
               label: Text('Aisle'),
-              onChanged: (value) => itemDetailsCubit.updateAisle(value),
+              onChanged: (value) => itemDetailsCubit.updateItem(aisle: value),
               child: ActionChip(
                 label: Text(
                   _verifyAisle(
@@ -130,7 +131,7 @@ class ItemDetailsView extends StatelessWidget {
               hintText: state.price,
               inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onChanged: (value) => itemDetailsCubit.updatePrice(value),
+              onChanged: (value) => itemDetailsCubit.updateItem(price: value),
             ),
             const SizedBox(height: 40),
             SettingsTile(
@@ -143,9 +144,16 @@ class ItemDetailsView extends StatelessWidget {
                           (shoppingCubit.taxRate == '0')))
                     TextButton(
                       onPressed: () async {
-                        await Navigator.pushNamed(
+                        await Navigator.push(
                           context,
-                          SettingsPage.id,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider.value(
+                                value: homeCubit,
+                                child: SettingsPage(),
+                              );
+                            },
+                          ),
                         );
                         shoppingCubit.updateTaxRate();
                       },
@@ -153,7 +161,8 @@ class ItemDetailsView extends StatelessWidget {
                     ),
                   Switch(
                     value: state.hasTax,
-                    onChanged: (value) => itemDetailsCubit.updateHasTax(value),
+                    onChanged: (value) =>
+                        itemDetailsCubit.updateItem(hasTax: value),
                   ),
                 ],
               ),
@@ -215,7 +224,7 @@ class ItemDetailsView extends StatelessWidget {
               defaultText: state.notes,
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              onChanged: (value) => itemDetailsCubit.updateNotes(value),
+              onChanged: (value) => itemDetailsCubit.updateItem(notes: value),
             ),
             const SizedBox(height: 40),
             DropdownButton<String>(

@@ -7,48 +7,43 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
   ItemDetailsCubit(Item item)
       : super(ItemDetailsState(
           item: item,
-          name: item.name,
-          quantity: item.quantity,
           aisle: item.aisle,
-          price: item.price,
-          total: item.total,
           hasTax: item.hasTax,
-          notes: item.notes,
           labels: item.labels,
+          name: item.name,
+          notes: item.notes,
+          price: item.price,
+          quantity: item.quantity,
+          total: item.total,
         ));
 
-  void updateName(String name) {
-    emit(state.copyWith(name: name));
+  /// Update item value(s). Only affects local state until applied when
+  /// leaving the ItemDetailsPage.
+  void updateItem({
+    String? aisle,
+    bool? hasTax,
+    List<String>? labels,
+    String? name,
+    String? notes,
+    String? price,
+    String? quantity,
+    String? total,
+  }) {
+    emit(
+      state.copyWith(
+        aisle: aisle,
+        hasTax: hasTax,
+        labels: labels,
+        name: name,
+        notes: notes,
+        price: price,
+        quantity: quantity,
+        total: total,
+      ),
+    );
   }
 
-  void updateQuantity(String quantity) {
-    emit(state.copyWith(quantity: quantity));
-  }
-
-  void updateAisle(String aisle) {
-    emit(state.copyWith(aisle: aisle));
-  }
-
-  void updatePrice(String price) {
-    final asDouble = double.tryParse(price);
-    emit(state.copyWith(price: asDouble.toString()));
-  }
-
-  void updateTotal() {
-    if (state.hasTax) {
-      // final total = state.price
-      emit(state.copyWith());
-    }
-  }
-
-  void updateHasTax(bool hasTax) {
-    emit(state.copyWith(hasTax: hasTax));
-  }
-
-  void updateNotes(String notes) {
-    emit(state.copyWith(notes: notes));
-  }
-
+  /// Toggle whether a label is applied to this item or not.
   void toggleLabel(String label) {
     final labels = state.labels;
     if (labels.contains(label)) {
@@ -56,9 +51,10 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
     } else {
       labels.add(label);
     }
-    emit(state.copyWith(labels: labels));
+    updateItem(labels: labels);
   }
 
+  /// Returns the `Item` object with the updated values.
   Item updatedItem() {
     return state._item.copyWith(
       aisle: state.aisle,

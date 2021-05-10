@@ -89,12 +89,12 @@ class AisleSidePanel extends StatelessWidget {
                           groupValue: _currentAisle,
                           onChanged: (String? value) {
                             setState(() => _currentAisle = value!);
-                            itemDetailsCubit.updateAisle(value!);
+                            itemDetailsCubit.updateItem(aisle: value);
                           },
                           secondary: IconButton(
                             onPressed: () {
                               shoppingCubit.deleteAisle(aisle: aisle);
-                              itemDetailsCubit.updateAisle('None');
+                              itemDetailsCubit.updateItem(aisle: 'None');
                               setState(() {});
                             },
                             icon: Icon(Icons.close),
