@@ -35,7 +35,10 @@ class _CompletedItemsViewState extends State<CompletedItemsView> {
                 return CheckboxListTile(
                   title: Center(child: Text(item.name)),
                   value: true,
-                  onChanged: (_) => cubit.setItemNotCompleted(item),
+                  onChanged: (_) {
+                    final updatedItem = item.copyWith(isComplete: false);
+                    cubit.updateItem(oldItem: item, newItem: updatedItem);
+                  },
                 );
               },
             );
@@ -48,7 +51,7 @@ class _CompletedItemsViewState extends State<CompletedItemsView> {
             child: BlocBuilder<ShoppingListCubit, ShoppingListState>(
               builder: (context, state) {
                 return FloatingActionButton.extended(
-                  onPressed: (state.completedItems().isNotEmpty)
+                  onPressed: (state.completedItems.isNotEmpty)
                       ? () {
                           cubit.deleteCompletedItems();
                           setState(() {});

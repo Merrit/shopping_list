@@ -1,85 +1,88 @@
 part of 'shopping_list_cubit.dart';
 
+/// Holds the state for the active shopping list.
 class ShoppingListState {
-  final String name;
   final List<Aisle> aisles;
+  final int color; // Customizable color for list name.
   final List<Item> items;
-  final String taxRate;
   final List<Label> labels;
-  final int color;
+  final String name;
+  final String sortBy;
+  final bool sortAscending;
+  final String taxRate;
 
   // State specific to the running app instance, rather than the ShoppingList.
   final List<Item> checkedItems;
-  final String sortBy;
-  final bool sortAscending;
 
   ShoppingListState({
-    required this.name,
     required this.aisles,
+    required this.color,
     required this.items,
-    required this.taxRate,
     required this.labels,
-    required this.checkedItems,
+    required this.name,
     required this.sortBy,
     required this.sortAscending,
-    required this.color,
+    required this.taxRate,
+    required this.checkedItems,
   });
 
   factory ShoppingListState.initial() {
     return ShoppingListState(
-      name: '',
       aisles: [],
+      color: Colors.white.value,
       items: [],
-      taxRate: '0',
       labels: [],
-      checkedItems: [],
+      name: '',
       sortBy: 'Name',
       sortAscending: false,
-      color: Colors.white.value,
+      taxRate: '0',
+      checkedItems: [],
     );
   }
 
-  List<Item> activeItems() {
+  List<Item> get activeItems {
     return items.where((item) => !item.isComplete).toList();
   }
 
-  List<Item> completedItems() {
+  List<Item> get completedItems {
     return items.where((item) => item.isComplete).toList();
   }
 
   ShoppingListState copyWith({
-    String? name,
     List<Aisle>? aisles,
+    int? color,
     List<Item>? items,
-    String? taxRate,
     List<Label>? labels,
-    List<Item>? checkedItems,
+    String? name,
     String? sortBy,
     bool? sortAscending,
-    int? color,
+    String? taxRate,
+    List<Item>? checkedItems,
   }) {
     return ShoppingListState(
-      name: name ?? this.name,
       aisles: aisles ?? this.aisles,
+      color: color ?? this.color,
       items: items ?? this.items,
-      taxRate: taxRate ?? this.taxRate,
       labels: labels ?? this.labels,
-      checkedItems: checkedItems ?? this.checkedItems,
+      name: name ?? this.name,
       sortBy: sortBy ?? this.sortBy,
       sortAscending: sortAscending ?? this.sortAscending,
-      color: color ?? this.color,
+      taxRate: taxRate ?? this.taxRate,
+      checkedItems: checkedItems ?? this.checkedItems,
     );
   }
 
   @override
   String toString() => '''\n
-ShoppingListState: name: $name,
-'aisles: $aisles,
+ShoppingListState:
+aisles: $aisles,
+color: $color,
 items: $items,
 labels: $labels,
-checkedItems: $checkedItems,
+name: $name,
 sortBy: $sortBy,
+sortAscending: $sortAscending,
 taxRate: $taxRate
-color: $color,
+checkedItems: $checkedItems,
 \n''';
 }

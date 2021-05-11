@@ -35,19 +35,19 @@ class SortByView extends StatelessWidget {
             'Price',
             'Total',
           ]
-              .map((e) => RadioListTile<String>(
-                    title: Text(e),
-                    value: e,
+              .map((element) => RadioListTile<String>(
+                    title: Text(element),
+                    value: element,
                     groupValue: state.sortBy,
                     onChanged: (String? value) {
-                      shoppingCubit.updateSortedBy(
-                          ascending: state.sortAscending, sortBy: e);
+                      shoppingCubit.updateList(sortBy: element);
                     },
-                    secondary: (state.sortBy == e)
+                    secondary: (state.sortBy == element)
                         ? IconButton(
                             onPressed: () {
-                              shoppingCubit.updateSortedBy(
-                                  ascending: !state.sortAscending, sortBy: e);
+                              shoppingCubit.updateList(
+                                sortAscending: !state.sortAscending,
+                              );
                             },
                             icon: FaIcon((state.sortAscending)
                                 ? FontAwesomeIcons.sortAmountDownAlt

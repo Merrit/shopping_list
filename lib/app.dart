@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:shopping_list/settings/settings.dart';
 
 import 'authentication/authentication.dart';
@@ -40,8 +41,8 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  final _log = Logger('_AppViewState');
   final _navigatorKey = GlobalKey<NavigatorState>();
-
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
@@ -56,12 +57,15 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 if (state.user.emailIsVerified) {
+                  _log.info('User is authenticated');
                   _navigator.pushReplacementNamed(HomePage.id);
                 } else {
+                  _log.info('User is authenticated, but email not verified');
                   _navigator.pushReplacementNamed(VerifyEmailPage.id);
                 }
                 break;
               case AuthenticationStatus.unauthenticated:
+                _log.info('No user currently authenticated');
                 _navigator.pushReplacementNamed(LoginPage.id);
                 break;
               default:
