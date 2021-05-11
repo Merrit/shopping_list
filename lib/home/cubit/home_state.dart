@@ -1,9 +1,12 @@
 part of 'home_cubit.dart';
 
-/// Represents the state of the home page which shows all of
-/// the user's existing lists and allows creating new ones.
+/// Holds the central app state for core bits like the
+/// currently active list, the shared AppBar & Drawer, etc.
 class HomeState {
+  /// The id of the active, currently displayed list.
   final String currentListId;
+
+  /// A list of all the lists this user has access to.
   final List<ShoppingList> shoppingLists;
 
   HomeState({
@@ -31,8 +34,11 @@ class HomeState {
   }
 
   @override
-  String toString() => 'HomeState: currentListId: $currentListId, '
-      'shoppingLists: $shoppingLists '
-      'prefs: $prefs'
-      'shoppingListCubit: $shoppingListCubit';
+  String toString() => '''\n
+HomeState: \n
+currentListId: $currentListId, 
+shoppingLists: $shoppingLists,
+prefs: $prefs,
+shoppingListCubit: $shoppingListCubit,
+\n''';
 }

@@ -11,11 +11,7 @@ class ChooseLabelsPage extends StatelessWidget {
   late ShoppingListCubit shoppingCubit;
 
   void _updateColor(Color color, Label label) {
-    shoppingCubit.updateColor(
-      color: color.value,
-      colorUpdate: ColorUpdate.label,
-      oldLabel: label,
-    );
+    shoppingCubit.updateLabelColor(color: color.value, oldLabel: label);
   }
 
   @override
@@ -141,7 +137,7 @@ class EditLabelsPage extends StatelessWidget {
               },
             ),
           );
-          if (newLabel != null) shoppingCubit.addLabel(name: newLabel);
+          if (newLabel != null) shoppingCubit.createLabel(name: newLabel);
         },
         label: Text('New label'),
         icon: Icon(Icons.add),

@@ -1,5 +1,6 @@
 part of 'item_details_cubit.dart';
 
+/// Holds the state while editing the details of a single item.
 class ItemDetailsState {
   final Item _item;
   final String name;
