@@ -12,11 +12,7 @@ class AisleSidePanel extends StatelessWidget {
   late ShoppingListCubit shoppingCubit;
 
   void _updateColor(Color color, Aisle aisle) {
-    shoppingCubit.updateColor(
-      color: color.value,
-      colorUpdate: ColorUpdate.aisle,
-      oldAisle: aisle,
-    );
+    shoppingCubit.updateAisleColor(color: color.value, oldAisle: aisle);
   }
 
   @override

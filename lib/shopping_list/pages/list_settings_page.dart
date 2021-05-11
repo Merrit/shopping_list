@@ -28,8 +28,7 @@ class ListSettingsView extends StatelessWidget {
   late ShoppingListCubit shoppingListCubit;
 
   void _updateColor(Color color) {
-    shoppingListCubit.updateColor(
-        color: color.value, colorUpdate: ColorUpdate.name);
+    shoppingListCubit.updateList(color: color.value);
   }
 
   @override
@@ -46,7 +45,7 @@ class ListSettingsView extends StatelessWidget {
             SettingsTile(
               label: Text('List name'),
               hintText: state.name,
-              onChanged: (value) => shoppingListCubit.updateListName(value),
+              onChanged: (value) => shoppingListCubit.updateList(name: value),
             ),
             const SizedBox(height: 30),
             Card(
@@ -85,10 +84,7 @@ class ListSettingsView extends StatelessWidget {
                     //     minHeight: 460, minWidth: 300, maxWidth: 320),
                   );
                   if (!confirmed) {
-                    shoppingListCubit.updateColor(
-                      color: colorBeforeDialog,
-                      colorUpdate: ColorUpdate.name,
-                    );
+                    shoppingListCubit.updateList(color: colorBeforeDialog);
                   }
                 },
               ),
