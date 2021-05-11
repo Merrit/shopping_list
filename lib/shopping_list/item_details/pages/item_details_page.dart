@@ -8,8 +8,6 @@ import 'package:shopping_list/repositories/shopping_list_repository/repository.d
 import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
 
-import 'package:shopping_list/core/widgets/text_input_formatter.dart';
-
 import '../item_details.dart';
 
 // ignore: must_be_immutable
@@ -85,7 +83,7 @@ class ItemDetailsView extends StatelessWidget {
             // padding between items and what-not.
             SettingsTile(
               label: Text('Name'),
-              hintText: itemDetailsCubit.state.name,
+              defaultText: itemDetailsCubit.state.name,
               onChanged: (value) => itemDetailsCubit.updateItem(name: value),
             ),
             const SizedBox(height: 40),
@@ -128,7 +126,7 @@ class ItemDetailsView extends StatelessWidget {
             const SizedBox(height: 40),
             SettingsTile(
               label: Text('Price'),
-              hintText: state.price,
+              defaultText: state.price,
               inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (value) => itemDetailsCubit.updateItem(price: value),
