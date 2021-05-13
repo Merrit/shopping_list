@@ -18,11 +18,12 @@ class LoginPage extends StatelessWidget {
         listener: (context, state) {
           if (state.status is SubmissionFailure) {
             final failure = state.status as SubmissionFailure;
+            final message = '${failure.code} \n ${failure.message}';
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text('Authentication Failure: ${failure.code}'),
+                  content: Text('Authentication Failure: $message'),
                 ),
               );
           }

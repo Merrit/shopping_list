@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 abstract class AuthFailure implements Exception {
   final String code;
@@ -25,7 +26,13 @@ class LogInWithEmailAndPasswordFailure extends AuthFailure {
 }
 
 class LogInWithGoogleFailure extends AuthFailure {
-  LogInWithGoogleFailure(String code) : super(code: code);
+  LogInWithGoogleFailure({
+    required PlatformException exception,
+    String? message,
+  }) : super(
+          code: exception.code,
+          message: exception.message,
+        );
 }
 
 class LogOutFailure extends AuthFailure {
