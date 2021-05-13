@@ -47,7 +47,9 @@ class AuthenticationRepository {
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        throw LogInWithGoogleFailure('Sign in with Google aborted');
+        throw LogInWithGoogleFailure(
+          exception: PlatformException(code: 'Sign in with Google aborted'),
+        );
       }
       final googleAuth = await googleUser.authentication;
       final credential = firebase_auth.GoogleAuthProvider.credential(
@@ -56,7 +58,7 @@ class AuthenticationRepository {
       );
       await _firebaseAuth.signInWithCredential(credential);
     } on PlatformException catch (e) {
-      throw LogInWithGoogleFailure(e.code);
+      throw LogInWithGoogleFailure(exception: e);
     }
   }
 
