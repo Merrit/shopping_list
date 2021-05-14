@@ -1,5 +1,9 @@
 name: Build Android apk & bundle
-on: [release, workflow_dispatch]
+on:
+  workflow_dispatch:
+  release:
+    types:
+      - created
 jobs:
   build_android:
     runs-on: ubuntu-latest

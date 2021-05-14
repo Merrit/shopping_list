@@ -1,5 +1,10 @@
 name: Run tests
-on: [pull_request, release, workflow_dispatch]
+on:
+  pull_request:
+  workflow_dispatch:
+  release:
+    types:
+      - created
 jobs:
   flutter_test:
     runs-on: ubuntu-latest
