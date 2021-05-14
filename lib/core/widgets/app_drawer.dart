@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
@@ -33,9 +34,14 @@ class ListDrawer extends StatelessWidget {
                   ),
                   selectedTileColor: Colors.grey.withAlpha(40),
                   child: ListView(
-                    children: state.shoppingLists
-                        .map((list) => _ListNameTile(list: list))
-                        .toList(),
+                    children: (foundation.kDebugMode)
+                        ? state.shoppingLists
+                            .map((list) => _ListNameTile(list: list))
+                            .toList()
+                        : state.shoppingLists
+                            .where((element) => element.name != 'Test List')
+                            .map((list) => _ListNameTile(list: list))
+                            .toList(),
                   ),
                 ),
               ),
