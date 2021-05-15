@@ -68,22 +68,21 @@ class ScrollingShoppingList extends StatelessWidget {
                     ? null
                     : BlocBuilder<ShoppingListCubit, ShoppingListState>(
                         builder: (context, state) {
-                          // var item = state.items[index];
                           return Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Flexible(
-                                      flex: 2,
-                                      child: (item.aisle == 'None')
-                                          ? const SizedBox()
-                                          : Chip(
+                                      child: Chip(
+                                        label: Text('x${item.quantity}'),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: (item.aisle != 'None')
+                                          ? Chip(
                                               label: Text(item.aisle),
                                               backgroundColor: Color(
                                                   shoppingListCubit.state.aisles
@@ -91,20 +90,17 @@ class ScrollingShoppingList extends StatelessWidget {
                                                           element.name ==
                                                           item.aisle)
                                                       .color),
-                                            ),
+                                            )
+                                          : Container(),
                                     ),
-                                    Flexible(
-                                      // child: Chip(
-                                      //     label: Text('x${item.quantity}')),
-                                      child: (item.quantity == '1')
-                                          ? const SizedBox()
-                                          : Chip(
-                                              label: Text('x${item.quantity}')),
-                                    ),
-                                    Spacer(),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 10),
                                     Flexible(
                                       child: (item.price == '0.00')
-                                          ? const SizedBox()
+                                          ? Container()
                                           : Column(
                                               children: [
                                                 Text('\$${item.price}'),
@@ -115,9 +111,10 @@ class ScrollingShoppingList extends StatelessWidget {
                                               ],
                                             ),
                                     ),
+                                    const SizedBox(width: 20),
                                     Flexible(
                                       child: (item.total == '0.00')
-                                          ? const SizedBox()
+                                          ? Container()
                                           : Column(
                                               children: [
                                                 Text('\$${item.total}'),
