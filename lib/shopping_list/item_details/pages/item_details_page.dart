@@ -106,6 +106,7 @@ class ItemDetailsView extends StatelessWidget {
                 title: 'Quantity',
                 type: InputDialogs.onlyInt,
                 initialValue: state.quantity,
+                preselectText: true,
               );
               if (input != null) itemDetailsCubit.updateItem(quantity: input);
             },
@@ -159,40 +160,27 @@ class ItemDetailsView extends StatelessWidget {
               if (input != null) itemDetailsCubit.updateItem(price: input);
             },
           ),
-          SettingsTile(
-            label: Text('Has Tax'),
-            onChanged: (value) {},
-            child: Column(
-              children: [
-                if (state.hasTax &&
-                    ((shoppingCubit.taxRate == '0.0') ||
-                        (shoppingCubit.taxRate == '0')))
-                  TextButton(
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider.value(
-                              value: homeCubit,
-                              child: SettingsPage(),
-                            );
-                          },
-                        ),
-                      );
-                      shoppingCubit.updateTaxRate();
-                    },
-                    child: Text('Set tax rate'),
-                  ),
-                Switch(
-                  value: state.hasTax,
-                  onChanged: (value) =>
-                      itemDetailsCubit.updateItem(hasTax: value),
+          InkWell(
+            onLongPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return BlocProvider.value(
+                      value: homeCubit,
+                      child: SettingsPage(),
+                    );
+                  },
                 ),
-              ],
+              );
+            },
+            child: SwitchListTile(
+              secondary: Icon(Icons.calculate_outlined),
+              title: Text('Tax'),
+              value: state.hasTax,
+              onChanged: (value) => itemDetailsCubit.updateItem(hasTax: value),
             ),
           ),
-          _Buffer(),
           Card(
             elevation: 4,
             shape:
