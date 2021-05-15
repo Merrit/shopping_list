@@ -39,7 +39,8 @@ class ListDrawer extends StatelessWidget {
                             .map((list) => _ListNameTile(list: list))
                             .toList()
                         : state.shoppingLists
-                            .where((element) => element.name != 'Test List')
+                            .where(
+                                (element) => element.name != '🔧 Test List 🔧')
                             .map((list) => _ListNameTile(list: list))
                             .toList(),
                   ),
