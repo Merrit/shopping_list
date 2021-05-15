@@ -181,56 +181,54 @@ class ItemDetailsView extends StatelessWidget {
               onChanged: (value) => itemDetailsCubit.updateItem(hasTax: value),
             ),
           ),
-          Card(
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12.0,
-                horizontal: 6.0,
-              ),
-              child: ListTile(
-                leading: Icon(Icons.label),
-                title: Text('Labels'),
-                subtitle: BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-                  builder: (context, state) {
-                    return Wrap(
-                      // spacing: 10,
-                      children: state.labels
-                          .map(
-                            (label) => Chip(
-                              label: Text(label),
-                              backgroundColor: Color(shoppingCubit.state.labels
-                                  .firstWhere(
-                                      (element) => element.name == label)
-                                  .color),
-                            ),
-                          )
-                          .toList(),
+          ListTile(
+            leading: Icon(Icons.label),
+            title: Text('Labels'),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            subtitle: (state.labels.isEmpty)
+                ? null
+                : BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: state.labels
+                              .map(
+                                (label) => Chip(
+                                  label: Text(label),
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  backgroundColor: Color(shoppingCubit
+                                      .state.labels
+                                      .firstWhere(
+                                          (element) => element.name == label)
+                                      .color),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      );
+                    },
+                  ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: itemDetailsCubit),
+                        BlocProvider.value(value: shoppingCubit),
+                      ],
+                      child: ChooseLabelsPage(),
                     );
                   },
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return MultiBlocProvider(
-                          providers: [
-                            BlocProvider.value(value: itemDetailsCubit),
-                            BlocProvider.value(value: shoppingCubit),
-                          ],
-                          child: ChooseLabelsPage(),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
+              );
+            },
           ),
-          const SizedBox(height: 40),
           SettingsTile(
             label: Text('Notes'),
             defaultText: state.notes,
