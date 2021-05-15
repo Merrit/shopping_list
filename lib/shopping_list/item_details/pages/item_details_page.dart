@@ -144,14 +144,21 @@ class ItemDetailsView extends StatelessWidget {
               );
             },
           ),
-          SettingsTile(
-            label: Text('Price'),
-            defaultText: state.price,
-            inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => itemDetailsCubit.updateItem(price: value),
+          ListTile(
+            leading: Icon(Icons.attach_money),
+            title: Text('Price'),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            subtitle: Text(state.price),
+            onTap: () async {
+              final input = await InputDialog.show(
+                context: context,
+                title: 'Price',
+                type: InputDialogs.onlyDouble,
+                initialValue: state.price,
+              );
+              if (input != null) itemDetailsCubit.updateItem(price: input);
+            },
           ),
-          const SizedBox(height: 40),
           SettingsTile(
             label: Text('Has Tax'),
             onChanged: (value) {},
