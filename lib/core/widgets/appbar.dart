@@ -110,7 +110,7 @@ class AdaptiveViewManager {
     final mediaQuery = MediaQuery.of(context);
     final isWide = (mediaQuery.size.width > 600);
     if (isWide) {
-      return showSlideInSidePanel(
+      return SidePanel.show(
         context: context,
         providers: providers,
         child: view,
