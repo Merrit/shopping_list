@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shopping_list/core/core.dart';
@@ -9,6 +6,7 @@ import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list/shopping_list/item_details/pages/aisles_page.dart';
+import 'package:shopping_list/shopping_list/item_details/pages/parent_list_page.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
 
 import '../item_details.dart';
@@ -238,24 +236,25 @@ class ItemDetailsView extends StatelessWidget {
               if (input != null) itemDetailsCubit.updateItem(notes: input);
             },
           ),
-          DropdownButton<String>(
-            value: shoppingCubit.state.name,
-            items: homeCubit.state.shoppingLists
-                .map((e) => e.name)
-                .toList()
-                .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text(value),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              homeCubit.moveItemToList(
-                item: shoppingCubit.state.items
-                    .firstWhere((element) => element.name == state.name),
-                currentListName: shoppingCubit.state.name,
-                newListName: value!,
+          ListTile(
+            leading: Icon(Icons.list),
+            title: Text('List'),
+            subtitle: Text(shoppingCubit.state.name),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: homeCubit),
+                        BlocProvider.value(value: shoppingCubit),
+                      ],
+                      child: ParentListPage(itemName: state.name),
+                    );
+                  },
+                ),
               );
-              Navigator.pop(context);
             },
           ),
         ];
