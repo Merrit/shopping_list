@@ -61,16 +61,16 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(shoppingListCubit: shoppingListCubit));
   }
 
-  void moveItemToList({
+  Future<void> moveItemToList({
     required Item item,
     required String currentListName,
     required String newListName,
-  }) {
+  }) async {
     final oldList = state.shoppingLists.firstWhere(
       (list) => list.name == currentListName,
     );
     oldList.items.remove(item);
-    shoppingListRepository.updateShoppingList(oldList);
+    await shoppingListRepository.updateShoppingList(oldList);
     final newList = state.shoppingLists.firstWhere(
       (list) => list.name == newListName,
     );
@@ -85,7 +85,7 @@ class HomeCubit extends Cubit<HomeState> {
         newList.labels.add(label);
       }
     });
-    shoppingListRepository.updateShoppingList(newList);
+    await shoppingListRepository.updateShoppingList(newList);
   }
 
   @override

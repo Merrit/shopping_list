@@ -10,8 +10,8 @@ class ChooseLabelsPage extends StatelessWidget {
   late ItemDetailsCubit itemDetailsCubit;
   late ShoppingListCubit shoppingCubit;
 
-  void _updateColor(Color color, Label label) {
-    shoppingCubit.updateLabelColor(color: color.value, oldLabel: label);
+  Future<void> _updateColor(Color color, Label label) async {
+    await shoppingCubit.updateLabelColor(color: color.value, oldLabel: label);
   }
 
   @override
@@ -51,7 +51,10 @@ class ChooseLabelsPage extends StatelessWidget {
                                   },
                                 ).showPickerDialog(context);
                                 if (!confirmed) {
-                                  _updateColor(Color(colorBeforeDialog), label);
+                                  await _updateColor(
+                                    Color(colorBeforeDialog),
+                                    label,
+                                  );
                                 }
                               },
                               child: FilterChip(
@@ -116,7 +119,9 @@ class EditLabelsPage extends StatelessWidget {
                   .map(
                     (label) => Chip(
                       label: Text(label.name),
-                      onDeleted: () => shoppingCubit.deleteLabel(label),
+                      onDeleted: () async {
+                        await shoppingCubit.deleteLabel(label);
+                      },
                     ),
                   )
                   .toList(),
@@ -137,7 +142,7 @@ class EditLabelsPage extends StatelessWidget {
               },
             ),
           );
-          if (newLabel != null) shoppingCubit.createLabel(name: newLabel);
+          if (newLabel != null) await shoppingCubit.createLabel(name: newLabel);
         },
         label: Text('New label'),
         icon: Icon(Icons.add),

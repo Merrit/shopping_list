@@ -11,8 +11,8 @@ class AisleSidePanel extends StatelessWidget {
   late ItemDetailsCubit itemDetailsCubit;
   late ShoppingListCubit shoppingCubit;
 
-  void _updateColor(Color color, Aisle aisle) {
-    shoppingCubit.updateAisleColor(color: color.value, oldAisle: aisle);
+  Future<void> _updateColor(Color color, Aisle aisle) async {
+    await shoppingCubit.updateAisleColor(color: color.value, oldAisle: aisle);
   }
 
   @override
@@ -64,7 +64,7 @@ class AisleSidePanel extends StatelessWidget {
                             },
                           ).showPickerDialog(context);
                           if (!confirmed) {
-                            _updateColor(
+                            await _updateColor(
                               Color(colorBeforeDialog),
                               aisle,
                             );
@@ -88,8 +88,8 @@ class AisleSidePanel extends StatelessWidget {
                             itemDetailsCubit.updateItem(aisle: value);
                           },
                           secondary: IconButton(
-                            onPressed: () {
-                              shoppingCubit.deleteAisle(aisle: aisle);
+                            onPressed: () async {
+                              await shoppingCubit.deleteAisle(aisle: aisle);
                               itemDetailsCubit.updateItem(aisle: 'None');
                               setState(() {});
                             },
@@ -145,8 +145,8 @@ class _CreateAisleDialog extends StatelessWidget {
     );
   }
 
-  void _createAisle(BuildContext context) {
-    shoppingCubit.createAisle(name: _controller.value.text);
+  Future<void> _createAisle(BuildContext context) async {
+    await shoppingCubit.createAisle(name: _controller.value.text);
     Navigator.pop(context);
   }
 }

@@ -88,7 +88,7 @@ class _SetCompletedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ShoppingListCubit>();
     return FloatingActionButton(
-      onPressed: () => cubit.setCheckedItemsCompleted(),
+      onPressed: () async => await cubit.setCheckedItemsCompleted(),
       backgroundColor: Colors.green,
       child: Icon(Icons.done_all),
     );

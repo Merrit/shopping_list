@@ -100,7 +100,7 @@ class _ActiveItemTile extends StatelessWidget {
     );
     if (newItem != null) {
       final cubit = context.read<ShoppingListCubit>();
-      cubit.updateItem(oldItem: item, newItem: newItem);
+      await cubit.updateItem(oldItem: item, newItem: newItem);
     }
   }
 }

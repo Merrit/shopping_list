@@ -185,6 +185,6 @@ Future<void> _goToItemDetails(BuildContext context, Item item) async {
   );
   if (newItem != null) {
     final cubit = context.read<ShoppingListCubit>();
-    cubit.updateItem(oldItem: item, newItem: newItem);
+    await cubit.updateItem(oldItem: item, newItem: newItem);
   }
 }

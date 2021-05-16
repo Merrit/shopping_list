@@ -44,7 +44,7 @@ class AislesView extends StatelessWidget {
                             hintText: 'Aisle name',
                           );
                           if (input != null) {
-                            shoppingListCubit.createAisle(name: input);
+                            await shoppingListCubit.createAisle(name: input);
                           }
                         },
                         child: Text('Create aisle'),
@@ -73,7 +73,7 @@ class AislesView extends StatelessWidget {
                             },
                           ).showPickerDialog(context);
                           if (!confirmed) {
-                            _updateColor(
+                            await _updateColor(
                                 color: Color(colorBeforeDialog),
                                 aisle: aisle,
                                 shoppingListCubit: shoppingListCubit);
@@ -95,8 +95,8 @@ class AislesView extends StatelessWidget {
                             itemDetailsCubit.updateItem(aisle: value);
                           },
                           secondary: IconButton(
-                            onPressed: () {
-                              shoppingListCubit.deleteAisle(aisle: aisle);
+                            onPressed: () async {
+                              await shoppingListCubit.deleteAisle(aisle: aisle);
                               itemDetailsCubit.updateItem(aisle: 'None');
                               setState(() {});
                             },
@@ -114,11 +114,14 @@ class AislesView extends StatelessWidget {
     );
   }
 
-  void _updateColor({
+  Future<void> _updateColor({
     required Color color,
     required Aisle aisle,
     required ShoppingListCubit shoppingListCubit,
-  }) {
-    shoppingListCubit.updateAisleColor(color: color.value, oldAisle: aisle);
+  }) async {
+    await shoppingListCubit.updateAisleColor(
+      color: color.value,
+      oldAisle: aisle,
+    );
   }
 }
