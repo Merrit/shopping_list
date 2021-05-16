@@ -124,15 +124,16 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   Future<void> updateItem(
       {required Item oldItem, required Item newItem}) async {
-    _shoppingList.items.remove(oldItem);
+    final list = _shoppingList.copyWith();
+    list.items.remove(oldItem);
     final updatedTotal = MoneyHandler().totalPrice(
       price: newItem.price,
       quantity: newItem.quantity,
       taxRate: (newItem.hasTax) ? taxRate : null,
     );
     final itemWithUpdatedTotal = newItem.copyWith(total: updatedTotal);
-    _shoppingList.items.add(itemWithUpdatedTotal);
-    await updateList(items: _shoppingList.items);
+    list.items.add(itemWithUpdatedTotal);
+    await updateList(items: list.items);
   }
 
   Future<void> deleteItem(Item item) async {
