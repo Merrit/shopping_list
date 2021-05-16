@@ -219,7 +219,7 @@ class ItemDetailsView extends StatelessWidget {
                         BlocProvider.value(value: itemDetailsCubit),
                         BlocProvider.value(value: shoppingCubit),
                       ],
-                      child: ChooseLabelsPage(),
+                      child: LabelsPage(),
                     );
                   },
                 ),

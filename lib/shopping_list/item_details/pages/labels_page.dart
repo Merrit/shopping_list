@@ -5,129 +5,85 @@ import 'package:shopping_list/repositories/shopping_list_repository/repository.d
 
 import '../../shopping_list.dart';
 
-// ignore: must_be_immutable
-class ChooseLabelsPage extends StatelessWidget {
-  late ItemDetailsCubit itemDetailsCubit;
-  late ShoppingListCubit shoppingCubit;
-
-  Future<void> _updateColor(Color color, Label label) async {
-    await shoppingCubit.updateLabelColor(color: color.value, oldLabel: label);
-  }
-
+class LabelsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    itemDetailsCubit = context.read<ItemDetailsCubit>();
-    shoppingCubit = context.read<ShoppingListCubit>();
+    final itemDetailsCubit = context.read<ItemDetailsCubit>();
+    final shoppingListCubit = context.read<ShoppingListCubit>();
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Labels'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            BlocBuilder<ShoppingListCubit, ShoppingListState>(
-              builder: (context, shoppingListState) {
-                return Wrap(
-                  spacing: 15,
-                  children: shoppingListState.labels
-                      .map(
-                        (label) =>
-                            BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-                          builder: (context, itemDetailsState) {
-                            return GestureDetector(
-                              onLongPress: () async {
-                                final colorBeforeDialog = label.color;
-                                final confirmed = await ColorPicker(
-                                  // Current color is pre-selected.
-                                  color: Color(label.color),
-                                  onColorChanged: (Color color) =>
-                                      _updateColor(color, label),
-                                  heading: Text('Select color'),
-                                  subheading: Text('Select color shade'),
-                                  pickersEnabled: const <ColorPickerType, bool>{
-                                    ColorPickerType.primary: true,
-                                    ColorPickerType.accent: false,
-                                  },
-                                ).showPickerDialog(context);
-                                if (!confirmed) {
-                                  await _updateColor(
-                                    Color(colorBeforeDialog),
-                                    label,
-                                  );
-                                }
+      appBar: AppBar(title: Text('Labels')),
+      body: BlocBuilder<ShoppingListCubit, ShoppingListState>(
+        builder: (context, shoppingListState) {
+          return ListView.builder(
+            padding: EdgeInsets.only(
+              top: 20,
+              left: 4,
+            ),
+            itemCount: shoppingListState.labels.length,
+            itemBuilder: (context, index) {
+              final label = shoppingListState.labels[index];
+              return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+                key: Key('$index'),
+                builder: (context, itemDetailsState) {
+                  return ListTile(
+                    leading: (itemDetailsState.labels.contains(label.name))
+                        ? Icon(Icons.check)
+                        : SizedBox(),
+                    title: Text(
+                      label.name,
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            color: Color(label.color),
+                          ),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            final colorBeforeDialog = label.color;
+                            final confirmed = await ColorPicker(
+                              // Current color is pre-selected.
+                              color: Color(label.color),
+                              onColorChanged: (Color color) async {
+                                await _updateColor(
+                                  color: color,
+                                  label: label,
+                                  shoppingListCubit: shoppingListCubit,
+                                );
                               },
-                              child: FilterChip(
-                                selected: itemDetailsState.labels
-                                    .contains(label.name),
-                                label: Text(label.name),
-                                backgroundColor: Color(label.color),
-                                // TODO: Add opacity or something to help
-                                // differentiate between selected and not color.
-                                selectedColor: Color(label.color),
-                                onSelected: (_) {
-                                  itemDetailsCubit.toggleLabel(label.name);
-                                },
-                              ),
-                            );
+                              heading: Text('Select color'),
+                              subheading: Text('Select color shade'),
+                              pickersEnabled: const <ColorPickerType, bool>{
+                                ColorPickerType.primary: true,
+                                ColorPickerType.accent: false,
+                              },
+                            ).showPickerDialog(context);
+                            if (!confirmed) {
+                              await _updateColor(
+                                color: Color(colorBeforeDialog),
+                                label: label,
+                                shoppingListCubit: shoppingListCubit,
+                              );
+                            }
                           },
+                          icon: Icon(Icons.edit_outlined),
                         ),
-                      )
-                      .toList(),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return BlocProvider.value(
-                  value: shoppingCubit,
-                  child: EditLabelsPage(),
-                );
-              },
-            ),
+                        IconButton(
+                          onPressed: () async {
+                            await shoppingListCubit.deleteLabel(label);
+                          },
+                          icon: Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                    onTap: () => itemDetailsCubit.toggleLabel(label.name),
+                  );
+                },
+              );
+            },
           );
         },
-        label: Text('Edit labels'),
-      ),
-    );
-  }
-}
-
-class EditLabelsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final shoppingCubit = context.read<ShoppingListCubit>();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Labels'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: BlocBuilder<ShoppingListCubit, ShoppingListState>(
-          builder: (context, state) {
-            return Wrap(
-              spacing: 10,
-              children: state.labels
-                  .map(
-                    (label) => Chip(
-                      label: Text(label.name),
-                      onDeleted: () async {
-                        await shoppingCubit.deleteLabel(label);
-                      },
-                    ),
-                  )
-                  .toList(),
-            );
-          },
-        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
@@ -136,13 +92,15 @@ class EditLabelsPage extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) {
                 return BlocProvider.value(
-                  value: shoppingCubit,
-                  child: CreateTagPage(),
+                  value: shoppingListCubit,
+                  child: CreateLabelPage(),
                 );
               },
             ),
           );
-          if (newLabel != null) await shoppingCubit.createLabel(name: newLabel);
+          if (newLabel != null) {
+            await shoppingListCubit.createLabel(name: newLabel);
+          }
         },
         label: Text('New label'),
         icon: Icon(Icons.add),
@@ -151,14 +109,24 @@ class EditLabelsPage extends StatelessWidget {
   }
 }
 
-class CreateTagPage extends StatelessWidget {
+Future<void> _updateColor({
+  required Color color,
+  required Label label,
+  required ShoppingListCubit shoppingListCubit,
+}) async {
+  await shoppingListCubit.updateLabelColor(color: color.value, oldLabel: label);
+}
+
+class CreateLabelPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = TextEditingController();
 
     Future<bool> _onWillPop() async {
       final newLabel = _controller.value.text;
-      Navigator.pop(context, newLabel);
+      final isBlank = (newLabel == '');
+      final value = (isBlank) ? null : newLabel;
+      Navigator.pop(context, value);
       return true;
     }
 

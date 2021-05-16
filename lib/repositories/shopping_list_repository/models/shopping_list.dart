@@ -54,10 +54,14 @@ class ShoppingList extends Equatable {
     String sortBy = 'Name',
     bool sortAscending = true,
   }) {
+    final validatedItems = LabelValidator(
+      items: items,
+      labels: labels,
+    ).validate();
     return ShoppingList._internal(
       name: name,
       aisles: AisleValidator.validate(aisles),
-      items: items.toSet().toList(), // Ensure no duplicates.
+      items: validatedItems,
       color: color,
       id: id,
       owner: owner,

@@ -85,11 +85,12 @@ class ScrollingShoppingList extends StatelessWidget {
                                           ? Chip(
                                               label: Text(item.aisle),
                                               backgroundColor: Color(
-                                                  shoppingListCubit.state.aisles
-                                                      .firstWhere((element) =>
-                                                          element.name ==
-                                                          item.aisle)
-                                                      .color),
+                                                state.aisles
+                                                    .firstWhere((aisle) =>
+                                                        aisle.name ==
+                                                        item.aisle)
+                                                    .color,
+                                              ),
                                             )
                                           : Container(),
                                     ),
@@ -129,7 +130,10 @@ class ScrollingShoppingList extends StatelessWidget {
                                 ),
                                 if (item.labels.isNotEmpty)
                                   Padding(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.only(
+                                      top: 8,
+                                      left: 8,
+                                    ),
                                     child: Wrap(
                                       spacing: 10,
                                       runSpacing: 10,
@@ -142,8 +146,7 @@ class ScrollingShoppingList extends StatelessWidget {
                                                   .subtitle1!
                                                   .copyWith(
                                                     color: Color(
-                                                      shoppingListCubit
-                                                          .state.labels
+                                                      state.labels
                                                           .firstWhere(
                                                               (element) =>
                                                                   element
