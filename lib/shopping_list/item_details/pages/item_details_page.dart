@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,10 +64,6 @@ class ItemDetailsView extends StatelessWidget {
     homeCubit = context.read<HomeCubit>();
 
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-      // buildWhen: (previous, current) =>
-      //     (previous.aisle != current.aisle) ||
-      //     (previous.hasTax != current.hasTax) ||
-      //     (previous.labels != current.labels),
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
         final shoppingCubit = context.watch<ShoppingListCubit>();
@@ -84,7 +82,6 @@ class ItemDetailsView extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.title),
             title: Text('Name'),
-            trailing: Icon(Icons.keyboard_arrow_right),
             subtitle: Text(state.name),
             onTap: () async {
               final input = await InputDialog.show(
@@ -98,7 +95,6 @@ class ItemDetailsView extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.tag),
             title: Text('Quantity'),
-            trailing: Icon(Icons.keyboard_arrow_right),
             subtitle: Text(state.quantity),
             onTap: () async {
               final input = await InputDialog.show(
@@ -148,7 +144,6 @@ class ItemDetailsView extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.attach_money),
             title: Text('Price'),
-            trailing: Icon(Icons.keyboard_arrow_right),
             subtitle: Text(state.price),
             onTap: () async {
               final input = await InputDialog.show(
@@ -229,14 +224,20 @@ class ItemDetailsView extends StatelessWidget {
               );
             },
           ),
-          SettingsTile(
-            label: Text('Notes'),
-            defaultText: state.notes,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            onChanged: (value) => itemDetailsCubit.updateItem(notes: value),
+          ListTile(
+            leading: Icon(Icons.notes),
+            title: Text('Notes'),
+            subtitle: (state.notes == '') ? null : Text(state.notes),
+            onTap: () async {
+              final input = await InputDialog.show(
+                context: context,
+                title: 'Notes',
+                initialValue: state.notes,
+                type: InputDialogs.multiLine,
+              );
+              if (input != null) itemDetailsCubit.updateItem(notes: input);
+            },
           ),
-          const SizedBox(height: 40),
           DropdownButton<String>(
             value: shoppingCubit.state.name,
             items: homeCubit.state.shoppingLists
