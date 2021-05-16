@@ -183,21 +183,25 @@ class ItemDetailsView extends StatelessWidget {
                 : BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
                     builder: (context, state) {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 8),
+                        padding: const EdgeInsets.only(top: 4),
                         child: Wrap(
                           spacing: 10,
                           runSpacing: 10,
                           children: state.labels
                               .map(
-                                (label) => Chip(
-                                  label: Text(label),
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  backgroundColor: Color(shoppingCubit
-                                      .state.labels
-                                      .firstWhere(
-                                          (element) => element.name == label)
-                                      .color),
+                                (label) => Text(
+                                  label,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(
+                                        color: Color(
+                                          shoppingCubit.state.labels
+                                              .firstWhere((element) =>
+                                                  element.name == label)
+                                              .color,
+                                        ),
+                                      ),
                                 ),
                               )
                               .toList(),

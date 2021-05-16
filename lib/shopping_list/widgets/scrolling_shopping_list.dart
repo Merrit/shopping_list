@@ -128,20 +128,34 @@ class ScrollingShoppingList extends StatelessWidget {
                                   ],
                                 ),
                                 if (item.labels.isNotEmpty)
-                                  Wrap(
-                                    children: item.labels
-                                        .map(
-                                          (label) => Chip(
-                                            label: Text(label),
-                                            backgroundColor: Color(
-                                                shoppingListCubit
-                                                    .state.labels
-                                                    .firstWhere((element) =>
-                                                        element.name == label)
-                                                    .color),
-                                          ),
-                                        )
-                                        .toList(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Wrap(
+                                      spacing: 10,
+                                      runSpacing: 10,
+                                      children: item.labels
+                                          .map(
+                                            (label) => Text(
+                                              label,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1!
+                                                  .copyWith(
+                                                    color: Color(
+                                                      shoppingListCubit
+                                                          .state.labels
+                                                          .firstWhere(
+                                                              (element) =>
+                                                                  element
+                                                                      .name ==
+                                                                  label)
+                                                          .color,
+                                                    ),
+                                                  ),
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
                                   ),
                                 if (item.notes != '')
                                   Container(
