@@ -270,27 +270,4 @@ class ItemDetailsView extends StatelessWidget {
       },
     );
   }
-
-  String _verifyAisle({
-    required ShoppingListCubit shoppingCubit,
-    required String aisle,
-  }) {
-    final verifiedAisle = (shoppingCubit.verifyAisle(aisle: aisle));
-    if (verifiedAisle == '') {
-      return 'None';
-    } else {
-      return verifiedAisle;
-    }
-  }
-}
-
-class _Buffer extends StatelessWidget {
-  const _Buffer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 40);
-  }
 }
