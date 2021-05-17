@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -15,7 +17,12 @@ void main() async {
   EquatableConfig.stringify = kDebugMode;
   initLogger();
   // Bloc.observer = SimpleBlocObserver();
+  _disableWebRightClick();
   runApp(App(authenticationRepository: AuthenticationRepository()));
+}
+
+void _disableWebRightClick() {
+  document.onContextMenu.listen((event) => event.preventDefault());
 }
 
 /// Initialize the logger.
