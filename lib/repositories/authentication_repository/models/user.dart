@@ -22,4 +22,11 @@ class User extends Equatable {
 
   @override
   List<Object> get props => [id, email, emailIsVerified];
+
+  @override
+  String toString() => '\n'
+      'id: $id, \n'
+      'email: $email, \n'
+      'emailIsVerified: $emailIsVerified, \n'
+      '\n';
 }

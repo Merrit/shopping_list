@@ -69,6 +69,7 @@ class _AppViewState extends State<AppView> {
                 _navigator.pushReplacementNamed(LoginPage.id);
                 break;
               default:
+                _log.info('Unknown auth state?');
                 break;
             }
           },
