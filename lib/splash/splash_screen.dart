@@ -10,13 +10,21 @@ class SplashPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            const SizedBox(width: double.infinity),
+            const SizedBox(
+              height: 50,
+              width: double.infinity,
+            ),
             AppIcon(
               height: 150,
               width: 150,
             ),
-            CircularProgressIndicator(),
+            const SizedBox(height: 50),
+            Flexible(
+              flex: 2,
+              child: CircularProgressIndicator(),
+            ),
           ],
         ),
       ),
