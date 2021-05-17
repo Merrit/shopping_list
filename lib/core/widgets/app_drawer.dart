@@ -22,32 +22,31 @@ class ListDrawer extends StatelessWidget {
           (previous.shoppingLists != current.shoppingLists) ||
           (previous.currentListId != current.currentListId),
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              const _CreateListButton(),
-              Expanded(
-                child: ListTileTheme(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  selectedTileColor: Colors.grey.withAlpha(40),
-                  child: ListView(
-                    children: (foundation.kDebugMode)
-                        ? state.shoppingLists
-                            .map((list) => _ListNameTile(list: list))
-                            .toList()
-                        : state.shoppingLists
-                            .where(
-                                (element) => element.name != '🔧 Test List 🔧')
-                            .map((list) => _ListNameTile(list: list))
-                            .toList(),
-                  ),
+        return Column(
+          children: [
+            const _CreateListButton(),
+            Expanded(
+              child: ListTileTheme(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                selectedTileColor: Colors.grey.withAlpha(40),
+                child: ListView(
+                  children: (foundation.kDebugMode)
+                      ? state.shoppingLists
+                          .map((list) => _ListNameTile(list: list))
+                          .toList()
+                      : state.shoppingLists
+                          .where((element) => element.name != '🔧 Test List 🔧')
+                          .map((list) => _ListNameTile(list: list))
+                          .toList(),
                 ),
               ),
-              const Spacer(),
-              Row(
+            ),
+            // const Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
@@ -72,8 +71,8 @@ class ListDrawer extends StatelessWidget {
                   )
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -158,14 +157,13 @@ class _ListNameTile extends StatelessWidget {
         return ListTile(
           selected: (state.currentListId == list.id),
           title: Center(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                list.name,
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Color(list.color),
-                    ),
-              ),
+            child: Text(
+              list.name,
+              style: Theme.of(context).textTheme.headline6!.copyWith(
+                    color: Color(list.color),
+                  ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           onTap: () {
