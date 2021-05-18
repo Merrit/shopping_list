@@ -60,8 +60,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   }
 
   void _listUpdatedFromDatabase(ShoppingList list) {
-    final sortedList = _sortItems(list: list);
-    _shoppingList = sortedList;
+    _shoppingList = list;
     _emitNewState(list: _shoppingList);
   }
 
@@ -75,15 +74,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     bool? sortAscending,
     List<Item>? checkedItems,
   }) async {
-    final sortedItems = ItemSorter().sort(
-      ascending: sortAscending ?? state.sortAscending,
-      currentItems: items ?? state.items,
-      sortBy: sortBy ?? state.sortBy,
-    );
     _shoppingList = _shoppingList.copyWith(
       aisles: aisles,
       color: color,
-      items: sortedItems,
+      items: items ?? state.items,
       labels: labels,
       name: name,
       sortBy: sortBy,
@@ -197,19 +191,6 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   Future<void> deleteAisle({required Aisle aisle}) async {
     _shoppingList.aisles.remove(aisle);
     await updateList(aisles: _shoppingList.aisles);
-  }
-
-  ShoppingList _sortItems({
-    required ShoppingList list,
-    bool? sortAscending,
-    String? sortBy,
-  }) {
-    final sortedItems = ItemSorter().sort(
-      ascending: sortAscending ?? state.sortAscending,
-      currentItems: list.items,
-      sortBy: sortBy ?? state.sortBy,
-    );
-    return list.copyWith(items: sortedItems);
   }
 
   String get taxRate => _homeCubit.state.prefs!.getString('taxRate') ?? '0.0';

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/validators/item_sort_validator.dart';
 
 import 'models.dart';
 
@@ -54,10 +55,17 @@ class ShoppingList extends Equatable {
     String sortBy = 'Name',
     bool sortAscending = true,
   }) {
-    final validatedItems = LabelValidator(
+    List<Item> validatedItems;
+    validatedItems = LabelValidator(
       items: items,
       labels: labels,
     ).validate();
+    validatedItems = ItemSortValidator(
+      items: validatedItems,
+    ).sort(
+      ascending: sortAscending,
+      sortBy: sortBy,
+    );
     return ShoppingList._internal(
       name: name,
       aisles: AisleValidator.validate(aisles),
