@@ -9,9 +9,9 @@ class LabelValidator {
   /// Clean out labels that have been deleted.
   List<Item> validate() {
     final labelNames = labels.map((label) => label.name).toList();
-    items.forEach((item) {
+    for (var item in items) {
       item.labels.removeWhere((label) => !labelNames.contains(label));
-    });
+    }
     return items;
   }
 }
