@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -7,8 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
+import 'package:shopping_list/setup/setup.dart';
 
 import 'app.dart';
+
 // import 'simple_bloc_observer.dart';
 
 void main() async {
@@ -17,12 +17,8 @@ void main() async {
   EquatableConfig.stringify = kDebugMode;
   initLogger();
   // Bloc.observer = SimpleBlocObserver();
-  _disableWebRightClick();
+  setup.init();
   runApp(App(authenticationRepository: AuthenticationRepository()));
-}
-
-void _disableWebRightClick() {
-  document.onContextMenu.listen((event) => event.preventDefault());
 }
 
 /// Initialize the logger.
