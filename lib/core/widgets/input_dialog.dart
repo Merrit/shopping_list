@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../core.dart';
+
 /// Allows to easily specify dialog properties such as the text field only
 /// accepting input as a double, which type of soft keyboard to show, etc.
 enum InputDialogs {
@@ -10,6 +12,7 @@ enum InputDialogs {
 }
 
 class InputDialog extends StatelessWidget {
+  final bool autofocus;
   final BuildContext context;
   final InputDialogs? type;
   final String title;
@@ -19,17 +22,18 @@ class InputDialog extends StatelessWidget {
   final List<TextInputFormatter>? formatter;
 
   InputDialog({
+    this.autofocus = true,
     required this.context,
     this.type,
     this.title = '',
     this.hintText,
     this.keyboardType,
     this.formatter,
-    required String initialValue,
+    String? initialValue,
     bool preselectText = false,
   }) : maxLines = (type == InputDialogs.multiLine) ? 5 : 1 {
-    controller.text = initialValue;
-    if (preselectText) {
+    controller.text = initialValue ?? '';
+    if (preselectText && initialValue != null) {
       controller.selection = TextSelection(
         baseOffset: 0,
         extentOffset: initialValue.length,
@@ -47,36 +51,33 @@ class InputDialog extends StatelessWidget {
       shortcuts: shortcuts,
       child: Actions(
         actions: actions,
-        child: Focus(
-          autofocus: false,
-          child: AlertDialog(
-            title: Text(title),
-            content: TextFormField(
-              controller: controller,
-              focusNode: textFieldFocusNode,
-              autofocus: true,
-              decoration: InputDecoration(hintText: hintText),
-              keyboardType: keyboardType,
-              inputFormatters: formatter,
-              minLines: 1,
-              maxLines: maxLines,
-              textInputAction: TextInputAction.newline,
-              // For non-multiline fields onFieldSubmitted has enter => submit.
-              // For multiline fields the hotkey Ctrl + Enter works instead.
-              onFieldSubmitted: (value) =>
-                  (type == InputDialogs.multiLine) ? null : _onSubmitted(),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, controller.text),
-                child: Text('Confirm'),
-              ),
-            ],
+        child: AlertDialog(
+          title: Text(title),
+          content: TextFormField(
+            controller: controller,
+            focusNode: textFieldFocusNode,
+            autofocus: autofocus,
+            decoration: InputDecoration(hintText: hintText),
+            keyboardType: keyboardType,
+            inputFormatters: formatter,
+            minLines: 1,
+            maxLines: maxLines,
+            textInputAction: TextInputAction.newline,
+            // For non-multiline fields onFieldSubmitted has enter => submit.
+            // For multiline fields the hotkey Ctrl + Enter works instead.
+            onFieldSubmitted: (value) =>
+                (type == InputDialogs.multiLine) ? null : _onSubmitted(),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, controller.text),
+              child: Text('Confirm'),
+            ),
+          ],
         ),
       ),
     );
@@ -114,10 +115,11 @@ class InputDialog extends StatelessWidget {
   /// field was left blank.
   static Future<String?> show({
     required BuildContext context,
+    bool? autofocus,
     InputDialogs? type,
     String? title,
     String? hintText,
-    required String initialValue,
+    String? initialValue,
     bool? preselectText,
   }) async {
     TextInputType keyboardType;
@@ -143,11 +145,23 @@ class InputDialog extends StatelessWidget {
         keyboardType = TextInputType.visiblePassword;
     }
 
+    bool shouldAutofocus;
+    if (autofocus != null) {
+      shouldAutofocus = autofocus;
+    } else {
+      if (platformIsWebMobile(context)) {
+        shouldAutofocus = false;
+      } else {
+        shouldAutofocus = true;
+      }
+    }
+
     var result = await showDialog<String>(
       context: context,
       builder: (context) {
         return InputDialog(
           context: context,
+          autofocus: shouldAutofocus,
           type: type,
           title: title ?? '',
           hintText: hintText,
