@@ -39,13 +39,13 @@ class SortByView extends StatelessWidget {
                     title: Text(element),
                     value: element,
                     groupValue: state.sortBy,
-                    onChanged: (String? value) {
-                      shoppingCubit.updateList(sortBy: element);
+                    onChanged: (String? value) async {
+                      await shoppingCubit.updateList(sortBy: element);
                     },
                     secondary: (state.sortBy == element)
                         ? IconButton(
-                            onPressed: () {
-                              shoppingCubit.updateList(
+                            onPressed: () async {
+                              await shoppingCubit.updateList(
                                 sortAscending: !state.sortAscending,
                               );
                             },

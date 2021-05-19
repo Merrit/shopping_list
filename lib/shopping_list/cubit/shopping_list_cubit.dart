@@ -60,12 +60,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   }
 
   void _listUpdatedFromDatabase(ShoppingList list) {
-    final sortedList = _sortItems(list: list);
-    _shoppingList = sortedList;
+    _shoppingList = list;
     _emitNewState(list: _shoppingList);
   }
 
-  void updateList({
+  Future<void> updateList({
     List<Aisle>? aisles,
     int? color,
     List<Item>? items,
@@ -74,22 +73,17 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     String? sortBy,
     bool? sortAscending,
     List<Item>? checkedItems,
-  }) {
-    final sortedItems = ItemSorter().sort(
-      ascending: sortAscending ?? state.sortAscending,
-      currentItems: items ?? state.items,
-      sortBy: sortBy ?? state.sortBy,
-    );
+  }) async {
     _shoppingList = _shoppingList.copyWith(
       aisles: aisles,
       color: color,
-      items: sortedItems,
+      items: items ?? state.items,
       labels: labels,
       name: name,
       sortBy: sortBy,
       sortAscending: sortAscending,
     );
-    _shoppingListRepository.updateShoppingList(_shoppingList);
+    await _shoppingListRepository.updateShoppingList(_shoppingList);
     _emitNewState(list: _shoppingList, checkedItems: checkedItems);
   }
 
@@ -116,27 +110,29 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _shoppingListRepository.deleteShoppingList(_shoppingList);
   }
 
-  void createItem({required String name}) {
+  Future<void> createItem({required String name}) async {
     final newItem = Item(name: name);
     _shoppingList.items.add(newItem);
-    _shoppingListRepository.updateShoppingList(_shoppingList);
+    await _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
-  void updateItem({required Item oldItem, required Item newItem}) {
-    _shoppingList.items.remove(oldItem);
+  Future<void> updateItem(
+      {required Item oldItem, required Item newItem}) async {
+    final list = _shoppingList.copyWith();
+    list.items.remove(oldItem);
     final updatedTotal = MoneyHandler().totalPrice(
       price: newItem.price,
       quantity: newItem.quantity,
       taxRate: (newItem.hasTax) ? taxRate : null,
     );
     final itemWithUpdatedTotal = newItem.copyWith(total: updatedTotal);
-    _shoppingList.items.add(itemWithUpdatedTotal);
-    updateList(items: _shoppingList.items);
+    list.items.add(itemWithUpdatedTotal);
+    await updateList(items: list.items);
   }
 
-  void deleteItem(Item item) {
+  Future<void> deleteItem(Item item) async {
     _shoppingList.items.removeWhere((element) => element == item);
-    _shoppingListRepository.updateShoppingList(_shoppingList);
+    await _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
   void toggleItemChecked(Item item) {
@@ -156,7 +152,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     emit(state.copyWith());
   }
 
-  void setCheckedItemsCompleted() {
+  Future<void> setCheckedItemsCompleted() async {
     final completedItems = <Item>[];
     state.checkedItems.forEach(
       (item) {
@@ -167,18 +163,18 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     );
     state.checkedItems.clear();
     _shoppingList.items.addAll(completedItems);
-    updateList(items: _shoppingList.items);
+    await updateList(items: _shoppingList.items);
   }
 
-  void deleteCompletedItems() {
+  Future<void> deleteCompletedItems() async {
     _shoppingList.items.removeWhere((item) => item.isComplete);
-    updateList(items: _shoppingList.items);
+    await updateList(items: _shoppingList.items);
   }
 
-  void createAisle({required String name, int? color}) {
+  Future<void> createAisle({required String name, int? color}) async {
     final aisle = Aisle(name: name, color: color ?? 0);
     _shoppingList.aisles.add(aisle);
-    updateList(aisles: _shoppingList.aisles);
+    await updateList(aisles: _shoppingList.aisles);
   }
 
   String verifyAisle({required String aisle}) {
@@ -192,53 +188,43 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     }
   }
 
-  void deleteAisle({required Aisle aisle}) {
+  Future<void> deleteAisle({required Aisle aisle}) async {
     _shoppingList.aisles.remove(aisle);
-    updateList(aisles: _shoppingList.aisles);
-  }
-
-  ShoppingList _sortItems({
-    required ShoppingList list,
-    bool? sortAscending,
-    String? sortBy,
-  }) {
-    final sortedItems = ItemSorter().sort(
-      ascending: sortAscending ?? state.sortAscending,
-      currentItems: list.items,
-      sortBy: sortBy ?? state.sortBy,
-    );
-    return list.copyWith(items: sortedItems);
+    await updateList(aisles: _shoppingList.aisles);
   }
 
   String get taxRate => _homeCubit.state.prefs!.getString('taxRate') ?? '0.0';
 
   void updateTaxRate() => emit(state.copyWith(taxRate: taxRate));
 
-  void createLabel({required String name, int color = 0}) {
-    final newLabel = Label(name: name, color: color);
+  Future<void> createLabel({required String name}) async {
+    final newLabel = Label(name: name, color: Colors.white.value);
     _shoppingList.labels.add(newLabel);
-    updateList(labels: _shoppingList.labels);
+    await updateList(labels: _shoppingList.labels);
   }
 
-  void deleteLabel(Label label) {
+  Future<void> deleteLabel(Label label) async {
     _shoppingList.labels.remove(label);
-    updateList(labels: _shoppingList.labels);
+    await updateList(labels: _shoppingList.labels);
   }
 
-  void updateAisleColor({required int color, required Aisle oldAisle}) {
+  Future<void> updateAisleColor(
+      {required int color, required Aisle oldAisle}) async {
     final updatedAisle = oldAisle.copyWith(color: color);
     _shoppingList.aisles
       ..remove(oldAisle)
       ..add(updatedAisle);
-    updateList(aisles: _shoppingList.aisles);
+    await updateList(aisles: _shoppingList.aisles);
   }
 
-  void updateLabelColor({required int color, required Label oldLabel}) {
+  Future<void> updateLabelColor(
+      {required int color, required Label oldLabel}) async {
     final updatedLabel = oldLabel.copyWith(color: color);
-    _shoppingList.labels
+    final list = _shoppingList.copyWith();
+    list.labels
       ..remove(oldLabel)
       ..add(updatedLabel);
-    updateList(labels: _shoppingList.labels);
+    await updateList(labels: list.labels);
   }
 
   @override

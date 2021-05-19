@@ -9,10 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^1.0.5
+  cloud_firestore: ^2.2.0
   equatable: ^2.0.0
-  firebase_auth: ^1.0.3
-  firebase_core: ^1.0.3
+  firebase_auth: ^1.2.0
+  firebase_core: ^1.2.0
   flex_color_picker: ^2.0.1
   flutter_bloc: ^7.0.0
   flutter_signin_button: ^2.0.0

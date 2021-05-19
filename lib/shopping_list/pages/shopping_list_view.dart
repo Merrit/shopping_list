@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/shopping_list/widgets/create_item_shortcut.dart';
+import 'package:shopping_list/shopping_list/widgets/main_floating_button.dart';
 
 import '../shopping_list.dart';
 
@@ -13,7 +16,7 @@ class ShoppingListView extends StatelessWidget {
         final haveActiveList = (state.currentListId != '');
         final prefsInitialized = (state.prefs != null);
         if (haveActiveList && prefsInitialized) {
-          return _ActiveListView();
+          return ActiveListView();
         } else {
           return _NoActiveListView();
         }
@@ -39,18 +42,34 @@ class _NoActiveListView extends StatelessWidget {
   }
 }
 
-class _ActiveListView extends StatelessWidget {
+class ActiveListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ActiveListState(),
-      child: Stack(
-        children: [
-          ScrollingShoppingList(),
-          FloatingButton(),
-        ],
+      child: CreateItemShortcut(
+        child: Stack(
+          children: [
+            ScrollingShoppingList(),
+            FloatingButton(
+              floatingActionButton: MainFloatingButton(),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  static Future<void> showCreateItemDialog(
+      {required BuildContext context}) async {
+    final shoppingListCubit = context.read<ShoppingListCubit>();
+    final input = await InputDialog.show(
+      context: context,
+      title: 'New item',
+    );
+    if ((input != null) && (input != '')) {
+      await shoppingListCubit.createItem(name: input.capitalizeFirst);
+    }
   }
 }
 

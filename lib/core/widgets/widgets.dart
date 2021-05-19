@@ -1,7 +1,10 @@
 export 'appbar.dart';
 export 'app_icon.dart';
-export 'app_drawer.dart';
+export 'app_drawer/app_drawer.dart';
+export 'floating_button.dart';
+export 'input_dialog.dart';
 export 'settings_tile.dart';
 export 'settings_tile_state.dart';
-export 'slide_in_side_panel.dart';
+export 'side_panel.dart';
+export 'simple_tooltip.dart';
 export 'text_input_formatter.dart';

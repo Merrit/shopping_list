@@ -7,8 +7,26 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: AppIcon(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            const SizedBox(
+              height: 50,
+              width: double.infinity,
+            ),
+            AppIcon(
+              height: 150,
+              width: 150,
+            ),
+            const SizedBox(height: 50),
+            Flexible(
+              flex: 2,
+              child: CircularProgressIndicator(),
+            ),
+          ],
+        ),
       ),
     );
   }

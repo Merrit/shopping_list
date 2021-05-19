@@ -6,19 +6,25 @@ import 'package:shopping_list/repositories/shopping_list_repository/repository.d
 
 import '../../shopping_list.dart';
 
-// ignore: must_be_immutable
-class AisleSidePanel extends StatelessWidget {
-  late ItemDetailsCubit itemDetailsCubit;
-  late ShoppingListCubit shoppingCubit;
-
-  Future<void> _updateColor(Color color, Aisle aisle) async {
-    await shoppingCubit.updateAisleColor(color: color.value, oldAisle: aisle);
-  }
+class AislesPage extends StatelessWidget {
+  static const id = 'aisles_page';
 
   @override
   Widget build(BuildContext context) {
-    itemDetailsCubit = context.read<ItemDetailsCubit>();
-    shoppingCubit = context.read<ShoppingListCubit>();
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: Text('Aisle')),
+        body: AislesView(),
+      ),
+    );
+  }
+}
+
+class AislesView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final itemDetailsCubit = context.read<ItemDetailsCubit>();
+    final shoppingListCubit = context.read<ShoppingListCubit>();
 
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, shoppingListState) {
@@ -27,25 +33,27 @@ class AisleSidePanel extends StatelessWidget {
             var _currentAisle = itemDetailsState.aisle;
             return StatefulBuilder(
               builder: (BuildContext context, setState) {
-                return Column(
+                return ListView(
                   children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return BlocProvider.value(
-                              value: shoppingCubit,
-                              child: _CreateAisleDialog(),
-                            );
-                          },
-                        );
-                        setState(() {});
-                      },
-                      child: Text('Create aisle'),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final input = await InputDialog.show(
+                            context: context,
+                            initialValue: '',
+                            title: 'Create aisle',
+                            hintText: 'Aisle name',
+                          );
+                          if (input != null) {
+                            await shoppingListCubit.createAisle(name: input);
+                          }
+                        },
+                        child: Text('Create aisle'),
+                      ),
                     ),
                     const SizedBox(height: 20),
-                    Text('Long press to edit items'),
+                    Center(child: Text('Long press to edit items')),
                     const SizedBox(height: 20),
                     for (var aisle in shoppingListState.aisles)
                       GestureDetector(
@@ -54,8 +62,11 @@ class AisleSidePanel extends StatelessWidget {
                           final confirmed = await ColorPicker(
                             // Current color is pre-selected.
                             color: Color(aisle.color),
-                            onColorChanged: (Color color) =>
-                                _updateColor(color, aisle),
+                            onColorChanged: (Color color) => _updateColor(
+                              aisle: aisle,
+                              color: color,
+                              shoppingListCubit: shoppingListCubit,
+                            ),
                             heading: Text('Select color'),
                             subheading: Text('Select color shade'),
                             pickersEnabled: const <ColorPickerType, bool>{
@@ -65,16 +76,14 @@ class AisleSidePanel extends StatelessWidget {
                           ).showPickerDialog(context);
                           if (!confirmed) {
                             await _updateColor(
-                              Color(colorBeforeDialog),
-                              aisle,
-                            );
+                                color: Color(colorBeforeDialog),
+                                aisle: aisle,
+                                shoppingListCubit: shoppingListCubit);
                           }
                         },
                         child: RadioListTile<String>(
                           title: Row(
                             children: [
-                              Text(aisle.name),
-                              SizedBox(width: 10),
                               Chip(
                                 label: Text(aisle.name),
                                 backgroundColor: Color(aisle.color),
@@ -89,7 +98,7 @@ class AisleSidePanel extends StatelessWidget {
                           },
                           secondary: IconButton(
                             onPressed: () async {
-                              await shoppingCubit.deleteAisle(aisle: aisle);
+                              await shoppingListCubit.deleteAisle(aisle: aisle);
                               itemDetailsCubit.updateItem(aisle: 'None');
                               setState(() {});
                             },
@@ -106,47 +115,15 @@ class AisleSidePanel extends StatelessWidget {
       },
     );
   }
-}
 
-class _CreateAisleDialog extends StatelessWidget {
-  _CreateAisleDialog({
-    Key? key,
-  }) : super(key: key);
-
-  late final ShoppingListCubit shoppingCubit;
-  final _controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    shoppingCubit = context.read<ShoppingListCubit>();
-    return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(labelText: 'Name'),
-            onSubmitted: (_) => _createAisle(context),
-          ),
-          SizedBox(height: 20),
-          AppIcon(),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => _createAisle(context),
-          child: Text('Create'),
-        ),
-      ],
+  Future<void> _updateColor({
+    required Color color,
+    required Aisle aisle,
+    required ShoppingListCubit shoppingListCubit,
+  }) async {
+    await shoppingListCubit.updateAisleColor(
+      color: color.value,
+      oldAisle: aisle,
     );
-  }
-
-  Future<void> _createAisle(BuildContext context) async {
-    await shoppingCubit.createAisle(name: _controller.value.text);
-    Navigator.pop(context);
   }
 }

@@ -1,2 +1,2 @@
-export 'item_sorter.dart';
+export 'capitalize_string.dart';
 export 'money_handler.dart';

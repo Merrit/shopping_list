@@ -52,8 +52,8 @@ class _CompletedItemsViewState extends State<CompletedItemsView> {
               builder: (context, state) {
                 return FloatingActionButton.extended(
                   onPressed: (state.completedItems.isNotEmpty)
-                      ? () {
-                          cubit.deleteCompletedItems();
+                      ? () async {
+                          await cubit.deleteCompletedItems();
                           setState(() {});
                         }
                       : null,

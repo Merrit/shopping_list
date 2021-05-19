@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shopping_list/authentication/enums/enums.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
@@ -13,14 +14,18 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
+  final Logger _log = Logger('AuthenticationBloc');
   late StreamSubscription<User> _userSubscription;
 
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
   })  : _authenticationRepository = authenticationRepository,
-        super(const AuthenticationState.unknown()) {
+        super(const AuthenticationState.unauthenticated()) {
     _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(AuthenticationUserChanged(user)),
+      (user) {
+        _log.info('User: $user');
+        add(AuthenticationUserChanged(user));
+      },
     );
   }
 
