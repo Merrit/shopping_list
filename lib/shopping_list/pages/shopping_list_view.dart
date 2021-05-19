@@ -41,10 +41,6 @@ class _NoActiveListView extends StatelessWidget {
   }
 }
 
-class CreateItemIntent extends Intent {
-  const CreateItemIntent();
-}
-
 class ActiveListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -69,7 +65,7 @@ class ActiveListView extends StatelessWidget {
       title: 'New item',
     );
     if ((input != null) && (input != '')) {
-      await shoppingListCubit.createItem(name: input);
+      await shoppingListCubit.createItem(name: input.capitalizeFirst);
     }
   }
 }

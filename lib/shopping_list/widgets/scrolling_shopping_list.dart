@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 import '../shopping_list.dart';
 
@@ -12,8 +10,6 @@ class ScrollingShoppingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shoppingListCubit = context.read<ShoppingListCubit>();
-
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _scrollController.addListener(() {
         context
@@ -30,178 +26,18 @@ class ScrollingShoppingList extends StatelessWidget {
           controller: _scrollController,
           padding: const EdgeInsets.all(4),
           separatorBuilder: (context, index) {
-            return const SizedBox(height: 0);
+            return const Divider(
+              indent: 20,
+              endIndent: 20,
+            );
           },
           itemCount: items.length,
           itemBuilder: (context, index) {
             var item = items[index];
-            return Card(
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 10.0,
-                  horizontal: 16.0,
-                ),
-                title: Row(
-                  children: [
-                    Text(
-                      item.name,
-                      style: TextStyle(
-                        fontSize: 25,
-                      ),
-                    ),
-                    Spacer(),
-                    SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: Checkbox(
-                        value: state.checkedItems.contains(item),
-                        onChanged: (value) =>
-                            shoppingListCubit.toggleItemChecked(item),
-                      ),
-                    ),
-                  ],
-                ),
-                subtitle: (item.aisle == 'None' &&
-                        item.labels.isEmpty &&
-                        item.notes == '' &&
-                        item.quantity == '1')
-                    ? null
-                    : BlocBuilder<ShoppingListCubit, ShoppingListState>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: Chip(
-                                        label: Text('x${item.quantity}'),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: (item.aisle != 'None')
-                                          ? Chip(
-                                              label: Text(item.aisle),
-                                              backgroundColor: Color(
-                                                state.aisles
-                                                    .firstWhere((aisle) =>
-                                                        aisle.name ==
-                                                        item.aisle)
-                                                    .color,
-                                              ),
-                                            )
-                                          : Container(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 10),
-                                    Flexible(
-                                      child: (item.price == '0.00')
-                                          ? Container()
-                                          : Column(
-                                              children: [
-                                                Text('\$${item.price}'),
-                                                Text(
-                                                  'each',
-                                                  style: _priceSubtitleStyle,
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                    const SizedBox(width: 20),
-                                    Flexible(
-                                      child: (item.total == '0.00')
-                                          ? Container()
-                                          : Column(
-                                              children: [
-                                                Text('\$${item.total}'),
-                                                Text(
-                                                  'total',
-                                                  style: _priceSubtitleStyle,
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                  ],
-                                ),
-                                if (item.labels.isNotEmpty)
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 8,
-                                      left: 8,
-                                    ),
-                                    child: Wrap(
-                                      spacing: 10,
-                                      runSpacing: 10,
-                                      children: item.labels
-                                          .map(
-                                            (label) => Text(
-                                              label,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!
-                                                  .copyWith(
-                                                    color: Color(
-                                                      state.labels
-                                                          .firstWhere(
-                                                              (element) =>
-                                                                  element
-                                                                      .name ==
-                                                                  label)
-                                                          .color,
-                                                    ),
-                                                  ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
-                                if (item.notes != '')
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(item.notes),
-                                  ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                onTap: () => _goToItemDetails(context, item),
-              ),
-            );
+            return ItemTile(item: item);
           },
         );
       },
     );
-  }
-
-  final _priceSubtitleStyle = const TextStyle(
-    fontSize: 15,
-    color: Colors.grey,
-  );
-}
-
-Future<void> _goToItemDetails(BuildContext context, Item item) async {
-  final homeCubit = context.read<HomeCubit>();
-  final shoppingListCubit = context.read<ShoppingListCubit>();
-  final newItem = await Navigator.push<Item>(
-    context,
-    MaterialPageRoute(
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: shoppingListCubit),
-          BlocProvider.value(value: homeCubit),
-        ],
-        child: ItemDetailsPage(item: item),
-      ),
-    ),
-  );
-  if (newItem != null) {
-    final cubit = context.read<ShoppingListCubit>();
-    await cubit.updateItem(oldItem: item, newItem: newItem);
   }
 }
