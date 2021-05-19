@@ -197,8 +197,8 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   void updateTaxRate() => emit(state.copyWith(taxRate: taxRate));
 
-  Future<void> createLabel({required String name, int color = 0}) async {
-    final newLabel = Label(name: name, color: color);
+  Future<void> createLabel({required String name}) async {
+    final newLabel = Label(name: name, color: Colors.white.value);
     _shoppingList.labels.add(newLabel);
     await updateList(labels: _shoppingList.labels);
   }

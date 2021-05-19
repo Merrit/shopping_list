@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/shopping_list/widgets/create_item_shortcut.dart';
+import 'package:shopping_list/shopping_list/widgets/main_floating_button.dart';
 
 import '../shopping_list.dart';
 
@@ -50,7 +51,9 @@ class ActiveListView extends StatelessWidget {
         child: Stack(
           children: [
             ScrollingShoppingList(),
-            FloatingButton(),
+            FloatingButton(
+              floatingActionButton: MainFloatingButton(),
+            ),
           ],
         ),
       ),

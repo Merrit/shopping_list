@@ -1,65 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/settings/settings.dart';
-import 'package:shopping_list/shopping_list/item_details/pages/aisles_page.dart';
 import 'package:shopping_list/shopping_list/item_details/pages/parent_list_page.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
 
-import '../item_details.dart';
+import '../../item_details.dart';
+import 'aisle_tile.dart';
+import 'labels_tile.dart';
 
-// ignore: must_be_immutable
-class ItemDetailsPage extends StatelessWidget {
-  static const id = 'item_details_page';
-
-  Item itemForCubit;
-
-  ItemDetailsPage({
-    Key? key,
-    required Item item,
-  })  : itemForCubit = item,
-        super(key: key);
-
-  Future<bool> _onWillPop(BuildContext context) async {
-    final item = context.read<ItemDetailsCubit>().updatedItem();
-    // Return the modified item.
-    Navigator.pop(context, item);
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ItemDetailsCubit(itemForCubit),
-      child: Builder(builder: (context) {
-        return WillPopScope(
-          onWillPop: () => _onWillPop(context),
-          child: SafeArea(
-            child: Scaffold(
-              appBar: AppBar(),
-              body: ItemDetailsView(),
-            ),
-          ),
-        );
-      }),
-    );
-  }
-}
-
-// ignore: must_be_immutable
 class ItemDetailsView extends StatelessWidget {
-  ItemDetailsView({
+  const ItemDetailsView({
     Key? key,
   }) : super(key: key);
 
-  late HomeCubit homeCubit;
-
   @override
   Widget build(BuildContext context) {
-    homeCubit = context.read<HomeCubit>();
+    final homeCubit = context.read<HomeCubit>();
 
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       builder: (context, state) {
@@ -70,7 +30,7 @@ class ItemDetailsView extends StatelessWidget {
         final listPadding = (isWide)
             ? EdgeInsets.symmetric(
                 vertical: 40,
-                horizontal: mediaQuery.size.width / 3,
+                horizontal: 20,
               )
             : const EdgeInsets.symmetric(
                 vertical: 20,
@@ -105,40 +65,7 @@ class ItemDetailsView extends StatelessWidget {
               if (input != null) itemDetailsCubit.updateItem(quantity: input);
             },
           ),
-          ListTile(
-            leading: Icon(Icons.format_color_text),
-            title: Text('Aisle'),
-            trailing: Icon(Icons.keyboard_arrow_right),
-            subtitle: Row(
-              // Row needed to un-center the chip.
-              children: [
-                Chip(
-                  label: Text(state.aisle),
-                  backgroundColor: Color(
-                    shoppingCubit.state.aisles
-                        .firstWhere((aisle) => aisle.name == state.aisle)
-                        .color,
-                  ),
-                ),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value: shoppingCubit),
-                        BlocProvider.value(value: itemDetailsCubit),
-                      ],
-                      child: AislesPage(),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+          AisleTile(),
           ListTile(
             leading: Icon(Icons.attach_money),
             title: Text('Price'),
@@ -174,58 +101,7 @@ class ItemDetailsView extends StatelessWidget {
               onChanged: (value) => itemDetailsCubit.updateItem(hasTax: value),
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.label),
-            title: Text('Labels'),
-            trailing: Icon(Icons.keyboard_arrow_right),
-            subtitle: (state.labels.isEmpty)
-                ? null
-                : BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-                    builder: (context, state) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: state.labels
-                              .map(
-                                (label) => Text(
-                                  label,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                        color: Color(
-                                          shoppingCubit.state.labels
-                                              .firstWhere((element) =>
-                                                  element.name == label)
-                                              .color,
-                                        ),
-                                      ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      );
-                    },
-                  ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value: itemDetailsCubit),
-                        BlocProvider.value(value: shoppingCubit),
-                      ],
-                      child: LabelsPage(),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+          LabelsTile(),
           ListTile(
             leading: Icon(Icons.notes),
             title: Text('Notes'),

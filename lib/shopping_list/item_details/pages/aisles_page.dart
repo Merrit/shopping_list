@@ -7,6 +7,8 @@ import 'package:shopping_list/repositories/shopping_list_repository/repository.d
 import '../../shopping_list.dart';
 
 class AislesPage extends StatelessWidget {
+  static const id = 'aisles_page';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
