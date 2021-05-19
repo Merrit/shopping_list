@@ -20,7 +20,6 @@ class NameTile extends StatelessWidget {
         final isSelected = (state.currentListId == list.id);
         return GestureDetector(
           onSecondaryTapUp: (details) async {
-            print('tapdown');
             final offset = details.globalPosition;
             final left = offset.dx;
             final top = offset.dy;
