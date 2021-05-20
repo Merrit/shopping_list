@@ -49,7 +49,7 @@ class AisleTile extends StatelessWidget {
       state.subpage = AislesPage.id;
     } else {
       final itemDetailsCubit = context.read<ItemDetailsCubit>();
-      final shoppingCubit = context.watch<ShoppingListCubit>();
+      final shoppingCubit = context.read<ShoppingListCubit>();
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -61,7 +61,7 @@ class LabelsTile extends StatelessWidget {
       state.subpage = LabelsPage.id;
     } else {
       final itemDetailsCubit = context.read<ItemDetailsCubit>();
-      final shoppingListCubit = context.watch<ShoppingListCubit>();
+      final shoppingListCubit = context.read<ShoppingListCubit>();
       Navigator.push(
         context,
         MaterialPageRoute(
