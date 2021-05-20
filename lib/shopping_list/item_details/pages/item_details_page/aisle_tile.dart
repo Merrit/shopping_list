@@ -16,11 +16,10 @@ class AisleTile extends StatelessWidget {
 
     return ListTile(
       leading: Icon(Icons.format_color_text),
-      title: Text('Aisle'),
-      trailing: Icon(Icons.keyboard_arrow_right),
-      subtitle: Row(
-        // Row needed to un-center the chip.
+      title: Row(
         children: [
+          Text('Aisle'),
+          const SizedBox(width: 15),
           BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
             builder: (context, state) {
               return Chip(
@@ -30,11 +29,13 @@ class AisleTile extends StatelessWidget {
                       .firstWhere((aisle) => aisle.name == state.aisle)
                       .color,
                 ),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               );
             },
           ),
         ],
       ),
+      trailing: Icon(Icons.keyboard_arrow_right),
       onTap: () {
         _goToAislesPage(context);
       },
