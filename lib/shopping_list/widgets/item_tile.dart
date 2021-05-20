@@ -14,10 +14,6 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 16.0,
-      ),
       title: _NameAndCheckbox(item: item),
       subtitle: (item.aisle == 'None' &&
               item.labels.isEmpty &&
@@ -67,7 +63,7 @@ class _NameAndCheckbox extends StatelessWidget {
         Text(
           item.name,
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 20,
           ),
         ),
         Spacer(),
