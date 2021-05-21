@@ -20,10 +20,10 @@ class ItemSortValidator {
         if (!ascending) _items = _items.reversed.toList();
         break;
       case 'Aisle':
-        _items.sort(
-          (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
-        );
-        if (!ascending) _items = _items.reversed.toList();
+        _items = _AisleSorter(
+          ascending: ascending,
+          items: _items,
+        ).sort();
         break;
       case 'Price':
         _items.sort((a, b) => a.price.compareTo(b.price));
@@ -37,5 +37,34 @@ class ItemSortValidator {
         print('Error sorting items');
     }
     return _items;
+  }
+}
+
+class _AisleSorter {
+  bool ascending;
+  List<Item> items;
+
+  _AisleSorter({
+    required this.ascending,
+    required this.items,
+  });
+
+  List<Item> sort() {
+    _sortAlphabetical();
+    _sortNoneAislesToEnd();
+    if (!ascending) items = items.reversed.toList();
+    return items;
+  }
+
+  void _sortAlphabetical() {
+    items.sort(
+      (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
+    );
+  }
+
+  void _sortNoneAislesToEnd() {
+    final noneAisles = items.where((item) => item.aisle == 'None').toList();
+    items.removeWhere((item) => noneAisles.contains(item));
+    items.addAll(noneAisles);
   }
 }
