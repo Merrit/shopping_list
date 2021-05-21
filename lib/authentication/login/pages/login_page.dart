@@ -26,6 +26,22 @@ class LoginPage extends StatelessWidget {
                   content: Text('Authentication Failure: $message'),
                 ),
               );
+
+            if (state.status is SubmissionInProgress) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Center(
+                    child: SizedBox(
+                      height: 52,
+                      width: 52,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              );
+            }
           }
         },
         child: LoginView(),
@@ -88,26 +104,10 @@ class LoginView extends StatelessWidget {
 class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        if (state.status is SubmissionInProgress) {
-          return const Center(
-            child: SizedBox(
-              height: 52,
-              width: 52,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return SignInButton(
-            Buttons.Email,
-            padding: EdgeInsets.symmetric(vertical: 16),
-            onPressed: () =>
-                context.read<LoginCubit>().submitForm(FormType.login),
-          );
-        }
-      },
+    return SignInButton(
+      Buttons.Email,
+      padding: EdgeInsets.symmetric(vertical: 16),
+      onPressed: () => context.read<LoginCubit>().submitForm(FormType.login),
     );
   }
 }
