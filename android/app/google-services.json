@@ -15,15 +15,31 @@
       },
       "oauth_client": [
         {
-          "client_id": "117835173986-i2alpavaqksgh0d6cf2j8fd53f2lf3jl.apps.googleusercontent.com",
+          "client_id": "117835173986-ci6v426pu9t870ddgtleinq6u3hu3lp8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "codes.merritt.shopping",
-            "certificate_hash": "480730faec87efcac7a4579861c0b21993ef675d"
+            "certificate_hash": "456d42189eee6e10b9a5e2449e740e3c300fa4be"
           }
         },
         {
           "client_id": "117835173986-i2alpavaqksgh0d6cf2j8fd53f2lf3jl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "codes.merritt.shopping",
+            "certificate_hash": "9e5a1a2e535ceb53a53073f79fbd7deb8ee1ae96"
+          }
+        },
+        {
+          "client_id": "117835173986-nb995o63hgj6vpo61njfatvapba9ma7b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "codes.merritt.shopping",
+            "certificate_hash": "d59ac8f97d468ed8c2d52d202f80130a0055c291"
+          }
+        },
+        {
+          "client_id": "117835173986-ur9v50l865l931pnn4fj8pmpt45bgdn1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -36,7 +52,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "117835173986-i2alpavaqksgh0d6cf2j8fd53f2lf3jl.apps.googleusercontent.com",
+              "client_id": "117835173986-ur9v50l865l931pnn4fj8pmpt45bgdn1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

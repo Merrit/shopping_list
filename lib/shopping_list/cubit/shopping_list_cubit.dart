@@ -208,9 +208,15 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     await updateList(labels: _shoppingList.labels);
   }
 
-  Future<void> updateAisleColor(
-      {required int color, required Aisle oldAisle}) async {
-    final updatedAisle = oldAisle.copyWith(color: color);
+  Future<void> updateAisle({
+    required Aisle oldAisle,
+    int? color,
+    String? name,
+  }) async {
+    final updatedAisle = oldAisle.copyWith(
+      color: color,
+      name: name,
+    );
     _shoppingList.aisles
       ..remove(oldAisle)
       ..add(updatedAisle);
