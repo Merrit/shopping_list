@@ -56,13 +56,15 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                if (state.user.emailIsVerified) {
-                  _log.info('User is authenticated');
-                  _navigator.pushReplacementNamed(HomePage.id);
-                } else {
-                  _log.info('User is authenticated, but email not verified');
-                  _navigator.pushReplacementNamed(VerifyEmailPage.id);
-                }
+                // Temporarily disable requirement for
+                // email verification while checking oauth...
+                // if (state.user.emailIsVerified) {
+                _log.info('User is authenticated');
+                _navigator.pushReplacementNamed(HomePage.id);
+                // } else {
+                //   _log.info('User is authenticated, but email not verified');
+                //   _navigator.pushReplacementNamed(VerifyEmailPage.id);
+                // }
                 break;
               case AuthenticationStatus.unauthenticated:
                 _log.info('No user currently authenticated');
