@@ -47,7 +47,9 @@ class ItemDetailsView extends StatelessWidget {
                 title: 'Name',
                 initialValue: state.name,
               );
-              if (input != null) itemDetailsCubit.updateItem(name: input);
+              if (input != null) {
+                itemDetailsCubit.updateItem(name: input.capitalizeFirst);
+              }
             },
           ),
           ListTile(
@@ -113,7 +115,9 @@ class ItemDetailsView extends StatelessWidget {
                 initialValue: state.notes,
                 type: InputDialogs.multiLine,
               );
-              if (input != null) itemDetailsCubit.updateItem(notes: input);
+              if (input != null) {
+                itemDetailsCubit.updateItem(notes: input.capitalizeFirst);
+              }
             },
           ),
           ListTile(
