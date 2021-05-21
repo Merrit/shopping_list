@@ -10,7 +10,9 @@ class LabelValidator {
   List<Item> validate() {
     final labelNames = labels.map((label) => label.name).toList();
     for (var item in items) {
-      item.labels.removeWhere((label) => !labelNames.contains(label));
+      final labels = List<String>.from(item.labels);
+      labels.removeWhere((label) => !labelNames.contains(label));
+      item = item.copyWith(labels: labels);
     }
     return items;
   }
