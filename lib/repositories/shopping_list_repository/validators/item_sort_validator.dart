@@ -4,10 +4,15 @@ import '../repository.dart';
 class ItemSortValidator {
   List<Item> _items;
 
-  ItemSortValidator({required List<Item> items})
-      : _items = List<Item>.from(items);
+  ItemSortValidator({
+    required List<Item> items,
+  }) : _items = List<Item>.from(items);
 
-  List<Item> sort({required bool ascending, required String sortBy}) {
+  List<Item> sort({
+    required List<Aisle> aisles,
+    required bool ascending,
+    required String sortBy,
+  }) {
     switch (sortBy) {
       case 'Name':
         _items.sort(
@@ -20,10 +25,17 @@ class ItemSortValidator {
         if (!ascending) _items = _items.reversed.toList();
         break;
       case 'Aisle':
-        _items.sort(
-          (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
-        );
-        if (!ascending) _items = _items.reversed.toList();
+        _items = _AisleSorter(
+          ascending: ascending,
+          items: _items,
+        ).sort();
+        break;
+      case 'Aisle-custom':
+        _items = _AisleSorter(
+          aisles: aisles,
+          ascending: ascending,
+          items: _items,
+        ).sortCustom();
         break;
       case 'Price':
         _items.sort((a, b) => a.price.compareTo(b.price));
@@ -37,5 +49,49 @@ class ItemSortValidator {
         print('Error sorting items');
     }
     return _items;
+  }
+}
+
+class _AisleSorter {
+  List<Aisle>? aisles;
+  bool ascending;
+  List<Item> items;
+
+  _AisleSorter({
+    this.aisles,
+    required this.ascending,
+    required this.items,
+  });
+
+  List<Item> sort() {
+    _sortAlphabetical();
+    _sortNoneAislesToEnd();
+    if (!ascending) items = items.reversed.toList();
+    return items;
+  }
+
+  void _sortAlphabetical() {
+    items.sort(
+      (a, b) => a.aisle.toLowerCase().compareTo(b.aisle.toLowerCase()),
+    );
+  }
+
+  void _sortNoneAislesToEnd() {
+    final noneAisles = items.where((item) => item.aisle == 'None').toList();
+    items.removeWhere((item) => noneAisles.contains(item));
+    items.addAll(noneAisles);
+  }
+
+  /// User has arranged aisles into a custom order,
+  /// now sort the items to match that order.
+  List<Item> sortCustom() {
+    assert(aisles != null);
+    final sortedItems = <Item>[];
+    aisles?.forEach((aisle) {
+      final matchedItems =
+          items.where((item) => item.aisle == aisle.name).toList();
+      sortedItems.addAll(matchedItems);
+    });
+    return sortedItems;
   }
 }

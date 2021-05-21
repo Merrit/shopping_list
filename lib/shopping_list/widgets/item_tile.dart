@@ -59,6 +59,7 @@ class _NameAndCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           item.name,
@@ -66,7 +67,6 @@ class _NameAndCheckbox extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        Spacer(),
         SizedBox(
           height: 24,
           width: 24,

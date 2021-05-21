@@ -239,7 +239,7 @@ class CreateAisleButton extends StatelessWidget {
             hintText: 'Aisle name',
           );
           if (input != null) {
-            await shoppingListCubit.createAisle(name: input);
+            await shoppingListCubit.createAisle(name: input.capitalizeFirst);
           }
         },
       ),

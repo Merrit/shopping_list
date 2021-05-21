@@ -6,7 +6,7 @@ import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/shopping_list/widgets/create_item_shortcut.dart';
 import 'package:shopping_list/shopping_list/widgets/main_floating_button.dart';
 
-import '../shopping_list.dart';
+import '../../shopping_list.dart';
 
 class ShoppingListView extends StatelessWidget {
   @override

@@ -60,9 +60,8 @@ class ShoppingList extends Equatable {
       items: items,
       labels: labels,
     ).validate();
-    validatedItems = ItemSortValidator(
-      items: validatedItems,
-    ).sort(
+    validatedItems = ItemSortValidator(items: validatedItems).sort(
+      aisles: aisles,
       ascending: sortAscending,
       sortBy: sortBy,
     );
