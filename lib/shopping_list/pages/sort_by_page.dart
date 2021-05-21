@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -129,14 +130,7 @@ class _CustomAisleOrderButton extends StatelessWidget {
                     aisles.removeAt(oldIndex);
                     aisles.insert(newIndex, aisle);
                   },
-                  header: (Platform.isAndroid || Platform.isIOS)
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text('Long press to reorder'),
-                          ),
-                        )
-                      : null,
+                  header: _header(),
                   itemCount: aisles.length,
                   itemBuilder: (context, index) {
                     final aisle = aisles[index];
@@ -167,5 +161,20 @@ class _CustomAisleOrderButton extends StatelessWidget {
         }
       },
     );
+  }
+
+  Widget? _header() {
+    // Running platform checks on web causes an exception.
+    if (kIsWeb) return null;
+    if (Platform.isAndroid || Platform.isIOS) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Text('Long press to reorder'),
+        ),
+      );
+    } else {
+      return null;
+    }
   }
 }
