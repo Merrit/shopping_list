@@ -117,6 +117,7 @@ class _GoogleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignInButton(
       Buttons.GoogleDark,
+      padding: EdgeInsets.symmetric(vertical: 8),
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
     );
   }
