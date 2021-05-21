@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/home/home.dart';
 
-import '../shopping_list.dart';
+import '../../shopping_list.dart';
 
 class ShoppingListPage extends StatelessWidget {
   @override
