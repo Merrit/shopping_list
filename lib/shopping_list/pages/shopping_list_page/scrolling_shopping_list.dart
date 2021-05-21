@@ -24,7 +24,12 @@ class ScrollingShoppingList extends StatelessWidget {
 
         return ListView.separated(
           controller: _scrollController,
-          padding: const EdgeInsets.all(4),
+          padding: const EdgeInsets.only(
+            left: 4,
+            right: 4,
+            top: 4,
+            bottom: 100,
+          ),
           separatorBuilder: (context, index) {
             return const Divider(
               indent: 20,
