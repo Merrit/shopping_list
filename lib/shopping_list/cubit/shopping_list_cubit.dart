@@ -217,9 +217,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       color: color,
       name: name,
     );
+    final index = _shoppingList.aisles.indexOf(oldAisle);
     _shoppingList.aisles
       ..remove(oldAisle)
-      ..add(updatedAisle);
+      ..insert(index, updatedAisle);
     await updateList(aisles: _shoppingList.aisles);
   }
 
