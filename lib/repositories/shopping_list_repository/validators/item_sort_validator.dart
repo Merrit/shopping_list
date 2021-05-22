@@ -2,11 +2,13 @@ import '../repository.dart';
 
 /// Sort the list of items according to the user's preference.
 class ItemSortValidator {
+  final List<Item> _originalItems;
   List<Item> _items;
 
   ItemSortValidator({
     required List<Item> items,
-  }) : _items = List<Item>.from(items);
+  })  : _originalItems = items,
+        _items = List<Item>.from(items);
 
   List<Item> sort({
     required List<Aisle> aisles,
@@ -48,6 +50,7 @@ class ItemSortValidator {
       default:
         print('Error sorting items');
     }
+    assert(_originalItems.length == _items.length);
     return _items;
   }
 }
@@ -91,6 +94,12 @@ class _AisleSorter {
       final matchedItems =
           items.where((item) => item.aisle == aisle.name).toList();
       sortedItems.addAll(matchedItems);
+    });
+    // If the item has an aisle that doesn't exist in the
+    // ShoppingList's aisles, it won't have been added.
+    // So we add it at then end so it doesn't get lost.
+    items.forEach((item) {
+      if (sortedItems.contains(item) == false) sortedItems.add(item);
     });
     return sortedItems;
   }

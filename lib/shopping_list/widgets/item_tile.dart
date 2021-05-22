@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -134,13 +135,15 @@ class _QuantityAndAisle extends StatelessWidget {
         (item.aisle != 'None')
             ? BlocBuilder<ShoppingListCubit, ShoppingListState>(
                 builder: (context, state) {
+                  final aisle = state.aisles.firstWhereOrNull(
+                    (aisle) => aisle.name == item.aisle,
+                  );
+                  final backgroundColor =
+                      (aisle == null) ? null : Color(aisle.color);
+
                   return Chip(
                     label: Text(item.aisle),
-                    backgroundColor: Color(
-                      state.aisles
-                          .firstWhere((aisle) => aisle.name == item.aisle)
-                          .color,
-                    ),
+                    backgroundColor: backgroundColor,
                   );
                 },
               )

@@ -36,21 +36,6 @@ class AislesView extends StatelessWidget {
   }
 }
 
-class _AislesListState extends ChangeNotifier {
-  String _currentAisle;
-
-  _AislesListState({
-    required String currentAisle,
-  }) : _currentAisle = currentAisle;
-
-  String get currentAisle => _currentAisle;
-
-  set currentAisle(String value) {
-    _currentAisle = value;
-    notifyListeners();
-  }
-}
-
 class _AislesList extends StatelessWidget {
   const _AislesList();
 
@@ -60,31 +45,27 @@ class _AislesList extends StatelessWidget {
       builder: (context, shoppingListState) {
         return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
           builder: (context, itemDetailsState) {
-            return ChangeNotifierProvider(
-                create: (context) => _AislesListState(
-                      currentAisle: itemDetailsState.aisle,
-                    ),
-                builder: (context, snapshot) {
-                  return ListView(
-                    children: [
-                      ExpansionPanelList.radio(
-                        children: [
-                          ...shoppingListState.aisles
-                              .map((aisle) => ExpansionPanelRadio(
-                                    value: aisle.name,
-                                    headerBuilder: (context, isExpanded) {
-                                      return AisleHeader(aisle: aisle);
-                                    },
-                                    body: (aisle.name == 'None')
-                                        ? Container()
-                                        : AisleExpandedBody(aisle: aisle),
-                                  ))
-                              .toList(),
-                        ],
-                      ),
-                    ],
-                  );
-                });
+            return ListView(
+              children: [
+                ExpansionPanelList.radio(
+                  children: [
+                    ...shoppingListState.aisles
+                        .map((aisle) => ExpansionPanelRadio(
+                              value: aisle.name,
+                              headerBuilder: (context, isExpanded) {
+                                return AisleHeader(aisle: aisle);
+                              },
+                              body: (aisle.name == 'None')
+                                  ? Container()
+                                  : AisleExpandedBody(aisle: aisle),
+                            ))
+                        .toList(),
+                  ],
+                ),
+              ],
+            );
+            //   },
+            // );
           },
         );
       },
@@ -99,19 +80,21 @@ class AisleHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _aislesState = context.read<_AislesListState>();
     final itemDetailsCubit = context.read<ItemDetailsCubit>();
 
-    return RadioListTile<String>(
-      title: Chip(
-        label: Text(aisle.name),
-        backgroundColor: Color(aisle.color),
-      ),
-      value: aisle.name,
-      groupValue: _aislesState.currentAisle,
-      onChanged: (String? value) {
-        _aislesState.currentAisle = value!;
-        itemDetailsCubit.updateItem(aisle: value);
+    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+      builder: (context, state) {
+        return RadioListTile<String>(
+          title: Chip(
+            label: Text(aisle.name),
+            backgroundColor: Color(aisle.color),
+          ),
+          value: aisle.name,
+          groupValue: state.aisle,
+          onChanged: (String? value) {
+            itemDetailsCubit.updateItem(aisle: value);
+          },
+        );
       },
     );
   }
@@ -165,7 +148,9 @@ class AisleExpandedBody extends StatelessWidget {
           TextButton(
             onPressed: () async {
               await shoppingListCubit.deleteAisle(aisle: aisle);
-              itemDetailsCubit.updateItem(aisle: 'None');
+              if (itemDetailsCubit.state.aisle == aisle.name) {
+                itemDetailsCubit.updateItem(aisle: 'None');
+              }
             },
             child: Text(
               'Remove aisle',
@@ -240,6 +225,8 @@ class CreateAisleButton extends StatelessWidget {
           );
           if (input != null) {
             await shoppingListCubit.createAisle(name: input.capitalizeFirst);
+            final itemDetailsCubit = context.read<ItemDetailsCubit>();
+            itemDetailsCubit.updateItem(aisle: input);
           }
         },
       ),

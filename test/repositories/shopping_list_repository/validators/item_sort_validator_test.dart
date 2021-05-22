@@ -34,4 +34,27 @@ void main() {
     ];
     expect(validatedItems, expected);
   });
+
+  test('Missing aisle items don\'t get removed', () {
+    aisles.addAll([
+      Aisle(name: 'Veggies'),
+      Aisle(name: 'Fruit'),
+    ]);
+    items.addAll([
+      Item(name: 'Bread', aisle: 'Bakery'),
+      Item(name: 'Mango', aisle: 'Fruit'),
+      Item(name: 'Bok choy', aisle: 'Veggies'),
+    ]);
+    final validatedItems = ItemSortValidator(items: items).sort(
+      aisles: aisles,
+      ascending: true,
+      sortBy: 'Aisle-custom',
+    );
+    final expected = <Item>[
+      Item(name: 'Bok choy', aisle: 'Veggies'),
+      Item(name: 'Mango', aisle: 'Fruit'),
+      Item(name: 'Bread', aisle: 'Bakery'),
+    ];
+    expect(validatedItems, expected);
+  });
 }

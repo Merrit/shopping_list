@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -22,13 +23,14 @@ class AisleTile extends StatelessWidget {
           const SizedBox(width: 15),
           BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
             builder: (context, state) {
+              final aisleFromList = shoppingCubit.state.aisles
+                  .firstWhereOrNull((aisle) => aisle.name == state.aisle);
+              final backgroundColor =
+                  (aisleFromList == null) ? null : Color(aisleFromList.color);
+
               return Chip(
                 label: Text(state.aisle),
-                backgroundColor: Color(
-                  shoppingCubit.state.aisles
-                      .firstWhere((aisle) => aisle.name == state.aisle)
-                      .color,
-                ),
+                backgroundColor: backgroundColor,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               );
             },
