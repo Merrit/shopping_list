@@ -180,7 +180,7 @@ class EditColorChip extends StatelessWidget {
       elevation: 1,
       onPressed: () async {
         Color? newColor;
-        final callback = (Color color) => newColor = color;
+        final Function callback = (Color color) => newColor = color;
         final confirmed = await ColorPicker(
           // Current color is pre-selected.
           color: Color(aisle.color),
