@@ -24,14 +24,9 @@ class ScrollingListNames extends StatelessWidget {
               (previous.currentListId != current.currentListId),
           builder: (context, state) {
             return ListView(
-              children: (foundation.kDebugMode)
-                  ? state.shoppingLists
-                      .map((list) => NameTile(list: list))
-                      .toList()
-                  : state.shoppingLists
-                      .where((element) => element.name != '🔧 Test List 🔧')
-                      .map((list) => NameTile(list: list))
-                      .toList(),
+              children: state.shoppingLists
+                  .map((list) => NameTile(list: list))
+                  .toList(),
             );
           },
         ),
