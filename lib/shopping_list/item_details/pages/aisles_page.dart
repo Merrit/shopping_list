@@ -226,7 +226,7 @@ class CreateAisleButton extends StatelessWidget {
           if (input != null) {
             await shoppingListCubit.createAisle(name: input.capitalizeFirst);
             final itemDetailsCubit = context.read<ItemDetailsCubit>();
-            itemDetailsCubit.updateItem(aisle: input);
+            itemDetailsCubit.updateItem(aisle: input.capitalizeFirst);
           }
         },
       ),
