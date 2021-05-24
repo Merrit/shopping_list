@@ -15,6 +15,7 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      dense: true,
       title: _NameAndCheckbox(item: item),
       subtitle: (item.aisle == 'None' &&
               item.labels.isEmpty &&
@@ -104,7 +105,6 @@ class _Subtitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _QuantityAndAisle(item: item),
-              const SizedBox(height: 10),
               _PriceAndTotal(item: item),
               if (item.labels.isNotEmpty) _Labels(item: item),
               if (item.notes != '') _Notes(item: item),
@@ -130,6 +130,7 @@ class _QuantityAndAisle extends StatelessWidget {
       children: [
         Chip(
           label: Text('x${item.quantity}'),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         const SizedBox(width: 5),
         (item.aisle != 'None')
@@ -144,6 +145,7 @@ class _QuantityAndAisle extends StatelessWidget {
                   return Chip(
                     label: Text(item.aisle),
                     backgroundColor: backgroundColor,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   );
                 },
               )
@@ -168,37 +170,42 @@ class _PriceAndTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 10),
-        Flexible(
-          child: (item.price == '0.00')
-              ? Container()
-              : Column(
-                  children: [
-                    Text('\$${item.price}'),
-                    Text(
-                      'each',
-                      style: _priceSubtitleStyle,
-                    ),
-                  ],
-                ),
-        ),
-        const SizedBox(width: 20),
-        Flexible(
-          child: (item.total == '0.00')
-              ? Container()
-              : Column(
-                  children: [
-                    Text('\$${item.total}'),
-                    Text(
-                      'total',
-                      style: _priceSubtitleStyle,
-                    ),
-                  ],
-                ),
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(
+        top: ((item.price == '0.00') && (item.total == '0.00')) ? 0 : 10,
+        left: 10,
+      ),
+      child: Row(
+        children: [
+          Flexible(
+            child: (item.price == '0.00')
+                ? Container()
+                : Column(
+                    children: [
+                      Text('\$${item.price}'),
+                      Text(
+                        'each',
+                        style: _priceSubtitleStyle,
+                      ),
+                    ],
+                  ),
+          ),
+          const SizedBox(width: 20),
+          Flexible(
+            child: (item.total == '0.00')
+                ? Container()
+                : Column(
+                    children: [
+                      Text('\$${item.total}'),
+                      Text(
+                        'total',
+                        style: _priceSubtitleStyle,
+                      ),
+                    ],
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -214,8 +221,8 @@ class _Labels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 8,
+      padding: EdgeInsets.only(
+        top: (item.labels.isEmpty) ? 0 : 10,
         left: 8,
       ),
       child: Wrap(
@@ -256,7 +263,12 @@ class _Notes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
-      child: Text(item.notes),
+      child: Text(
+        item.notes,
+        style: TextStyle(
+          fontSize: 14,
+        ),
+      ),
     );
   }
 }

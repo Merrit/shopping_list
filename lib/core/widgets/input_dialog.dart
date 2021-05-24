@@ -122,7 +122,7 @@ class InputDialog extends StatelessWidget {
     String? initialValue,
     bool? preselectText,
   }) async {
-    TextInputType keyboardType;
+    TextInputType? keyboardType;
     List<TextInputFormatter>? formatter;
 
     switch (type) {
@@ -142,7 +142,6 @@ class InputDialog extends StatelessWidget {
         break;
       default:
         formatter = null; // No restrictions on text entry.
-        keyboardType = TextInputType.visiblePassword;
     }
 
     bool shouldAutofocus;
