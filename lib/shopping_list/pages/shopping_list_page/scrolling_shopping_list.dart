@@ -16,30 +16,38 @@ class ScrollingShoppingList extends StatelessWidget {
       builder: (context, state) {
         final items = state.items.where((e) => e.isComplete == false).toList();
 
-        return Scrollbar(
-          controller: _scrollController,
-          isAlwaysShown: _isLargeFormFactor ? true : false,
-          child: ListView.separated(
-            controller: _scrollController,
-            padding: const EdgeInsets.only(
-              left: 4,
-              right: 4,
-              top: 4,
-              bottom: 100,
-            ),
-            separatorBuilder: (context, index) {
-              return const Divider(
-                indent: 20,
-                endIndent: 20,
-                height: 4,
-              );
-            },
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              var item = items[index];
-              return ItemTile(item: item);
-            },
-          ),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            double sidePadding = _isLargeFormFactor
+                ? (constraints.maxWidth / 10)
+                : Insets.xsmall;
+
+            return Scrollbar(
+              controller: _scrollController,
+              isAlwaysShown: _isLargeFormFactor ? true : false,
+              child: ListView.separated(
+                controller: _scrollController,
+                padding: EdgeInsets.only(
+                  left: sidePadding,
+                  right: sidePadding,
+                  top: 4,
+                  bottom: 100,
+                ),
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    indent: 20,
+                    endIndent: 20,
+                    height: 4,
+                  );
+                },
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  var item = items[index];
+                  return ItemTile(item: item);
+                },
+              ),
+            );
+          },
         );
       },
     );

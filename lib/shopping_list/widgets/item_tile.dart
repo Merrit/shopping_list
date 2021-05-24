@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/core/core.dart';
 
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
@@ -14,8 +15,10 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _isLargeFormFactor = isLargeFormFactor(context);
+
     return ListTile(
-      dense: true,
+      dense: _isLargeFormFactor ? false : true,
       title: _NameAndCheckbox(item: item),
       subtitle: (item.aisle == 'None' &&
               item.labels.isEmpty &&
