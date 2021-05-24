@@ -37,33 +37,40 @@ class AislesView extends StatelessWidget {
 }
 
 class _AislesList extends StatelessWidget {
-  const _AislesList();
+  final _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    final _isLargeFormFactor = isLargeFormFactor(context);
+
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, shoppingListState) {
         return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
           builder: (context, itemDetailsState) {
-            return ListView(
-              padding: Insets.listViewWithFloatingButton,
-              children: [
-                ExpansionPanelList.radio(
-                  children: [
-                    ...shoppingListState.aisles
-                        .map((aisle) => ExpansionPanelRadio(
-                              value: aisle.name,
-                              headerBuilder: (context, isExpanded) {
-                                return AisleHeader(aisle: aisle);
-                              },
-                              body: (aisle.name == 'None')
-                                  ? Container()
-                                  : AisleExpandedBody(aisle: aisle),
-                            ))
-                        .toList(),
-                  ],
-                ),
-              ],
+            return Scrollbar(
+              controller: _controller,
+              isAlwaysShown: _isLargeFormFactor ? true : false,
+              child: ListView(
+                controller: _controller,
+                padding: Insets.listViewWithFloatingButton,
+                children: [
+                  ExpansionPanelList.radio(
+                    children: [
+                      ...shoppingListState.aisles
+                          .map((aisle) => ExpansionPanelRadio(
+                                value: aisle.name,
+                                headerBuilder: (context, isExpanded) {
+                                  return AisleHeader(aisle: aisle);
+                                },
+                                body: (aisle.name == 'None')
+                                    ? Container()
+                                    : AisleExpandedBody(aisle: aisle),
+                              ))
+                          .toList(),
+                    ],
+                  ),
+                ],
+              ),
             );
           },
         );
