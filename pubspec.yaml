@@ -24,6 +24,7 @@ dependencies:
   pedantic: ^1.11.0
   provider: ^5.0.0
   shared_preferences: ^2.0.5
+  universal_platform: ^1.0.0-nullsafety
 
 dev_dependencies:
   flutter_test:
