@@ -38,7 +38,7 @@ class LabelsView extends StatelessWidget {
               child: ListView.builder(
                 controller: _controller,
                 padding: Insets.listViewWithFloatingButton,
-                itemCount: 50,
+                itemCount: shoppingListState.labels.length,
                 itemBuilder: (context, index) {
                   final label = shoppingListState.labels[index];
                   return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
