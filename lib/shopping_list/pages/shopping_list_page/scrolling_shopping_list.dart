@@ -6,20 +6,10 @@ import 'package:shopping_list/core/helpers/form_factor.dart';
 import '../../shopping_list.dart';
 
 class ScrollingShoppingList extends StatelessWidget {
-  final _scrollController = ScrollController(
-    keepScrollOffset: true,
-  );
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _scrollController.addListener(() {
-        context
-            .read<ActiveListState>()
-            .updateFloatingButtonVisibility(_scrollController.offset);
-      });
-    });
-
     final _isLargeFormFactor = isLargeFormFactor(context);
 
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(

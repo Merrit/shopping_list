@@ -12,22 +12,14 @@ class MainFloatingButton extends StatelessWidget {
         final hasCheckedItems = (state.checkedItems.isNotEmpty);
         final shoppingListCubit = context.read<ShoppingListCubit>();
 
-        return Consumer<ActiveListState>(
-          builder: (context, value, child) {
-            return Visibility(
-              visible: value.showFloatingButton,
-              child: FloatingActionButton(
-                onPressed: () async => (hasCheckedItems)
-                    ? await shoppingListCubit.setCheckedItemsCompleted()
-                    : await ActiveListView.showCreateItemDialog(
-                        context: context),
-                backgroundColor: (hasCheckedItems) ? Colors.green : null,
-                child: Icon(
-                  (hasCheckedItems) ? Icons.done_all : Icons.add,
-                ),
-              ),
-            );
-          },
+        return FloatingActionButton(
+          onPressed: () async => (hasCheckedItems)
+              ? await shoppingListCubit.setCheckedItemsCompleted()
+              : await ActiveListView.showCreateItemDialog(context: context),
+          backgroundColor: (hasCheckedItems) ? Colors.green : null,
+          child: Icon(
+            (hasCheckedItems) ? Icons.done_all : Icons.add,
+          ),
         );
       },
     );
