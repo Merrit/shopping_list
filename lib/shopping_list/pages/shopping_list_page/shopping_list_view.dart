@@ -45,17 +45,14 @@ class _NoActiveListView extends StatelessWidget {
 class ActiveListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ActiveListState(),
-      child: CreateItemShortcut(
-        child: Stack(
-          children: [
-            ScrollingShoppingList(),
-            FloatingButton(
-              floatingActionButton: MainFloatingButton(),
-            ),
-          ],
-        ),
+    return CreateItemShortcut(
+      child: Stack(
+        children: [
+          ScrollingShoppingList(),
+          FloatingButton(
+            floatingActionButton: MainFloatingButton(),
+          ),
+        ],
       ),
     );
   }
@@ -70,22 +67,5 @@ class ActiveListView extends StatelessWidget {
     if ((input != null) && (input != '')) {
       await shoppingListCubit.createItem(name: input.capitalizeFirst);
     }
-  }
-}
-
-class ActiveListState extends ChangeNotifier {
-  bool showFloatingButton = true;
-
-  double _previousScrollOffset = 0.0;
-
-  void updateFloatingButtonVisibility(double offset) {
-    final oldShowBool = showFloatingButton;
-    if (offset > _previousScrollOffset) {
-      showFloatingButton = false;
-    } else {
-      showFloatingButton = true;
-    }
-    _previousScrollOffset = offset;
-    if (oldShowBool != showFloatingButton) notifyListeners();
   }
 }
