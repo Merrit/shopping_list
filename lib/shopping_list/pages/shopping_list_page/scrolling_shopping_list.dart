@@ -34,6 +34,7 @@ class ScrollingShoppingList extends StatelessWidget {
             return const Divider(
               indent: 20,
               endIndent: 20,
+              height: 4,
             );
           },
           itemCount: items.length,
