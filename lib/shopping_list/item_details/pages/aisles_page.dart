@@ -46,6 +46,7 @@ class _AislesList extends StatelessWidget {
         return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
           builder: (context, itemDetailsState) {
             return ListView(
+              padding: Insets.listViewWithFloatingButton,
               children: [
                 ExpansionPanelList.radio(
                   children: [
@@ -64,8 +65,6 @@ class _AislesList extends StatelessWidget {
                 ),
               ],
             );
-            //   },
-            // );
           },
         );
       },
