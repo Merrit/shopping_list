@@ -25,12 +25,10 @@ class AislesPage extends StatelessWidget {
 class AislesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final shoppingListCubit = context.read<ShoppingListCubit>();
-
     return Stack(
       children: [
         _AislesList(),
-        CreateAisleButton(shoppingListCubit: shoppingListCubit),
+        FloatingDoneButton(),
       ],
     );
   }
@@ -68,6 +66,11 @@ class _AislesList extends StatelessWidget {
                               ))
                           .toList(),
                     ],
+                  ),
+                  const SizedBox(height: 10),
+                  IconButton(
+                    onPressed: () => _createAisle(context: context),
+                    icon: CircleAvatar(child: Icon(Icons.add)),
                   ),
                 ],
               ),
@@ -209,33 +212,18 @@ class EditColorChip extends StatelessWidget {
   }
 }
 
-class CreateAisleButton extends StatelessWidget {
-  const CreateAisleButton({
-    Key? key,
-    required this.shoppingListCubit,
-  }) : super(key: key);
-
-  final ShoppingListCubit shoppingListCubit;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingButton(
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Create aisle'),
-        onPressed: () async {
-          final input = await InputDialog.show(
-            context: context,
-            initialValue: '',
-            title: 'Create aisle',
-            hintText: 'Aisle name',
-          );
-          if (input != null) {
-            await shoppingListCubit.createAisle(name: input.capitalizeFirst);
-            final itemDetailsCubit = context.read<ItemDetailsCubit>();
-            itemDetailsCubit.updateItem(aisle: input.capitalizeFirst);
-          }
-        },
-      ),
-    );
+Future<void> _createAisle({required BuildContext context}) async {
+  final shoppingListCubit = context.read<ShoppingListCubit>();
+  final input = await InputDialog.show(
+    context: context,
+    initialValue: '',
+    title: 'Create aisle',
+    hintText: 'Aisle name',
+  );
+  if (input != null) {
+    final newAisle = input.capitalizeFirst;
+    await shoppingListCubit.createAisle(name: newAisle);
+    final itemDetailsCubit = context.read<ItemDetailsCubit>();
+    itemDetailsCubit.updateItem(aisle: newAisle);
   }
 }
