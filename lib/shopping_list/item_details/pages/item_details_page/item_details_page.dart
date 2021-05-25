@@ -19,7 +19,7 @@ class ItemDetailsPage extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  Future<bool> _onWillPop(BuildContext context) async {
+  static Future<bool> popItemDetails(BuildContext context) async {
     final item = context.read<ItemDetailsCubit>().updatedItem();
     // Return the modified item.
     Navigator.pop(context, item);
@@ -32,7 +32,7 @@ class ItemDetailsPage extends StatelessWidget {
       create: (context) => ItemDetailsCubit(item),
       child: Builder(builder: (context) {
         return WillPopScope(
-          onWillPop: () => _onWillPop(context),
+          onWillPop: () => popItemDetails(context),
           child: SafeArea(
             child: Scaffold(
               appBar: AppBar(),
