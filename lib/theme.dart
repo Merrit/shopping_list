@@ -5,6 +5,9 @@ class AppTheme {
     brightness: Brightness.dark,
     primaryColorDark: Colors.lightBlue,
     accentColor: Colors.lightBlueAccent,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Colors.lightBlueAccent,
+    ),
     toggleableActiveColor: Colors.lightBlueAccent,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(),
