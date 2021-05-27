@@ -1,4 +1,4 @@
-import '../../repository.dart';
+import '../repository.dart';
 
 class QuantityValidator {
   final String input;
