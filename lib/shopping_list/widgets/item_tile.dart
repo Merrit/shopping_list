@@ -72,18 +72,17 @@ class _NameAndCheckbox extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        SizedBox(
-          height: 24,
-          width: 24,
-          child: BlocBuilder<ShoppingListCubit, ShoppingListState>(
-            builder: (context, state) {
-              final shoppingListCubit = context.read<ShoppingListCubit>();
-              return Checkbox(
+        BlocBuilder<ShoppingListCubit, ShoppingListState>(
+          builder: (context, state) {
+            final shoppingListCubit = context.read<ShoppingListCubit>();
+            return Transform.scale(
+              scale: 1.2,
+              child: Checkbox(
                 value: state.checkedItems.contains(item),
                 onChanged: (_) => shoppingListCubit.toggleItemChecked(item),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ],
     );
