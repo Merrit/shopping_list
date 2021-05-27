@@ -70,6 +70,11 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final mobileHorizonalPadding = mediaQuery.size.width / 10;
+    final wideHorizonalPadding = mediaQuery.size.width / 4;
+    final isWide = isLargeFormFactor(context);
+    final horizontalPadding =
+        (isWide) ? wideHorizonalPadding : mobileHorizonalPadding;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
@@ -80,7 +85,7 @@ class LoginView extends StatelessWidget {
             for (var child in children)
               SliverPadding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: (mediaQuery.size.width < 600) ? 8 : 400,
+                  horizontal: horizontalPadding,
                 ),
                 sliver: SliverToBoxAdapter(child: child),
               ),
