@@ -100,33 +100,7 @@ class _LabelTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () async {
-                  final colorBeforeDialog = label.color;
-                  final confirmed = await ColorPicker(
-                    // Current color is pre-selected.
-                    color: Color(label.color),
-                    onColorChanged: (Color color) async {
-                      await _updateColor(
-                        color: color,
-                        label: label,
-                        shoppingListCubit: shoppingListCubit,
-                      );
-                    },
-                    heading: Text('Select color'),
-                    subheading: Text('Select color shade'),
-                    pickersEnabled: const <ColorPickerType, bool>{
-                      ColorPickerType.primary: true,
-                      ColorPickerType.accent: false,
-                    },
-                  ).showPickerDialog(context);
-                  if (!confirmed) {
-                    await _updateColor(
-                      color: Color(colorBeforeDialog),
-                      label: label,
-                      shoppingListCubit: shoppingListCubit,
-                    );
-                  }
-                },
+                onPressed: () async => await _editColor(label, context),
                 icon: Icon(Icons.edit_outlined),
               ),
               IconButton(
@@ -141,6 +115,60 @@ class _LabelTile extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _editColor(Label label, BuildContext context) async {
+    Color labelColor = Color(label.color);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    label.name,
+                    style: TextStyle(color: labelColor),
+                  ),
+                  ColorPicker(
+                    // Current color is pre-selected.
+                    color: labelColor,
+                    onColorChanged: (Color color) {
+                      setState(() => labelColor = color);
+                    },
+                    heading: Text('Select color'),
+                    subheading: Text('Select color shade'),
+                    pickersEnabled: const <ColorPickerType, bool>{
+                      ColorPickerType.primary: true,
+                      ColorPickerType.accent: false,
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != null) {
+      await _updateColor(
+        color: labelColor,
+        label: label,
+        shoppingListCubit: shoppingListCubit,
+      );
+    }
   }
 }
 

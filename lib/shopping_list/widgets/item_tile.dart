@@ -240,7 +240,13 @@ class _Labels extends StatelessWidget {
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
                           color: Color(
                             state.labels
-                                .firstWhere((element) => element.name == label)
+                                .firstWhere(
+                                  (element) => element.name == label,
+                                  orElse: () => Label(
+                                    name: label,
+                                    color: Colors.white.value,
+                                  ),
+                                )
                                 .color,
                           ),
                         ),

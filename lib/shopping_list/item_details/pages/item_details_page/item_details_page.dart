@@ -9,6 +9,8 @@ import 'package:shopping_list/shopping_list/shopping_list.dart';
 import '../../item_details.dart';
 import 'item_details_view.dart';
 
+late ItemDetailsCubit itemDetailsCubit;
+
 class ItemDetailsPage extends StatelessWidget {
   static const id = 'item_details_page';
 
@@ -31,6 +33,7 @@ class ItemDetailsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ItemDetailsCubit(item),
       child: Builder(builder: (context) {
+        itemDetailsCubit = context.read<ItemDetailsCubit>();
         return WillPopScope(
           onWillPop: () => popItemDetails(context),
           child: SafeArea(

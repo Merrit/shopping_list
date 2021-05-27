@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/models/label.dart';
 
 import 'package:shopping_list/shopping_list/shopping_list.dart';
 
@@ -25,7 +26,7 @@ class LabelsTile extends StatelessWidget {
                       child: Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children: state.labels
+                        children: itemDetailsCubit.state.labels
                             .map(
                               (label) => Text(
                                 label,
@@ -35,8 +36,14 @@ class LabelsTile extends StatelessWidget {
                                     .copyWith(
                                       color: Color(
                                         shoppingListCubit.state.labels
-                                            .firstWhere((element) =>
-                                                element.name == label)
+                                            .firstWhere(
+                                              (element) =>
+                                                  element.name == label,
+                                              orElse: () => Label(
+                                                name: label,
+                                                color: Colors.white.value,
+                                              ),
+                                            )
                                             .color,
                                       ),
                                     ),

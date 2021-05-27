@@ -8,9 +8,13 @@ import 'package:shopping_list/shopping_list/widgets/main_floating_button.dart';
 
 import '../../shopping_list.dart';
 
+late ShoppingListCubit shoppingListCubit;
+
 class ShoppingListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    shoppingListCubit = context.read<ShoppingListCubit>();
+
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final haveActiveList = (state.currentListId != '');

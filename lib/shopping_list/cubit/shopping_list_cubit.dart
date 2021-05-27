@@ -227,11 +227,10 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   Future<void> updateLabelColor(
       {required int color, required Label oldLabel}) async {
     final updatedLabel = oldLabel.copyWith(color: color);
-    final list = _shoppingList.copyWith();
-    list.labels
+    _shoppingList.labels
       ..remove(oldLabel)
       ..add(updatedLabel);
-    await updateList(labels: list.labels);
+    await updateList(labels: _shoppingList.labels);
   }
 
   @override

@@ -5,6 +5,8 @@ import 'package:shopping_list/home/home.dart';
 import '../../shopping_list.dart';
 
 class ShoppingListPage extends StatelessWidget {
+  const ShoppingListPage();
+
   @override
   Widget build(BuildContext context) {
     final homeCubit = context.read<HomeCubit>();
