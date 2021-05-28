@@ -87,9 +87,10 @@ class _LabelTile extends StatelessWidget {
       key: Key('$index'),
       builder: (context, itemDetailsState) {
         return ListTile(
-          leading: (itemDetailsState.labels.contains(label.name))
-              ? Icon(Icons.check)
-              : SizedBox(),
+          leading: Checkbox(
+            value: itemDetailsState.labels.contains(label.name),
+            onChanged: (_) => itemDetailsCubit.toggleLabel(label.name),
+          ),
           title: Text(
             label.name,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
@@ -99,10 +100,11 @@ class _LabelTile extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
+              ActionChip(
+                label: Text('Edit color'),
                 onPressed: () async => await _editColor(label, context),
-                icon: Icon(Icons.edit_outlined),
               ),
+              const SizedBox(width: 20),
               IconButton(
                 onPressed: () async {
                   await shoppingListCubit.deleteLabel(label);
