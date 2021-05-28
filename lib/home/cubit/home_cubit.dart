@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
 import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
-import 'package:shopping_list/shopping_list/shopping_list.dart';
 
 part 'home_state.dart';
 

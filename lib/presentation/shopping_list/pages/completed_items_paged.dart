@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../shopping_list.dart';
+import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 
 class CompletedItemsPage extends StatelessWidget {
   @override

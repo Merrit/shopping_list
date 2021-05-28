@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
+import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/models/label.dart';
 
-import 'package:shopping_list/shopping_list/shopping_list.dart';
-
-import '../../item_details.dart';
+import '../labels_page.dart';
+import 'item_details_page.dart';
 
 class LabelsTile extends StatelessWidget {
   @override

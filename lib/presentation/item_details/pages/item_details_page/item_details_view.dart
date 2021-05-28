@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
+import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/settings/settings.dart';
-import 'package:shopping_list/shopping_list/item_details/pages/parent_list_page.dart';
-import 'package:shopping_list/shopping_list/shopping_list.dart';
 
-import '../../item_details.dart';
+import '../parent_list_page.dart';
 import 'aisle_tile.dart';
 import 'labels_tile.dart';
 

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
+import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_page/shopping_list_page.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
-import 'package:shopping_list/shopping_list/shopping_list.dart';
 
 import '../home.dart';
 

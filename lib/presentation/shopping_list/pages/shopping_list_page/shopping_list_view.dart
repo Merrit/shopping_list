@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/shopping_list/widgets/create_item_shortcut.dart';
-import 'package:shopping_list/shopping_list/widgets/main_floating_button.dart';
+import 'package:shopping_list/presentation/shopping_list/widgets/main_floating_button.dart';
 
 import '../../shopping_list.dart';
 

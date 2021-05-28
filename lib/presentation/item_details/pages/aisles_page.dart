@@ -2,11 +2,12 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
+import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 
 import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/presentation/item_details/widgets/floating_done_button.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
-
-import '../../shopping_list.dart';
 
 class AislesPage extends StatelessWidget {
   static const id = 'aisles_page';

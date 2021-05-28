@@ -6,8 +6,8 @@ import 'package:shopping_list/settings/settings.dart';
 import 'authentication/authentication.dart';
 import 'authentication/enums/enums.dart';
 import 'home/home.dart';
+import 'presentation/shopping_list/pages/list_settings_page.dart';
 import 'repositories/authentication_repository/repository.dart';
-import 'shopping_list/shopping_list.dart';
 import 'splash/splash_screen.dart';
 import 'theme.dart';
 
