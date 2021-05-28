@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/core/helpers/money_handler.dart';
+import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 import 'package:shopping_list/shopping_list/shopping_list.dart';
@@ -13,15 +14,28 @@ class HomeCubit extends Cubit<HomeState> {
   final ShoppingListRepository shoppingListRepository;
   late StreamSubscription shoppingListSubscription;
   final User user;
+  final PreferencesRepository _preferencesRepository;
 
-  HomeCubit({
+  HomeCubit(
+    this._preferencesRepository, {
     required this.shoppingListRepository,
     required this.user,
-  }) : super(HomeState()) {
+  }) : super(
+          HomeState(shoppingViewMode: _getViewMode(_preferencesRepository)),
+        ) {
     _initPrefs();
     shoppingListSubscription = shoppingListRepository
         .shoppingListsStream()
         .listen((shoppingLists) => _listsChanged(shoppingLists));
+  }
+
+  static String _getViewMode(PreferencesRepository _preferencesRepository) {
+    final viewModeFromPrefs = _preferencesRepository.getKey('shoppingViewMode');
+    if (viewModeFromPrefs != null) {
+      return viewModeFromPrefs as String;
+    } else {
+      return 'Dense';
+    }
   }
 
   Future<void> _initPrefs() async {
@@ -86,6 +100,15 @@ class HomeCubit extends Cubit<HomeState> {
       }
     });
     await shoppingListRepository.updateShoppingList(newList);
+  }
+
+  void updateShoppingViewMode(String shoppingViewMode) {
+    assert(shoppingViewMode == 'Dense' || shoppingViewMode == 'Spacious');
+    _preferencesRepository.setString(
+      key: 'shoppingViewMode',
+      value: shoppingViewMode,
+    );
+    emit(state.copyWith(shoppingViewMode: shoppingViewMode));
   }
 
   @override

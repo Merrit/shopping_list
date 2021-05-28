@@ -9,11 +9,14 @@ class HomeState {
   /// A list of all the lists this user has access to.
   final List<ShoppingList> shoppingLists;
 
+  final String shoppingViewMode;
+
   HomeState({
     this.currentListId = '',
     this.shoppingLists = const [],
     this.prefs,
     this.shoppingListCubit,
+    required this.shoppingViewMode,
   });
 
   SharedPreferences? prefs;
@@ -24,12 +27,14 @@ class HomeState {
     List<ShoppingList>? shoppingLists,
     SharedPreferences? prefs,
     ShoppingListCubit? shoppingListCubit,
+    String? shoppingViewMode,
   }) {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
       shoppingLists: shoppingLists ?? this.shoppingLists,
       prefs: prefs ?? this.prefs,
       shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
+      shoppingViewMode: shoppingViewMode ?? this.shoppingViewMode,
     );
   }
 

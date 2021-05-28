@@ -28,39 +28,94 @@ class ShoppingListAppBar extends StatelessWidget {
                       ),
                 ),
                 actions: [
-                  PopupMenuButton(
-                    itemBuilder: (context) {
-                      return [
-                        'Sort by',
-                        'List settings',
-                        'Completed items',
-                      ].map((String choice) {
-                        return PopupMenuItem<String>(
-                          value: choice,
-                          child: Text(choice),
-                        );
-                      }).toList();
-                    },
-                    onSelected: (String choice) {
-                      switch (choice) {
-                        case 'Sort by':
-                          _showSortBy(context: context);
-                          break;
-                        case 'List settings':
-                          _showListSettings(context);
-                          break;
-                        case 'Completed items':
-                          _showCompletedItems(context: context);
-                          break;
-                        default:
-                      }
-                    },
-                  ),
+                  _PopupMenuButton(),
                 ],
               );
       },
     );
   }
+}
+
+class _PopupMenuButton extends StatelessWidget {
+  const _PopupMenuButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      itemBuilder: (context) {
+        return [
+          'Sort by',
+          'View mode',
+          'List settings',
+          'Completed items',
+        ].map((String choice) {
+          return PopupMenuItem<String>(
+            value: choice,
+            child: Text(choice),
+          );
+        }).toList();
+      },
+      onSelected: (String choice) {
+        switch (choice) {
+          case 'Sort by':
+            _showSortBy(context: context);
+            break;
+          case 'View mode':
+            _showViewModeChooser(context);
+            break;
+          case 'List settings':
+            _showListSettings(context);
+            break;
+          case 'Completed items':
+            _showCompletedItems(context: context);
+            break;
+          default:
+        }
+      },
+    );
+  }
+}
+
+Future<void> _showViewModeChooser(BuildContext context) async {
+  String viewMode = homeCubit.state.shoppingViewMode;
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('List view density'),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            final setViewMode = (String value) {
+              setState(() => viewMode = value);
+              Navigator.pop(context);
+            };
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile<String>(
+                  title: Text('Dense'),
+                  secondary: Icon(Icons.view_headline),
+                  value: 'Dense',
+                  groupValue: viewMode,
+                  onChanged: (value) => setViewMode(value!),
+                ),
+                RadioListTile<String>(
+                  title: Text('Spacious'),
+                  secondary: Icon(Icons.dashboard_outlined),
+                  value: 'Spacious',
+                  groupValue: viewMode,
+                  onChanged: (value) => setViewMode(value!),
+                ),
+              ],
+            );
+          },
+        ),
+      );
+    },
+  );
+  homeCubit.updateShoppingViewMode(viewMode);
 }
 
 void _showListSettings(BuildContext context) {
