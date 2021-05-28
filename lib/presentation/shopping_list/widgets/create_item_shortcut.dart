@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../shopping_list.dart';
+import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 
 class CreateItemIntent extends Intent {
   const CreateItemIntent();

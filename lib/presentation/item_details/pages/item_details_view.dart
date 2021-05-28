@@ -7,7 +7,7 @@ import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubi
 
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_page/shopping_list_view.dart';
+import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/models/label.dart';
 import 'package:shopping_list/settings/settings.dart';
 
