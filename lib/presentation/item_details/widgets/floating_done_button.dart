@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/core/core.dart';
-import 'package:shopping_list/presentation/item_details/pages/item_details_page/item_details_page.dart';
+import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
 
 class FloatingDoneButton extends StatelessWidget {
   const FloatingDoneButton({

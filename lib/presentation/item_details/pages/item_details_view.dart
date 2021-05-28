@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -6,11 +7,15 @@ import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubi
 
 import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_page/shopping_list_view.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/models/label.dart';
 import 'package:shopping_list/settings/settings.dart';
 
-import '../parent_list_page.dart';
-import 'aisle_tile.dart';
-import 'labels_tile.dart';
+import 'aisles_page.dart';
+import 'item_details_page.dart';
+import 'item_details_page_state.dart';
+import 'labels_page.dart';
+import 'parent_list_page.dart';
 
 class ItemDetailsView extends StatelessWidget {
   const ItemDetailsView({
@@ -19,8 +24,6 @@ class ItemDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeCubit = context.read<HomeCubit>();
-
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
@@ -152,6 +155,121 @@ class ItemDetailsView extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class AisleTile extends StatelessWidget {
+  const AisleTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final shoppingCubit = context.watch<ShoppingListCubit>();
+
+    return ListTile(
+      leading: Icon(Icons.format_color_text),
+      title: Row(
+        children: [
+          Text('Aisle'),
+          const SizedBox(width: 15),
+          BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+            builder: (context, state) {
+              final aisleFromList = shoppingCubit.state.aisles
+                  .firstWhereOrNull((aisle) => aisle.name == state.aisle);
+              final backgroundColor =
+                  (aisleFromList == null) ? null : Color(aisleFromList.color);
+
+              return Chip(
+                label: Text(state.aisle),
+                backgroundColor: backgroundColor,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              );
+            },
+          ),
+        ],
+      ),
+      trailing: Icon(Icons.keyboard_arrow_right),
+      onTap: () => _goToSubPage(context, pageId: AislesPage.id),
+    );
+  }
+}
+
+class LabelsTile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final shoppingListCubit = context.read<ShoppingListCubit>();
+
+    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+      builder: (context, state) {
+        return ListTile(
+          leading: Icon(Icons.label),
+          title: Text('Labels'),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          subtitle: (state.labels.isEmpty)
+              ? null
+              : BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: itemDetailsCubit.state.labels
+                            .map(
+                              (label) => Text(
+                                label,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                      color: Color(
+                                        shoppingListCubit.state.labels
+                                            .firstWhere(
+                                              (element) =>
+                                                  element.name == label,
+                                              orElse: () => Label(
+                                                name: label,
+                                                color: Colors.white.value,
+                                              ),
+                                            )
+                                            .color,
+                                      ),
+                                    ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    );
+                  },
+                ),
+          onTap: () => _goToSubPage(context, pageId: LabelsPage.id),
+        );
+      },
+    );
+  }
+}
+
+void _goToSubPage(BuildContext context, {required String pageId}) {
+  final isWide = isLargeFormFactor(context);
+  if (isWide) {
+    final state = context.read<ItemDetailsPageState>();
+    state.subpage = pageId;
+  } else {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: itemDetailsCubit),
+              BlocProvider.value(value: shoppingListCubit),
+            ],
+            child: (pageId == AislesPage.id) ? AislesPage() : LabelsPage(),
+          );
+        },
+      ),
     );
   }
 }

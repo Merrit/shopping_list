@@ -5,9 +5,10 @@ import 'package:shopping_list/application/item_details/cubit/item_details_cubit.
 
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
-import '../aisles_page.dart';
-import '../labels_page.dart';
+import 'aisles_page.dart';
+import 'item_details_page_state.dart';
 import 'item_details_view.dart';
+import 'labels_page.dart';
 
 late ItemDetailsCubit itemDetailsCubit;
 
@@ -57,22 +58,11 @@ class ItemDetailsPage extends StatelessWidget {
   }
 }
 
-class DetailsPageState extends ChangeNotifier {
-  String _subpage = '';
-
-  String get subpage => _subpage;
-
-  set subpage(String value) {
-    _subpage = value;
-    notifyListeners();
-  }
-}
-
 class TwoColumnView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => DetailsPageState(),
+      create: (context) => ItemDetailsPageState(),
       builder: (context, child) {
         return Row(
           children: [
@@ -95,7 +85,7 @@ class TwoColumnView extends StatelessWidget {
 class TwoColumnSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<DetailsPageState>(
+    return Consumer<ItemDetailsPageState>(
       builder: (context, state, child) {
         switch (state.subpage) {
           case '':

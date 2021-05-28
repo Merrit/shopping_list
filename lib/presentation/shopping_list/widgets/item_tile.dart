@@ -5,7 +5,7 @@ import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubi
 import 'package:shopping_list/core/core.dart';
 
 import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/presentation/item_details/pages/item_details_page/item_details_page.dart';
+import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class ItemTile extends StatelessWidget {
