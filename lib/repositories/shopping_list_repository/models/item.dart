@@ -62,17 +62,7 @@ class Item extends Equatable {
   Map<String, dynamic> toJson() => _$ItemToJson(this);
 
   @override
-  List<Object?> get props => [
-        name,
-        aisle,
-        notes,
-        isComplete,
-        hasTax,
-        quantity,
-        price,
-        total,
-        labels,
-      ];
+  List<Object?> get props => [name];
 
   @override
   String toString() {

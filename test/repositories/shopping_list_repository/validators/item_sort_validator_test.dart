@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/validators/item_sort_validator.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/validators/list_items_validator.dart';
 
 void main() {
   final aisles = <Aisle>[];
@@ -22,10 +22,12 @@ void main() {
       Item(name: 'Mango', aisle: 'Fruit'),
       Item(name: 'Bok choy', aisle: 'Veggies'),
     ]);
-    final validatedItems = ItemSortValidator(items: items).sort(
+    final validatedItems = ListItemsValidator.validateItems(
       aisles: aisles,
-      ascending: true,
+      items: items,
+      labels: [],
       sortBy: 'Aisle-custom',
+      sortAscending: true,
     );
     final expected = <Item>[
       Item(name: 'Bok choy', aisle: 'Veggies'),
@@ -45,10 +47,12 @@ void main() {
       Item(name: 'Mango', aisle: 'Fruit'),
       Item(name: 'Bok choy', aisle: 'Veggies'),
     ]);
-    final validatedItems = ItemSortValidator(items: items).sort(
+    final validatedItems = ListItemsValidator.validateItems(
       aisles: aisles,
-      ascending: true,
+      items: items,
+      labels: [],
       sortBy: 'Aisle-custom',
+      sortAscending: true,
     );
     final expected = <Item>[
       Item(name: 'Bok choy', aisle: 'Veggies'),

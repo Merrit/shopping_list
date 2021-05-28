@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/validators/list_items_validator.dart';
 
 void main() {
   test('Removes labels from items that do not exit in shopping list', () {
@@ -11,10 +12,13 @@ void main() {
     final labels = [
       Label(name: 'Label1', color: Colors.white.value),
     ];
-    final validatedItems = LabelValidator(
+    final validatedItems = ListItemsValidator.validateItems(
+      aisles: [],
       items: items,
       labels: labels,
-    ).validate();
+      sortBy: 'Name',
+      sortAscending: true,
+    );
     expect(validatedItems[1].labels.length, 0);
   });
 }
