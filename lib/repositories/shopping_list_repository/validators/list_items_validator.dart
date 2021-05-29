@@ -14,6 +14,10 @@ class ListItemsValidator {
       items: validatedItems,
       labels: labels,
     ).validate();
+    validatedItems = _AisleValidator(
+      items: validatedItems,
+      aisles: aisles,
+    ).validate();
     validatedItems = _ItemSortValidator.sort(
       items: validatedItems,
       aisles: aisles,
@@ -44,6 +48,24 @@ class _LabelValidator {
         (String label) => (labelNames.contains(label) == false),
       );
       validatedItems.add(item.copyWith(labels: labels));
+    }
+    return validatedItems;
+  }
+}
+
+class _AisleValidator {
+  final List<Item> items;
+  final List<Aisle> aisles;
+
+  const _AisleValidator({required this.items, required this.aisles});
+
+  /// Clean out aisles that have been deleted.
+  List<Item> validate() {
+    List<Item> validatedItems = [];
+    final aisleNames = aisles.map((aisle) => aisle.name).toList();
+    for (var item in items) {
+      final bool aisleExists = aisleNames.contains(item.aisle);
+      validatedItems.add(aisleExists ? item : item.copyWith(aisle: 'None'));
     }
     return validatedItems;
   }
