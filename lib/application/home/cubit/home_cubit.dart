@@ -23,6 +23,7 @@ class HomeCubit extends Cubit<HomeState> {
   }) : super(
           HomeState(shoppingViewMode: _getViewMode(_preferencesRepository)),
         ) {
+    _init();
     shoppingListSubscription = shoppingListRepository
         .shoppingListsStream()
         .listen((shoppingLists) => _listsChanged(shoppingLists));
@@ -34,6 +35,22 @@ class HomeCubit extends Cubit<HomeState> {
       return viewModeFromPrefs as String;
     } else {
       return 'Dense';
+    }
+  }
+
+  void _init() async {
+    await _getSavedListId();
+  }
+
+  Future<void> _getSavedListId() async {
+    final shoppingLists = await shoppingListRepository.shoppingLists();
+    final listIds = <String>[];
+    shoppingLists.forEach((list) => listIds.add(list.id));
+    var savedId = _preferencesRepository.getKey('currentList') as String?;
+    if (savedId == null) return;
+    final bool savedIdExists = listIds.contains(savedId);
+    if (savedIdExists) {
+      emit(state.copyWith(currentListId: savedId));
     }
   }
 
@@ -55,6 +72,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void setCurrentList(String listId) {
+    _preferencesRepository.setString(key: 'currentList', value: listId);
     emit(state.copyWith(
       currentListId: listId,
     ));
