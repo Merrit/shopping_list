@@ -58,7 +58,7 @@ class AisleGroup extends StatelessWidget {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) {
-                      return Divider();
+                      return Divider(height: 0);
                     },
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -121,13 +121,17 @@ class _Quantity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(item.quantity),
-        const SizedBox(width: 8),
-        VerticalDivider(),
-      ],
+    return SizedBox(
+      width: 60,
+      child: Row(
+        children: [
+          const Spacer(),
+          Text(item.quantity),
+          const Spacer(),
+          const SizedBox(width: 8),
+          const VerticalDivider(),
+        ],
+      ),
     );
   }
 }
@@ -166,72 +170,34 @@ class _Subtitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // _PriceAndTotal(item: item),
-              if (item.labels.isNotEmpty) _Labels(item: item),
-              if (item.notes != '') _Notes(item: item),
-            ],
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (item.price != '0.00') _Price(item: item),
+            if (item.labels.isNotEmpty) _Labels(item: item),
+            if (item.notes != '') _Notes(item: item),
+          ],
         );
       },
     );
   }
 }
 
-class _PriceAndTotal extends StatelessWidget {
+class _Price extends StatelessWidget {
   final Item item;
 
-  const _PriceAndTotal({
+  const _Price({
     Key? key,
     required this.item,
   }) : super(key: key);
 
-  final _priceSubtitleStyle = const TextStyle(
-    fontSize: 15,
-    color: Colors.grey,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        top: ((item.price == '0.00') && (item.total == '0.00')) ? 0 : 10,
-        left: 10,
-      ),
-      child: Row(
-        children: [
-          Flexible(
-            child: (item.price == '0.00')
-                ? Container()
-                : Column(
-                    children: [
-                      Text('\$${item.price}'),
-                      Text(
-                        'each',
-                        style: _priceSubtitleStyle,
-                      ),
-                    ],
-                  ),
-          ),
-          const SizedBox(width: 20),
-          Flexible(
-            child: (item.total == '0.00')
-                ? Container()
-                : Column(
-                    children: [
-                      Text('\$${item.total}'),
-                      Text(
-                        'total',
-                        style: _priceSubtitleStyle,
-                      ),
-                    ],
-                  ),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Text(
+        '\$${item.total}',
+        style: TextStyle(color: Colors.green.withOpacity(0.8)),
       ),
     );
   }
