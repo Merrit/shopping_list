@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 import 'package:shopping_list/settings/settings.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/list_settings_page.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
@@ -152,6 +152,7 @@ class _NameTile extends StatelessWidget {
             );
             switch (choice) {
               case 'List settings':
+                // TODO: Combine with AppBar method that does same.
                 setCurrentList(context, list.id);
                 await Navigator.push(
                   context,
@@ -159,9 +160,7 @@ class _NameTile extends StatelessWidget {
                     builder: (context) {
                       return MultiBlocProvider(
                         providers: [
-                          BlocProvider(
-                              create: (_) =>
-                                  ShoppingListCubit(homeCubit: homeCubit)),
+                          BlocProvider.value(value: shoppingListCubit),
                           BlocProvider.value(value: homeCubit),
                         ],
                         child: ListSettingsPage(),

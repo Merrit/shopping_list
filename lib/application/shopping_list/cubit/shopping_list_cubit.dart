@@ -3,20 +3,22 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 part 'shopping_list_state.dart';
 
 class ShoppingListCubit extends Cubit<ShoppingListState> {
   final HomeCubit _homeCubit;
+  final PreferencesRepository _preferencesRepository;
   late StreamSubscription _homeCubitSubscription;
   late ShoppingList _shoppingList;
   final ShoppingListRepository _shoppingListRepository;
 
-  ShoppingListCubit({
+  ShoppingListCubit(
+    this._preferencesRepository, {
     required HomeCubit homeCubit,
   })  : _homeCubit = homeCubit,
         // Assign initial dummy list while loading.
@@ -42,8 +44,6 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     _listUpdatedFromDatabase(shoppingList);
   }
 
-  SharedPreferences? prefs;
-
   void _subscribeToHomeCubit() {
     _homeCubitSubscription = _homeCubit.stream.listen((HomeState event) {
       final currentList = event.shoppingLists.firstWhereOrNull(
@@ -52,10 +52,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       if (currentList != null && currentList != _shoppingList) {
         _listUpdatedFromDatabase(currentList);
       }
-      if (prefs == null && (event.prefs != null)) {
-        prefs = event.prefs;
-        updateTaxRate();
-      }
+      updateTaxRate();
     });
   }
 
@@ -193,7 +190,14 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     await updateList(aisles: _shoppingList.aisles);
   }
 
-  String get taxRate => _homeCubit.state.prefs!.getString('taxRate') ?? '0.0';
+  String get taxRate {
+    final savedRate = _preferencesRepository.getKey('taxRate');
+    if (savedRate != null) {
+      return savedRate as String;
+    } else {
+      return '0.0';
+    }
+  }
 
   void updateTaxRate() => emit(state.copyWith(taxRate: taxRate));
 

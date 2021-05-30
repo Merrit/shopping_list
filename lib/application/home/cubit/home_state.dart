@@ -14,12 +14,10 @@ class HomeState {
   HomeState({
     this.currentListId = '',
     this.shoppingLists = const [],
-    this.prefs,
     this.shoppingListCubit,
     required this.shoppingViewMode,
   });
 
-  SharedPreferences? prefs;
   ShoppingListCubit? shoppingListCubit;
 
   HomeState copyWith({
@@ -32,7 +30,6 @@ class HomeState {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
       shoppingLists: shoppingLists ?? this.shoppingLists,
-      prefs: prefs ?? this.prefs,
       shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
       shoppingViewMode: shoppingViewMode ?? this.shoppingViewMode,
     );
@@ -43,7 +40,6 @@ class HomeState {
 HomeState: \n
 currentListId: $currentListId, 
 shoppingLists: $shoppingLists,
-prefs: $prefs,
 shoppingListCubit: $shoppingListCubit,
 \n''';
 }

@@ -23,7 +23,6 @@ class HomeCubit extends Cubit<HomeState> {
   }) : super(
           HomeState(shoppingViewMode: _getViewMode(_preferencesRepository)),
         ) {
-    _initPrefs();
     shoppingListSubscription = shoppingListRepository
         .shoppingListsStream()
         .listen((shoppingLists) => _listsChanged(shoppingLists));
@@ -36,11 +35,6 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       return 'Dense';
     }
-  }
-
-  Future<void> _initPrefs() async {
-    final _prefs = await SharedPreferences.getInstance();
-    emit(state.copyWith(prefs: _prefs));
   }
 
   void _listsChanged(List<ShoppingList> shoppingLists) {

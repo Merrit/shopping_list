@@ -22,12 +22,7 @@ class ShoppingListView extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final haveActiveList = (state.currentListId != '');
-        final prefsInitialized = (state.prefs != null);
-        if (haveActiveList && prefsInitialized) {
-          return ActiveListView();
-        } else {
-          return _NoActiveListView();
-        }
+        return (haveActiveList) ? ActiveListView() : _NoActiveListView();
       },
     );
   }
