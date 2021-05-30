@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/core/core.dart';
 
-import 'package:shopping_list/home/home.dart';
-import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
+import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
+import 'package:shopping_list/presentation/shopping_list/widgets/checkbox_large.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class ItemTile extends StatelessWidget {
@@ -27,29 +27,8 @@ class ItemTile extends StatelessWidget {
               item.price == '0.00')
           ? null
           : _Subtitle(item: item),
-      onTap: () => _goToItemDetails(context, item),
+      onTap: () => goToItemDetails(context, item),
     );
-  }
-
-  Future<void> _goToItemDetails(BuildContext context, Item item) async {
-    final homeCubit = context.read<HomeCubit>();
-    final shoppingListCubit = context.read<ShoppingListCubit>();
-    final newItem = await Navigator.push<Item>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: shoppingListCubit),
-            BlocProvider.value(value: homeCubit),
-          ],
-          child: ItemDetailsPage(item: item),
-        ),
-      ),
-    );
-    if (newItem != null) {
-      final cubit = context.read<ShoppingListCubit>();
-      await cubit.updateItem(oldItem: item, newItem: newItem);
-    }
   }
 }
 
@@ -75,12 +54,9 @@ class _NameAndCheckbox extends StatelessWidget {
         BlocBuilder<ShoppingListCubit, ShoppingListState>(
           builder: (context, state) {
             final shoppingListCubit = context.read<ShoppingListCubit>();
-            return Transform.scale(
-              scale: 1.2,
-              child: Checkbox(
-                value: state.checkedItems.contains(item),
-                onChanged: (_) => shoppingListCubit.toggleItemChecked(item),
-              ),
+            return CheckboxLarge(
+              value: state.checkedItems.contains(item),
+              onChanged: (_) => shoppingListCubit.toggleItemChecked(item),
             );
           },
         ),

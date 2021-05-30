@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
+import 'package:shopping_list/core/core.dart';
 import 'package:shopping_list/home/home.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/list_settings_page.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
@@ -66,9 +67,7 @@ class NameTile extends StatelessWidget {
             title: Center(
               child: Text(
                 list.name,
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Color(list.color),
-                    ),
+                style: TextStyles.headline1.copyWith(color: Color(list.color)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

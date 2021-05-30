@@ -25,7 +25,9 @@ class Insets {
 }
 
 class TextStyles {
-  static const TextStyle raleway = TextStyle();
+  static const TextStyle base = TextStyle();
 
-  static TextStyle body1 = raleway.copyWith();
+  static TextStyle body1 = base.copyWith();
+
+  static TextStyle headline1 = base.copyWith(fontSize: 20);
 }
