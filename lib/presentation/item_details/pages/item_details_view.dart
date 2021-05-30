@@ -50,6 +50,7 @@ class ItemDetailsView extends StatelessWidget {
                 context: context,
                 title: 'Name',
                 initialValue: state.name,
+                preselectText: true,
               );
               if (input != null) {
                 itemDetailsCubit.updateItem(name: input.capitalizeFirst);
@@ -78,11 +79,11 @@ class ItemDetailsView extends StatelessWidget {
             subtitle: Text(state.price),
             onTap: () async {
               final input = await InputDialog.show(
-                context: context,
-                title: 'Price',
-                type: InputDialogs.onlyDouble,
-                initialValue: state.price,
-              );
+                  context: context,
+                  title: 'Price',
+                  type: InputDialogs.onlyDouble,
+                  initialValue: state.price,
+                  preselectText: true);
               if (input != null) itemDetailsCubit.updateItem(price: input);
             },
           ),
