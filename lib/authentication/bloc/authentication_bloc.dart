@@ -20,7 +20,12 @@ class AuthenticationBloc
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
   })  : _authenticationRepository = authenticationRepository,
-        super(const AuthenticationState.unauthenticated()) {
+        super(
+          (authenticationRepository.currentUser != User.empty)
+              ? AuthenticationState.authenticated(
+                  authenticationRepository.currentUser)
+              : const AuthenticationState.unauthenticated(),
+        ) {
     _userSubscription = _authenticationRepository.user.listen(
       (user) {
         _log.info('User: $user');
