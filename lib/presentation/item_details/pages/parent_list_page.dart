@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/presentation/home/pages/home_page.dart';
 
 class ParentListPage extends StatelessWidget {
   final String itemName;

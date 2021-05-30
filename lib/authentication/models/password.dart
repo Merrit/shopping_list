@@ -1,4 +1,4 @@
-import 'package:shopping_list/core/validators/validators.dart';
+import 'package:shopping_list/domain/core/core.dart';
 
 class Password {
   final String value;

@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/presentation/core/core.dart';
+import 'package:shopping_list/presentation/home/pages/home_page.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/completed_items_paged.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/list_settings_page.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/sort_by_page.dart';
-
-import '../../home/home.dart';
 
 class ShoppingListAppBar extends StatelessWidget {
   @override

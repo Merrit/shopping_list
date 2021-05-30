@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_list/core/widgets/app_icon.dart';
-import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/presentation/core/core.dart';
+import 'package:shopping_list/presentation/home/pages/home_page.dart';
 import 'package:shopping_list/repositories/authentication_repository/authentication_repository.dart';
 import 'package:shopping_list/repositories/authentication_repository/models/user.dart';
 

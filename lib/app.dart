@@ -4,7 +4,7 @@ import 'package:shopping_list/settings/settings.dart';
 
 import 'authentication/authentication.dart';
 import 'authentication/enums/enums.dart';
-import 'home/home.dart';
+import 'presentation/home/pages/home_page.dart';
 import 'presentation/shopping_list/pages/list_settings_page.dart';
 import 'repositories/authentication_repository/repository.dart';
 import 'presentation/pages/splash_page.dart';

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/core/core.dart';
-import 'package:shopping_list/home/home.dart';
+import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/presentation/core/core.dart';
 import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/create_item_shortcut.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/aisle_group.dart';

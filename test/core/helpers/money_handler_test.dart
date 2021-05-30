@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shopping_list/core/helpers/money_handler.dart';
+import 'package:shopping_list/domain/core/core.dart';
 
 void main() {
   final handler = MoneyHandler();
