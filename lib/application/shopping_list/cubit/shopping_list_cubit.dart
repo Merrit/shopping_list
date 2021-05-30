@@ -109,6 +109,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   Future<void> createItem({required String name}) async {
     final newItem = Item(name: name);
+    await createItemFromItem(newItem);
+  }
+
+  Future<void> createItemFromItem(Item newItem) async {
+    _shoppingList.items.removeWhere((item) => item.name == newItem.name);
     _shoppingList.items.add(newItem);
     await _shoppingListRepository.updateShoppingList(_shoppingList);
   }
@@ -153,7 +158,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     final completedItems = <Item>[];
     state.checkedItems.forEach(
       (item) {
-        final completedItem = item.copyWith(isComplete: true);
+        final completedItem = item.copyWith(isComplete: true, aisle: 'None');
         completedItems.add(completedItem);
         _shoppingList.items.remove(item);
       },

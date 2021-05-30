@@ -22,9 +22,12 @@ class AisleGroup extends StatelessWidget {
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, shoppingListState) {
         final aisle = shoppingListState.aisles[index];
+        if (aisle.itemCount == 0) return Container();
         final items = shoppingListState.items
-            .where((item) => item.aisle == aisle.name)
+            .where((item) =>
+                (item.aisle == aisle.name) && (item.isComplete == false))
             .toList();
+        if (items.isEmpty) return Container();
         return Column(
           children: [
             if (aisle.name != 'None')
@@ -104,7 +107,7 @@ class _ItemTile extends StatelessWidget {
       trailing: _Checkbox(item: item),
       isThreeLine: isThreeLine,
       subtitle: (hideSubtitle) ? null : _Subtitle(item: item),
-      onTap: () => goToItemDetails(context, item),
+      onTap: () => goToItemDetails(context: context, item: item),
     );
   }
 
@@ -173,7 +176,7 @@ class _Subtitle extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (item.price != '0.00') _Price(item: item),
+            if (item.total != '0.00') _TotalPrice(item: item),
             if (item.labels.isNotEmpty) _Labels(item: item),
             if (item.notes != '') _Notes(item: item),
           ],
@@ -183,10 +186,10 @@ class _Subtitle extends StatelessWidget {
   }
 }
 
-class _Price extends StatelessWidget {
+class _TotalPrice extends StatelessWidget {
   final Item item;
 
-  const _Price({
+  const _TotalPrice({
     Key? key,
     required this.item,
   }) : super(key: key);

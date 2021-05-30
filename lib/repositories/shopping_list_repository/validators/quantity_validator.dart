@@ -1,16 +1,15 @@
 import '../repository.dart';
 
 class QuantityValidator {
-  final String input;
+  final String? input;
 
   const QuantityValidator(this.input);
 
+  static const String _defaultQuantity = '1';
+
   String validate() {
-    final isValidNumber = NumberValidator(input).isValidNumber();
-    if (isValidNumber) {
-      return input;
-    } else {
-      return '1';
-    }
+    if (input == null) return _defaultQuantity;
+    final isValidNumber = NumberValidator(input!).isValidNumber();
+    return (isValidNumber) ? input! : _defaultQuantity;
   }
 }

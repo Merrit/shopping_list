@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:shopping_list/domain/core/core.dart';
 
 import '../repository.dart';
 
@@ -21,17 +22,46 @@ class Item extends Equatable {
   @JsonKey(defaultValue: <String>[])
   final List<String> labels;
 
-  Item({
+  Item._internal({
     required this.name,
-    this.aisle = 'None',
-    this.notes = '',
-    this.isComplete = false,
-    this.hasTax = false,
-    String quantity = '1',
-    this.price = '0.00',
-    this.total = '0.00',
-    this.labels = const [],
-  }) : quantity = QuantityValidator(quantity).validate();
+    required this.aisle,
+    required this.notes,
+    required this.isComplete,
+    required this.hasTax,
+    required this.quantity,
+    required this.price,
+    required this.total,
+    required this.labels,
+  });
+
+  factory Item({
+    required String name,
+    String? aisle,
+    String? notes,
+    bool? isComplete,
+    bool? hasTax,
+    String? quantity,
+    String? price,
+    String? total,
+    List<String>? labels,
+  }) {
+    final validatedQuantity = QuantityValidator(quantity).validate();
+    final validatedTotal = MoneyHandler().totalPrice(
+      price: price,
+      quantity: validatedQuantity,
+    );
+    return Item._internal(
+      name: name,
+      aisle: aisle ?? 'None',
+      notes: notes ?? '',
+      isComplete: isComplete ?? false,
+      hasTax: hasTax ?? false,
+      quantity: validatedQuantity,
+      price: price ?? '0.00',
+      total: validatedTotal,
+      labels: labels ?? const [],
+    );
+  }
 
   Item copyWith({
     String? name,

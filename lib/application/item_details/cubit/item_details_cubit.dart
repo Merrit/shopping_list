@@ -45,7 +45,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
 
   /// Toggle whether a label is applied to this item or not.
   void toggleLabel(String label) {
-    final labels = state.labels;
+    final labels = List<String>.from(state.labels);
     if (labels.contains(label)) {
       labels.remove(label);
     } else {
@@ -64,6 +64,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       total: state.total,
       hasTax: state.hasTax,
       notes: state.notes,
+      labels: state.labels,
     );
   }
 }

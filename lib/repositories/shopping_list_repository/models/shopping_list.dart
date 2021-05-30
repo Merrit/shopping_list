@@ -62,9 +62,13 @@ class ShoppingList extends Equatable {
       sortBy: sortBy,
       sortAscending: sortAscending,
     );
+    final validatedAisles = AisleValidator.validate(
+      aisles: aisles,
+      items: validatedItems,
+    );
     return ShoppingList._internal(
       name: name,
-      aisles: AisleValidator.validate(aisles),
+      aisles: validatedAisles,
       items: validatedItems,
       color: color,
       id: id,

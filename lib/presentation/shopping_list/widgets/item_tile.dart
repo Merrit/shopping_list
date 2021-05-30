@@ -27,7 +27,7 @@ class ItemTile extends StatelessWidget {
               item.price == '0.00')
           ? null
           : _Subtitle(item: item),
-      onTap: () => goToItemDetails(context, item),
+      onTap: () => goToItemDetails(context: context, item: item),
     );
   }
 }

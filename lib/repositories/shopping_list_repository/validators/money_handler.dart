@@ -7,15 +7,18 @@ class MoneyHandler {
 
   MoneyHandler();
 
+  static const String _defaultTotal = '0.00';
+
   /// Returns the total price, with or without tax.
   String totalPrice({
-    required String price,
+    String? price,
     required String quantity,
     String? taxRate,
   }) {
+    if (price == null) return _defaultTotal;
     final _price = _parseStringToMoney(price);
     final _quantity = int.tryParse(quantity);
-    if (_quantity == null) return '0.00';
+    if (_quantity == null) return _defaultTotal;
     final total = _price * _quantity;
     if (taxRate == null) {
       return total.toString();

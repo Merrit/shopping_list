@@ -5,6 +5,7 @@ import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/presentation/core/core.dart';
+import 'package:shopping_list/presentation/home/home.dart';
 import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/create_item_shortcut.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/aisle_group.dart';
@@ -62,13 +63,53 @@ class ActiveListView extends StatelessWidget {
 
   static Future<void> showCreateItemDialog(
       {required BuildContext context}) async {
-    final shoppingListCubit = context.read<ShoppingListCubit>();
-    final input = await InputDialog.show(
+    bool customize = false;
+    final input = await showDialog<String>(
       context: context,
-      title: 'New item',
+      builder: (context) {
+        final _controller = TextEditingController();
+        return AlertDialog(
+          title: Text('New item'),
+          content: TextField(
+            controller: _controller,
+            autofocus: platformIsWebMobile(context) ? false : true,
+            onSubmitted: (_) => Navigator.pop(context, _controller.text),
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Cancel'),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {
+                    customize = true;
+                    Navigator.pop(context, _controller.text);
+                  },
+                  child: Text('Customize'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, _controller.text),
+                  child: Text('Create'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
-    if ((input != null) && (input != '')) {
-      await shoppingListCubit.createItem(name: input.capitalizeFirst);
+    if (input == null) return;
+    final newItemName = input.capitalizeFirst;
+    if (customize) {
+      await goToItemDetails(
+        context: context,
+        item: Item(name: newItemName),
+        creatingItem: true,
+      );
+    } else {
+      await shoppingListCubit.createItem(name: newItemName);
     }
   }
 }
@@ -140,9 +181,11 @@ class ScrollingShoppingList extends StatelessWidget {
 }
 
 /// Function to navigate to details shared by AisleGroup & ItemTile.
-Future<void> goToItemDetails(BuildContext context, Item item) async {
-  final homeCubit = context.read<HomeCubit>();
-  final shoppingListCubit = context.read<ShoppingListCubit>();
+Future<void> goToItemDetails({
+  required BuildContext context,
+  required Item item,
+  bool creatingItem = false,
+}) async {
   final newItem = await Navigator.push<Item>(
     context,
     MaterialPageRoute(
@@ -155,8 +198,10 @@ Future<void> goToItemDetails(BuildContext context, Item item) async {
       ),
     ),
   );
-  if (newItem != null) {
-    final cubit = context.read<ShoppingListCubit>();
-    await cubit.updateItem(oldItem: item, newItem: newItem);
+  if (newItem == null) return;
+  if (creatingItem) {
+    await shoppingListCubit.createItemFromItem(newItem);
+  } else {
+    await shoppingListCubit.updateItem(oldItem: item, newItem: newItem);
   }
 }
