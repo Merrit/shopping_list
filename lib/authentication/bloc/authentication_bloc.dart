@@ -28,7 +28,7 @@ class AuthenticationBloc
         ) {
     _userSubscription = _authenticationRepository.user.listen(
       (user) {
-        _log.info('User: $user');
+        _log.fine('User: $user');
         add(AuthenticationUserChanged(user));
       },
     );
