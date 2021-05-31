@@ -2,27 +2,25 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/checkbox_large.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/models/item.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/models/label.dart';
+import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class AisleGroup extends StatelessWidget {
-  final int index;
+  final Aisle aisle;
 
   const AisleGroup({
     Key? key,
-    required this.index,
+    required this.aisle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, shoppingListState) {
-        final aisle = shoppingListState.aisles[index];
-        if (aisle.itemCount == 0) return Container();
         final items = shoppingListState.items
             .where((item) =>
                 (item.aisle == aisle.name) && (item.isComplete == false))
@@ -33,7 +31,13 @@ class AisleGroup extends StatelessWidget {
             if (aisle.name != 'None')
               Text(
                 aisle.name,
-                style: TextStyles.headline1.copyWith(color: Color(aisle.color)),
+                style: TextStyles.headline1.copyWith(
+                  color: Color(
+                    (aisle.color == 0)
+                        ? 4294967295 // Default to white text if not custom.
+                        : aisle.color,
+                  ),
+                ),
               ),
             Padding(
               padding: const EdgeInsets.only(
@@ -66,7 +70,7 @@ class AisleGroup extends StatelessWidget {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
-                      return _ItemTile(item: item);
+                      return _ItemTile(key: ValueKey(item), item: item);
                     },
                   ),
                 ),

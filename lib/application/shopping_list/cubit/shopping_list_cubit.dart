@@ -113,9 +113,12 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   }
 
   Future<void> createItemFromItem(Item newItem) async {
-    _shoppingList.items.removeWhere((item) => item.name == newItem.name);
-    _shoppingList.items.add(newItem);
-    await _shoppingListRepository.updateShoppingList(_shoppingList);
+    final items = List<Item>.from(_shoppingList.items);
+    items.removeWhere((item) => item.name == newItem.name);
+    items.add(newItem);
+    await _shoppingListRepository.updateShoppingList(
+      _shoppingList.copyWith(items: items),
+    );
   }
 
   Future<void> updateItem(

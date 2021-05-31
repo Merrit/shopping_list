@@ -136,40 +136,46 @@ class ScrollingShoppingList extends StatelessWidget {
                     ? (constraints.maxWidth / 10)
                     : Insets.xsmall;
 
+                final listViewPadding = EdgeInsets.only(
+                  left: sidePadding,
+                  right: sidePadding,
+                  top: 40,
+                  bottom: 100,
+                );
+
                 return Scrollbar(
                   controller: _scrollController,
                   isAlwaysShown: _isLargeFormFactor ? true : false,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    padding: EdgeInsets.only(
-                      left: sidePadding,
-                      right: sidePadding,
-                      top: 40,
-                      bottom: 100,
-                    ),
-                    separatorBuilder: (context, index) {
-                      if (viewIsDense) {
-                        return const SizedBox(height: 20);
-                      } else {
-                        return const Divider(
-                          indent: 20,
-                          endIndent: 20,
-                          height: 4,
-                        );
-                      }
-                    },
-                    itemCount: (viewIsDense)
-                        ? shoppingListState.aisles.length
-                        : items.length,
-                    itemBuilder: (context, index) {
-                      if (viewIsDense) {
-                        return AisleGroup(index: index);
-                      } else {
-                        var item = items[index];
-                        return ItemTile(item: item);
-                      }
-                    },
-                  ),
+                  child: (viewIsDense)
+                      // Dense ListView.
+                      ? ListView(
+                          controller: _scrollController,
+                          padding: listViewPadding,
+                          children: shoppingListState.aisles
+                              .where((aisle) => aisle.itemCount > 0)
+                              .map((aisle) => AisleGroup(
+                                    key: ValueKey(aisle),
+                                    aisle: aisle,
+                                  ))
+                              .toList(),
+                        )
+                      // Spacious ListView.
+                      : ListView.separated(
+                          controller: _scrollController,
+                          padding: listViewPadding,
+                          separatorBuilder: (context, index) {
+                            return const Divider(
+                              indent: 20,
+                              endIndent: 20,
+                              height: 4,
+                            );
+                          },
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            var item = items[index];
+                            return ItemTile(item: item);
+                          },
+                        ),
                 );
               },
             );
