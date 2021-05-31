@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 import 'package:shopping_list/setup/setup.dart';
 
@@ -16,6 +17,7 @@ import 'app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   primeFonts();
+  await PreferencesRepository.init();
   await Firebase.initializeApp();
   EquatableConfig.stringify = kDebugMode;
   initLogger();

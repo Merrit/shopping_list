@@ -10,18 +10,24 @@ class Aisle extends Equatable {
   final String name;
   final int color;
 
+  @JsonKey(defaultValue: 0)
+  final int itemCount;
+
   Aisle({
     required this.name,
     this.color = 0,
+    this.itemCount = 0,
   });
 
   Aisle copyWith({
     String? name,
     int? color,
+    int? itemCount,
   }) {
     return Aisle(
       name: name ?? this.name,
       color: color ?? this.color,
+      itemCount: itemCount ?? this.itemCount,
     );
   }
 
@@ -30,13 +36,8 @@ class Aisle extends Equatable {
   Map<String, dynamic> toJson() => _$AisleToJson(this);
 
   @override
-  List<Object?> get props => [name, color];
+  List<Object> get props => [name];
 
   @override
-  String toString() {
-    return '''Aisle {
-        name: $name,
-        color: $color,
-        }''';
-  }
+  bool get stringify => true;
 }

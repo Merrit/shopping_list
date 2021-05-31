@@ -14,6 +14,12 @@ class AuthenticationRepository {
   })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
 
+  /// Returns [User.empty] if there is no current user.
+  User get currentUser {
+    final firebaseUser = _firebaseAuth.currentUser;
+    return (firebaseUser == null) ? User.empty : firebaseUser.toUser;
+  }
+
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
   ///

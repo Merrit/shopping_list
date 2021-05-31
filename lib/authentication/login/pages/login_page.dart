@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:shopping_list/core/core.dart';
+import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/presentation/core/core.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 import '../../authentication.dart';
@@ -70,6 +71,11 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final mobileHorizonalPadding = mediaQuery.size.width / 10;
+    final wideHorizonalPadding = mediaQuery.size.width / 4;
+    final isWide = isLargeFormFactor(context);
+    final horizontalPadding =
+        (isWide) ? wideHorizonalPadding : mobileHorizonalPadding;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
@@ -80,7 +86,7 @@ class LoginView extends StatelessWidget {
             for (var child in children)
               SliverPadding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: (mediaQuery.size.width < 600) ? 8 : 400,
+                  horizontal: horizontalPadding,
                 ),
                 sliver: SliverToBoxAdapter(child: child),
               ),

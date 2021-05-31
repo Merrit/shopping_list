@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:shopping_list/settings/settings.dart';
 
 import 'authentication/authentication.dart';
 import 'authentication/enums/enums.dart';
-import 'home/home.dart';
+import 'presentation/home/pages/home_page.dart';
+import 'presentation/shopping_list/pages/list_settings_page.dart';
 import 'repositories/authentication_repository/repository.dart';
-import 'shopping_list/shopping_list.dart';
-import 'splash/splash_screen.dart';
+import 'presentation/pages/splash_page.dart';
 import 'theme.dart';
 
 /// Provides the Bloc that listens to the authentication state.
@@ -41,7 +40,6 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
-  final _log = Logger('_AppViewState');
   final _navigatorKey = GlobalKey<NavigatorState>();
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
@@ -59,7 +57,6 @@ class _AppViewState extends State<AppView> {
                 // Temporarily disable requirement for
                 // email verification while checking oauth...
                 // if (state.user.emailIsVerified) {
-                _log.info('User is authenticated');
                 _navigator.pushReplacementNamed(HomePage.id);
                 // } else {
                 //   _log.info('User is authenticated, but email not verified');
@@ -67,11 +64,9 @@ class _AppViewState extends State<AppView> {
                 // }
                 break;
               case AuthenticationStatus.unauthenticated:
-                _log.info('No user currently authenticated');
                 _navigator.pushReplacementNamed(LoginPage.id);
                 break;
               default:
-                _log.info('Unknown auth state?');
                 break;
             }
           },
