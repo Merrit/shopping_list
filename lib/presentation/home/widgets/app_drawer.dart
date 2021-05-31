@@ -211,28 +211,32 @@ class _BottomButtons extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextButton(
             onPressed: () => _auth.add(AuthenticationLogoutRequested()),
             child: Text('Sign out'),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return BlocProvider.value(
-                      value: homeCubit,
-                      child: SettingsPage(),
-                    );
-                  },
-                ),
-              );
-            },
-            icon: Icon(Icons.settings),
-          )
+          // Disabled because TaxRate is the only setting currently,
+          // which is now handled directly in ItemDetails.
+          //
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) {
+          //           return BlocProvider.value(
+          //             value: homeCubit,
+          //             child: SettingsPage(),
+          //           );
+          //         },
+          //       ),
+          //     );
+          //   },
+          //   icon: Icon(Icons.settings),
+          // )
         ],
       ),
     );
