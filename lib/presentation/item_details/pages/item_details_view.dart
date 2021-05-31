@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
@@ -101,11 +102,39 @@ class ItemDetailsView extends StatelessWidget {
                 ),
               );
             },
-            child: SwitchListTile(
-              secondary: Icon(Icons.calculate_outlined),
-              title: Text('Tax'),
-              value: state.hasTax,
-              onChanged: (value) => itemDetailsCubit.updateItem(hasTax: value),
+            child: BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, homeState) {
+                return SwitchListTile(
+                  secondary: Icon(Icons.calculate_outlined),
+                  title: Text('Tax'),
+                  value: state.hasTax,
+                  subtitle: (state.hasTax && !homeState.taxRateIsSet)
+                      ? Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            onPressed: () async {
+                              final input = await InputDialog.show(
+                                context: context,
+                                title: 'Enter tax rate',
+                                autofocus: true,
+                                initialValue: homeState.taxRate,
+                                preselectText: true,
+                                type: InputDialogs.onlyDouble,
+                              );
+                              if (input == null) return;
+                              homeCubit.updateTaxRate(input);
+                            },
+                            child: Text(
+                              'Set tax rate',
+                              style: TextStyle(color: Colors.orange),
+                            ),
+                          ),
+                        )
+                      : null,
+                  onChanged: (value) =>
+                      itemDetailsCubit.updateItem(hasTax: value),
+                );
+              },
             ),
           ),
           LabelsTile(),

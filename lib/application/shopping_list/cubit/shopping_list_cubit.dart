@@ -5,22 +5,19 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
+import 'package:shopping_list/presentation/home/home.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 part 'shopping_list_state.dart';
 
 class ShoppingListCubit extends Cubit<ShoppingListState> {
   final HomeCubit _homeCubit;
-  final PreferencesRepository _preferencesRepository;
   late StreamSubscription _homeCubitSubscription;
   late ShoppingList _shoppingList;
   final ShoppingListRepository _shoppingListRepository;
 
-  ShoppingListCubit(
-    this._preferencesRepository, {
-    required HomeCubit homeCubit,
-  })  : _homeCubit = homeCubit,
+  ShoppingListCubit({required HomeCubit homeCubit})
+      : _homeCubit = homeCubit,
         // Assign initial dummy list while loading.
         _shoppingList = ShoppingList(name: '', owner: homeCubit.user.id),
         _shoppingListRepository = homeCubit.shoppingListRepository,
@@ -198,14 +195,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     await updateList(aisles: _shoppingList.aisles);
   }
 
-  String get taxRate {
-    final savedRate = _preferencesRepository.getKey('taxRate');
-    if (savedRate != null) {
-      return savedRate as String;
-    } else {
-      return '0.0';
-    }
-  }
+  String get taxRate => homeCubit.state.taxRate;
 
   void updateTaxRate() => emit(state.copyWith(taxRate: taxRate));
 

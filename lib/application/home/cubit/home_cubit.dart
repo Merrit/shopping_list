@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/domain/preferences/preferences.dart';
 import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
@@ -21,7 +21,11 @@ class HomeCubit extends Cubit<HomeState> {
     required this.shoppingListRepository,
     required this.user,
   }) : super(
-          HomeState(shoppingViewMode: _getViewMode(_preferencesRepository)),
+          HomeState.initial(
+            shoppingViewMode: _getViewMode(_preferencesRepository),
+            taxRateIsSet: _taxRateIsSet(_preferencesRepository),
+            taxRate: _getTaxRate(_preferencesRepository),
+          ),
         ) {
     _init();
     shoppingListSubscription = shoppingListRepository
@@ -36,6 +40,15 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       return 'Dense';
     }
+  }
+
+  static bool _taxRateIsSet(PreferencesRepository _preferencesRepository) {
+    final taxRateFromPrefs = _preferencesRepository.getKey('taxRate');
+    return (taxRateFromPrefs == null) ? false : true;
+  }
+
+  static String? _getTaxRate(PreferencesRepository _preferencesRepository) {
+    return _preferencesRepository.getKey('taxRate') as String?;
   }
 
   void _init() async {
@@ -121,6 +134,20 @@ class HomeCubit extends Cubit<HomeState> {
       value: shoppingViewMode,
     );
     emit(state.copyWith(shoppingViewMode: shoppingViewMode));
+  }
+
+  void updateTaxRate(String newRate) {
+    final validatedRate = TaxRate(taxRate: newRate);
+    emit(
+      state.copyWith(
+        taxRate: validatedRate.taxRate,
+        taxRateIsSet: (validatedRate.taxRate == '0.0') ? false : true,
+      ),
+    );
+    _preferencesRepository.setString(
+      key: 'taxRate',
+      value: validatedRate.taxRate,
+    );
   }
 
   @override

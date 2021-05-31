@@ -10,28 +10,43 @@ class HomeState {
   final List<ShoppingList> shoppingLists;
 
   final String shoppingViewMode;
+  final bool taxRateIsSet;
+  final String taxRate;
 
   HomeState({
-    this.currentListId = '',
-    this.shoppingLists = const [],
-    this.shoppingListCubit,
+    required this.currentListId,
+    required this.shoppingLists,
     required this.shoppingViewMode,
+    required this.taxRateIsSet,
+    required this.shoppingListCubit,
+    required this.taxRate,
   });
+
+  HomeState.initial({
+    this.shoppingLists = const [],
+    this.currentListId = '',
+    required this.shoppingViewMode,
+    this.taxRateIsSet = false,
+    String? taxRate,
+  }) : taxRate = taxRate ?? '0.0';
 
   ShoppingListCubit? shoppingListCubit;
 
   HomeState copyWith({
     String? currentListId,
     List<ShoppingList>? shoppingLists,
-    SharedPreferences? prefs,
-    ShoppingListCubit? shoppingListCubit,
     String? shoppingViewMode,
+    bool? taxRateIsSet,
+    ShoppingListCubit? shoppingListCubit,
+    String? taxRate,
   }) {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
       shoppingLists: shoppingLists ?? this.shoppingLists,
-      shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
       shoppingViewMode: shoppingViewMode ?? this.shoppingViewMode,
+      taxRateIsSet: taxRateIsSet ?? this.taxRateIsSet,
+      shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
+      taxRate: taxRate ?? this.taxRate,
     );
   }
 

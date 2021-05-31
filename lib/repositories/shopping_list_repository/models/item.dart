@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
-import 'package:shopping_list/domain/core/core.dart';
 
 import '../repository.dart';
 
@@ -46,10 +45,6 @@ class Item extends Equatable {
     List<String>? labels,
   }) {
     final validatedQuantity = QuantityValidator(quantity).validate();
-    final validatedTotal = MoneyHandler().totalPrice(
-      price: price,
-      quantity: validatedQuantity,
-    );
     return Item._internal(
       name: name,
       aisle: aisle ?? 'None',
@@ -58,7 +53,7 @@ class Item extends Equatable {
       hasTax: hasTax ?? false,
       quantity: validatedQuantity,
       price: price ?? '0.00',
-      total: validatedTotal,
+      total: total ?? '0.00',
       labels: labels ?? const [],
     );
   }
