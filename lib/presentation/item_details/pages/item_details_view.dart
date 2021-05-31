@@ -150,7 +150,7 @@ class ItemDetailsView extends StatelessWidget {
 
         return ListView.separated(
           padding: listPadding,
-          separatorBuilder: (context, index) => const Divider(),
+          separatorBuilder: (context, index) => const Divider(height: 0),
           itemCount: items.length,
           itemBuilder: (context, index) {
             return items[index];
