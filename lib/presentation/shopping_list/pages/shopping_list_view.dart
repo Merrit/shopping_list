@@ -133,7 +133,7 @@ class ScrollingShoppingList extends StatelessWidget {
             return LayoutBuilder(
               builder: (context, constraints) {
                 double sidePadding = _isLargeFormFactor
-                    ? (constraints.maxWidth / 10)
+                    ? (constraints.maxWidth * 0.15)
                     : Insets.xsmall;
 
                 final listViewPadding = EdgeInsets.only(
