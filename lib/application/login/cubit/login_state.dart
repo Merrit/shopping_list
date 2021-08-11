@@ -9,6 +9,7 @@ class LoginState extends Equatable {
   final LoginStatus status;
 
   final bool credentialsAreValid;
+  final String? emailFieldErrorText;
 
   const LoginState._internal({
     required this.email,
@@ -17,6 +18,7 @@ class LoginState extends Equatable {
     required this.formStatus,
     required this.status,
     required this.credentialsAreValid,
+    required this.emailFieldErrorText,
   });
 
   factory LoginState({
@@ -27,6 +29,9 @@ class LoginState extends Equatable {
     required LoginStatus status,
   }) {
     final credentialsAreValid = (email.isValid && password.isValid);
+    final formModified = (formStatus == FormStatus.modified);
+    final emailFieldErrorText =
+        (formModified && !email.isValid) ? 'invalid email' : null;
     return LoginState._internal(
       email: email,
       password: password,
@@ -34,6 +39,7 @@ class LoginState extends Equatable {
       formStatus: formStatus,
       status: status,
       credentialsAreValid: credentialsAreValid,
+      emailFieldErrorText: emailFieldErrorText,
     );
   }
 
@@ -43,13 +49,8 @@ class LoginState extends Equatable {
         confirmedPassword = const Password.initial(),
         formStatus = FormStatus.unmodified,
         status = SignedOut(),
-        credentialsAreValid = true;
-
-  String? emailFieldErrorText() {
-    if (formStatus == FormStatus.modified) {
-      return email.isValid ? null : 'invalid email';
-    }
-  }
+        credentialsAreValid = true,
+        emailFieldErrorText = null;
 
   String? passwordFieldErrorText() {
     if (formStatus == FormStatus.modified) {

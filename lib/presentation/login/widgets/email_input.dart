@@ -18,7 +18,7 @@ class EmailInput extends StatelessWidget {
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             labelText: 'Email',
-            errorText: state.emailFieldErrorText(),
+            errorText: state.emailFieldErrorText,
           ),
           onSubmitted: (_) => context.read<LoginCubit>().submitForm(formType),
         );
