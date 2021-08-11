@@ -101,7 +101,7 @@ class _ConfirmPasswordInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Confirm password',
             helperText: '',
-            errorText: state.confirmPasswordFieldErrorText(),
+            errorText: state.confirmPasswordFieldErrorText,
           ),
           onSubmitted: (_) => context.read<LoginCubit>().signUpFormSubmitted(),
         );

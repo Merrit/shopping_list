@@ -11,6 +11,7 @@ class LoginState extends Equatable {
   final bool credentialsAreValid;
   final String? emailFieldErrorText;
   final String? passwordFieldErrorText;
+  final String? confirmPasswordFieldErrorText;
 
   const LoginState._internal({
     required this.email,
@@ -21,6 +22,7 @@ class LoginState extends Equatable {
     required this.credentialsAreValid,
     required this.emailFieldErrorText,
     required this.passwordFieldErrorText,
+    required this.confirmPasswordFieldErrorText,
   });
 
   factory LoginState({
@@ -36,6 +38,9 @@ class LoginState extends Equatable {
         (formModified && !email.isValid) ? 'invalid email' : null;
     final passwordFieldErrorText =
         (formModified && !password.isValid) ? 'invalid password' : null;
+    final passwordsMatch = (confirmedPassword.value == password.value);
+    final confirmPasswordFieldErrorText =
+        (formModified && !passwordsMatch) ? 'passwords do not match' : null;
     return LoginState._internal(
       email: email,
       password: password,
@@ -45,6 +50,7 @@ class LoginState extends Equatable {
       credentialsAreValid: credentialsAreValid,
       emailFieldErrorText: emailFieldErrorText,
       passwordFieldErrorText: passwordFieldErrorText,
+      confirmPasswordFieldErrorText: confirmPasswordFieldErrorText,
     );
   }
 
@@ -56,15 +62,8 @@ class LoginState extends Equatable {
         status = SignedOut(),
         credentialsAreValid = true,
         emailFieldErrorText = null,
-        passwordFieldErrorText = null;
-
-  String? confirmPasswordFieldErrorText() {
-    if (formStatus == FormStatus.modified) {
-      return (confirmedPassword.value == password.value)
-          ? null
-          : 'passwords do not match';
-    }
-  }
+        passwordFieldErrorText = null,
+        confirmPasswordFieldErrorText = null;
 
   @override
   List<Object?> get props => [
@@ -76,6 +75,7 @@ class LoginState extends Equatable {
         credentialsAreValid,
         emailFieldErrorText,
         passwordFieldErrorText,
+        confirmPasswordFieldErrorText,
       ];
 
   LoginState copyWith({
