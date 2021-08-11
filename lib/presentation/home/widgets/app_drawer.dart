@@ -5,7 +5,6 @@ import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
-import 'package:shopping_list/settings/settings.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/list_settings_page.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
@@ -206,7 +205,6 @@ class _BottomButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _auth = context.read<AuthenticationBloc>();
-    final homeCubit = context.read<HomeCubit>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
