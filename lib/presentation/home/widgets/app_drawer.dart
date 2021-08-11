@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:shopping_list/application/authentication/bloc/authentication_bloc.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/list_settings_page.dart';
