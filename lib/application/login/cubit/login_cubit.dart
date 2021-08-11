@@ -36,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> logInWithCredentials() async {
-    if (state.credentialsAreValid() == false) {
+    if (!state.credentialsAreValid) {
       emit(state.copyWith(formStatus: FormStatus.modified));
       return;
     }
@@ -81,7 +81,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> signUpFormSubmitted() async {
-    if (state.credentialsAreValid() == false) {
+    if (!state.credentialsAreValid) {
       emit(state.copyWith(formStatus: FormStatus.modified));
       return;
     }

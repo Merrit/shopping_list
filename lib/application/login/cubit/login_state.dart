@@ -8,28 +8,42 @@ class LoginState extends Equatable {
   final FormStatus formStatus;
   final LoginStatus status;
 
-  const LoginState({
+  final bool credentialsAreValid;
+
+  const LoginState._internal({
     required this.email,
     required this.password,
     required this.confirmedPassword,
+    required this.formStatus,
     required this.status,
-    this.formStatus = FormStatus.unmodified,
+    required this.credentialsAreValid,
   });
+
+  factory LoginState({
+    required Email email,
+    required Password password,
+    required Password confirmedPassword,
+    required FormStatus formStatus,
+    required LoginStatus status,
+  }) {
+    final credentialsAreValid = (email.isValid && password.isValid);
+    return LoginState._internal(
+      email: email,
+      password: password,
+      confirmedPassword: confirmedPassword,
+      formStatus: formStatus,
+      status: status,
+      credentialsAreValid: credentialsAreValid,
+    );
+  }
 
   LoginState.initial()
       : email = const Email.initial(),
         password = const Password.initial(),
         confirmedPassword = const Password.initial(),
         formStatus = FormStatus.unmodified,
-        status = SignedOut();
-
-  bool credentialsAreValid() {
-    if (email.isValid && password.isValid) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+        status = SignedOut(),
+        credentialsAreValid = true;
 
   String? emailFieldErrorText() {
     if (formStatus == FormStatus.modified) {
@@ -58,6 +72,7 @@ class LoginState extends Equatable {
         confirmedPassword,
         status,
         formStatus,
+        credentialsAreValid,
       ];
 
   LoginState copyWith({
@@ -66,6 +81,7 @@ class LoginState extends Equatable {
     Password? confirmedPassword,
     LoginStatus? status,
     FormStatus? formStatus,
+    bool? credentialsAreValid,
   }) {
     return LoginState(
       email: email ?? this.email,
