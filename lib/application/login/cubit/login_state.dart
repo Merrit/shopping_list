@@ -10,6 +10,7 @@ class LoginState extends Equatable {
 
   final bool credentialsAreValid;
   final String? emailFieldErrorText;
+  final String? passwordFieldErrorText;
 
   const LoginState._internal({
     required this.email,
@@ -19,6 +20,7 @@ class LoginState extends Equatable {
     required this.status,
     required this.credentialsAreValid,
     required this.emailFieldErrorText,
+    required this.passwordFieldErrorText,
   });
 
   factory LoginState({
@@ -32,6 +34,8 @@ class LoginState extends Equatable {
     final formModified = (formStatus == FormStatus.modified);
     final emailFieldErrorText =
         (formModified && !email.isValid) ? 'invalid email' : null;
+    final passwordFieldErrorText =
+        (formModified && !password.isValid) ? 'invalid password' : null;
     return LoginState._internal(
       email: email,
       password: password,
@@ -40,6 +44,7 @@ class LoginState extends Equatable {
       status: status,
       credentialsAreValid: credentialsAreValid,
       emailFieldErrorText: emailFieldErrorText,
+      passwordFieldErrorText: passwordFieldErrorText,
     );
   }
 
@@ -50,13 +55,8 @@ class LoginState extends Equatable {
         formStatus = FormStatus.unmodified,
         status = SignedOut(),
         credentialsAreValid = true,
-        emailFieldErrorText = null;
-
-  String? passwordFieldErrorText() {
-    if (formStatus == FormStatus.modified) {
-      return password.isValid ? null : 'invalid password';
-    }
-  }
+        emailFieldErrorText = null,
+        passwordFieldErrorText = null;
 
   String? confirmPasswordFieldErrorText() {
     if (formStatus == FormStatus.modified) {
@@ -67,13 +67,15 @@ class LoginState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         email,
         password,
         confirmedPassword,
         status,
         formStatus,
         credentialsAreValid,
+        emailFieldErrorText,
+        passwordFieldErrorText,
       ];
 
   LoginState copyWith({
