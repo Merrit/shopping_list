@@ -11,7 +11,7 @@ import 'package:shopping_list/presentation/core/core.dart';
 import 'package:shopping_list/presentation/home/pages/home_page.dart';
 import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 import 'package:shopping_list/repositories/shopping_list_repository/models/label.dart';
-import 'package:shopping_list/settings/settings.dart';
+import 'package:shopping_list/presentation/settings/settings.dart';
 
 import 'aisles_page.dart';
 import 'item_details_page.dart';
