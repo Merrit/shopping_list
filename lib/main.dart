@@ -8,9 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:logging/logging.dart';
 import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
-import 'package:shopping_list/setup/setup.dart';
 
 import 'app.dart';
+import 'application/setup/setup.dart';
 
 // import 'simple_bloc_observer.dart';
 
