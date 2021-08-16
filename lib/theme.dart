@@ -4,7 +4,6 @@ class AppTheme {
   static final dark = ThemeData.dark().copyWith(
     brightness: Brightness.dark,
     primaryColorDark: Colors.lightBlue,
-    accentColor: Colors.lightBlueAccent,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Colors.lightBlueAccent,
     ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_list/application/authentication/bloc/authentication_bloc.dart';
 import 'package:shopping_list/presentation/core/core.dart';
-
-import '../../authentication.dart';
 
 class VerifyEmailPage extends StatelessWidget {
   static const id = 'verify_email_page';

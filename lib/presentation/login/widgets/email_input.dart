@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../login.dart';
+import 'package:shopping_list/application/login/cubit/login_cubit.dart';
+import 'package:shopping_list/domain/login/login.dart';
 
 class EmailInput extends StatelessWidget {
   final FormType formType;
@@ -18,7 +18,7 @@ class EmailInput extends StatelessWidget {
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             labelText: 'Email',
-            errorText: state.emailFieldErrorText(),
+            errorText: state.emailFieldErrorText,
           ),
           onSubmitted: (_) => context.read<LoginCubit>().submitForm(formType),
         );

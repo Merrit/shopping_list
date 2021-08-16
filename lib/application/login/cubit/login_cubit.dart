@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shopping_list/application/authentication/bloc/login_status.dart';
+import 'package:shopping_list/domain/authentication/authentication.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/domain/login/login.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
-
-import '../../authentication.dart';
 
 part 'login_state.dart';
 
@@ -35,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> logInWithCredentials() async {
-    if (state.credentialsAreValid() == false) {
+    if (!state.credentialsAreValid) {
       emit(state.copyWith(formStatus: FormStatus.modified));
       return;
     }
@@ -80,7 +81,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> signUpFormSubmitted() async {
-    if (state.credentialsAreValid() == false) {
+    if (!state.credentialsAreValid) {
       emit(state.copyWith(formStatus: FormStatus.modified));
       return;
     }

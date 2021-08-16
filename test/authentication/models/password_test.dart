@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shopping_list/authentication/models/password.dart';
+import 'package:shopping_list/domain/authentication/authentication.dart';
 
 void main() {
   test('Can instantiate initial', () {

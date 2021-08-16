@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:pedantic/pedantic.dart';
-import 'package:shopping_list/authentication/enums/enums.dart';
+import 'package:shopping_list/domain/authentication/authentication.dart';
 import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 part 'authentication_event.dart';

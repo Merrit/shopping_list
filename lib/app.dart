@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/settings/settings.dart';
 
-import 'authentication/authentication.dart';
-import 'authentication/enums/enums.dart';
+import 'application/authentication/bloc/authentication_bloc.dart';
+import 'domain/authentication/authentication.dart';
 import 'presentation/home/pages/home_page.dart';
+import 'presentation/login/login.dart';
 import 'presentation/shopping_list/pages/list_settings_page.dart';
 import 'repositories/authentication_repository/repository.dart';
 import 'presentation/pages/splash_page.dart';

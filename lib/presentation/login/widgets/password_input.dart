@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../login.dart';
+import 'package:shopping_list/application/login/cubit/login_cubit.dart';
+import 'package:shopping_list/domain/login/login.dart';
 
 class PasswordInput extends StatelessWidget {
   final FormType formType;
@@ -20,7 +20,7 @@ class PasswordInput extends StatelessWidget {
             labelText: 'Password',
             helperText:
                 (formType == FormType.signup) ? 'Minimum 12 characters' : null,
-            errorText: state.passwordFieldErrorText(),
+            errorText: state.passwordFieldErrorText,
           ),
           onSubmitted: (_) => context.read<LoginCubit>().submitForm(formType),
         );
