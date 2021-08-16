@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shopping_list/domain/authentication/authentication.dart';
-import 'package:shopping_list/repositories/authentication_repository/repository.dart';
+import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';

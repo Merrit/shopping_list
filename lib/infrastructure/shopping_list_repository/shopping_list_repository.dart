@@ -1,4 +1,8 @@
-import 'repository.dart';
+export 'models/models.dart';
+export 'validators/validators.dart';
+export 'firebase_shopping_list_repository.dart';
+
+import 'models/models.dart';
 
 abstract class ShoppingListRepository {
   Future<void> createNewShoppingList(ShoppingList shoppingList);

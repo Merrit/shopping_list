@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
-
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 import 'aisles_page.dart';
 import 'item_details_page_state.dart';

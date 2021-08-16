@@ -4,11 +4,11 @@ import 'package:shopping_list/presentation/settings/settings.dart';
 
 import 'application/authentication/bloc/authentication_bloc.dart';
 import 'domain/authentication/authentication.dart';
+import 'infrastructure/authentication_repository/authentication_repository.dart';
 import 'presentation/home/pages/home_page.dart';
 import 'presentation/login/login.dart';
 import 'presentation/shopping_list/pages/list_settings_page.dart';
 import 'presentation/splash/splash.dart';
-import 'repositories/authentication_repository/repository.dart';
 import 'theme.dart';
 
 /// Provides the Bloc that listens to the authentication state.

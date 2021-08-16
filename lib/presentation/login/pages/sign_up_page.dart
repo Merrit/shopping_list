@@ -4,8 +4,8 @@ import 'package:shopping_list/application/authentication/bloc/login_status.dart'
 import 'package:shopping_list/application/login/cubit/login_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/domain/login/login.dart';
+import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
 import 'package:shopping_list/presentation/core/core.dart';
-import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 import '../login.dart';
 

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/checkbox_large.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class ItemTile extends StatelessWidget {
   final Item item;
