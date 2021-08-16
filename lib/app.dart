@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/settings/settings.dart';
+import 'package:shopping_list/presentation/settings/settings.dart';
 
 import 'application/authentication/bloc/authentication_bloc.dart';
 import 'domain/authentication/authentication.dart';
