@@ -11,8 +11,7 @@ import 'package:shopping_list/repositories/authentication_repository/repository.
 
 import 'app.dart';
 import 'application/setup/setup.dart';
-
-// import 'simple_bloc_observer.dart';
+// import 'application/simple_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
