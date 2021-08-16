@@ -4,9 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import 'package:shopping_list/presentation/home/home.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 part 'shopping_list_state.dart';
 

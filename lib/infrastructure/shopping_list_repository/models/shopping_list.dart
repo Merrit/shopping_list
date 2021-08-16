@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/validators/list_items_validator.dart';
 
+import '../shopping_list_repository.dart';
 import 'models.dart';
 
 part 'shopping_list.g.dart';

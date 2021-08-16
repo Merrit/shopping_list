@@ -1,4 +1,4 @@
-import '../repository.dart';
+import '../shopping_list_repository.dart';
 
 class AisleValidator {
   const AisleValidator();

@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/domain/preferences/preferences.dart';
+import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
 import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
-import 'package:shopping_list/repositories/authentication_repository/repository.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 part 'home_state.dart';
 

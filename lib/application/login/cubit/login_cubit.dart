@@ -4,7 +4,7 @@ import 'package:shopping_list/application/authentication/bloc/login_status.dart'
 import 'package:shopping_list/domain/authentication/authentication.dart';
 import 'package:shopping_list/domain/core/core.dart';
 import 'package:shopping_list/domain/login/login.dart';
-import 'package:shopping_list/repositories/authentication_repository/repository.dart';
+import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
 
 part 'login_state.dart';
 

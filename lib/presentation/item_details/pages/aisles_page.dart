@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import 'package:shopping_list/presentation/core/core.dart';
 
 import 'package:shopping_list/presentation/item_details/widgets/floating_done_button.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
 
 class AislesPage extends StatelessWidget {
   static const id = 'aisles_page';

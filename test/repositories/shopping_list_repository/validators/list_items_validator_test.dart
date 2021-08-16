@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/models/models.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/validators/list_items_validator.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 void main() {
   test('Duplicate items are removed', () {

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/validators/list_items_validator.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 void main() {
   final aisles = <Aisle>[];

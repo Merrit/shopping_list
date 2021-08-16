@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/repository.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 part 'item_details_state.dart';
 

@@ -7,10 +7,10 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
-import 'package:shopping_list/repositories/authentication_repository/repository.dart';
 
 import 'app.dart';
 import 'application/setup/setup.dart';
+import 'infrastructure/authentication_repository/authentication_repository.dart';
 // import 'application/simple_bloc_observer.dart';
 
 void main() async {

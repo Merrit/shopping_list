@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
+import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import 'package:shopping_list/presentation/core/core.dart';
 import 'package:shopping_list/presentation/home/home.dart';
 import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
@@ -11,7 +12,6 @@ import 'package:shopping_list/presentation/shopping_list/widgets/create_item_sho
 import 'package:shopping_list/presentation/shopping_list/widgets/aisle_group.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/item_tile.dart';
 import 'package:shopping_list/presentation/shopping_list/widgets/main_floating_button.dart';
-import 'package:shopping_list/repositories/shopping_list_repository/models/item.dart';
 
 late ShoppingListCubit shoppingListCubit;
 
