@@ -1,7 +1,6 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
@@ -49,7 +48,7 @@ class _AislesList extends StatelessWidget {
           builder: (context, itemDetailsState) {
             return Scrollbar(
               controller: _controller,
-              isAlwaysShown: _isLargeFormFactor ? true : false,
+              thumbVisibility: _isLargeFormFactor ? true : false,
               child: ListView(
                 controller: _controller,
                 padding: Insets.listViewWithFloatingButton,

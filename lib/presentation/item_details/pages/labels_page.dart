@@ -37,7 +37,7 @@ class LabelsView extends StatelessWidget {
           builder: (context, shoppingListState) {
             return Scrollbar(
               controller: _controller,
-              isAlwaysShown: _isLargeFormFactor ? true : false,
+              thumbVisibility: _isLargeFormFactor ? true : false,
               child: ListView.builder(
                 controller: _controller,
                 padding: Insets.listViewWithFloatingButton,

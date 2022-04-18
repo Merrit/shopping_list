@@ -97,6 +97,7 @@ class InputDialog extends StatelessWidget {
     SubmitIntent: CallbackAction<SubmitIntent>(
       onInvoke: (SubmitIntent intent) {
         Navigator.pop(context, controller.text);
+        return null;
       },
     ),
   };
