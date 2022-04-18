@@ -13,7 +13,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Workaround for the bug in Web debug version where
     // hot restart gets stuck on the splash page.
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = context.read<AuthenticationRepository>().currentUser;
       if (user == User.empty) {
         print('No user found on SpashPage');

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:shopping_list/domain/authentication/authentication.dart';
 import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
 
@@ -32,17 +31,14 @@ class AuthenticationBloc
         add(AuthenticationUserChanged(user));
       },
     );
-  }
 
-  @override
-  Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
-    if (event is AuthenticationUserChanged) {
-      yield _mapAuthenticationUserChangedToState(event);
-    } else if (event is AuthenticationLogoutRequested) {
-      unawaited(_authenticationRepository.logOut());
-    }
+    on<AuthenticationUserChanged>((event, emit) {
+      emit(_mapAuthenticationUserChangedToState(event));
+    });
+
+    on<AuthenticationLogoutRequested>((event, emit) {
+      _authenticationRepository.logOut();
+    });
   }
 
   @override

@@ -29,15 +29,7 @@ class MoneyHandler {
   }
 
   Money _parseStringToMoney(String amount) {
-    Money _parsedAmount;
-    try {
-      _parsedAmount = currency.parse(amount, pattern: '0.00');
-    } on MoneyParseException catch (e) {
-      print('MoneyParseException: \n'
-          '$e');
-      _parsedAmount = Money.parse('0.00', currency);
-    }
-    return _parsedAmount;
+    return currency.parse(amount, pattern: '0.00');
   }
 
   Money _addTax({required Money amount, required String taxRate}) {
@@ -47,7 +39,7 @@ class MoneyHandler {
       final totalWithTax = amount * _taxRate;
       return totalWithTax;
     } else {
-      return Money.parse('0.00', currency);
+      return currency.parse('0.00');
     }
   }
 }

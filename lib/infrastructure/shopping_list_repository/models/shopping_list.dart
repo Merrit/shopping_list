@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
 import '../shopping_list_repository.dart';
-import 'models.dart';
 
 part 'shopping_list.g.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:shopping_list/application/home/cubit/home_cubit.dart';
 import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
 import 'package:shopping_list/domain/core/core.dart';
@@ -145,7 +144,7 @@ class ScrollingShoppingList extends StatelessWidget {
 
                 return Scrollbar(
                   controller: _scrollController,
-                  isAlwaysShown: _isLargeFormFactor ? true : false,
+                  thumbVisibility: _isLargeFormFactor ? true : false,
                   child: (viewIsDense)
                       // Dense ListView.
                       ? ListView(
