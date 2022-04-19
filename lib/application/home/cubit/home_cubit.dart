@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/preferences/preferences.dart';
-import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
-import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
+
+import '../../../domain/preferences/preferences.dart';
+import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../../infrastructure/preferences/preferences_repository.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../shopping_list/cubit/shopping_list_cubit.dart';
 
 part 'home_state.dart';
 
@@ -57,7 +58,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> _getSavedListId() async {
     final shoppingLists = await shoppingListRepository.shoppingLists();
     final listIds = <String>[];
-    shoppingLists.forEach((list) => listIds.add(list.id));
+    for (var list in shoppingLists) {
+      listIds.add(list.id);
+    }
     var savedId = _preferencesRepository.getKey('currentList') as String?;
     if (savedId == null) return;
     final bool savedIdExists = listIds.contains(savedId);
@@ -77,7 +80,7 @@ class HomeCubit extends Cubit<HomeState> {
     shoppingListRepository.createNewShoppingList(
       ShoppingList(
         name: name,
-        aisles: [Aisle(name: 'None')],
+        aisles: const [Aisle(name: 'None')],
         owner: user.id,
       ),
     );
@@ -113,16 +116,16 @@ class HomeCubit extends Cubit<HomeState> {
       (list) => list.name == newListName,
     );
     newList.items.add(item);
-    if (!newList.aisles.contains(item.aisle)) {
+    if (!newList.aisles.map((e) => e.name).contains(item.aisle)) {
       newList.aisles.add(
         oldList.aisles.firstWhere((element) => element.name == item.aisle),
       );
     }
-    oldList.labels.forEach((label) {
+    for (var label in oldList.labels) {
       if (!newList.labels.contains(label)) {
         newList.labels.add(label);
       }
-    });
+    }
     await shoppingListRepository.updateShoppingList(newList);
   }
 
@@ -163,9 +166,9 @@ class MassListUpdater {
 
   Future<void> updateTotals(String taxRate) async {
     final lists = await shoppingListRepository.shoppingLists();
-    lists.forEach((list) async {
+    for (var list in lists) {
       await _updateListItemTotals(list: list, taxRate: taxRate);
-    });
+    }
   }
 
   Future<void> _updateListItemTotals({
@@ -173,7 +176,7 @@ class MassListUpdater {
     required String taxRate,
   }) async {
     final updatedItems = <Item>[];
-    list.items.forEach((item) {
+    for (var item in list.items) {
       final updatedTotal = MoneyHandler().totalPrice(
         price: item.price,
         quantity: item.quantity,
@@ -181,7 +184,7 @@ class MassListUpdater {
       );
       final updatedItem = item.copyWith(total: updatedTotal);
       updatedItems.add(updatedItem);
-    });
+    }
     await shoppingListRepository.updateShoppingList(
       list.copyWith(items: updatedItems),
     );

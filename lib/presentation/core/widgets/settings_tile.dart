@@ -33,7 +33,7 @@ class SettingsTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         label,
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Focus(
             focusNode: _focusNode,
             child: child ??

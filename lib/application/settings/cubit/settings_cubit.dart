@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
+
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../home/cubit/home_cubit.dart';
 
 part 'settings_state.dart';
 

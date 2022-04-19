@@ -30,10 +30,10 @@ class _ItemCounter {
 
   List<Aisle> validate() {
     final validatedAisles = <Aisle>[];
-    aisles.forEach((aisle) {
+    for (var aisle in aisles) {
       int itemCount = items.where((item) => item.aisle == aisle.name).length;
       validatedAisles.add(aisle.copyWith(itemCount: itemCount));
-    });
+    }
     return validatedAisles;
   }
 }

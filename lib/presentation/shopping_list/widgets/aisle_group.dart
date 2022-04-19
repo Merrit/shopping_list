@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
-import 'package:shopping_list/presentation/shopping_list/widgets/checkbox_large.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../pages/shopping_list_view.dart';
+import 'checkbox_large.dart';
 
 class AisleGroup extends StatelessWidget {
   final Aisle aisle;
@@ -50,7 +50,7 @@ class AisleGroup extends StatelessWidget {
                       color: Color(aisle.color).withOpacity(0.3),
                       blurRadius: 6.0,
                       spreadRadius: 0.0,
-                      offset: Offset(0.0, 3.0),
+                      offset: const Offset(0.0, 3.0),
                     ),
                   ],
                 ),
@@ -61,9 +61,9 @@ class AisleGroup extends StatelessWidget {
                   elevation: 2,
                   child: ListView.separated(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) {
-                      return Divider(height: 0);
+                      return const Divider(height: 0);
                     },
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -259,12 +259,10 @@ class _Notes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        item.notes,
-        style: TextStyle(
-          fontSize: 14,
-        ),
+    return Text(
+      item.notes,
+      style: const TextStyle(
+        fontSize: 14,
       ),
     );
   }

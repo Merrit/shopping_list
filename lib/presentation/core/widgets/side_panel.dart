@@ -26,7 +26,7 @@ class SidePanel extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: FractionallySizedBox(
                 widthFactor: width,
-                child: Container(
+                child: SizedBox(
                   height: double.infinity,
                   child: Card(
                     child: child,

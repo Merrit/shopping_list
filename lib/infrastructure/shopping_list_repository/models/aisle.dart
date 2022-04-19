@@ -13,7 +13,7 @@ class Aisle extends Equatable {
   @JsonKey(defaultValue: 0)
   final int itemCount;
 
-  Aisle({
+  const Aisle({
     required this.name,
     this.color = 0,
     this.itemCount = 0,

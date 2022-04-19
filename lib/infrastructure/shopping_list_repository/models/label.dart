@@ -11,7 +11,7 @@ class Label extends Equatable {
 
   final int color;
 
-  Label({
+  const Label({
     required this.name,
     required this.color,
   });

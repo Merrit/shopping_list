@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
-import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
-import 'package:shopping_list/presentation/shopping_list/widgets/checkbox_large.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../pages/shopping_list_view.dart';
+import 'checkbox_large.dart';
 
 class ItemTile extends StatelessWidget {
   final Item item;
 
-  const ItemTile({required this.item});
+  const ItemTile({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _NameAndCheckbox extends StatelessWidget {
       children: [
         Text(
           item.name,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20,
           ),
         ),
@@ -249,7 +249,7 @@ class _Notes extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Text(
         item.notes,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 14,
         ),
       ),

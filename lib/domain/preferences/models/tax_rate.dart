@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
+
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 @immutable
 class TaxRate extends Equatable {

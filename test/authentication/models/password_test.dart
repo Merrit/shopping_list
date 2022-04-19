@@ -3,7 +3,7 @@ import 'package:shopping_list/domain/authentication/authentication.dart';
 
 void main() {
   test('Can instantiate initial', () {
-    final password = Password.initial();
+    const password = Password.initial();
     expect(password, isA<Password>());
     expect(password.value, '');
     expect(password.isValid, false);

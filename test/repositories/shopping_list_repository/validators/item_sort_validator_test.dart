@@ -12,9 +12,9 @@ void main() {
 
   test('Custom aisle sort', () {
     aisles.addAll([
-      Aisle(name: 'Veggies'),
-      Aisle(name: 'Bakery'),
-      Aisle(name: 'Fruit'),
+      const Aisle(name: 'Veggies'),
+      const Aisle(name: 'Bakery'),
+      const Aisle(name: 'Fruit'),
     ]);
     items.addAll([
       Item(name: 'Bread', aisle: 'Bakery'),
@@ -38,8 +38,8 @@ void main() {
 
   test('Missing aisle items don\'t get removed', () {
     aisles.addAll([
-      Aisle(name: 'Veggies'),
-      Aisle(name: 'Fruit'),
+      const Aisle(name: 'Veggies'),
+      const Aisle(name: 'Fruit'),
     ]);
     items.addAll([
       Item(name: 'Bread', aisle: 'Bakery'),

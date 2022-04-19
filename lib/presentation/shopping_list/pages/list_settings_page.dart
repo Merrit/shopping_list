@@ -1,20 +1,24 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/presentation/core/core.dart';
-import 'package:shopping_list/presentation/home/pages/home_page.dart';
+import 'package:logging/logging.dart';
+
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../core/core.dart';
+import '../../home/pages/home_page.dart';
 
 class ListSettingsPage extends StatelessWidget {
   static const id = 'list_settings_page';
+
+  const ListSettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('List settings'),
+          title: const Text('List settings'),
         ),
         body: ListSettingsView(),
       ),
@@ -24,8 +28,12 @@ class ListSettingsPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class ListSettingsView extends StatelessWidget {
+  final _log = Logger('ListSettingsView');
+
   late HomeCubit homeCubit;
   late ShoppingListCubit shoppingListCubit;
+
+  ListSettingsView({Key? key}) : super(key: key);
 
   Future<void> _updateColor(Color color) async {
     await shoppingListCubit.updateList(color: color.value);
@@ -36,14 +44,14 @@ class ListSettingsView extends StatelessWidget {
     homeCubit = context.read<HomeCubit>();
     shoppingListCubit = context.read<ShoppingListCubit>();
     final black = Colors.white.value;
-    print('black: $black');
+    _log.info('black: $black');
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
         return ListView(
           padding: const EdgeInsets.all(30),
           children: [
             SettingsTile(
-              label: Text('List name'),
+              label: const Text('List name'),
               hintText: state.name,
               onChanged: (value) async {
                 await shoppingListCubit.updateList(name: value);
@@ -76,8 +84,8 @@ class ListSettingsView extends StatelessWidget {
                     // borderRadius: 4,
                     // spacing: 5,
                     // runSpacing: 5,
-                    heading: Text('Select color'),
-                    subheading: Text('Select color shade'),
+                    heading: const Text('Select color'),
+                    subheading: const Text('Select color shade'),
                     pickersEnabled: const <ColorPickerType, bool>{
                       ColorPickerType.primary: true,
                       ColorPickerType.accent: false,
@@ -97,7 +105,7 @@ class ListSettingsView extends StatelessWidget {
             const SizedBox(height: 100),
             OutlinedButton(
               onPressed: () => _deleteList(shoppingListCubit, context),
-              child: Text(
+              child: const Text(
                 'Delete list',
                 style: TextStyle(
                   color: Colors.red,
@@ -117,12 +125,12 @@ Future<void> _deleteList(ShoppingListCubit cubit, BuildContext context) async {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Delete list?'),
-        content: Text('This cannot be undone.'),
+        title: const Text('Delete list?'),
+        content: const Text('This cannot be undone.'),
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -130,7 +138,7 @@ Future<void> _deleteList(ShoppingListCubit cubit, BuildContext context) async {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(primary: Colors.red),
-            child: Text('Delete'),
+            child: const Text('Delete'),
           ),
         ],
       );

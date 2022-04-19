@@ -1,35 +1,39 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/core/core.dart';
 
-import 'package:shopping_list/presentation/item_details/widgets/floating_done_button.dart';
+import '../../../application/item_details/cubit/item_details_cubit.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../core/core.dart';
+import '../widgets/floating_done_button.dart';
 
 class AislesPage extends StatelessWidget {
   static const id = 'aisles_page';
+
+  const AislesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text('Aisle')),
-        body: AislesView(),
+        appBar: AppBar(title: const Text('Aisle')),
+        body: const AislesView(),
       ),
     );
   }
 }
 
 class AislesView extends StatelessWidget {
+  const AislesView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         _AislesList(),
-        FloatingDoneButton(),
+        const FloatingDoneButton(),
       ],
     );
   }
@@ -71,7 +75,7 @@ class _AislesList extends StatelessWidget {
                   const SizedBox(height: 10),
                   IconButton(
                     onPressed: () => _createAisle(context: context),
-                    icon: CircleAvatar(child: Icon(Icons.add)),
+                    icon: const CircleAvatar(child: Icon(Icons.add)),
                   ),
                 ],
               ),
@@ -133,7 +137,7 @@ class AisleExpandedBody extends StatelessWidget {
             spacing: 10,
             children: [
               ActionChip(
-                label: Text('Edit name'),
+                label: const Text('Edit name'),
                 elevation: 1,
                 onPressed: () async {
                   final input = await InputDialog.show(
@@ -162,7 +166,7 @@ class AisleExpandedBody extends StatelessWidget {
                 itemDetailsCubit.updateItem(aisle: 'None');
               }
             },
-            child: Text(
+            child: const Text(
               'Remove aisle',
               style: TextStyle(color: Colors.red),
             ),
@@ -186,17 +190,18 @@ class EditColorChip extends StatelessWidget {
     final shoppingListCubit = context.read<ShoppingListCubit>();
 
     return ActionChip(
-      label: Text('Edit color'),
+      label: const Text('Edit color'),
       elevation: 1,
       onPressed: () async {
         Color? newColor;
+        // ignore: prefer_function_declarations_over_variables
         final Function callback = (Color color) => newColor = color;
         final confirmed = await ColorPicker(
           // Current color is pre-selected.
           color: Color(aisle.color),
           onColorChanged: (Color color) => callback(color),
-          heading: Text('Select color'),
-          subheading: Text('Select color shade'),
+          heading: const Text('Select color'),
+          subheading: const Text('Select color shade'),
           pickersEnabled: const <ColorPickerType, bool>{
             ColorPickerType.primary: true,
             ColorPickerType.accent: false,

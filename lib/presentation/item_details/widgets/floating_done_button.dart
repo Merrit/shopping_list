@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/presentation/core/core.dart';
-import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
+
+import '../../../domain/core/core.dart';
+import '../../core/core.dart';
+import '../pages/item_details_page.dart';
 
 class FloatingDoneButton extends StatelessWidget {
   const FloatingDoneButton({
@@ -12,7 +13,7 @@ class FloatingDoneButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingButton(
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('Done'),
+        label: const Text('Done'),
         onPressed: () {
           // On handsets we go back to item details,
           // on larger screens that show 2 colums we

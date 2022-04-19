@@ -1,17 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/core/core.dart';
 
-import 'package:shopping_list/presentation/home/pages/home_page.dart';
-import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
-import 'package:shopping_list/presentation/settings/settings.dart';
-
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../../application/item_details/cubit/item_details_cubit.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../core/core.dart';
+import '../../home/pages/home_page.dart';
+import '../../settings/settings.dart';
+import '../../shopping_list/pages/shopping_list_view.dart';
 import 'aisles_page.dart';
 import 'item_details_page.dart';
 import 'item_details_page_state.dart';
@@ -32,7 +31,7 @@ class ItemDetailsView extends StatelessWidget {
         final mediaQuery = MediaQuery.of(context);
         final isWide = (mediaQuery.size.width > 600);
         final listPadding = (isWide)
-            ? EdgeInsets.symmetric(
+            ? const EdgeInsets.symmetric(
                 vertical: 40,
                 horizontal: 20,
               )
@@ -42,8 +41,8 @@ class ItemDetailsView extends StatelessWidget {
               );
         final items = [
           ListTile(
-            leading: Icon(Icons.title),
-            title: Text('Name'),
+            leading: const Icon(Icons.title),
+            title: const Text('Name'),
             subtitle: Text(state.name),
             onTap: () async {
               final input = await InputDialog.show(
@@ -58,8 +57,8 @@ class ItemDetailsView extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.tag),
-            title: Text('Quantity'),
+            leading: const Icon(Icons.tag),
+            title: const Text('Quantity'),
             subtitle: Text(state.quantity),
             onTap: () async {
               final input = await InputDialog.show(
@@ -72,10 +71,10 @@ class ItemDetailsView extends StatelessWidget {
               if (input != null) itemDetailsCubit.updateItem(quantity: input);
             },
           ),
-          AisleTile(),
+          const AisleTile(),
           ListTile(
-            leading: Icon(Icons.attach_money),
-            title: Text('Price'),
+            leading: const Icon(Icons.attach_money),
+            title: const Text('Price'),
             subtitle: Text(state.price),
             onTap: () async {
               final input = await InputDialog.show(
@@ -95,7 +94,7 @@ class ItemDetailsView extends StatelessWidget {
                   builder: (context) {
                     return BlocProvider.value(
                       value: homeCubit,
-                      child: SettingsPage(),
+                      child: const SettingsPage(),
                     );
                   },
                 ),
@@ -104,8 +103,8 @@ class ItemDetailsView extends StatelessWidget {
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, homeState) {
                 return SwitchListTile(
-                  secondary: Icon(Icons.calculate_outlined),
-                  title: Text('Tax'),
+                  secondary: const Icon(Icons.calculate_outlined),
+                  title: const Text('Tax'),
                   value: state.hasTax,
                   subtitle: (state.hasTax && !homeState.taxRateIsSet)
                       ? Align(
@@ -123,7 +122,7 @@ class ItemDetailsView extends StatelessWidget {
                               if (input == null) return;
                               homeCubit.updateTaxRate(input);
                             },
-                            child: Text(
+                            child: const Text(
                               'Set tax rate',
                               style: TextStyle(color: Colors.orange),
                             ),
@@ -136,10 +135,10 @@ class ItemDetailsView extends StatelessWidget {
               },
             ),
           ),
-          LabelsTile(),
+          const LabelsTile(),
           ListTile(
-            leading: Icon(Icons.notes),
-            title: Text('Notes'),
+            leading: const Icon(Icons.notes),
+            title: const Text('Notes'),
             subtitle: (state.notes == '') ? null : Text(state.notes),
             onTap: () async {
               final input = await InputDialog.show(
@@ -154,8 +153,8 @@ class ItemDetailsView extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.list),
-            title: Text('List'),
+            leading: const Icon(Icons.list),
+            title: const Text('List'),
             subtitle: Text(shoppingCubit.state.name),
             onTap: () {
               Navigator.push(
@@ -199,10 +198,10 @@ class AisleTile extends StatelessWidget {
     final shoppingCubit = context.watch<ShoppingListCubit>();
 
     return ListTile(
-      leading: Icon(Icons.format_color_text),
+      leading: const Icon(Icons.format_color_text),
       title: Row(
         children: [
-          Text('Aisle'),
+          const Text('Aisle'),
           const SizedBox(width: 15),
           BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
             builder: (context, state) {
@@ -220,13 +219,15 @@ class AisleTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing: Icon(Icons.keyboard_arrow_right),
+      trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () => _goToSubPage(context, pageId: AislesPage.id),
     );
   }
 }
 
 class LabelsTile extends StatelessWidget {
+  const LabelsTile({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final shoppingListCubit = context.read<ShoppingListCubit>();
@@ -234,9 +235,9 @@ class LabelsTile extends StatelessWidget {
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       builder: (context, state) {
         return ListTile(
-          leading: Icon(Icons.label),
-          title: Text('Labels'),
-          trailing: Icon(Icons.keyboard_arrow_right),
+          leading: const Icon(Icons.label),
+          title: const Text('Labels'),
+          trailing: const Icon(Icons.keyboard_arrow_right),
           subtitle: (state.labels.isEmpty)
               ? null
               : BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
@@ -296,7 +297,9 @@ void _goToSubPage(BuildContext context, {required String pageId}) {
               BlocProvider.value(value: itemDetailsCubit),
               BlocProvider.value(value: shoppingListCubit),
             ],
-            child: (pageId == AislesPage.id) ? AislesPage() : LabelsPage(),
+            child: (pageId == AislesPage.id)
+                ? const AislesPage()
+                : const LabelsPage(),
           );
         },
       ),

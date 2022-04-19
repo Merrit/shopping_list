@@ -1,12 +1,15 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/presentation/core/core.dart';
-import 'package:shopping_list/presentation/home/pages/home_page.dart';
-import 'package:shopping_list/presentation/shopping_list/shopping_list.dart';
+
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../core/core.dart';
+import '../../shopping_list/shopping_list.dart';
+import '../pages/home_page.dart';
 
 class ShoppingListAppBar extends StatelessWidget {
+  const ShoppingListAppBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
@@ -26,7 +29,7 @@ class ShoppingListAppBar extends StatelessWidget {
                         color: Color(listColor),
                       ),
                 ),
-                actions: [
+                actions: const [
                   _PopupMenuButton(),
                 ],
               );
@@ -83,9 +86,10 @@ Future<void> _showViewModeChooser(BuildContext context) async {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('List view density'),
+        title: const Text('List view density'),
         content: StatefulBuilder(
           builder: (context, setState) {
+            // ignore: prefer_function_declarations_over_variables
             final setViewMode = (String value) {
               setState(() => viewMode = value);
               Navigator.pop(context);
@@ -94,15 +98,15 @@ Future<void> _showViewModeChooser(BuildContext context) async {
               mainAxisSize: MainAxisSize.min,
               children: [
                 RadioListTile<String>(
-                  title: Text('Dense'),
-                  secondary: Icon(Icons.view_headline),
+                  title: const Text('Dense'),
+                  secondary: const Icon(Icons.view_headline),
                   value: 'Dense',
                   groupValue: viewMode,
                   onChanged: (value) => setViewMode(value!),
                 ),
                 RadioListTile<String>(
-                  title: Text('Spacious'),
-                  secondary: Icon(Icons.dashboard_outlined),
+                  title: const Text('Spacious'),
+                  secondary: const Icon(Icons.dashboard_outlined),
                   value: 'Spacious',
                   groupValue: viewMode,
                   onChanged: (value) => setViewMode(value!),
@@ -128,7 +132,7 @@ void _showListSettings(BuildContext context) {
             BlocProvider.value(value: shoppingListCubit),
             BlocProvider.value(value: homeCubit),
           ],
-          child: ListSettingsPage(),
+          child: const ListSettingsPage(),
         );
       },
     ),
@@ -138,11 +142,11 @@ void _showListSettings(BuildContext context) {
 void _showSortBy({required BuildContext context}) {
   final shoppingCubit = context.read<HomeCubit>().state.shoppingListCubit!;
   final shoppingProvider = BlocProvider.value(value: shoppingCubit);
-  AdaptiveViewManager().pushView(
+  const AdaptiveViewManager().pushView(
     context: context,
     providers: [shoppingProvider],
-    page: SortByPage(),
-    view: SortByView(),
+    page: const SortByPage(),
+    view: const SortByView(),
   );
 }
 
@@ -184,10 +188,10 @@ class AdaptiveViewManager {
 void _showCompletedItems({required BuildContext context}) {
   final shoppingCubit = context.read<HomeCubit>().state.shoppingListCubit!;
   final shoppingProvider = BlocProvider.value(value: shoppingCubit);
-  AdaptiveViewManager().pushView(
+  const AdaptiveViewManager().pushView(
     context: context,
     providers: [shoppingProvider],
-    page: CompletedItemsPage(),
-    view: CompletedItemsView(),
+    page: const CompletedItemsPage(),
+    view: const CompletedItemsView(),
   );
 }

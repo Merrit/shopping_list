@@ -21,6 +21,7 @@ class SettingsInitial extends SettingsState {}
 
 class SettingsLoaded extends SettingsState {
   @override
+  // ignore: overridden_fields
   final String taxRate;
 
   const SettingsLoaded({required this.taxRate});

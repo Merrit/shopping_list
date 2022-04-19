@@ -1,3 +1,5 @@
+import 'package:logging/logging.dart';
+
 import '../shopping_list_repository.dart';
 
 class ListItemsValidator {
@@ -73,6 +75,8 @@ class _AisleValidator {
 
 /// Sort the list of items according to the user's preference.
 class _ItemSortValidator {
+  static final _log = Logger('_ItemSortValidator');
+
   static List<Item> sort({
     required List<Item> items,
     required List<Aisle> aisles,
@@ -113,7 +117,7 @@ class _ItemSortValidator {
         if (!ascending) items = items.reversed.toList();
         break;
       default:
-        print('Error sorting items');
+        _log.warning('Error sorting items');
     }
     assert(_originalItems.length == items.length);
     return items;
@@ -163,9 +167,9 @@ class _AisleSorter {
     // If the item has an aisle that doesn't exist in the
     // ShoppingList's aisles, it won't have been added.
     // So we add it at then end so it doesn't get lost.
-    items.forEach((item) {
+    for (var item in items) {
       if (sortedItems.contains(item) == false) sortedItems.add(item);
-    });
+    }
     return sortedItems;
   }
 }

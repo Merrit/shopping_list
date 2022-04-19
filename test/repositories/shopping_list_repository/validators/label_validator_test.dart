@@ -5,8 +5,8 @@ import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_l
 void main() {
   test('Removes labels from items that do not exit in shopping list', () {
     final items = [
-      Item(name: 'Item1', labels: ['Label1']),
-      Item(name: 'Item2', labels: ['Label2']),
+      Item(name: 'Item1', labels: const ['Label1']),
+      Item(name: 'Item2', labels: const ['Label2']),
     ];
     final labels = [
       Label(name: 'Label1', color: Colors.white.value),

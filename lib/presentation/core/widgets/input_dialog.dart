@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shopping_list/domain/core/core.dart';
+
+import '../../../domain/core/core.dart';
 
 /// Allows to easily specify dialog properties such as the text field only
 /// accepting input as a double, which type of soft keyboard to show, etc.
@@ -21,6 +22,7 @@ class InputDialog extends StatelessWidget {
   final List<TextInputFormatter>? formatter;
 
   InputDialog({
+    Key? key,
     this.autofocus = true,
     required this.context,
     this.type,
@@ -30,7 +32,8 @@ class InputDialog extends StatelessWidget {
     this.formatter,
     String? initialValue,
     bool preselectText = false,
-  }) : maxLines = (type == InputDialogs.multiLine) ? 5 : 1 {
+  })  : maxLines = (type == InputDialogs.multiLine) ? 5 : 1,
+        super(key: key) {
     controller.text = initialValue ?? '';
     if (preselectText && initialValue != null) {
       controller.selection = TextSelection(
@@ -70,11 +73,11 @@ class InputDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, controller.text),
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
             ),
           ],
         ),

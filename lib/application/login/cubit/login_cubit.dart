@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shopping_list/application/authentication/bloc/login_status.dart';
-import 'package:shopping_list/domain/authentication/authentication.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/domain/login/login.dart';
-import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
+
+import '../../../domain/authentication/authentication.dart';
+import '../../../domain/core/core.dart';
+import '../../../domain/login/login.dart';
+import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../authentication/bloc/login_status.dart';
 
 part 'login_state.dart';
 

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/authentication/bloc/authentication_bloc.dart';
-import 'package:shopping_list/presentation/core/core.dart';
+
+import '../../../application/authentication/bloc/authentication_bloc.dart';
+import '../../core/core.dart';
 
 class VerifyEmailPage extends StatelessWidget {
   static const id = 'verify_email_page';
+
+  const VerifyEmailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class VerifyEmailPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Center(child: AppIcon()),
+            const Center(child: AppIcon()),
             const SizedBox(height: 50),
             const Text('A verification email has been sent to '
                 'the address provided.\n'
@@ -25,7 +28,7 @@ class VerifyEmailPage extends StatelessWidget {
               onPressed: () => context
                   .read<AuthenticationBloc>()
                   .add(AuthenticationLogoutRequested()),
-              child: Text('BACK'),
+              child: const Text('BACK'),
             ),
           ],
         ),
