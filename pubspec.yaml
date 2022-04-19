@@ -1,7 +1,7 @@
 name: shopping_list
 description: A cross platform shopping list app with Firebase.
 publish_to: "none"
-version: 1.1.0+13
+version: 1.2.0+14
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
