@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:shopping_list/application/authentication/bloc/login_status.dart';
-import 'package:shopping_list/application/login/cubit/login_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/domain/login/login.dart';
-import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
-import 'package:shopping_list/presentation/core/core.dart';
 
+import '../../../application/authentication/bloc/login_status.dart';
+import '../../../application/login/cubit/login_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../domain/login/login.dart';
+import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../core/core.dart';
 import '../login.dart';
 
 class LoginPage extends StatelessWidget {
   static const id = 'login_page';
+
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class LoginPage extends StatelessWidget {
                 context: context,
                 barrierDismissible: false,
                 builder: (context) {
-                  return Center(
+                  return const Center(
                     child: SizedBox(
                       height: 52,
                       width: 52,
@@ -60,11 +62,11 @@ class LoginView extends StatelessWidget {
   }) : super(key: key);
 
   final children = <Widget>[
-    AppIcon(height: 100),
+    const AppIcon(height: 100),
     const SizedBox(height: 16.0),
-    EmailInput(FormType.login),
+    const EmailInput(FormType.login),
     const SizedBox(height: 12.0),
-    PasswordInput(FormType.login),
+    const PasswordInput(FormType.login),
     const SizedBox(height: 12.0),
     _LoginButton(),
     const SizedBox(height: 12.0),
@@ -115,7 +117,7 @@ class _LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignInButton(
       Buttons.Email,
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       onPressed: () => context.read<LoginCubit>().submitForm(FormType.login),
     );
   }
@@ -126,7 +128,7 @@ class _GoogleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignInButton(
       Buttons.GoogleDark,
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
     );
   }

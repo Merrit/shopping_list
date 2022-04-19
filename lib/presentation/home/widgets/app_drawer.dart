@@ -1,12 +1,14 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
-import 'package:shopping_list/application/authentication/bloc/authentication_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
-import 'package:shopping_list/presentation/shopping_list/pages/list_settings_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
+
+import '../../../application/authentication/bloc/authentication_bloc.dart';
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../shopping_list/pages/list_settings_page.dart';
+import '../../shopping_list/pages/shopping_list_view.dart';
 
 class ListDrawer extends StatelessWidget {
   const ListDrawer({
@@ -16,16 +18,18 @@ class ListDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        const _CreateListButton(),
-        const _ListNameArea(),
-        const _BottomButtons(),
+      children: const [
+        _CreateListButton(),
+        _ListNameArea(),
+        _BottomButtons(),
       ],
     );
   }
 }
 
 class _CreateListButton extends StatelessWidget {
+  static final _log = Logger('_CreateListButton');
+
   const _CreateListButton({
     Key? key,
   }) : super(key: key);
@@ -58,15 +62,15 @@ class _CreateListButton extends StatelessWidget {
       builder: (context) {
         final _controller = TextEditingController();
         return AlertDialog(
-          title: Text('Create list'),
+          title: const Text('Create list'),
           content: TextField(
             controller: _controller,
             autofocus: platformIsWebMobile(context) ? false : true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Name',
             ),
             onSubmitted: (_) {
-              print('submitted');
+              _log.info('submitted');
               newListName = _controller.value.text;
               Navigator.pop(context);
             },
@@ -77,7 +81,7 @@ class _CreateListButton extends StatelessWidget {
                 newListName = _controller.value.text;
                 Navigator.pop(context);
               },
-              child: Text('Create'),
+              child: const Text('Create'),
             ),
           ],
         );
@@ -162,7 +166,7 @@ class _NameTile extends StatelessWidget {
                           BlocProvider.value(value: shoppingListCubit),
                           BlocProvider.value(value: homeCubit),
                         ],
-                        child: ListSettingsPage(),
+                        child: const ListSettingsPage(),
                       );
                     },
                   ),
@@ -214,7 +218,7 @@ class _BottomButtons extends StatelessWidget {
         children: [
           TextButton(
             onPressed: () => _auth.add(AuthenticationLogoutRequested()),
-            child: Text('Sign out'),
+            child: const Text('Sign out'),
           ),
           // Disabled because TaxRate is the only setting currently,
           // which is now handled directly in ItemDetails.

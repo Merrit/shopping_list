@@ -1,4 +1,4 @@
-import 'package:shopping_list/domain/core/core.dart';
+import '../../core/core.dart';
 
 class Email {
   final String value;

@@ -4,17 +4,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
+
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 class SortByPage extends StatelessWidget {
+  const SortByPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sort by'),
+        title: const Text('Sort by'),
       ),
-      body: SortByView(),
+      body: const SortByView(),
     );
   }
 }
@@ -24,6 +27,8 @@ class SortByState extends ChangeNotifier {
 }
 
 class SortByView extends StatelessWidget {
+  const SortByView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final shoppingCubit = context.read<ShoppingListCubit>();
@@ -112,16 +117,16 @@ class _CustomAisleOrderButton extends StatelessWidget {
     final shoppingListCubit = context.read<ShoppingListCubit>();
     final aisles = shoppingListCubit.state.aisles;
     return ActionChip(
-      label: Text('Customize'),
+      label: const Text('Customize'),
       onPressed: () async {
         final reorderedAisles = await showDialog<List<Aisle>>(
           context: context,
           builder: (context) {
             return AlertDialog(
-              content: Container(
+              content: SizedBox(
                 width: double.maxFinite,
                 child: ReorderableListView.builder(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   shrinkWrap: true,
                   onReorder: (oldIndex, newIndex) {
                     if (oldIndex < newIndex) newIndex--;
@@ -143,13 +148,13 @@ class _CustomAisleOrderButton extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context, aisles);
                   },
-                  child: Text('Save'),
+                  child: const Text('Save'),
                 ),
               ],
             );
@@ -166,9 +171,9 @@ class _CustomAisleOrderButton extends StatelessWidget {
     // Running platform checks on web causes an exception.
     if (kIsWeb) return null;
     if (Platform.isAndroid || Platform.isIOS) {
-      return Center(
+      return const Center(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: EdgeInsets.only(bottom: 20),
           child: Text('Long press to reorder'),
         ),
       );

@@ -18,7 +18,7 @@ class CheckboxLarge extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        side: BorderSide(
+        side: const BorderSide(
           color: Colors.grey,
           width: 1,
         ),

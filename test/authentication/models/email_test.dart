@@ -3,7 +3,7 @@ import 'package:shopping_list/domain/authentication/authentication.dart';
 
 void main() {
   test('Can instantiate initial', () {
-    final email = Email.initial();
+    const email = Email.initial();
     expect(email, isA<Email>());
     expect(email.value, '');
     expect(email.isValid, isFalse);

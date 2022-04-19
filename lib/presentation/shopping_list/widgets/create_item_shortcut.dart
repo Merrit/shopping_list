@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shopping_list/presentation/shopping_list/pages/shopping_list_view.dart';
+
+import '../pages/shopping_list_view.dart';
 
 class CreateItemIntent extends Intent {
   const CreateItemIntent();
@@ -9,7 +10,7 @@ class CreateItemIntent extends Intent {
 class CreateItemShortcut extends StatelessWidget {
   final Widget child;
 
-  const CreateItemShortcut({required this.child});
+  const CreateItemShortcut({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

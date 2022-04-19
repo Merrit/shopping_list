@@ -21,7 +21,7 @@ class Item extends Equatable {
   @JsonKey(defaultValue: <String>[])
   final List<String> labels;
 
-  Item._internal({
+  const Item._internal({
     required this.name,
     required this.aisle,
     required this.notes,

@@ -6,14 +6,14 @@ void main() {
 
   group('Without tax', () {
     test('Single quantity', () {
-      final price = '1.00';
-      final quantity = '1';
+      const price = '1.00';
+      const quantity = '1';
       final totalPrice = handler.totalPrice(price: price, quantity: quantity);
       expect(totalPrice, '1.00');
     });
     test('Multiple quantity', () {
-      final price = '1.00';
-      final quantity = '2';
+      const price = '1.00';
+      const quantity = '2';
       final totalPrice = handler.totalPrice(price: price, quantity: quantity);
       expect(totalPrice, '2.00');
     });
@@ -21,9 +21,9 @@ void main() {
 
   group('With tax', () {
     test('Single quantity', () {
-      final price = '1.00';
-      final quantity = '1';
-      final tax = '13';
+      const price = '1.00';
+      const quantity = '1';
+      const tax = '13';
       final totalPrice = handler.totalPrice(
         price: price,
         quantity: quantity,
@@ -32,9 +32,9 @@ void main() {
       expect(totalPrice, '1.13');
     });
     test('Multiple quantity', () {
-      final price = '1.00';
-      final quantity = '2';
-      final tax = '7.5';
+      const price = '1.00';
+      const quantity = '2';
+      const tax = '7.5';
       final totalPrice = handler.totalPrice(
         price: price,
         quantity: quantity,

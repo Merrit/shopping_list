@@ -4,11 +4,11 @@ class AppTheme {
   static final dark = ThemeData.dark().copyWith(
     brightness: Brightness.dark,
     primaryColorDark: Colors.lightBlue,
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Colors.lightBlueAccent,
     ),
     toggleableActiveColor: Colors.lightBlueAccent,
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -16,7 +16,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
       ),
     ),
   );

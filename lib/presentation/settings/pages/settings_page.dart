@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/application/settings/cubit/settings_cubit.dart';
-import 'package:shopping_list/presentation/core/core.dart';
+
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../../application/settings/cubit/settings_cubit.dart';
+import '../../core/core.dart';
 
 class SettingsPage extends StatelessWidget {
   static const id = 'settings_page';
+
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +32,9 @@ class SettingsPage extends StatelessWidget {
             builder: (context, state) {
               settingsCubit = context.read<SettingsCubit>();
               if (state is SettingsInitial) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else {
-                return SettingsView();
+                return const SettingsView();
               }
             },
           ),
@@ -42,6 +45,8 @@ class SettingsPage extends StatelessWidget {
 }
 
 class SettingsView extends StatelessWidget {
+  const SettingsView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SettingsCubit>();
@@ -56,7 +61,7 @@ class SettingsView extends StatelessWidget {
           child: Column(
             children: [
               SettingsTile(
-                label: Text('Tax rate'),
+                label: const Text('Tax rate'),
                 hintText: '${state.taxRate}%',
                 keyboardType: TextInputType.number,
                 onChanged: (value) => cubit.recordTaxRateState(value),

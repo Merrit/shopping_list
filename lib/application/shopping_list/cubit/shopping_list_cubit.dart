@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/home/home.dart';
+
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../../presentation/home/home.dart';
+import '../../home/cubit/home_cubit.dart';
 
 part 'shopping_list_state.dart';
 
@@ -155,13 +156,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   Future<void> setCheckedItemsCompleted() async {
     final completedItems = <Item>[];
-    state.checkedItems.forEach(
-      (item) {
-        final completedItem = item.copyWith(isComplete: true, aisle: 'None');
-        completedItems.add(completedItem);
-        _shoppingList.items.remove(item);
-      },
-    );
+    for (var item in state.checkedItems) {
+      final completedItem = item.copyWith(isComplete: true, aisle: 'None');
+      completedItems.add(completedItem);
+      _shoppingList.items.remove(item);
+    }
     state.checkedItems.clear();
     _shoppingList.items.addAll(completedItems);
     await updateList(items: _shoppingList.items);

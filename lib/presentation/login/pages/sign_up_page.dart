@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/authentication/bloc/login_status.dart';
-import 'package:shopping_list/application/login/cubit/login_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/domain/login/login.dart';
-import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
-import 'package:shopping_list/presentation/core/core.dart';
 
+import '../../../application/authentication/bloc/login_status.dart';
+import '../../../application/login/cubit/login_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../domain/login/login.dart';
+import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../core/core.dart';
 import '../login.dart';
 
 class SignUpPage extends StatelessWidget {
   static const id = 'sign_up_page';
 
-  const SignUpPage();
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +39,16 @@ class SignUpPage extends StatelessWidget {
 
 class SignUpView extends StatelessWidget {
   final children = <Widget>[
-    AppIcon(height: 100),
+    const AppIcon(height: 100),
     const SizedBox(height: 16.0),
-    EmailInput(FormType.signup),
+    const EmailInput(FormType.signup),
     const SizedBox(height: 12.0),
-    PasswordInput(FormType.signup),
+    const PasswordInput(FormType.signup),
     const SizedBox(height: 12.0),
     _ConfirmPasswordInput(),
   ];
+
+  SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,7 @@ class _SignUpButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(200, 50),
+                  minimumSize: const Size(200, 50),
                   elevation: 4.0,
                 ),
                 onPressed: () =>

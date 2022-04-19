@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/presentation/settings/settings.dart';
 
 import 'application/authentication/bloc/authentication_bloc.dart';
 import 'domain/authentication/authentication.dart';
 import 'infrastructure/authentication_repository/authentication_repository.dart';
 import 'presentation/home/pages/home_page.dart';
 import 'presentation/login/login.dart';
+import 'presentation/settings/settings.dart';
 import 'presentation/shopping_list/pages/list_settings_page.dart';
 import 'presentation/splash/splash.dart';
 import 'theme.dart';
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
         ),
-        child: AppView(),
+        child: const AppView(),
       ),
     );
   }
@@ -36,6 +36,8 @@ class App extends StatelessWidget {
 
 /// Entryway to the main UI, decides initial page from authentication bloc.
 class AppView extends StatefulWidget {
+  const AppView({Key? key}) : super(key: key);
+
   @override
   _AppViewState createState() => _AppViewState();
 }
@@ -75,16 +77,16 @@ class _AppViewState extends State<AppView> {
         );
       },
       routes: {
-        HomePage.id: (_) => HomePage(),
-        ListSettingsPage.id: (_) => ListSettingsPage(),
-        LoginPage.id: (_) => LoginPage(),
-        SettingsPage.id: (_) => SettingsPage(),
-        SignUpPage.id: (_) => SignUpPage(),
-        SplashPage.id: (_) => SplashPage(),
-        VerifyEmailPage.id: (_) => VerifyEmailPage(),
+        HomePage.id: (_) => const HomePage(),
+        ListSettingsPage.id: (_) => const ListSettingsPage(),
+        LoginPage.id: (_) => const LoginPage(),
+        SettingsPage.id: (_) => const SettingsPage(),
+        SignUpPage.id: (_) => const SignUpPage(),
+        SplashPage.id: (_) => const SplashPage(),
+        VerifyEmailPage.id: (_) => const VerifyEmailPage(),
       },
       onGenerateRoute: (_) => MaterialPageRoute(
-        builder: (context) => SplashPage(),
+        builder: (context) => const SplashPage(),
       ),
     );
   }

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/core/core.dart';
-import 'package:shopping_list/presentation/home/home.dart';
-import 'package:shopping_list/presentation/item_details/pages/item_details_page.dart';
-import 'package:shopping_list/presentation/shopping_list/widgets/create_item_shortcut.dart';
-import 'package:shopping_list/presentation/shopping_list/widgets/aisle_group.dart';
-import 'package:shopping_list/presentation/shopping_list/widgets/item_tile.dart';
-import 'package:shopping_list/presentation/shopping_list/widgets/main_floating_button.dart';
+
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../core/core.dart';
+import '../../home/home.dart';
+import '../../item_details/pages/item_details_page.dart';
+import '../widgets/aisle_group.dart';
+import '../widgets/create_item_shortcut.dart';
+import '../widgets/item_tile.dart';
+import '../widgets/main_floating_button.dart';
 
 late ShoppingListCubit shoppingListCubit;
 
 class ShoppingListView extends StatelessWidget {
+  const ShoppingListView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     shoppingListCubit = context.read<ShoppingListCubit>();
@@ -22,7 +25,7 @@ class ShoppingListView extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final haveActiveList = (state.currentListId != '');
-        return (haveActiveList) ? ActiveListView() : _NoActiveListView();
+        return (haveActiveList) ? const ActiveListView() : _NoActiveListView();
       },
     );
   }
@@ -31,8 +34,7 @@ class ShoppingListView extends StatelessWidget {
 class _NoActiveListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: BlocListener<HomeCubit, HomeState>(
+    return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) {
         if (state.currentListId == '') {
           // Show the drawer if there is no active list so that
@@ -41,18 +43,20 @@ class _NoActiveListView extends StatelessWidget {
         }
       },
       child: Container(),
-    ));
+    );
   }
 }
 
 class ActiveListView extends StatelessWidget {
+  const ActiveListView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CreateItemShortcut(
       child: Stack(
         children: [
           ScrollingShoppingList(),
-          FloatingButton(
+          const FloatingButton(
             floatingActionButton: MainFloatingButton(),
           ),
         ],
@@ -68,7 +72,7 @@ class ActiveListView extends StatelessWidget {
       builder: (context) {
         final _controller = TextEditingController();
         return AlertDialog(
-          title: Text('New item'),
+          title: const Text('New item'),
           content: TextField(
             controller: _controller,
             autofocus: platformIsWebMobile(context) ? false : true,
@@ -79,7 +83,7 @@ class ActiveListView extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
                 const Spacer(),
                 TextButton(
@@ -87,11 +91,11 @@ class ActiveListView extends StatelessWidget {
                     customize = true;
                     Navigator.pop(context, _controller.text);
                   },
-                  child: Text('Customize'),
+                  child: const Text('Customize'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, _controller.text),
-                  child: Text('Create'),
+                  child: const Text('Create'),
                 ),
               ],
             ),
@@ -115,6 +119,8 @@ class ActiveListView extends StatelessWidget {
 
 class ScrollingShoppingList extends StatelessWidget {
   final _scrollController = ScrollController();
+
+  ScrollingShoppingList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

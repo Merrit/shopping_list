@@ -1,29 +1,33 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/domain/core/core.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import 'package:shopping_list/presentation/core/core.dart';
 
-import 'package:shopping_list/presentation/item_details/widgets/floating_done_button.dart';
+import '../../../application/item_details/cubit/item_details_cubit.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../core/core.dart';
+import '../widgets/floating_done_button.dart';
 
 class LabelsPage extends StatelessWidget {
   static const id = 'labels_page';
+
+  const LabelsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text('Labels')),
-        body: LabelsView(),
+        appBar: AppBar(title: const Text('Labels')),
+        body: const LabelsView(),
       ),
     );
   }
 }
 
 class LabelsView extends StatelessWidget {
+  const LabelsView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _controller = ScrollController();
@@ -54,7 +58,7 @@ class LabelsView extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 10),
                       child: IconButton(
                         onPressed: () => _createLabel(context: context),
-                        icon: CircleAvatar(child: Icon(Icons.add)),
+                        icon: const CircleAvatar(child: Icon(Icons.add)),
                       ),
                     );
                   }
@@ -63,7 +67,7 @@ class LabelsView extends StatelessWidget {
             );
           },
         ),
-        FloatingDoneButton(),
+        const FloatingDoneButton(),
       ],
     );
   }
@@ -103,7 +107,7 @@ class _LabelTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ActionChip(
-                label: Text('Edit color'),
+                label: const Text('Edit color'),
                 onPressed: () async => await _editColor(label, context),
               ),
               const SizedBox(width: 20),
@@ -111,7 +115,7 @@ class _LabelTile extends StatelessWidget {
                 onPressed: () async {
                   await shoppingListCubit.deleteLabel(label);
                 },
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
               ),
             ],
           ),
@@ -142,8 +146,8 @@ class _LabelTile extends StatelessWidget {
                     onColorChanged: (Color color) {
                       setState(() => labelColor = color);
                     },
-                    heading: Text('Select color'),
-                    subheading: Text('Select color shade'),
+                    heading: const Text('Select color'),
+                    subheading: const Text('Select color shade'),
                     pickersEnabled: const <ColorPickerType, bool>{
                       ColorPickerType.primary: true,
                       ColorPickerType.accent: false,
@@ -156,11 +160,11 @@ class _LabelTile extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );

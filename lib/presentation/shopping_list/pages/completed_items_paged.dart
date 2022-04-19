@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
+
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
 
 class CompletedItemsPage extends StatelessWidget {
+  const CompletedItemsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Completed items')),
-      body: CompletedItemsView(),
+      appBar: AppBar(title: const Text('Completed items')),
+      body: const CompletedItemsView(),
     );
   }
 }
 
 class CompletedItemsView extends StatefulWidget {
+  const CompletedItemsView({Key? key}) : super(key: key);
+
   @override
   _CompletedItemsViewState createState() => _CompletedItemsViewState();
 }
@@ -56,7 +61,7 @@ class _CompletedItemsViewState extends State<CompletedItemsView> {
                           setState(() {});
                         }
                       : null,
-                  label: Text('Delete all completed'),
+                  label: const Text('Delete all completed'),
                 );
               },
             ),

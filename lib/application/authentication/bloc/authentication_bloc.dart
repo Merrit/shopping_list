@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:shopping_list/domain/authentication/authentication.dart';
-import 'package:shopping_list/infrastructure/authentication_repository/authentication_repository.dart';
+
+import '../../../domain/authentication/authentication.dart';
+import '../../../infrastructure/authentication_repository/authentication_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -54,6 +55,6 @@ AuthenticationState _mapAuthenticationUserChangedToState(
   if (event.user != User.empty) {
     return AuthenticationState.authenticated(event.user);
   } else {
-    return AuthenticationState.unauthenticated();
+    return const AuthenticationState.unauthenticated();
   }
 }

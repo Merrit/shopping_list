@@ -1,17 +1,16 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:shopping_list/infrastructure/preferences/preferences_repository.dart';
 
 import 'app.dart';
 import 'application/setup/setup.dart';
 import 'infrastructure/authentication_repository/authentication_repository.dart';
-// import 'application/simple_bloc_observer.dart';
+import 'infrastructure/preferences/preferences_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +30,7 @@ void main() async {
 void primeFonts() {
   final pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
   pb.addText('\ud83d\ude01'); // Smiley-face emoji.
-  pb.build().layout(ParagraphConstraints(width: 100));
+  pb.build().layout(const ParagraphConstraints(width: 100));
 }
 
 /// Initialize the logger.
@@ -42,6 +41,6 @@ void initLogger() {
     var msg = '${record.level.name}: ${record.time}: '
         '${record.loggerName}: ${record.message}';
     if (record.error != null) msg += '\nError: ${record.error}';
-    print(msg);
+    stdout.writeln(msg);
   });
 }

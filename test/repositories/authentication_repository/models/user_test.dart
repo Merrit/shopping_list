@@ -2,14 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shopping_list/infrastructure/authentication_repository/models/user.dart';
 
 void main() {
-  final user = User(
+  const user = User(
     id: 'unique_user_id',
     email: 'very@email.com',
     emailIsVerified: true,
   );
 
   test('Can instantiate empty', () {
-    final user = User.empty;
+    const user = User.empty;
     expect(user, isA<User>());
     expect(user.email, equals(''));
     expect(user.id, equals(''));

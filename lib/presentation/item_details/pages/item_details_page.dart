@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/application/item_details/cubit/item_details_cubit.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
+import '../../../application/item_details/cubit/item_details_cubit.dart';
+import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import 'aisles_page.dart';
 import 'item_details_page_state.dart';
 import 'item_details_view.dart';
@@ -43,9 +43,9 @@ class ItemDetailsPage extends StatelessWidget {
                 builder: (context, constraints) {
                   final isWide = constraints.maxWidth > 600;
                   if (isWide) {
-                    return TwoColumnView();
+                    return const TwoColumnView();
                   } else {
-                    return ItemDetailsView();
+                    return const ItemDetailsView();
                   }
                 },
               ),
@@ -58,13 +58,15 @@ class ItemDetailsPage extends StatelessWidget {
 }
 
 class TwoColumnView extends StatelessWidget {
+  const TwoColumnView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ItemDetailsPageState(),
       builder: (context, child) {
         return Row(
-          children: [
+          children: const [
             Flexible(
               flex: 2,
               child: ItemDetailsView(),
@@ -82,6 +84,8 @@ class TwoColumnView extends StatelessWidget {
 }
 
 class TwoColumnSubPage extends StatelessWidget {
+  const TwoColumnSubPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ItemDetailsPageState>(
@@ -90,9 +94,9 @@ class TwoColumnSubPage extends StatelessWidget {
           case '':
             return Container();
           case AislesPage.id:
-            return AislesView();
+            return const AislesView();
           case LabelsPage.id:
-            return LabelsView();
+            return const LabelsView();
           default:
             return Container();
         }

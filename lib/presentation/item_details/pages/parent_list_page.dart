@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_list/application/home/cubit/home_cubit.dart';
-import 'package:shopping_list/application/shopping_list/cubit/shopping_list_cubit.dart';
-import 'package:shopping_list/presentation/home/pages/home_page.dart';
+
+import '../../../application/home/cubit/home_cubit.dart';
+import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../home/pages/home_page.dart';
 
 class ParentListPage extends StatelessWidget {
   final String itemName;
@@ -13,7 +14,7 @@ class ParentListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text('Parent List')),
+        appBar: AppBar(title: const Text('Parent List')),
         body: ParentListView(itemName: itemName),
       ),
     );
@@ -32,7 +33,7 @@ class ParentListView extends StatelessWidget {
 
     return Container(
       alignment: Alignment.topCenter,
-      padding: EdgeInsets.all(40),
+      padding: const EdgeInsets.all(40),
       child: DropdownButton<String>(
         value: shoppingListCubit.state.name,
         items: homeCubit.state.shoppingLists
