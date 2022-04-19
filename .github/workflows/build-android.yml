@@ -1,9 +1,15 @@
 name: Build Android apk & bundle
+
 on:
+  # Enable manual run
   workflow_dispatch:
-  release:
-    types:
-      - created
+  # Verify builds succeed on pull requests
+  pull_request:
+  # Build & deploy for tag events matching v*, i.e. v1.0.0, v20.15.10
+  push:
+    tags:
+      - "v*"
+
 jobs:
   build_android:
     runs-on: ubuntu-latest
