@@ -14,6 +14,11 @@ class ShoppingList extends Equatable {
   final List<Aisle> aisles;
   final List<String> allowedUsers;
   final String id;
+
+  /// If not provided the index defaults to `-1` to indicated this list has
+  /// not yet been properly assigned an order and must be dealt with.
+  final int index;
+
   final List<Item> items;
   final List<Label> labels;
   final String name;
@@ -32,6 +37,7 @@ class ShoppingList extends Equatable {
     required this.name,
     required this.aisles,
     required this.color,
+    required this.index,
     required this.items,
     required this.id,
     required this.owner,
@@ -44,6 +50,7 @@ class ShoppingList extends Equatable {
   factory ShoppingList({
     required String name,
     List<Aisle> aisles = const [],
+    int index = -1,
     List<Item> items = const [],
     int color = _defaultListColor,
     String id = '',
@@ -70,6 +77,7 @@ class ShoppingList extends Equatable {
       items: validatedItems,
       color: color,
       id: id,
+      index: index,
       owner: owner,
       allowedUsers: allowedUsers,
       labels: labels.toSet().toList(), // Ensure no duplicates.
@@ -84,6 +92,7 @@ class ShoppingList extends Equatable {
     int? color,
     List<Item>? items,
     String? id,
+    int? index,
     String? owner,
     List<String>? allowedUsers,
     List<Label>? labels,
@@ -96,6 +105,7 @@ class ShoppingList extends Equatable {
       color: color ?? this.color,
       items: items ?? this.items,
       id: id ?? this.id,
+      index: index ?? this.index,
       owner: owner ?? this.owner,
       allowedUsers: allowedUsers ?? this.allowedUsers,
       labels: labels ?? this.labels,
@@ -115,6 +125,7 @@ class ShoppingList extends Equatable {
         aisles,
         items,
         id,
+        index,
         owner,
         allowedUsers,
         color,
@@ -131,6 +142,7 @@ ShoppingList {
   aisles: $aisles,
   items: $items,
   id: $id,
+  index: $index,
   owner: $owner,
   allowedUsers: $allowedUsers,
   color: $color,
