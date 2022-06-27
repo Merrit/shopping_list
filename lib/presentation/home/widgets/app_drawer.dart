@@ -9,6 +9,7 @@ import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../shopping_list/pages/list_settings_page.dart';
 import '../../shopping_list/pages/shopping_list_view.dart';
+import '../pages/home_page.dart';
 
 class ListDrawer extends StatelessWidget {
   const ListDrawer({
@@ -109,9 +110,15 @@ class _ListNameArea extends StatelessWidget {
               (previous.shoppingLists != current.shoppingLists) ||
               (previous.currentListId != current.currentListId),
           builder: (context, state) {
-            return ListView(
+            return ReorderableListView(
+              onReorder: (oldIndex, newIndex) {
+                homeCubit.reorderSheets(oldIndex, newIndex);
+              },
               children: state.shoppingLists
-                  .map((list) => _NameTile(list: list))
+                  .map((list) => _NameTile(
+                        key: foundation.ValueKey(list),
+                        list: list,
+                      ))
                   .toList(),
             );
           },

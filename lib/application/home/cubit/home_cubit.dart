@@ -70,6 +70,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void _listsChanged(List<ShoppingList> shoppingLists) {
+    shoppingLists.sort(((a, b) => a.index.compareTo(b.index)));
     emit(state.copyWith(
       shoppingLists: shoppingLists,
     ));
@@ -150,6 +151,20 @@ class HomeCubit extends Cubit<HomeState> {
       key: 'taxRate',
       value: validatedRate.taxRate,
     );
+  }
+
+  Future<void> reorderSheets(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) newIndex -= 1;
+    final shoppingLists = List<ShoppingList>.from(state.shoppingLists)
+      ..removeAt(oldIndex)
+      ..insert(newIndex, state.shoppingLists[oldIndex]);
+    for (var i = 0; i < shoppingLists.length; i++) {
+      shoppingLists[i] = shoppingLists[i].copyWith(index: i);
+    }
+    emit(state.copyWith(shoppingLists: shoppingLists));
+    for (var list in shoppingLists) {
+      await shoppingListRepository.updateShoppingList(list);
+    }
   }
 
   @override
