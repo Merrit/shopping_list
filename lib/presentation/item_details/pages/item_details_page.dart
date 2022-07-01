@@ -49,6 +49,10 @@ class ItemDetailsPage extends StatelessWidget {
                   }
                 },
               ),
+              floatingActionButton: FloatingActionButton(
+                child: const Icon(Icons.check),
+                onPressed: () => popItemDetails(context),
+              ),
             ),
           ),
         );
