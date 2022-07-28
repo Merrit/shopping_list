@@ -67,16 +67,68 @@ class ActiveListView extends StatelessWidget {
   static Future<void> showCreateItemDialog(
       {required BuildContext context}) async {
     bool customize = false;
+    final shoppingListCubit = context.read<ShoppingListCubit>();
+
     final input = await showDialog<String>(
       context: context,
       builder: (context) {
-        final _controller = TextEditingController();
+        TextEditingController? _controller;
+
         return AlertDialog(
           title: const Text('New item'),
-          content: TextField(
-            controller: _controller,
-            autofocus: platformIsWebMobile(context) ? false : true,
-            onSubmitted: (_) => Navigator.pop(context, _controller.text),
+          content: Autocomplete<Item>(
+            fieldViewBuilder:
+                (context, textEditingController, focusNode, onFieldSubmitted) {
+              _controller = textEditingController;
+
+              return TextField(
+                controller: textEditingController,
+                focusNode: focusNode,
+                autofocus: platformIsWebMobile(context) ? false : true,
+                onSubmitted: (_) => Navigator.pop(context, _controller?.text),
+              );
+            },
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              if (textEditingValue.text == '') return [];
+
+              return shoppingListCubit //
+                  .state
+                  .completedItems
+                  .where((e) => e.name
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase()));
+            },
+            optionsViewBuilder: (context, onSelected, options) {
+              return Align(
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 60),
+                    child: ListView.builder(
+                      itemCount: options.length,
+                      itemBuilder: (context, index) {
+                        final Item item = options.toList()[index];
+
+                        return Material(
+                          child: ListTile(
+                            title: Text(item.name),
+                            onTap: () {
+                              print('click!');
+                              shoppingListCubit.updateItem(
+                                oldItem: item,
+                                newItem: item.copyWith(isComplete: false),
+                              );
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           actions: [
             Row(
@@ -89,12 +141,12 @@ class ActiveListView extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     customize = true;
-                    Navigator.pop(context, _controller.text);
+                    Navigator.pop(context, _controller?.text);
                   },
                   child: const Text('Customize'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.pop(context, _controller.text),
+                  onPressed: () => Navigator.pop(context, _controller?.text),
                   child: const Text('Create'),
                 ),
               ],
