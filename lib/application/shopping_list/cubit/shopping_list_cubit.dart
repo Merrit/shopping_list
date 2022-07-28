@@ -106,6 +106,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   Future<void> createItem({required String name}) async {
     final newItem = Item(name: name);
+
+    // Quickly emit change while waiting for Firebase to propogate.
+    final items = state.items..add(newItem);
+    _emitNewState(list: _shoppingList.copyWith(items: items));
+
     await createItemFromItem(newItem);
   }
 
@@ -157,7 +162,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   Future<void> setCheckedItemsCompleted() async {
     final completedItems = <Item>[];
     for (var item in state.checkedItems) {
-      final completedItem = item.copyWith(isComplete: true, aisle: 'None');
+      final completedItem = item.copyWith(isComplete: true);
       completedItems.add(completedItem);
       _shoppingList.items.remove(item);
     }
