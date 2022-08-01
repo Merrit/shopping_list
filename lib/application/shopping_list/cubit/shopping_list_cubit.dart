@@ -16,12 +16,15 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   late ShoppingList _shoppingList;
   final ShoppingListRepository _shoppingListRepository;
 
+  static late ShoppingListCubit instance;
+
   ShoppingListCubit({required HomeCubit homeCubit})
       : _homeCubit = homeCubit,
         // Assign initial dummy list while loading.
         _shoppingList = ShoppingList(name: '', owner: homeCubit.user.id),
         _shoppingListRepository = homeCubit.shoppingListRepository,
         super(ShoppingListState.initial()) {
+    instance = this;
     _init();
   }
 
@@ -236,6 +239,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       ..remove(oldLabel)
       ..add(updatedLabel);
     await updateList(labels: _shoppingList.labels);
+  }
+
+  void tiggerShowCreateItemDialog() {
+    emit(state.copyWith(showCreateItemDialog: true));
+    emit(state.copyWith(showCreateItemDialog: false));
   }
 
   @override

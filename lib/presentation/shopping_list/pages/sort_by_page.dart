@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -170,15 +168,15 @@ class _CustomAisleOrderButton extends StatelessWidget {
   Widget? _header() {
     // Running platform checks on web causes an exception.
     if (kIsWeb) return null;
-    if (Platform.isAndroid || Platform.isIOS) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 20),
-          child: Text('Long press to reorder'),
-        ),
-      );
-    } else {
-      return null;
-    }
+    // if (Platform.isAndroid || Platform.isIOS) {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 20),
+        child: Text('Long press to reorder'),
+      ),
+    );
+    // } else {
+    // return null;
+    // }
   }
 }

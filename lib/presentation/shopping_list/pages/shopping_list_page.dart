@@ -10,12 +10,7 @@ class ShoppingListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeCubit = context.read<HomeCubit>();
-    return BlocProvider(
-      create: (context) => ShoppingListCubit(
-        homeCubit: homeCubit,
-      ),
-      child: const ShoppingListView(),
-    );
+    // final homeCubit = context.read<HomeCubit>();
+    return const ShoppingListView();
   }
 }

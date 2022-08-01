@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../application/authentication/bloc/authentication_bloc.dart';
 import '../../../application/home/cubit/home_cubit.dart';
-import '../../../infrastructure/preferences/preferences_repository.dart';
-import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../shopping_list/pages/shopping_list_page.dart';
 import '../home.dart';
 
@@ -17,15 +14,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
-    return BlocProvider(
-      create: (context) => HomeCubit(
-        PreferencesRepository(),
-        shoppingListRepository: FirebaseShoppingListRepository(user.id),
-        user: user,
-      ),
-      child: const HomeView(),
-    );
+    return const HomeView();
   }
 }
 

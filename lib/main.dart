@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
@@ -41,6 +40,6 @@ void initLogger() {
     var msg = '${record.level.name}: ${record.time}: '
         '${record.loggerName}: ${record.message}';
     if (record.error != null) msg += '\nError: ${record.error}';
-    stdout.writeln(msg);
+    debugPrint(msg);
   });
 }

@@ -14,6 +14,8 @@ class ShoppingListState {
   // State specific to the running app instance, rather than the ShoppingList.
   final List<Item> checkedItems;
 
+  final bool showCreateItemDialog;
+
   ShoppingListState({
     required this.aisles,
     required this.color,
@@ -24,6 +26,7 @@ class ShoppingListState {
     required this.sortAscending,
     required this.taxRate,
     required this.checkedItems,
+    required this.showCreateItemDialog,
   });
 
   factory ShoppingListState.initial() {
@@ -37,6 +40,7 @@ class ShoppingListState {
       sortAscending: false,
       taxRate: '0',
       checkedItems: [],
+      showCreateItemDialog: false,
     );
   }
 
@@ -58,6 +62,7 @@ class ShoppingListState {
     bool? sortAscending,
     String? taxRate,
     List<Item>? checkedItems,
+    bool? showCreateItemDialog,
   }) {
     return ShoppingListState(
       aisles: aisles ?? this.aisles,
@@ -69,6 +74,7 @@ class ShoppingListState {
       sortAscending: sortAscending ?? this.sortAscending,
       taxRate: taxRate ?? this.taxRate,
       checkedItems: checkedItems ?? this.checkedItems,
+      showCreateItemDialog: showCreateItemDialog ?? this.showCreateItemDialog,
     );
   }
 
@@ -84,5 +90,6 @@ sortBy: $sortBy,
 sortAscending: $sortAscending,
 taxRate: $taxRate
 checkedItems: $checkedItems,
+showCreateItemDialog: $showCreateItemDialog,
 \n''';
 }

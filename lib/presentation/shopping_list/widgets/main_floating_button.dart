@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
-import '../pages/shopping_list_view.dart';
 
 class MainFloatingButton extends StatelessWidget {
   const MainFloatingButton({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class MainFloatingButton extends StatelessWidget {
         return FloatingActionButton(
           onPressed: () async => (hasCheckedItems)
               ? await shoppingListCubit.setCheckedItemsCompleted()
-              : await ActiveListView.showCreateItemDialog(context: context),
+              : shoppingListCubit.tiggerShowCreateItemDialog(),
           backgroundColor: (hasCheckedItems) ? Colors.green : null,
           child: Icon(
             (hasCheckedItems) ? Icons.done_all : Icons.add,
