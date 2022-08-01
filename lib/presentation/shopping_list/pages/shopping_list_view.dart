@@ -9,7 +9,6 @@ import '../../core/core.dart';
 import '../../home/home.dart';
 import '../../item_details/pages/item_details_page.dart';
 import '../widgets/aisle_group.dart';
-import '../widgets/create_item_shortcut.dart';
 import '../widgets/item_tile.dart';
 import '../widgets/main_floating_button.dart';
 
@@ -52,7 +51,10 @@ class ActiveListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CreateItemShortcut(
+    return BlocListener<ShoppingListCubit, ShoppingListState>(
+      listener: (context, state) {
+        if (state.showCreateItemDialog) showCreateItemDialog(context: context);
+      },
       child: Stack(
         children: [
           ScrollingShoppingList(),
@@ -217,6 +219,7 @@ class ScrollingShoppingList extends StatelessWidget {
                               .toList(),
                         )
                       // Spacious ListView.
+                      // TODO: Reorderable listview?
                       : ListView.separated(
                           controller: _scrollController,
                           padding: listViewPadding,

@@ -52,6 +52,35 @@
 </head>
 
 <body>
+
+  <!-- Block default browser shortcuts -->
+  <script>
+    // This prevents default browser actions on key combinations.
+    // See https://stackoverflow.com/a/67039463/6509751.
+    window.addEventListener('keydown', function (e) {
+      if (event.target == document.body) {
+        // Prevents going back to the previous tab.
+        if (event.key == 'Backspace') {
+          event.preventDefault();
+        }
+      }
+
+      if (event.metaKey || event.ctrlKey) {
+        switch (event.key) {
+          case '=': // Prevent zooming in.
+          case '-': // Prevent zooming out.
+          case 'd': // Prevent bookmark on Firefox e.g.
+          case 'g': // Prevent open find on Firefox e.g.
+          case 'n': // Prevent open new window.
+          case 'z': // Prevent restoring tab on Safari.
+            event.preventDefault();
+            break;
+        }
+      }
+    });
+  </script>
+
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
