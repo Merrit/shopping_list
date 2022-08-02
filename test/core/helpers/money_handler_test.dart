@@ -40,7 +40,7 @@ void main() {
         quantity: quantity,
         taxRate: tax,
       );
-      expect(totalPrice, '2.15');
+      expect(totalPrice, '2.14');
     });
   });
 }
