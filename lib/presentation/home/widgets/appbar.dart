@@ -18,13 +18,13 @@ class ShoppingListAppBar extends StatelessWidget {
         var listColor = (shoppingCubit == null)
             ? Colors.white.value
             : shoppingCubit.state.color;
-        final _shoppingList = state.shoppingLists
+        final shoppingList = state.shoppingLists
             .firstWhereOrNull((list) => list.id == state.currentListId);
-        return (_shoppingList == null)
+        return (shoppingList == null)
             ? AppBar()
             : AppBar(
                 title: Text(
-                  _shoppingList.name,
+                  shoppingList.name,
                   style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: Color(listColor),
                       ),

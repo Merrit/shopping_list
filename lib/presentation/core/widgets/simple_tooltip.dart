@@ -18,8 +18,8 @@ class SimpleTooltip extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final dynamic _toolTip = _toolTipKey.currentState;
-        _toolTip.ensureTooltipVisible();
+        final dynamic toolTip = _toolTipKey.currentState;
+        toolTip.ensureTooltipVisible();
       },
       child: Tooltip(
         key: _toolTipKey,

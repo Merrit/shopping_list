@@ -180,8 +180,8 @@ class InputDialog extends StatelessWidget {
     // Format as a full double, for example text entered as '.49' becomes '0.49'
     // and '5' becomes '5.00'.
     if (type == InputDialogs.onlyDouble) {
-      final _asDouble = double.tryParse(result);
-      if (_asDouble != null) result = _asDouble.toStringAsFixed(2).toString();
+      final asDouble = double.tryParse(result);
+      if (asDouble != null) result = asDouble.toStringAsFixed(2).toString();
     }
 
     return result;

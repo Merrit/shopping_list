@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/preferences/preferences.dart';
 import '../../../infrastructure/authentication_repository/authentication_repository.dart';
@@ -33,8 +33,8 @@ class HomeCubit extends Cubit<HomeState> {
         .listen((shoppingLists) => _listsChanged(shoppingLists));
   }
 
-  static String _getViewMode(PreferencesRepository _preferencesRepository) {
-    final viewModeFromPrefs = _preferencesRepository.getKey('shoppingViewMode');
+  static String _getViewMode(PreferencesRepository preferencesRepository) {
+    final viewModeFromPrefs = preferencesRepository.getKey('shoppingViewMode');
     if (viewModeFromPrefs != null) {
       return viewModeFromPrefs as String;
     } else {
@@ -42,13 +42,13 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  static bool _taxRateIsSet(PreferencesRepository _preferencesRepository) {
-    final taxRateFromPrefs = _preferencesRepository.getKey('taxRate');
+  static bool _taxRateIsSet(PreferencesRepository preferencesRepository) {
+    final taxRateFromPrefs = preferencesRepository.getKey('taxRate');
     return (taxRateFromPrefs == null) ? false : true;
   }
 
-  static String? _getTaxRate(PreferencesRepository _preferencesRepository) {
-    return _preferencesRepository.getKey('taxRate') as String?;
+  static String? _getTaxRate(PreferencesRepository preferencesRepository) {
+    return preferencesRepository.getKey('taxRate') as String?;
   }
 
   void _init() async {

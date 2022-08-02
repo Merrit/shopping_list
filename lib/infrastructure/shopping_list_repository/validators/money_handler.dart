@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:money2/money2.dart';
 
 /// Handles math operations involving money, since representing

@@ -44,6 +44,7 @@ class _AislesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final _isLargeFormFactor = isLargeFormFactor(context);
 
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
@@ -219,6 +220,7 @@ class EditColorChip extends StatelessWidget {
 }
 
 Future<void> _createAisle({required BuildContext context}) async {
+  final itemDetailsCubit = context.read<ItemDetailsCubit>();
   final shoppingListCubit = context.read<ShoppingListCubit>();
   final input = await InputDialog.show(
     context: context,
@@ -229,7 +231,6 @@ Future<void> _createAisle({required BuildContext context}) async {
   if (input != null) {
     final newAisle = input.capitalizeFirst;
     await shoppingListCubit.createAisle(name: newAisle);
-    final itemDetailsCubit = context.read<ItemDetailsCubit>();
     itemDetailsCubit.updateItem(aisle: newAisle);
   }
 }

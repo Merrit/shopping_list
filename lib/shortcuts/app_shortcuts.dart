@@ -18,7 +18,7 @@ class AppShortcuts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _shortcuts = <LogicalKeySet, Intent>{
+    final shortcuts = <LogicalKeySet, Intent>{
       LogicalKeySet(
         LogicalKeyboardKey.control,
         LogicalKeyboardKey.keyN,
@@ -30,17 +30,17 @@ class AppShortcuts extends StatelessWidget {
       ): const QuitIntent(),
     };
 
-    final _actions = <Type, Action<Intent>>{
+    final actions = <Type, Action<Intent>>{
       CreateItemIntent: CreateItemAction(),
       QuitIntent: QuitAction(),
     };
 
     return Shortcuts(
       manager: LoggingShortcutManager(),
-      shortcuts: _shortcuts,
+      shortcuts: shortcuts,
       child: Actions(
         dispatcher: LoggingActionDispatcher(),
-        actions: _actions,
+        actions: actions,
         child: child,
       ),
     );
@@ -56,7 +56,8 @@ class QuitIntent extends Intent {
 class QuitAction extends Action<QuitIntent> {
   @override
   Object? invoke(QuitIntent intent) {
-    print('Quit requested, exiting.');
+    debugPrint('Quit requested, exiting.');
+    return null;
     // Not available on web, importing causes crashes.
     // exit(0);
   }

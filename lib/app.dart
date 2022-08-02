@@ -44,12 +44,11 @@ class AppView extends StatefulWidget {
   const AppView({Key? key}) : super(key: key);
 
   @override
-  _AppViewState createState() => _AppViewState();
+  AppViewState createState() => AppViewState();
 }
 
-class _AppViewState extends State<AppView> {
+class AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class _AppViewState extends State<AppView> {
             );
 
           case AuthenticationStatus.authenticated:
-            final _homeCubit = HomeCubit(
+            final homeCubit = HomeCubit(
               PreferencesRepository(),
               shoppingListRepository: FirebaseShoppingListRepository(
                 state.user.id,
@@ -76,9 +75,9 @@ class _AppViewState extends State<AppView> {
             // contexts and do not need to be passed manually.
             return MultiBlocProvider(
               providers: [
-                BlocProvider.value(value: _homeCubit),
+                BlocProvider.value(value: homeCubit),
                 BlocProvider(
-                  create: (context) => ShoppingListCubit(homeCubit: _homeCubit),
+                  create: (context) => ShoppingListCubit(homeCubit: homeCubit),
                   child: Container(),
                 )
               ],
