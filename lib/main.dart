@@ -8,14 +8,15 @@ import 'package:logging/logging.dart';
 
 import 'app.dart';
 import 'application/setup/setup.dart';
+import 'firebase_options.dart';
 import 'infrastructure/authentication_repository/authentication_repository.dart';
 import 'infrastructure/preferences/preferences_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   primeFonts();
   await PreferencesRepository.init();
-  await Firebase.initializeApp();
   EquatableConfig.stringify = kDebugMode;
   initLogger();
   // Bloc.observer = SimpleBlocObserver();
