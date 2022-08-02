@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,29 +59,31 @@ class _CreateListButton extends StatelessWidget {
   }
 
   Future<void> _showCreateListDialog(BuildContext context) async {
+    final homeCubit = context.read<HomeCubit>();
+
     String? newListName;
     await showDialog(
       context: context,
       builder: (context) {
-        final _controller = TextEditingController();
+        final controller = TextEditingController();
         return AlertDialog(
           title: const Text('Create list'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             autofocus: platformIsWebMobile(context) ? false : true,
             decoration: const InputDecoration(
               hintText: 'Name',
             ),
             onSubmitted: (_) {
               _log.info('submitted');
-              newListName = _controller.value.text;
+              newListName = controller.value.text;
               Navigator.pop(context);
             },
           ),
           actions: [
             TextButton(
               onPressed: () {
-                newListName = _controller.value.text;
+                newListName = controller.value.text;
                 Navigator.pop(context);
               },
               child: const Text('Create'),
@@ -88,7 +92,8 @@ class _CreateListButton extends StatelessWidget {
         );
       },
     );
-    context.read<HomeCubit>().createList(name: newListName);
+
+    homeCubit.createList(name: newListName);
   }
 }
 
@@ -215,7 +220,7 @@ class _BottomButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = context.read<AuthenticationBloc>();
+    final auth = context.read<AuthenticationBloc>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -224,7 +229,7 @@ class _BottomButtons extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextButton(
-            onPressed: () => _auth.add(AuthenticationLogoutRequested()),
+            onPressed: () => auth.add(AuthenticationLogoutRequested()),
             child: const Text('Sign out'),
           ),
           // Disabled because TaxRate is the only setting currently,

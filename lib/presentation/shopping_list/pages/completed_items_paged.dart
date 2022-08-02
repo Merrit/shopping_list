@@ -19,10 +19,10 @@ class CompletedItemsView extends StatefulWidget {
   const CompletedItemsView({Key? key}) : super(key: key);
 
   @override
-  _CompletedItemsViewState createState() => _CompletedItemsViewState();
+  CompletedItemsViewState createState() => CompletedItemsViewState();
 }
 
-class _CompletedItemsViewState extends State<CompletedItemsView> {
+class CompletedItemsViewState extends State<CompletedItemsView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ShoppingListCubit>();

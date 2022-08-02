@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 

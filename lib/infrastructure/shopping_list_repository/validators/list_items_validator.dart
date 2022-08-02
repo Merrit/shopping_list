@@ -83,7 +83,7 @@ class _ItemSortValidator {
     required bool ascending,
     required String sortBy,
   }) {
-    final List<Item> _originalItems = List<Item>.from(items);
+    final List<Item> originalItems = List<Item>.from(items);
     switch (sortBy) {
       case 'Name':
         items.sort(
@@ -119,7 +119,7 @@ class _ItemSortValidator {
       default:
         _log.warning('Error sorting items');
     }
-    assert(_originalItems.length == items.length);
+    assert(originalItems.length == items.length);
     return items;
   }
 }

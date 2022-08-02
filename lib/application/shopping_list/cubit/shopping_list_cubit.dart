@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../../presentation/home/home.dart';

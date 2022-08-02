@@ -120,6 +120,7 @@ class ListSettingsView extends StatelessWidget {
 }
 
 Future<void> _deleteList(ShoppingListCubit cubit, BuildContext context) async {
+  final navigator = Navigator.of(context);
   var shouldDelete = false;
   await showDialog<bool>(
     context: context,
@@ -146,6 +147,6 @@ Future<void> _deleteList(ShoppingListCubit cubit, BuildContext context) async {
   );
   if (shouldDelete) {
     cubit.deleteList();
-    await Navigator.pushReplacementNamed(context, HomePage.id);
+    await navigator.pushReplacementNamed(HomePage.id);
   }
 }
