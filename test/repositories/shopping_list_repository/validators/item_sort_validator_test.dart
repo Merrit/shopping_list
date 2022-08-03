@@ -24,7 +24,6 @@ void main() {
     final validatedItems = ListItemsValidator.validateItems(
       aisles: aisles,
       items: items,
-      labels: [],
       sortBy: 'Aisle-custom',
       sortAscending: true,
     );
@@ -49,14 +48,13 @@ void main() {
     final validatedItems = ListItemsValidator.validateItems(
       aisles: aisles,
       items: items,
-      labels: [],
       sortBy: 'Aisle-custom',
       sortAscending: true,
     );
     final expected = <Item>[
       Item(name: 'Bok choy', aisle: 'Veggies'),
       Item(name: 'Mango', aisle: 'Fruit'),
-      Item(name: 'Bread', aisle: 'Bakery'),
+      Item(name: 'Bread'),
     ];
     expect(validatedItems, expected);
   });

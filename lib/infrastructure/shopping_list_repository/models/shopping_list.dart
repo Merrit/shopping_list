@@ -63,7 +63,6 @@ class ShoppingList extends Equatable {
     final validatedItems = ListItemsValidator.validateItems(
       aisles: aisles,
       items: items,
-      labels: labels,
       sortBy: sortBy,
       sortAscending: sortAscending,
     );
