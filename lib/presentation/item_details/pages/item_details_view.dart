@@ -266,9 +266,6 @@ class WhenOnSaleSwitchTile extends StatelessWidget {
   }
 }
 
-// TODO: Labels not used now. Move the only label, "when on sale", to being a
-// SwitchListTile like "onSale", which gets set as a chip.
-
 // TODO: After removing LabelsPage this function is redundant, only pushing one
 // route - refactor required to simplify.
 void _goToSubPage(BuildContext context, {required String pageId}) {
