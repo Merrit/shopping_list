@@ -10,7 +10,7 @@ import '../../../infrastructure/shopping_list_repository/shopping_list_repositor
 import '../../core/core.dart';
 import '../../home/pages/home_page.dart';
 import '../../settings/settings.dart';
-import '../../shopping_list/pages/shopping_list_view.dart';
+import '../../shopping_list/shopping_list.dart';
 import 'aisles_page.dart';
 import 'item_details_page.dart';
 import 'item_details_page_state.dart';
@@ -135,6 +135,7 @@ class ItemDetailsView extends StatelessWidget {
               },
             ),
           ),
+          const SaleSwitchTile(),
           const LabelsTile(),
           ListTile(
             leading: const Icon(Icons.notes),
@@ -225,6 +226,28 @@ class AisleTile extends StatelessWidget {
   }
 }
 
+class SaleSwitchTile extends StatelessWidget {
+  const SaleSwitchTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+      builder: (context, state) {
+        return SwitchListTile(
+          title: const Text('Sale'),
+          secondary: const Icon(Icons.money_off),
+          value: state.onSale,
+          onChanged: (value) => itemDetailsCubit.updateItem(onSale: value),
+        );
+      },
+    );
+  }
+}
+
+// TODO: Labels not used now. Move the only label, "when on sale", to being a
+// SwitchListTile like "onSale", which gets set as a chip.
 class LabelsTile extends StatelessWidget {
   const LabelsTile({Key? key}) : super(key: key);
 
