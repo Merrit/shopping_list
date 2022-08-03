@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                 ? null
                 : const Drawer(child: ListDrawer()),
             body: constraints.maxWidth > 600
-                ? const ShoppingListTwoColumnView()
+                ? const TwoColumnView()
                 : const ShoppingListPage(),
           ),
         );
@@ -37,8 +37,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class ShoppingListTwoColumnView extends StatelessWidget {
-  const ShoppingListTwoColumnView({Key? key}) : super(key: key);
+class TwoColumnView extends StatelessWidget {
+  const TwoColumnView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +49,7 @@ class ShoppingListTwoColumnView extends StatelessWidget {
           width: 200,
           child: ListDrawer(),
         ),
-        VerticalDivider(
-          width: 0,
-        ),
+        VerticalDivider(width: 0),
         Flexible(
           child: ShoppingListPage(),
         ),
