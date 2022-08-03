@@ -6,7 +6,6 @@ import '../../../application/home/cubit/home_cubit.dart';
 import '../../../application/item_details/cubit/item_details_cubit.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../../domain/core/core.dart';
-import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../core/core.dart';
 import '../../home/pages/home_page.dart';
 import '../../settings/settings.dart';
@@ -14,7 +13,6 @@ import '../../shopping_list/shopping_list.dart';
 import 'aisles_page.dart';
 import 'item_details_page.dart';
 import 'item_details_page_state.dart';
-import 'labels_page.dart';
 import 'parent_list_page.dart';
 
 class ItemDetailsView extends StatelessWidget {
@@ -136,7 +134,7 @@ class ItemDetailsView extends StatelessWidget {
             ),
           ),
           const SaleSwitchTile(),
-          const LabelsTile(),
+          const WhenOnSaleSwitchTile(),
           ListTile(
             leading: const Icon(Icons.notes),
             title: const Text('Notes'),
@@ -246,65 +244,33 @@ class SaleSwitchTile extends StatelessWidget {
   }
 }
 
-// TODO: Labels not used now. Move the only label, "when on sale", to being a
-// SwitchListTile like "onSale", which gets set as a chip.
-class LabelsTile extends StatelessWidget {
-  const LabelsTile({Key? key}) : super(key: key);
+class WhenOnSaleSwitchTile extends StatelessWidget {
+  const WhenOnSaleSwitchTile({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final shoppingListCubit = context.read<ShoppingListCubit>();
-
     return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
       builder: (context, state) {
-        return ListTile(
-          leading: const Icon(Icons.label),
-          title: const Text('Labels'),
-          trailing: const Icon(Icons.keyboard_arrow_right),
-          subtitle: (state.labels.isEmpty)
-              ? null
-              : BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-                  builder: (context, state) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: itemDetailsCubit.state.labels
-                            .map(
-                              (label) => Text(
-                                label,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                      color: Color(
-                                        shoppingListCubit.state.labels
-                                            .firstWhere(
-                                              (element) =>
-                                                  element.name == label,
-                                              orElse: () => Label(
-                                                name: label,
-                                                color: Colors.white.value,
-                                              ),
-                                            )
-                                            .color,
-                                      ),
-                                    ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    );
-                  },
-                ),
-          onTap: () => _goToSubPage(context, pageId: LabelsPage.id),
+        return SwitchListTile(
+          title: const Text('Buy when on sale'),
+          secondary: const Icon(Icons.money_off),
+          value: state.buyWhenOnSale,
+          onChanged: (value) => itemDetailsCubit.updateItem(
+            buyWhenOnSale: value,
+          ),
         );
       },
     );
   }
 }
 
+// TODO: Labels not used now. Move the only label, "when on sale", to being a
+// SwitchListTile like "onSale", which gets set as a chip.
+
+// TODO: After removing LabelsPage this function is redundant, only pushing one
+// route - refactor required to simplify.
 void _goToSubPage(BuildContext context, {required String pageId}) {
   final isWide = isLargeFormFactor(context);
   if (isWide) {
@@ -320,9 +286,7 @@ void _goToSubPage(BuildContext context, {required String pageId}) {
               BlocProvider.value(value: itemDetailsCubit),
               BlocProvider.value(value: shoppingListCubit),
             ],
-            child: (pageId == AislesPage.id)
-                ? const AislesPage()
-                : const LabelsPage(),
+            child: const AislesPage(),
           );
         },
       ),

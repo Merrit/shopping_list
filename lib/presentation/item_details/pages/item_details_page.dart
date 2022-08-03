@@ -7,7 +7,6 @@ import '../../../infrastructure/shopping_list_repository/shopping_list_repositor
 import 'aisles_page.dart';
 import 'item_details_page_state.dart';
 import 'item_details_view.dart';
-import 'labels_page.dart';
 
 late ItemDetailsCubit itemDetailsCubit;
 
@@ -99,8 +98,6 @@ class TwoColumnSubPage extends StatelessWidget {
             return Container();
           case AislesPage.id:
             return const AislesView();
-          case LabelsPage.id:
-            return const LabelsView();
           default:
             return Container();
         }

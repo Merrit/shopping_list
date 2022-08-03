@@ -217,20 +217,32 @@ class _Labels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = [];
+    final List<Widget> chips = [];
 
     if (item.onSale) {
-      children.add(Chip(
-        label: const Text('SALE'),
-        padding: const EdgeInsets.all(0),
-        backgroundColor: Colors.red.shade700,
-      ));
+      chips.add(
+        Chip(
+          label: const Text('SALE'),
+          padding: const EdgeInsets.all(0),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
+
+    if (item.buyWhenOnSale) {
+      chips.add(
+        const Chip(
+          label: Text('Buy when on sale'),
+          padding: EdgeInsets.all(0),
+          backgroundColor: Colors.blue,
+        ),
+      );
     }
 
     return Wrap(
       spacing: 10,
       runSpacing: 10,
-      children: children,
+      children: chips,
     );
   }
 }
