@@ -12,10 +12,6 @@ class ListItemsValidator {
   }) {
     List<Item> validatedItems;
     validatedItems = _validateDuplicates(items);
-    validatedItems = _LabelValidator(
-      items: validatedItems,
-      labels: labels,
-    ).validate();
     validatedItems = _AisleValidator(
       items: validatedItems,
       aisles: aisles,
@@ -31,27 +27,6 @@ class ListItemsValidator {
 
   static List<Item> _validateDuplicates(List<Item> items) {
     return items.toSet().toList();
-  }
-}
-
-class _LabelValidator {
-  final List<Item> items;
-  final List<Label> labels;
-
-  const _LabelValidator({required this.items, required this.labels});
-
-  /// Clean out labels that have been deleted.
-  List<Item> validate() {
-    List<Item> validatedItems = [];
-    final labelNames = labels.map((label) => label.name).toList();
-    for (var item in items) {
-      final labels = List<String>.from(item.labels);
-      labels.removeWhere(
-        (String label) => (labelNames.contains(label) == false),
-      );
-      validatedItems.add(item.copyWith(labels: labels));
-    }
-    return validatedItems;
   }
 }
 

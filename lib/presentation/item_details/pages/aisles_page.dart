@@ -49,39 +49,35 @@ class _AislesList extends StatelessWidget {
 
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, shoppingListState) {
-        return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-          builder: (context, itemDetailsState) {
-            return Scrollbar(
-              controller: _controller,
-              thumbVisibility: _isLargeFormFactor ? true : false,
-              child: ListView(
-                controller: _controller,
-                padding: Insets.listViewWithFloatingButton,
+        return Scrollbar(
+          controller: _controller,
+          thumbVisibility: _isLargeFormFactor ? true : false,
+          child: ListView(
+            controller: _controller,
+            padding: Insets.listViewWithFloatingButton,
+            children: [
+              ExpansionPanelList.radio(
                 children: [
-                  ExpansionPanelList.radio(
-                    children: [
-                      ...shoppingListState.aisles
-                          .map((aisle) => ExpansionPanelRadio(
-                                value: aisle.name,
-                                headerBuilder: (context, isExpanded) {
-                                  return AisleHeader(aisle: aisle);
-                                },
-                                body: (aisle.name == 'None')
-                                    ? Container()
-                                    : AisleExpandedBody(aisle: aisle),
-                              ))
-                          .toList(),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  IconButton(
-                    onPressed: () => _createAisle(context: context),
-                    icon: const CircleAvatar(child: Icon(Icons.add)),
-                  ),
+                  ...shoppingListState.aisles
+                      .map((aisle) => ExpansionPanelRadio(
+                            value: aisle.name,
+                            headerBuilder: (context, isExpanded) {
+                              return AisleHeader(aisle: aisle);
+                            },
+                            body: (aisle.name == 'None')
+                                ? Container()
+                                : AisleExpandedBody(aisle: aisle),
+                          ))
+                      .toList(),
                 ],
               ),
-            );
-          },
+              const SizedBox(height: 10),
+              IconButton(
+                onPressed: () => _createAisle(context: context),
+                icon: const CircleAvatar(child: Icon(Icons.add)),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -97,17 +93,17 @@ class AisleHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemDetailsCubit = context.read<ItemDetailsCubit>();
 
-    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
-      builder: (context, state) {
+    return BlocBuilder<ItemDetailsCubit, Item>(
+      builder: (context, item) {
         return RadioListTile<String>(
           title: Chip(
             label: Text(aisle.name),
             backgroundColor: Color(aisle.color),
           ),
           value: aisle.name,
-          groupValue: state.aisle,
+          groupValue: item.aisle,
           onChanged: (String? value) {
-            itemDetailsCubit.updateItem(aisle: value);
+            itemDetailsCubit.updateItem(item.copyWith(aisle: value));
           },
         );
       },
@@ -126,54 +122,58 @@ class AisleExpandedBody extends StatelessWidget {
         context.read<ShoppingListCubit>();
     final ItemDetailsCubit itemDetailsCubit = context.read<ItemDetailsCubit>();
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-        bottom: 10,
-      ),
-      child: Column(
-        children: [
-          Wrap(
-            spacing: 10,
+    return BlocBuilder<ItemDetailsCubit, Item>(
+      builder: (context, item) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            bottom: 10,
+          ),
+          child: Column(
             children: [
-              ActionChip(
-                label: const Text('Edit name'),
-                elevation: 1,
+              Wrap(
+                spacing: 10,
+                children: [
+                  ActionChip(
+                    label: const Text('Edit name'),
+                    elevation: 1,
+                    onPressed: () async {
+                      final input = await InputDialog.show(
+                        context: context,
+                        title: 'Name',
+                        initialValue: aisle.name,
+                        preselectText: true,
+                      );
+                      if (input != null) {
+                        await shoppingListCubit.updateAisle(
+                          oldAisle: aisle,
+                          name: input,
+                        );
+                      }
+                    },
+                  ),
+                  EditColorChip(
+                    aisle: aisle,
+                  ),
+                ],
+              ),
+              TextButton(
                 onPressed: () async {
-                  final input = await InputDialog.show(
-                    context: context,
-                    title: 'Name',
-                    initialValue: aisle.name,
-                    preselectText: true,
-                  );
-                  if (input != null) {
-                    await shoppingListCubit.updateAisle(
-                      oldAisle: aisle,
-                      name: input,
-                    );
+                  await shoppingListCubit.deleteAisle(aisle: aisle);
+                  if (itemDetailsCubit.state.aisle == aisle.name) {
+                    itemDetailsCubit.updateItem(item.copyWith(aisle: 'None'));
                   }
                 },
-              ),
-              EditColorChip(
-                aisle: aisle,
+                child: const Text(
+                  'Remove aisle',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ],
           ),
-          TextButton(
-            onPressed: () async {
-              await shoppingListCubit.deleteAisle(aisle: aisle);
-              if (itemDetailsCubit.state.aisle == aisle.name) {
-                itemDetailsCubit.updateItem(aisle: 'None');
-              }
-            },
-            child: const Text(
-              'Remove aisle',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -231,6 +231,8 @@ Future<void> _createAisle({required BuildContext context}) async {
   if (input != null) {
     final newAisle = input.capitalizeFirst;
     await shoppingListCubit.createAisle(name: newAisle);
-    itemDetailsCubit.updateItem(aisle: newAisle);
+    itemDetailsCubit.updateItem(itemDetailsCubit.state.copyWith(
+      aisle: newAisle,
+    ));
   }
 }

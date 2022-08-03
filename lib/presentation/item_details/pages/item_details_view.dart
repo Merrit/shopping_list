@@ -6,6 +6,7 @@ import '../../../application/home/cubit/home_cubit.dart';
 import '../../../application/item_details/cubit/item_details_cubit.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../../domain/core/core.dart';
+import '../../../infrastructure/shopping_list_repository/models/item.dart';
 import '../../core/core.dart';
 import '../../home/pages/home_page.dart';
 import '../../settings/settings.dart';
@@ -22,7 +23,7 @@ class ItemDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+    return BlocBuilder<ItemDetailsCubit, Item>(
       builder: (context, state) {
         final itemDetailsCubit = context.read<ItemDetailsCubit>();
         final shoppingCubit = context.watch<ShoppingListCubit>();
@@ -50,7 +51,9 @@ class ItemDetailsView extends StatelessWidget {
                 preselectText: true,
               );
               if (input != null) {
-                itemDetailsCubit.updateItem(name: input.capitalizeFirst);
+                itemDetailsCubit.updateItem(state.copyWith(
+                  name: input.capitalizeFirst,
+                ));
               }
             },
           ),
@@ -66,7 +69,11 @@ class ItemDetailsView extends StatelessWidget {
                 initialValue: state.quantity,
                 preselectText: true,
               );
-              if (input != null) itemDetailsCubit.updateItem(quantity: input);
+              if (input != null) {
+                itemDetailsCubit.updateItem(state.copyWith(
+                  quantity: input,
+                ));
+              }
             },
           ),
           const AisleTile(),
@@ -81,7 +88,11 @@ class ItemDetailsView extends StatelessWidget {
                   type: InputDialogs.onlyDouble,
                   initialValue: state.price,
                   preselectText: true);
-              if (input != null) itemDetailsCubit.updateItem(price: input);
+              if (input != null) {
+                itemDetailsCubit.updateItem(state.copyWith(
+                  price: input,
+                ));
+              }
             },
           ),
           InkWell(
@@ -128,7 +139,9 @@ class ItemDetailsView extends StatelessWidget {
                         )
                       : null,
                   onChanged: (value) =>
-                      itemDetailsCubit.updateItem(hasTax: value),
+                      itemDetailsCubit.updateItem(state.copyWith(
+                    hasTax: value,
+                  )),
                 );
               },
             ),
@@ -147,7 +160,9 @@ class ItemDetailsView extends StatelessWidget {
                 type: InputDialogs.multiLine,
               );
               if (input != null) {
-                itemDetailsCubit.updateItem(notes: input.capitalizeFirst);
+                itemDetailsCubit.updateItem(state.copyWith(
+                  notes: input.capitalizeFirst,
+                ));
               }
             },
           ),
@@ -202,7 +217,7 @@ class AisleTile extends StatelessWidget {
         children: [
           const Text('Aisle'),
           const SizedBox(width: 15),
-          BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+          BlocBuilder<ItemDetailsCubit, Item>(
             builder: (context, state) {
               final aisleFromList = shoppingCubit.state.aisles
                   .firstWhereOrNull((aisle) => aisle.name == state.aisle);
@@ -231,13 +246,15 @@ class SaleSwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+    return BlocBuilder<ItemDetailsCubit, Item>(
       builder: (context, state) {
         return SwitchListTile(
           title: const Text('Sale'),
           secondary: const Icon(Icons.money_off),
           value: state.onSale,
-          onChanged: (value) => itemDetailsCubit.updateItem(onSale: value),
+          onChanged: (value) => itemDetailsCubit.updateItem(state.copyWith(
+            onSale: value,
+          )),
         );
       },
     );
@@ -251,15 +268,15 @@ class WhenOnSaleSwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemDetailsCubit, ItemDetailsState>(
+    return BlocBuilder<ItemDetailsCubit, Item>(
       builder: (context, state) {
         return SwitchListTile(
           title: const Text('Buy when on sale'),
           secondary: const Icon(Icons.money_off),
           value: state.buyWhenOnSale,
-          onChanged: (value) => itemDetailsCubit.updateItem(
+          onChanged: (value) => itemDetailsCubit.updateItem(state.copyWith(
             buyWhenOnSale: value,
-          ),
+          )),
         );
       },
     );

@@ -1,79 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../../infrastructure/shopping_list_repository/models/item.dart';
 
-part 'item_details_state.dart';
-
-class ItemDetailsCubit extends Cubit<ItemDetailsState> {
-  ItemDetailsCubit(Item item)
-      : super(ItemDetailsState(
-          item: item,
-          aisle: item.aisle,
-          hasTax: item.hasTax,
-          onSale: item.onSale,
-          buyWhenOnSale: item.buyWhenOnSale,
-          labels: item.labels,
-          name: item.name,
-          notes: item.notes,
-          price: item.price,
-          quantity: item.quantity,
-          total: item.total,
-        ));
+class ItemDetailsCubit extends Cubit<Item> {
+  ItemDetailsCubit(Item item) : super(item);
 
   /// Update item value(s). Only affects local state until applied when
-  /// leaving the ItemDetailsPage.
-  void updateItem({
-    String? aisle,
-    bool? hasTax,
-    bool? onSale,
-    bool? buyWhenOnSale,
-    List<String>? labels,
-    String? name,
-    String? notes,
-    String? price,
-    String? quantity,
-    String? total,
-  }) {
-    emit(
-      state.copyWith(
-        aisle: aisle,
-        hasTax: hasTax,
-        onSale: onSale,
-        buyWhenOnSale: buyWhenOnSale,
-        labels: labels,
-        name: name,
-        notes: notes,
-        price: price,
-        quantity: quantity,
-        total: total,
-      ),
-    );
-  }
+  /// leaving the ItemDetailsPage, which is useful because it will mean only 1
+  /// call to Firebase for update instead of an update for every change.
+  void updateItem(Item item) => emit(item);
 
-  /// Toggle whether a label is applied to this item or not.
-  void toggleLabel(String label) {
-    final labels = List<String>.from(state.labels);
-    if (labels.contains(label)) {
-      labels.remove(label);
-    } else {
-      labels.add(label);
-    }
-    updateItem(labels: labels);
-  }
-
-  /// Returns the `Item` object with the updated values.
-  Item updatedItem() {
-    return state._item.copyWith(
-      aisle: state.aisle,
-      name: state.name,
-      quantity: state.quantity,
-      price: state.price,
-      total: state.total,
-      hasTax: state.hasTax,
-      onSale: state.onSale,
-      buyWhenOnSale: state.buyWhenOnSale,
-      notes: state.notes,
-      labels: state.labels,
-    );
-  }
+  /// Returns the [Item] object with the updated values.
+  Item updatedItem() => state;
 }
