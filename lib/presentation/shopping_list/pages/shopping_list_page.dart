@@ -11,7 +11,6 @@ import '../../core/core.dart';
 import '../../home/home.dart';
 import '../../item_details/pages/item_details_page.dart';
 import '../widgets/aisle_group.dart';
-import '../widgets/item_tile.dart';
 import '../widgets/main_floating_button.dart';
 
 late ShoppingListCubit shoppingListCubit;
@@ -175,7 +174,6 @@ class ScrollingItemsWidget extends StatelessWidget {
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, homeState) {
-        final viewIsDense = homeState.shoppingViewMode == 'Dense';
         return BlocBuilder<ShoppingListCubit, ShoppingListState>(
           builder: (context, shoppingListState) {
             final items = shoppingListState.items
@@ -198,37 +196,17 @@ class ScrollingItemsWidget extends StatelessWidget {
                 return Scrollbar(
                   controller: _scrollController,
                   thumbVisibility: _isLargeFormFactor ? true : false,
-                  child: (viewIsDense)
-                      // Dense ListView.
-                      ? ListView(
-                          controller: _scrollController,
-                          padding: listViewPadding,
-                          children: shoppingListState.aisles
-                              .where((aisle) => aisle.itemCount > 0)
-                              .map((aisle) => AisleGroup(
-                                    key: ValueKey(aisle),
-                                    aisle: aisle,
-                                  ))
-                              .toList(),
-                        )
-                      // Spacious ListView.
-                      // TODO: Reorderable listview?
-                      : ListView.separated(
-                          controller: _scrollController,
-                          padding: listViewPadding,
-                          separatorBuilder: (context, index) {
-                            return const Divider(
-                              indent: 20,
-                              endIndent: 20,
-                              height: 4,
-                            );
-                          },
-                          itemCount: items.length,
-                          itemBuilder: (context, index) {
-                            var item = items[index];
-                            return ItemTile(item: item);
-                          },
-                        ),
+                  child: ListView(
+                    controller: _scrollController,
+                    padding: listViewPadding,
+                    children: shoppingListState.aisles
+                        .where((aisle) => aisle.itemCount > 0)
+                        .map((aisle) => AisleGroup(
+                              key: ValueKey(aisle),
+                              aisle: aisle,
+                            ))
+                        .toList(),
+                  ),
                 );
               },
             );

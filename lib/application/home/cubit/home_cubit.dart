@@ -22,7 +22,6 @@ class HomeCubit extends Cubit<HomeState> {
     required this.user,
   }) : super(
           HomeState.initial(
-            shoppingViewMode: _getViewMode(_preferencesRepository),
             taxRateIsSet: _taxRateIsSet(_preferencesRepository),
             taxRate: _getTaxRate(_preferencesRepository),
           ),
@@ -31,15 +30,6 @@ class HomeCubit extends Cubit<HomeState> {
     shoppingListSubscription = shoppingListRepository
         .shoppingListsStream()
         .listen((shoppingLists) => _listsChanged(shoppingLists));
-  }
-
-  static String _getViewMode(PreferencesRepository preferencesRepository) {
-    final viewModeFromPrefs = preferencesRepository.getKey('shoppingViewMode');
-    if (viewModeFromPrefs != null) {
-      return viewModeFromPrefs as String;
-    } else {
-      return 'Dense';
-    }
   }
 
   static bool _taxRateIsSet(PreferencesRepository preferencesRepository) {
@@ -128,15 +118,6 @@ class HomeCubit extends Cubit<HomeState> {
       }
     }
     await shoppingListRepository.updateShoppingList(newList);
-  }
-
-  void updateShoppingViewMode(String shoppingViewMode) {
-    assert(shoppingViewMode == 'Dense' || shoppingViewMode == 'Spacious');
-    _preferencesRepository.setString(
-      key: 'shoppingViewMode',
-      value: shoppingViewMode,
-    );
-    emit(state.copyWith(shoppingViewMode: shoppingViewMode));
   }
 
   void updateTaxRate(String newRate) {
