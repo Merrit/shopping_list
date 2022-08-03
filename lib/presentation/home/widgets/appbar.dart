@@ -49,7 +49,6 @@ class _PopupMenuButton extends StatelessWidget {
       itemBuilder: (context) {
         return [
           'Sort by',
-          'View mode',
           'List settings',
           'Completed items',
         ].map((String choice) {
@@ -64,9 +63,6 @@ class _PopupMenuButton extends StatelessWidget {
           case 'Sort by':
             _showSortBy(context: context);
             break;
-          case 'View mode':
-            _showViewModeChooser(context);
-            break;
           case 'List settings':
             _showListSettings(context);
             break;
@@ -78,47 +74,6 @@ class _PopupMenuButton extends StatelessWidget {
       },
     );
   }
-}
-
-Future<void> _showViewModeChooser(BuildContext context) async {
-  String viewMode = homeCubit.state.shoppingViewMode;
-  await showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('List view density'),
-        content: StatefulBuilder(
-          builder: (context, setState) {
-            // ignore: prefer_function_declarations_over_variables
-            final setViewMode = (String value) {
-              setState(() => viewMode = value);
-              Navigator.pop(context);
-            };
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RadioListTile<String>(
-                  title: const Text('Dense'),
-                  secondary: const Icon(Icons.view_headline),
-                  value: 'Dense',
-                  groupValue: viewMode,
-                  onChanged: (value) => setViewMode(value!),
-                ),
-                RadioListTile<String>(
-                  title: const Text('Spacious'),
-                  secondary: const Icon(Icons.dashboard_outlined),
-                  value: 'Spacious',
-                  groupValue: viewMode,
-                  onChanged: (value) => setViewMode(value!),
-                ),
-              ],
-            );
-          },
-        ),
-      );
-    },
-  );
-  homeCubit.updateShoppingViewMode(viewMode);
 }
 
 void _showListSettings(BuildContext context) {

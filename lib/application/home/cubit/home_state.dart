@@ -9,14 +9,12 @@ class HomeState {
   /// A list of all the lists this user has access to.
   final List<ShoppingList> shoppingLists;
 
-  final String shoppingViewMode;
   final bool taxRateIsSet;
   final String taxRate;
 
   HomeState({
     required this.currentListId,
     required this.shoppingLists,
-    required this.shoppingViewMode,
     required this.taxRateIsSet,
     required this.shoppingListCubit,
     required this.taxRate,
@@ -25,7 +23,6 @@ class HomeState {
   HomeState.initial({
     this.shoppingLists = const [],
     this.currentListId = '',
-    required this.shoppingViewMode,
     this.taxRateIsSet = false,
     String? taxRate,
   }) : taxRate = taxRate ?? '0.0';
@@ -35,7 +32,6 @@ class HomeState {
   HomeState copyWith({
     String? currentListId,
     List<ShoppingList>? shoppingLists,
-    String? shoppingViewMode,
     bool? taxRateIsSet,
     ShoppingListCubit? shoppingListCubit,
     String? taxRate,
@@ -43,7 +39,6 @@ class HomeState {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
       shoppingLists: shoppingLists ?? this.shoppingLists,
-      shoppingViewMode: shoppingViewMode ?? this.shoppingViewMode,
       taxRateIsSet: taxRateIsSet ?? this.taxRateIsSet,
       shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
       taxRate: taxRate ?? this.taxRate,
