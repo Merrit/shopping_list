@@ -176,10 +176,6 @@ class ScrollingItemsWidget extends StatelessWidget {
       builder: (context, homeState) {
         return BlocBuilder<ShoppingListCubit, ShoppingListState>(
           builder: (context, shoppingListState) {
-            final items = shoppingListState.items
-                .where((e) => e.isComplete == false)
-                .toList();
-
             return LayoutBuilder(
               builder: (context, constraints) {
                 double sidePadding = _isLargeFormFactor

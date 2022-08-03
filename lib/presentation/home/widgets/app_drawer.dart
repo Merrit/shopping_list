@@ -9,7 +9,6 @@ import '../../../application/authentication/bloc/authentication_bloc.dart';
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import '../../shopping_list/pages/list_settings_page.dart';
 import '../../shopping_list/shopping_list.dart';
 import '../pages/home_page.dart';
 

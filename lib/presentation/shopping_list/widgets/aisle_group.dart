@@ -217,33 +217,20 @@ class _Labels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> children = [];
+
+    if (item.onSale) {
+      children.add(Chip(
+        label: const Text('SALE'),
+        padding: const EdgeInsets.all(0),
+        backgroundColor: Colors.red.shade700,
+      ));
+    }
+
     return Wrap(
       spacing: 10,
       runSpacing: 10,
-      children: item.labels
-          .map(
-            (label) => BlocBuilder<ShoppingListCubit, ShoppingListState>(
-              builder: (context, state) {
-                return Text(
-                  label,
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: Color(
-                          state.labels
-                              .firstWhere(
-                                (element) => element.name == label,
-                                orElse: () => Label(
-                                  name: label,
-                                  color: Colors.white.value,
-                                ),
-                              )
-                              .color,
-                        ),
-                      ),
-                );
-              },
-            ),
-          )
-          .toList(),
+      children: children,
     );
   }
 }
