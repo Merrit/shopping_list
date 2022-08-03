@@ -248,11 +248,21 @@ class _Labels extends StatelessWidget {
       );
     }
 
+    if (item.haveCoupon) {
+      chips.add(
+        const Chip(
+          label: Text('Have coupon'),
+          padding: EdgeInsets.all(0),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+
     if (chips.isEmpty) return const SizedBox();
 
     return Wrap(
-      spacing: 10,
-      runSpacing: 10,
+      spacing: 5,
+      runSpacing: -10,
       children: chips,
     );
   }

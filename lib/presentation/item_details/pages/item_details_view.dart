@@ -148,6 +148,7 @@ class ItemDetailsView extends StatelessWidget {
           ),
           const SaleSwitchTile(),
           const WhenOnSaleSwitchTile(),
+          const HaveCouponSwitchTile(),
           ListTile(
             leading: const Icon(Icons.notes),
             title: const Text('Notes'),
@@ -272,10 +273,32 @@ class WhenOnSaleSwitchTile extends StatelessWidget {
       builder: (context, state) {
         return SwitchListTile(
           title: const Text('Buy when on sale'),
-          secondary: const Icon(Icons.money_off),
+          secondary: const Icon(Icons.question_mark),
           value: state.buyWhenOnSale,
           onChanged: (value) => itemDetailsCubit.updateItem(state.copyWith(
             buyWhenOnSale: value,
+          )),
+        );
+      },
+    );
+  }
+}
+
+class HaveCouponSwitchTile extends StatelessWidget {
+  const HaveCouponSwitchTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ItemDetailsCubit, Item>(
+      builder: (context, state) {
+        return SwitchListTile(
+          title: const Text('Have coupon'),
+          secondary: const Icon(Icons.card_membership),
+          value: state.haveCoupon,
+          onChanged: (value) => itemDetailsCubit.updateItem(state.copyWith(
+            haveCoupon: value,
           )),
         );
       },
