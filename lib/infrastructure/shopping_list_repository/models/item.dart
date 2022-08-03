@@ -16,6 +16,7 @@ class Item extends Equatable {
   final bool hasTax;
   final bool onSale;
   final bool buyWhenOnSale;
+  final bool haveCoupon;
   final String quantity;
   final String price;
   final String total;
@@ -28,6 +29,7 @@ class Item extends Equatable {
     required this.hasTax,
     required this.onSale,
     required this.buyWhenOnSale,
+    required this.haveCoupon,
     required this.quantity,
     required this.price,
     required this.total,
@@ -41,6 +43,7 @@ class Item extends Equatable {
     bool? hasTax,
     bool? onSale,
     bool? buyWhenOnSale,
+    bool? haveCoupon,
     String? quantity,
     String? price,
     String? total,
@@ -54,6 +57,7 @@ class Item extends Equatable {
       hasTax: hasTax ?? false,
       onSale: onSale ?? false,
       buyWhenOnSale: buyWhenOnSale ?? false,
+      haveCoupon: haveCoupon ?? false,
       quantity: validatedQuantity,
       price: price ?? '0.00',
       total: total ?? '0.00',
@@ -68,6 +72,7 @@ class Item extends Equatable {
     bool? hasTax,
     bool? onSale,
     bool? buyWhenOnSale,
+    bool? haveCoupon,
     String? quantity,
     String? price,
     String? total,
@@ -80,6 +85,7 @@ class Item extends Equatable {
       hasTax: hasTax ?? this.hasTax,
       onSale: onSale ?? this.onSale,
       buyWhenOnSale: buyWhenOnSale ?? this.buyWhenOnSale,
+      haveCoupon: haveCoupon ?? this.haveCoupon,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       total: total ?? this.total,
@@ -100,6 +106,7 @@ class Item extends Equatable {
       hasTax,
       onSale,
       buyWhenOnSale,
+      haveCoupon,
       quantity,
       price,
       total,
@@ -117,6 +124,7 @@ Item {
   hasTax: $hasTax,
   onSale: $onSale,
   buyWhenOnSale: $buyWhenOnSale,
+  haveCoupon: $haveCoupon,
   quantity: $quantity,
   price: $price,
   total: $total,
