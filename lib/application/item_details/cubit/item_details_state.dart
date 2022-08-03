@@ -9,6 +9,7 @@ class ItemDetailsState {
   final String price;
   final String total;
   final bool hasTax;
+  final bool onSale;
   final String notes;
   final List<String> labels;
 
@@ -20,6 +21,7 @@ class ItemDetailsState {
     required this.price,
     required this.total,
     required this.hasTax,
+    required this.onSale,
     required this.notes,
     required this.labels,
   }) : _item = item;
@@ -31,6 +33,7 @@ class ItemDetailsState {
     String? price,
     String? total,
     bool? hasTax,
+    bool? onSale,
     String? notes,
     List<String>? labels,
   }) {
@@ -42,6 +45,7 @@ class ItemDetailsState {
       price: price ?? this.price,
       total: total ?? this.total,
       hasTax: hasTax ?? this.hasTax,
+      onSale: onSale ?? this.onSale,
       notes: notes ?? this.notes,
       labels: labels ?? this.labels,
     );

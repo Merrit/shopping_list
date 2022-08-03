@@ -10,6 +10,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           item: item,
           aisle: item.aisle,
           hasTax: item.hasTax,
+          onSale: item.onSale,
           labels: item.labels,
           name: item.name,
           notes: item.notes,
@@ -23,6 +24,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
   void updateItem({
     String? aisle,
     bool? hasTax,
+    bool? onSale,
     List<String>? labels,
     String? name,
     String? notes,
@@ -34,6 +36,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       state.copyWith(
         aisle: aisle,
         hasTax: hasTax,
+        onSale: onSale,
         labels: labels,
         name: name,
         notes: notes,
@@ -64,6 +67,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
       price: state.price,
       total: state.total,
       hasTax: state.hasTax,
+      onSale: state.onSale,
       notes: state.notes,
       labels: state.labels,
     );

@@ -14,6 +14,7 @@ class Item extends Equatable {
   final String notes;
   final bool isComplete;
   final bool hasTax;
+  final bool onSale;
   final String quantity;
   final String price;
   final String total;
@@ -27,6 +28,7 @@ class Item extends Equatable {
     required this.notes,
     required this.isComplete,
     required this.hasTax,
+    required this.onSale,
     required this.quantity,
     required this.price,
     required this.total,
@@ -39,6 +41,7 @@ class Item extends Equatable {
     String? notes,
     bool? isComplete,
     bool? hasTax,
+    bool? onSale,
     String? quantity,
     String? price,
     String? total,
@@ -51,6 +54,7 @@ class Item extends Equatable {
       notes: notes ?? '',
       isComplete: isComplete ?? false,
       hasTax: hasTax ?? false,
+      onSale: onSale ?? false,
       quantity: validatedQuantity,
       price: price ?? '0.00',
       total: total ?? '0.00',
@@ -64,6 +68,7 @@ class Item extends Equatable {
     String? notes,
     bool? isComplete,
     bool? hasTax,
+    bool? onSale,
     String? quantity,
     String? price,
     String? total,
@@ -75,6 +80,7 @@ class Item extends Equatable {
       notes: notes ?? this.notes,
       isComplete: isComplete ?? this.isComplete,
       hasTax: hasTax ?? this.hasTax,
+      onSale: onSale ?? this.onSale,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       total: total ?? this.total,
@@ -87,7 +93,20 @@ class Item extends Equatable {
   Map<String, dynamic> toJson() => _$ItemToJson(this);
 
   @override
-  List<Object?> get props => [name];
+  List<Object> get props {
+    return [
+      name,
+      aisle,
+      notes,
+      isComplete,
+      hasTax,
+      onSale,
+      quantity,
+      price,
+      total,
+      labels,
+    ];
+  }
 
   @override
   String toString() {
@@ -98,6 +117,7 @@ Item {
   notes: $notes,
   isComplete: $isComplete,
   hasTax: $hasTax,
+  onSale: $onSale,
   quantity: $quantity,
   price: $price,
   total: $total,
