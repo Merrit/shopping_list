@@ -20,9 +20,6 @@ class Item extends Equatable {
   final String price;
   final String total;
 
-  @JsonKey(defaultValue: <String>[])
-  final List<String> labels;
-
   const Item._internal({
     required this.name,
     required this.aisle,
@@ -34,7 +31,6 @@ class Item extends Equatable {
     required this.quantity,
     required this.price,
     required this.total,
-    required this.labels,
   });
 
   factory Item({
@@ -48,7 +44,6 @@ class Item extends Equatable {
     String? quantity,
     String? price,
     String? total,
-    List<String>? labels,
   }) {
     final validatedQuantity = QuantityValidator(quantity).validate();
     return Item._internal(
@@ -62,7 +57,6 @@ class Item extends Equatable {
       quantity: validatedQuantity,
       price: price ?? '0.00',
       total: total ?? '0.00',
-      labels: labels ?? const [],
     );
   }
 
@@ -77,7 +71,6 @@ class Item extends Equatable {
     String? quantity,
     String? price,
     String? total,
-    List<String>? labels,
   }) {
     return Item(
       name: name ?? this.name,
@@ -90,7 +83,6 @@ class Item extends Equatable {
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       total: total ?? this.total,
-      labels: labels ?? this.labels,
     );
   }
 
@@ -111,7 +103,6 @@ class Item extends Equatable {
       quantity,
       price,
       total,
-      labels,
     ];
   }
 
@@ -129,7 +120,6 @@ Item {
   quantity: $quantity,
   price: $price,
   total: $total,
-  labels: $labels,
 }\n''';
   }
 }

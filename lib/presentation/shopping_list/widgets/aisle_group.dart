@@ -88,7 +88,16 @@ class _ItemTile extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  bool get isLabelsEmpty => item.labels.isEmpty;
+  bool get isLabelsEmpty {
+    bool empty;
+    if (item.onSale || item.buyWhenOnSale) {
+      empty = false;
+    } else {
+      empty = true;
+    }
+    return empty;
+  }
+
   bool get isNotesEmpty => item.notes == '';
   bool get isPriceUnset => item.price == '0.00';
 
@@ -178,7 +187,7 @@ class _Subtitle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (item.total != '0.00') _TotalPrice(item: item),
-            if (item.labels.isNotEmpty) _Labels(item: item),
+            _Labels(item: item),
             if (item.notes != '') _Notes(item: item),
           ],
         );
@@ -238,6 +247,8 @@ class _Labels extends StatelessWidget {
         ),
       );
     }
+
+    if (chips.isEmpty) return const SizedBox();
 
     return Wrap(
       spacing: 10,
