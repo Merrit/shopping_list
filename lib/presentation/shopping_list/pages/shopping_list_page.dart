@@ -51,7 +51,7 @@ class ShoppingListView extends StatelessWidget {
       },
       child: Stack(
         children: [
-          ScrollingShoppingList(),
+          ScrollingItemsWidget(),
           const FloatingButton(
             floatingActionButton: MainFloatingButton(),
           ),
@@ -164,10 +164,10 @@ class ShoppingListView extends StatelessWidget {
   }
 }
 
-class ScrollingShoppingList extends StatelessWidget {
-  final _scrollController = ScrollController();
+class ScrollingItemsWidget extends StatelessWidget {
+  ScrollingItemsWidget({Key? key}) : super(key: key);
 
-  ScrollingShoppingList({Key? key}) : super(key: key);
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
