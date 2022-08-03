@@ -6,7 +6,6 @@ class ListItemsValidator {
   static List<Item> validateItems({
     required List<Aisle> aisles,
     required List<Item> items,
-    required List<Label> labels,
     required String sortBy,
     required bool sortAscending,
   }) {

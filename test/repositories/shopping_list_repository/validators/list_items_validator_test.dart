@@ -10,7 +10,6 @@ void main() {
     final validatedItems = ListItemsValidator.validateItems(
       aisles: [],
       items: itemsWithDuplicate,
-      labels: [],
       sortBy: 'Name',
       sortAscending: true,
     );
