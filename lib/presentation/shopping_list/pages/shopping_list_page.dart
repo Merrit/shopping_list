@@ -23,19 +23,7 @@ class ShoppingListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     shoppingListCubit = context.read<ShoppingListCubit>();
 
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        final haveActiveList = (state.currentListId != '');
-        return (haveActiveList) ? const ActiveListView() : _NoActiveListView();
-      },
-    );
-  }
-}
-
-class _NoActiveListView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<HomeCubit, HomeState>(
+    return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         if (state.currentListId == '') {
           // Show the drawer if there is no active list so that
@@ -43,13 +31,17 @@ class _NoActiveListView extends StatelessWidget {
           Scaffold.of(context).openDrawer();
         }
       },
-      child: Container(),
+      builder: (context, state) {
+        return (state.currentListId == '')
+            ? const SizedBox()
+            : const ShoppingListView();
+      },
     );
   }
 }
 
-class ActiveListView extends StatelessWidget {
-  const ActiveListView({Key? key}) : super(key: key);
+class ShoppingListView extends StatelessWidget {
+  const ShoppingListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
