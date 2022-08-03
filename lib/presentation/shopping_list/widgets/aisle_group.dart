@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import '../pages/shopping_list_view.dart';
-import 'checkbox_large.dart';
+import '../shopping_list.dart';
 
 class AisleGroup extends StatelessWidget {
   final Aisle aisle;
