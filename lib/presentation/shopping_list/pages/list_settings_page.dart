@@ -138,7 +138,7 @@ Future<void> _deleteList(ShoppingListCubit cubit, BuildContext context) async {
               shouldDelete = true;
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(primary: Colors.red),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('Delete'),
           ),
         ],

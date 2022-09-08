@@ -15,13 +15,13 @@ class SettingsPage extends StatelessWidget {
     final homeCubit = context.read<HomeCubit>();
     late SettingsCubit settingsCubit;
 
-    Future<bool> _onWillPop(SettingsCubit settingsCubit) async {
+    Future<bool> onWillPop(SettingsCubit settingsCubit) async {
       await settingsCubit.updateTaxRate();
       return true;
     }
 
     return WillPopScope(
-      onWillPop: () => _onWillPop(settingsCubit),
+      onWillPop: () => onWillPop(settingsCubit),
       child: Scaffold(
         appBar: AppBar(),
         body: BlocProvider(

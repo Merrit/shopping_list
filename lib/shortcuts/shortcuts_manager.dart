@@ -3,6 +3,9 @@ import 'package:logging/logging.dart';
 
 /// A ShortcutManager that logs all keys that it handles.
 class LoggingShortcutManager extends ShortcutManager {
+  LoggingShortcutManager(Map<ShortcutActivator, Intent> shortcuts)
+      : super(shortcuts: shortcuts);
+
   final _log = Logger('LoggingShortcutManager');
 
   @override

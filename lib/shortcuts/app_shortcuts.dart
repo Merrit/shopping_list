@@ -35,9 +35,8 @@ class AppShortcuts extends StatelessWidget {
       QuitIntent: QuitAction(),
     };
 
-    return Shortcuts(
-      manager: LoggingShortcutManager(),
-      shortcuts: shortcuts,
+    return Shortcuts.manager(
+      manager: LoggingShortcutManager(shortcuts),
       child: Actions(
         dispatcher: LoggingActionDispatcher(),
         actions: actions,
