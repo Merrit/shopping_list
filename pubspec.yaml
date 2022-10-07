@@ -7,11 +7,11 @@ environment:
   sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
-  cloud_firestore: ^3.4.3
+  cloud_firestore: ^3.5.1
   collection: ^1.16.0
   equatable: ^2.0.3
-  firebase_auth: ^3.0.1
-  firebase_core: ^1.2.0
+  firebase_auth: ^3.11.2
+  firebase_core: ^1.24.0
   flex_color_picker: ^2.0.1
   flutter:
     sdk: flutter
