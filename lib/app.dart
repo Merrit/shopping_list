@@ -59,6 +59,33 @@ class AppViewState extends State<AppView> {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: AppTheme.dark,
+              routes: {
+                LoginPage.id: (_) => const LoginPage(),
+                SignUpPage.id: (_) => const SignUpPage(),
+              },
+              onGenerateRoute: (RouteSettings routeSettings) {
+                return MaterialPageRoute<void>(
+                  settings: routeSettings,
+                  builder: (BuildContext context) {
+                    Widget child;
+                    switch (routeSettings.name) {
+                      case LoginPage.id:
+                        child = const LoginPage();
+                        break;
+                      case SignUpPage.id:
+                        child = const SignUpPage();
+                        break;
+                      case VerifyEmailPage.id:
+                        child = const VerifyEmailPage();
+                        break;
+                      default:
+                        child = const LoginPage();
+                    }
+
+                    return child;
+                  },
+                );
+              },
               home: const LoginPage(),
             );
 
@@ -89,9 +116,7 @@ class AppViewState extends State<AppView> {
                   routes: {
                     HomePage.id: (_) => const HomePage(),
                     ListSettingsPage.id: (_) => const ListSettingsPage(),
-                    LoginPage.id: (_) => const LoginPage(),
                     SettingsPage.id: (_) => const SettingsPage(),
-                    SignUpPage.id: (_) => const SignUpPage(),
                     SplashPage.id: (_) => const SplashPage(),
                     VerifyEmailPage.id: (_) => const VerifyEmailPage(),
                   },
