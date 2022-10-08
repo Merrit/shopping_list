@@ -23,9 +23,9 @@ class AppShortcuts extends StatelessWidget {
           CreateItemIntent(
         FocusManager.instance.primaryFocus?.context ?? context,
       ),
-      LogicalKeySet(
-        LogicalKeyboardKey.control,
+      const SingleActivator(
         LogicalKeyboardKey.keyQ,
+        control: true,
       ): const QuitIntent(),
     };
 
