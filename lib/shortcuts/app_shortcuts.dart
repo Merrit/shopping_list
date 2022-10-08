@@ -18,12 +18,11 @@ class AppShortcuts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shortcuts = <LogicalKeySet, Intent>{
-      LogicalKeySet(
-        LogicalKeyboardKey.control,
-        LogicalKeyboardKey.keyN,
-      ): CreateItemIntent(
-          FocusManager.instance.primaryFocus?.context ?? context),
+    final shortcuts = <ShortcutActivator, Intent>{
+      const SingleActivator(LogicalKeyboardKey.keyN, alt: true):
+          CreateItemIntent(
+        FocusManager.instance.primaryFocus?.context ?? context,
+      ),
       LogicalKeySet(
         LogicalKeyboardKey.control,
         LogicalKeyboardKey.keyQ,
@@ -76,7 +75,13 @@ class CreateItemAction extends Action<CreateItemIntent> {
   @override
   Object? invoke(CreateItemIntent intent) {
     final context = intent.context;
-    context.read<ShoppingListCubit>().tiggerShowCreateItemDialog();
+    final isCurrent = ModalRoute.of(context)?.isCurrent;
+
+    // Only trigger shortcut when on the main page.
+    if (isCurrent == true) {
+      context.read<ShoppingListCubit>().tiggerShowCreateItemDialog();
+    }
+
     return null;
   }
 }
