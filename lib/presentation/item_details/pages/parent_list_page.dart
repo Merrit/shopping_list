@@ -44,14 +44,15 @@ class ParentListView extends StatelessWidget {
                   child: Text(value),
                 ))
             .toList(),
-        onChanged: (value) async {
+        onChanged: (String? listName) async {
           final navigator = Navigator.of(context);
           await homeCubit.moveItemToList(
             item: shoppingListCubit.state.items
                 .firstWhere((item) => item.name == itemName),
             currentListName: shoppingListCubit.state.name,
-            newListName: value!,
+            newListName: listName!,
           );
+          homeCubit.showSnackBar('$itemName moved to $listName.');
           await navigator.pushReplacementNamed(HomePage.id);
         },
       ),

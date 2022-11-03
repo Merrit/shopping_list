@@ -148,6 +148,12 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  /// Show a Snackbar on the main page with [msg].
+  void showSnackBar(String msg) {
+    emit(state.copyWith(snackBarMsg: msg));
+    emit(state.copyWith(snackBarMsg: ''));
+  }
+
   @override
   Future<void> close() {
     shoppingListSubscription.cancel();

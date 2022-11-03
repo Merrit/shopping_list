@@ -19,17 +19,26 @@ class HomePage extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SafeArea(
-          child: Scaffold(
-            appBar: const PreferredSize(
-              preferredSize: Size.fromHeight(kToolbarHeight),
-              child: ShoppingListAppBar(),
+          child: BlocListener<HomeCubit, HomeState>(
+            listenWhen: (previous, current) =>
+                previous.snackBarMsg != current.snackBarMsg,
+            listener: (context, state) {
+              if (state.snackBarMsg == '') return;
+              final snackBar = SnackBar(content: Text(state.snackBarMsg));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            child: Scaffold(
+              appBar: const PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: ShoppingListAppBar(),
+              ),
+              drawer: (constraints.maxWidth > 600)
+                  ? null
+                  : const Drawer(child: ListDrawer()),
+              body: constraints.maxWidth > 600
+                  ? const TwoColumnView()
+                  : const ShoppingListPage(),
             ),
-            drawer: (constraints.maxWidth > 600)
-                ? null
-                : const Drawer(child: ListDrawer()),
-            body: constraints.maxWidth > 600
-                ? const TwoColumnView()
-                : const ShoppingListPage(),
           ),
         );
       },
