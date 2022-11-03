@@ -9,10 +9,15 @@ class HomeState {
   /// A list of all the lists this user has access to.
   final List<ShoppingList> shoppingLists;
 
+  /// If provided the main page Scaffold will display the given message in a
+  /// snackbar.
+  final String snackBarMsg;
+
   final bool taxRateIsSet;
   final String taxRate;
 
   HomeState({
+    this.snackBarMsg = '',
     required this.currentListId,
     required this.shoppingLists,
     required this.taxRateIsSet,
@@ -21,6 +26,7 @@ class HomeState {
   });
 
   HomeState.initial({
+    this.snackBarMsg = '',
     this.shoppingLists = const [],
     this.currentListId = '',
     this.taxRateIsSet = false,
@@ -33,11 +39,13 @@ class HomeState {
     String? currentListId,
     List<ShoppingList>? shoppingLists,
     bool? taxRateIsSet,
+    String? snackBarMsg,
     ShoppingListCubit? shoppingListCubit,
     String? taxRate,
   }) {
     return HomeState(
       currentListId: currentListId ?? this.currentListId,
+      snackBarMsg: snackBarMsg ?? this.snackBarMsg,
       shoppingLists: shoppingLists ?? this.shoppingLists,
       taxRateIsSet: taxRateIsSet ?? this.taxRateIsSet,
       shoppingListCubit: shoppingListCubit ?? this.shoppingListCubit,
@@ -51,5 +59,6 @@ HomeState: \n
 currentListId: $currentListId, 
 shoppingLists: $shoppingLists,
 shoppingListCubit: $shoppingListCubit,
+snackBarMsg: $snackBarMsg,
 \n''';
 }
