@@ -45,17 +45,33 @@ class ListSettingsView extends StatelessWidget {
     shoppingListCubit = context.read<ShoppingListCubit>();
     final black = Colors.white.value;
     _log.info('black: $black');
+
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
         return ListView(
           padding: const EdgeInsets.all(30),
           children: [
-            SettingsTile(
-              label: const Text('List name'),
-              hintText: state.name,
-              onChanged: (value) async {
-                await shoppingListCubit.updateList(name: value);
-              },
+            Card(
+              child: ListTile(
+                leading: const Text('List Name'),
+                title: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(state.name),
+                ),
+                trailing: const Icon(Icons.edit),
+                onTap: () async {
+                  final String? newName = await InputDialog.show(
+                    context: context,
+                    title: 'List Name',
+                    initialValue: state.name,
+                    preselectText: true,
+                  );
+
+                  if (newName == null || newName == '') return;
+
+                  await shoppingListCubit.updateList(name: newName);
+                },
+              ),
             ),
             const SizedBox(height: 30),
             Card(
