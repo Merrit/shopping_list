@@ -169,7 +169,7 @@ class ItemDetailsView extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.list),
-            title: const Text('List'),
+            title: const Text('Parent List'),
             subtitle: Text(shoppingCubit.state.name),
             onTap: () {
               Navigator.push(
