@@ -183,12 +183,22 @@ class _Subtitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
+        final Widget totalPrice = (item.total != '0.00') //
+            ? _TotalPrice(item: item)
+            : const SizedBox();
+
+        final Widget labels = _Labels(item: item);
+
+        final Widget notes = (item.notes != '') //
+            ? _Notes(item: item)
+            : const SizedBox();
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (item.total != '0.00') _TotalPrice(item: item),
-            _Labels(item: item),
-            if (item.notes != '') _Notes(item: item),
+            totalPrice,
+            labels,
+            notes,
           ],
         );
       },
