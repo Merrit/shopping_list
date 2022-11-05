@@ -20,6 +20,7 @@ class Item extends Equatable {
   final String quantity;
   final String price;
   final String total;
+  final String taxRate;
 
   const Item._internal({
     required this.name,
@@ -33,9 +34,12 @@ class Item extends Equatable {
     required this.quantity,
     required this.price,
     required this.total,
+    required this.taxRate,
   });
 
   factory Item({
+    /// Can be passed in for unit tests.
+    MoneyHandler? moneyHandler,
     required String name,
     String? aisle,
     String? notes,
@@ -46,9 +50,15 @@ class Item extends Equatable {
     bool? haveCoupon,
     String? quantity,
     String? price,
-    String? total,
+    String? taxRate,
   }) {
     final validatedQuantity = QuantityValidator(quantity).validate();
+    moneyHandler ??= MoneyHandler();
+    final String total = moneyHandler.totalPrice(
+      price: price,
+      quantity: validatedQuantity,
+      taxRate: taxRate,
+    );
     return Item._internal(
       name: name,
       aisle: aisle ?? 'None',
@@ -60,7 +70,8 @@ class Item extends Equatable {
       haveCoupon: haveCoupon ?? false,
       quantity: validatedQuantity,
       price: price ?? '0.00',
-      total: total ?? '0.00',
+      total: total,
+      taxRate: taxRate ?? '0.00',
     );
   }
 
@@ -75,7 +86,7 @@ class Item extends Equatable {
     bool? haveCoupon,
     String? quantity,
     String? price,
-    String? total,
+    String? taxRate,
   }) {
     return Item(
       name: name ?? this.name,
@@ -88,7 +99,7 @@ class Item extends Equatable {
       haveCoupon: haveCoupon ?? this.haveCoupon,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
-      total: total ?? this.total,
+      taxRate: taxRate ?? this.taxRate,
     );
   }
 
@@ -110,6 +121,7 @@ class Item extends Equatable {
       quantity,
       price,
       total,
+      taxRate,
     ];
   }
 
@@ -128,6 +140,7 @@ Item {
   quantity: $quantity,
   price: $price,
   total: $total,
+  taxRate: $taxRate,
 }\n''';
   }
 }
