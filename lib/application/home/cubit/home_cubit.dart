@@ -173,20 +173,17 @@ class MassListUpdater {
     }
   }
 
+  /// Update the tax rate for each item, which causes it to internally calculate
+  /// the new total.
   Future<void> _updateListItemTotals({
     required ShoppingList list,
     required String taxRate,
   }) async {
-    final updatedItems = <Item>[];
-    for (var item in list.items) {
-      final updatedTotal = MoneyHandler().totalPrice(
-        price: item.price,
-        quantity: item.quantity,
-        taxRate: (item.hasTax) ? taxRate : null,
-      );
-      final updatedItem = item.copyWith(total: updatedTotal);
-      updatedItems.add(updatedItem);
-    }
+    final List<Item> updatedItems = list //
+        .items
+        .map((Item item) => item.copyWith(taxRate: taxRate))
+        .toList();
+
     await shoppingListRepository.updateShoppingList(
       list.copyWith(items: updatedItems),
     );
