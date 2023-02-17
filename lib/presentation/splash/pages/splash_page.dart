@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
 import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../../logs/logging_manager.dart';
 import '../../core/core.dart';
 import '../../home/pages/home_page.dart';
 
@@ -11,8 +11,6 @@ class SplashPage extends StatelessWidget {
 
   const SplashPage({Key? key}) : super(key: key);
 
-  static final _log = Logger('SplashPage');
-
   @override
   Widget build(BuildContext context) {
     // Workaround for the bug in Web debug version where
@@ -20,7 +18,7 @@ class SplashPage extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = context.read<AuthenticationRepository>().currentUser;
       if (user == User.empty) {
-        _log.info('No user found on SpashPage');
+        log.v('No user found on SpashPage');
       } else {
         Navigator.pushReplacementNamed(context, HomePage.id);
       }

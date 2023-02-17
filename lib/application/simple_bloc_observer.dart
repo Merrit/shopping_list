@@ -1,31 +1,30 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
-final _log = Logger('SimpleBlocObserver');
+import '../logs/logging_manager.dart';
 
 /// Log authentication state changes.
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
-    _log.info(event);
+    log.v(event);
     super.onEvent(bloc, event);
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    _log.info(error);
+    log.v(error);
     super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
-    _log.info(change);
+    log.v(change);
     super.onChange(bloc, change);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    _log.info(transition);
+    log.v(transition);
     super.onTransition(bloc, transition);
   }
 }

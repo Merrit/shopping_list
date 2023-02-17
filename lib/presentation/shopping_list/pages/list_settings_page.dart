@@ -1,10 +1,10 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../../logs/logging_manager.dart';
 import '../../core/core.dart';
 import '../../home/pages/home_page.dart';
 
@@ -28,8 +28,6 @@ class ListSettingsPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class ListSettingsView extends StatelessWidget {
-  final _log = Logger('ListSettingsView');
-
   late HomeCubit homeCubit;
   late ShoppingListCubit shoppingListCubit;
 
@@ -44,7 +42,7 @@ class ListSettingsView extends StatelessWidget {
     homeCubit = context.read<HomeCubit>();
     shoppingListCubit = context.read<ShoppingListCubit>();
     final black = Colors.white.value;
-    _log.info('black: $black');
+    log.v('black: $black');
 
     return BlocBuilder<ShoppingListCubit, ShoppingListState>(
       builder: (context, state) {
