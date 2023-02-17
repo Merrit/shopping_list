@@ -5,6 +5,7 @@ import '../../../domain/authentication/authentication.dart';
 import '../../../domain/core/core.dart';
 import '../../../domain/login/login.dart';
 import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../../logs/logging_manager.dart';
 import '../../authentication/bloc/login_status.dart';
 
 part 'login_state.dart';
@@ -59,7 +60,9 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> logInWithGoogle() async {
+    log.v('User pressed Google sign in button');
     emit(state.copyWith(status: SubmissionInProgress()));
+
     try {
       await _authenticationRepository.logInWithGoogle();
       emit(state.copyWith(status: SubmissionSuccess()));
