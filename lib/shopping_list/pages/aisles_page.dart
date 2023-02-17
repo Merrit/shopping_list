@@ -2,12 +2,12 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../application/item_details/cubit/item_details_cubit.dart';
-import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
-import '../../../domain/core/core.dart';
-import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import '../../core/core.dart';
-import '../widgets/floating_done_button.dart';
+import '../../application/item_details/cubit/item_details_cubit.dart';
+import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
+import '../../domain/core/core.dart';
+import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../presentation/core/core.dart';
+import '../../presentation/item_details/widgets/floating_done_button.dart';
 
 class AislesPage extends StatelessWidget {
   static const id = 'aisles_page';
