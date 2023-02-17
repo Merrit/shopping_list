@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../core/core.dart';
-import '../../shopping_list/shopping_list.dart';
+import '../../../shopping_list/shopping_list.dart';
 
 class ShoppingListAppBar extends StatelessWidget {
   const ShoppingListAppBar({Key? key}) : super(key: key);

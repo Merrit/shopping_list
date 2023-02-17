@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/home/cubit/home_cubit.dart';
-import '../../shopping_list/pages/shopping_list_page.dart';
+import '../../../shopping_list/pages/shopping_list_page.dart';
 import '../home.dart';
 
 late HomeCubit homeCubit;
