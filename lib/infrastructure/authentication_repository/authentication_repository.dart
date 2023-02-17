@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../logs/logging_manager.dart';
 import 'failures.dart';
 import 'models/models.dart';
 
@@ -54,6 +55,8 @@ class AuthenticationRepository {
   }
 
   Future<void> logInWithGoogle() async {
+    log.i('Signing in with Google...');
+
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -68,6 +71,7 @@ class AuthenticationRepository {
       );
       await _firebaseAuth.signInWithCredential(credential);
     } on PlatformException catch (e) {
+      log.e('Signing in with Google failed', e);
       throw LogInWithGoogleFailure(exception: e);
     }
   }
