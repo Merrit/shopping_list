@@ -1,4 +1,4 @@
-export 'aisles_page.dart';
+export '../../../shopping_list/pages/aisles_page.dart';
 export 'item_details_page_state.dart';
 export 'item_details_page.dart';
 export 'item_details_view.dart';
