@@ -143,7 +143,7 @@ class _SignUpButton extends StatelessWidget {
       onPressed: () => Navigator.pushNamed(context, SignUpPage.id),
       child: Text(
         'CREATE ACCOUNT',
-        style: theme.textTheme.subtitle2,
+        style: theme.textTheme.titleSmall,
       ),
     );
   }

@@ -117,7 +117,10 @@ class _ItemTile extends StatelessWidget {
       trailing: _Checkbox(item: item),
       isThreeLine: isThreeLine,
       subtitle: (hideSubtitle) ? null : _Subtitle(item: item),
-      onTap: () => goToItemDetails(context: context, item: item),
+      onTap: () => goToItemDetails(
+        navigator: Navigator.of(context),
+        item: item,
+      ),
     );
   }
 

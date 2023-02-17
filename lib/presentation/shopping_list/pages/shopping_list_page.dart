@@ -61,6 +61,7 @@ class ShoppingListView extends StatelessWidget {
 
   static Future<void> showCreateItemDialog(
       {required BuildContext context}) async {
+    final navigator = Navigator.of(context);
     bool customize = false;
     final shoppingListCubit = context.read<ShoppingListCubit>();
 
@@ -153,7 +154,7 @@ class ShoppingListView extends StatelessWidget {
     final newItemName = input.capitalizeFirst;
     if (customize) {
       await goToItemDetails(
-        context: context,
+        navigator: navigator,
         item: Item(name: newItemName),
         creatingItem: true,
       );
@@ -215,12 +216,11 @@ class ScrollingItemsWidget extends StatelessWidget {
 
 /// Function to navigate to details shared by AisleGroup & ItemTile.
 Future<void> goToItemDetails({
-  required BuildContext context,
+  required NavigatorState navigator,
   required Item item,
   bool creatingItem = false,
 }) async {
-  final newItem = await Navigator.push<Item>(
-    context,
+  final newItem = await navigator.push<Item>(
     MaterialPageRoute(
       builder: (context) => MultiBlocProvider(
         providers: [

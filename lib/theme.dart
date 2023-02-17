@@ -7,7 +7,6 @@ class AppTheme {
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Colors.lightBlueAccent,
     ),
-    toggleableActiveColor: Colors.lightBlueAccent,
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(),
     ),
