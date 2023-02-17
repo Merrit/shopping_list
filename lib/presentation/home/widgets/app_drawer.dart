@@ -48,7 +48,7 @@ class _CreateListButton extends StatelessWidget {
           children: [
             Text(
               'Create list',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Icon(Icons.add),
           ],

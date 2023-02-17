@@ -24,7 +24,7 @@ class ShoppingListAppBar extends StatelessWidget {
             : AppBar(
                 title: Text(
                   shoppingList.name,
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Color(listColor),
                       ),
                 ),
