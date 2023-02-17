@@ -3,12 +3,12 @@
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
 import '../../../application/authentication/bloc/authentication_bloc.dart';
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../../logs/logging_manager.dart';
 import '../../shopping_list/shopping_list.dart';
 import '../pages/home_page.dart';
 
@@ -30,8 +30,6 @@ class ListDrawer extends StatelessWidget {
 }
 
 class _CreateListButton extends StatelessWidget {
-  static final _log = Logger('_CreateListButton');
-
   const _CreateListButton({
     Key? key,
   }) : super(key: key);
@@ -74,7 +72,7 @@ class _CreateListButton extends StatelessWidget {
               hintText: 'Name',
             ),
             onSubmitted: (_) {
-              _log.info('submitted');
+              log.v('submitted');
               newListName = controller.value.text;
               Navigator.pop(context);
             },

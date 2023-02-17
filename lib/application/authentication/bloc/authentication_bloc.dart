@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
 import '../../../domain/authentication/authentication.dart';
 import '../../../infrastructure/authentication_repository/authentication_repository.dart';
+import '../../../logs/logging_manager.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -14,7 +14,6 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
-  final Logger _log = Logger('AuthenticationBloc');
   late StreamSubscription<User> _userSubscription;
 
   AuthenticationBloc({
@@ -28,7 +27,7 @@ class AuthenticationBloc
         ) {
     _userSubscription = _authenticationRepository.user.listen(
       (user) {
-        _log.fine('User: $user');
+        log.v('User: $user');
         add(AuthenticationUserChanged(user));
       },
     );

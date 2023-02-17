@@ -19,11 +19,16 @@ dependencies:
   flutter_signin_button: ^2.0.0
   font_awesome_flutter: ^9.2.0
   google_sign_in: ^5.0.1
+  helpers:
+    git:
+      url: https://github.com/Merrit/helpers.git
+      ref: 2dd7305c83b9b2a86829c46a4cb7fb1d5857ff4f
   json_annotation: ^4.6.0
   json_serializable: ^6.1.6
-  logging: ^1.0.1
+  logger: ^1.1.0
   meta: ^1.1.8
   money2: ^3.1.3
+  path_provider: ^2.0.12
   provider: ^6.0.2
   shared_preferences: ^2.0.5
   universal_html: ^2.0.8

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
+
+import '../logs/logging_manager.dart';
 
 /// A ShortcutManager that logs all keys that it handles.
 class LoggingShortcutManager extends ShortcutManager {
   LoggingShortcutManager(Map<ShortcutActivator, Intent> shortcuts)
       : super(shortcuts: shortcuts);
-
-  final _log = Logger('LoggingShortcutManager');
 
   @override
   KeyEventResult handleKeypress(BuildContext context, RawKeyEvent event) {
@@ -18,7 +17,7 @@ Shortcut: $event
 Context: $context
       ''');
     } else {
-      _log.info('Not handling keypress: $event');
+      log.v('Not handling keypress: $event');
     }
 
     return result;

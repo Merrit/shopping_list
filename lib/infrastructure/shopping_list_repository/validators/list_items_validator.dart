@@ -1,5 +1,4 @@
-import 'package:logging/logging.dart';
-
+import '../../../logs/logging_manager.dart';
 import '../shopping_list_repository.dart';
 
 class ListItemsValidator {
@@ -49,8 +48,6 @@ class _AisleValidator {
 
 /// Sort the list of items according to the user's preference.
 class _ItemSortValidator {
-  static final _log = Logger('_ItemSortValidator');
-
   static List<Item> sort({
     required List<Item> items,
     required List<Aisle> aisles,
@@ -91,7 +88,7 @@ class _ItemSortValidator {
         if (!ascending) items = items.reversed.toList();
         break;
       default:
-        _log.warning('Error sorting items');
+        log.w('Error sorting items');
     }
     assert(originalItems.length == items.length);
     return items;
