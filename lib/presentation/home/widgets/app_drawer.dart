@@ -9,7 +9,7 @@ import '../../../application/home/cubit/home_cubit.dart';
 import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../../logs/logging_manager.dart';
-import '../../shopping_list/shopping_list.dart';
+import '../../../shopping_list/shopping_list.dart';
 import '../pages/home_page.dart';
 
 class ListDrawer extends StatelessWidget {

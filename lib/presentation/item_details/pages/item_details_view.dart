@@ -10,7 +10,7 @@ import '../../../infrastructure/shopping_list_repository/models/item.dart';
 import '../../core/core.dart';
 import '../../home/pages/home_page.dart';
 import '../../settings/settings.dart';
-import '../../shopping_list/shopping_list.dart';
+import '../../../shopping_list/shopping_list.dart';
 import 'aisles_page.dart';
 import 'item_details_page.dart';
 import 'item_details_page_state.dart';
