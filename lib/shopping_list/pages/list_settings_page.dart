@@ -7,8 +7,6 @@ import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../logs/logging_manager.dart';
 import '../../presentation/core/core.dart';
 import '../../presentation/home/pages/home_page.dart';
-import '../../presentation/item_details/item_details.dart';
-import '../shopping_list.dart';
 
 class ListSettingsPage extends StatelessWidget {
   static const id = 'list_settings_page';
@@ -118,7 +116,6 @@ class ListSettingsView extends StatelessWidget {
                 },
               ),
             ),
-            const _EditAislesTile(),
             const SizedBox(height: 100),
             OutlinedButton(
               onPressed: () => _deleteList(shoppingListCubit, context),
@@ -165,34 +162,5 @@ Future<void> _deleteList(ShoppingListCubit cubit, BuildContext context) async {
   if (shouldDelete) {
     cubit.deleteList();
     await navigator.pushReplacementNamed(HomePage.id);
-  }
-}
-
-class _EditAislesTile extends StatelessWidget {
-  const _EditAislesTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: const Text('Edit aisles'),
-      leading: const Icon(Icons.edit),
-      trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(value: itemDetailsCubit),
-                  BlocProvider.value(value: shoppingListCubit),
-                ],
-                child: const AislesPage(),
-              );
-            },
-          ),
-        );
-      },
-    );
   }
 }
