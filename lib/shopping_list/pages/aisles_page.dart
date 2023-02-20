@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../domain/core/core.dart';
 import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import '../../presentation/core/core.dart';
 
 /// Displays a list of aisles and allows the user to edit them.
 class AislesPage extends StatelessWidget {
@@ -17,7 +16,8 @@ class AislesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Round button with icon and background color to create aisle.
     final Widget createAisleButton = FloatingActionButton.small(
-      onPressed: () => _createAisle(context: context),
+      heroTag: null,
+      onPressed: () => _showAisleDialog(context: context),
       backgroundColor: Colors.greenAccent.shade400,
       child: const Icon(Icons.add),
     );
@@ -79,14 +79,16 @@ class _AislesList extends StatelessWidget {
                 : const EdgeInsets.all(30),
             children: shoppingListState.aisles.map((aisle) {
               return ListTile(
-                key: ValueKey(aisle.name),
-                title: Chip(
-                  label: Text(aisle.name),
-                  backgroundColor: Color(aisle.color),
-                ),
-                enabled: aisle.name != 'None',
-                onTap: () => _editAisle(context: context, aisle: aisle),
-              );
+                  key: ValueKey(aisle.name),
+                  title: Chip(
+                    label: Text(aisle.name),
+                    backgroundColor: Color(aisle.color),
+                  ),
+                  enabled: aisle.name != 'None',
+                  onTap: () => _showAisleDialog(
+                        context: context,
+                        aisle: aisle,
+                      ));
             }).toList(),
             onReorder: (int oldIndex, int newIndex) {
               context
@@ -100,35 +102,53 @@ class _AislesList extends StatelessWidget {
   }
 }
 
-/// Create a new aisle after prompting the user for a name.
-Future<void> _createAisle({required BuildContext context}) async {
-  final shoppingListCubit = context.read<ShoppingListCubit>();
-  final input = await InputDialog.show(
-    context: context,
-    initialValue: '',
-    title: 'Create aisle',
-    hintText: 'Aisle name',
-  );
-  if (input != null) {
-    final newAisle = input.capitalizeFirst;
-    await shoppingListCubit.createAisle(name: newAisle);
-  }
-}
-
-/// Edit the name and color of an aisle.
+/// Show a dialog where the user can either create, edit, or delete an aisle.
 ///
-/// Also allows the user to delete the aisle.
-void _editAisle({required BuildContext context, required Aisle aisle}) {
+/// If [aisle] is null, the user is creating a new aisle.
+/// If [aisle] is not null, the user is editing an existing aisle.
+void _showAisleDialog({required BuildContext context, Aisle? aisle}) {
+  final focusNode = FocusNode();
+
   showDialog(
     context: context,
     builder: (context) {
-      Color color = Color(aisle.color);
-      final nameController = TextEditingController(text: aisle.name);
-      final colorController =
-          TextEditingController(text: color.value.toRadixString(16));
+      Color color = Color(aisle?.color ?? 0);
+      final nameController = TextEditingController(text: aisle?.name ?? '');
+      final colorController = TextEditingController(
+        text: color.value.toRadixString(16),
+      );
+
+      final Widget deleteButton;
+      if (aisle == null) {
+        deleteButton = const SizedBox.shrink();
+      } else {
+        deleteButton = TextButton(
+          onPressed: () async {
+            final navigator = Navigator.of(context);
+
+            final deleteConfirmed = await _deleteAisle(
+              context: context,
+              aisle: aisle,
+            );
+
+            if (deleteConfirmed) navigator.pop();
+          },
+          child: const Text(
+            'Delete',
+            style: TextStyle(color: Colors.red),
+          ),
+        );
+      }
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // If the user is creating a new aisle, focus the text field.
+        if (aisle == null) {
+          focusNode.requestFocus();
+        }
+      });
 
       return AlertDialog(
-        title: const Text('Edit aisle'),
+        title: Text(aisle == null ? 'Create aisle' : 'Edit aisle'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -137,6 +157,7 @@ void _editAisle({required BuildContext context, required Aisle aisle}) {
               decoration: const InputDecoration(
                 labelText: 'Name',
               ),
+              focusNode: focusNode,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a name';
@@ -155,22 +176,7 @@ void _editAisle({required BuildContext context, required Aisle aisle}) {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              final navigator = Navigator.of(context);
-
-              final deleteConfirmed = await _deleteAisle(
-                context: context,
-                aisle: aisle,
-              );
-
-              if (deleteConfirmed) navigator.pop();
-            },
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
+          deleteButton,
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
@@ -178,14 +184,22 @@ void _editAisle({required BuildContext context, required Aisle aisle}) {
           TextButton(
             onPressed: () async {
               final navigator = Navigator.of(context);
-              await context.read<ShoppingListCubit>().updateAisle(
-                    oldAisle: aisle,
-                    color: color.value,
-                    name: nameController.text,
-                  );
+              if (aisle == null) {
+                if (nameController.text.trim().isEmpty) return;
+                await context.read<ShoppingListCubit>().createAisle(
+                      name: nameController.text,
+                      color: color.value,
+                    );
+              } else {
+                await context.read<ShoppingListCubit>().updateAisle(
+                      oldAisle: aisle,
+                      color: color.value,
+                      name: nameController.text,
+                    );
+              }
               navigator.pop();
             },
-            child: const Text('Save'),
+            child: Text(aisle == null ? 'Create' : 'Save'),
           ),
         ],
       );
