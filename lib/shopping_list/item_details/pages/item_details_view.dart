@@ -14,10 +14,24 @@ import '../../shopping_list.dart';
 import 'item_details_page.dart';
 import 'parent_list_page.dart';
 
-class ItemDetailsView extends StatelessWidget {
+class ItemDetailsView extends StatefulWidget {
   const ItemDetailsView({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ItemDetailsView> createState() => _ItemDetailsViewState();
+}
+
+class _ItemDetailsViewState extends State<ItemDetailsView> {
+  final notesController = TextEditingController();
+
+  @override
+  void initState() {
+    final itemDetailsCubit = context.read<ItemDetailsCubit>();
+    notesController.text = itemDetailsCubit.state.notes;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +50,32 @@ class ItemDetailsView extends StatelessWidget {
                 vertical: 20,
                 horizontal: 10,
               );
+
+        /// ListTile with an inline TextFormField that updates the item's notes.
+        final Widget notesTile = ListTile(
+          leading: const Icon(Icons.notes),
+          title: const Text('Notes'),
+          subtitle: Opacity(
+            opacity: 0.7,
+            child: TextFormField(
+              controller: notesController,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Add notes',
+              ),
+              maxLines: null,
+              style: Theme.of(context).textTheme.bodyLarge,
+              onChanged: (value) {
+                itemDetailsCubit.updateItem(
+                  state.copyWith(
+                    notes: value,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+
         final items = [
           ListTile(
             leading: const Icon(Icons.title),
@@ -147,24 +187,7 @@ class ItemDetailsView extends StatelessWidget {
           const SaleSwitchTile(),
           const WhenOnSaleSwitchTile(),
           const HaveCouponSwitchTile(),
-          ListTile(
-            leading: const Icon(Icons.notes),
-            title: const Text('Notes'),
-            subtitle: (state.notes == '') ? null : Text(state.notes),
-            onTap: () async {
-              final input = await InputDialog.show(
-                context: context,
-                title: 'Notes',
-                initialValue: state.notes,
-                type: InputDialogs.multiLine,
-              );
-              if (input != null) {
-                itemDetailsCubit.updateItem(state.copyWith(
-                  notes: input.capitalizeFirst,
-                ));
-              }
-            },
-          ),
+          notesTile,
           ListTile(
             leading: const Icon(Icons.list),
             title: const Text('Parent List'),
