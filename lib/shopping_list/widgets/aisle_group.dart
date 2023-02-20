@@ -135,6 +135,26 @@ class _Quantity extends StatelessWidget {
 
   final Item item;
 
+  /// Returns a color for the quantity text based on the quantity.
+  ///
+  /// If the quantity is 1, the return value is null.
+  Color? getQuantityColor() {
+    if (item.quantity == '1') return null;
+    final int quantity = int.parse(item.quantity);
+    switch (quantity) {
+      case 2:
+        return Colors.blue;
+      case 3:
+        return Colors.green;
+      case 4:
+        return Colors.yellow;
+      case 5:
+        return Colors.orange;
+      default:
+        return Colors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -142,7 +162,10 @@ class _Quantity extends StatelessWidget {
       child: Row(
         children: [
           const Spacer(),
-          Text(item.quantity),
+          Text(
+            item.quantity,
+            style: TextStyle(color: getQuantityColor()),
+          ),
           const Spacer(),
           const SizedBox(width: 8),
           const VerticalDivider(),
