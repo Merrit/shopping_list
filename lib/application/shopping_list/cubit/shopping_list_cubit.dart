@@ -73,7 +73,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     List<Item>? checkedItems,
   }) async {
     _shoppingList = _shoppingList.copyWith(
-      aisles: aisles,
+      aisles: aisles?.verify(),
       color: color,
       items: items ?? state.items,
       labels: labels,
@@ -175,6 +175,11 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
   }
 
   Future<void> createAisle({required String name, int? color}) async {
+    // Verify aisle doesn't already exist.
+    final aisleExists = state.aisles
+        .any((element) => element.name.toLowerCase() == name.toLowerCase());
+    if (aisleExists) return;
+
     final aisle = Aisle(name: name, color: color ?? 0);
     _shoppingList.aisles.add(aisle);
     await updateList(aisles: _shoppingList.aisles);
