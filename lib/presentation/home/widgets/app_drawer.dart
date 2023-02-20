@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../application/authentication/bloc/authentication_bloc.dart';
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../../logs/logging_manager.dart';
+import '../../../settings/settings.dart';
 import '../../../shopping_list/shopping_list.dart';
 import '../pages/home_page.dart';
 
@@ -216,37 +216,26 @@ class _BottomButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.read<AuthenticationBloc>();
+    final Widget settingsButton = TextButton(
+      onPressed: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const AppSettingsPage();
+            },
+          ),
+        );
+      },
+      child: const Text('Settings'),
+    );
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton(
-            onPressed: () => auth.add(AuthenticationLogoutRequested()),
-            child: const Text('Sign out'),
-          ),
-          // Disabled because TaxRate is the only setting currently,
-          // which is now handled directly in ItemDetails.
-          //
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) {
-          //           return BlocProvider.value(
-          //             value: homeCubit,
-          //             child: SettingsPage(),
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          //   icon: Icon(Icons.settings),
-          // )
+          settingsButton,
         ],
       ),
     );
