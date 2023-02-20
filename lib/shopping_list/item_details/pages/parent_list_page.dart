@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
-import '../../home/pages/home_page.dart';
+import '../../../presentation/home/pages/home_page.dart';
 
 class ParentListPage extends StatelessWidget {
   final String itemName;

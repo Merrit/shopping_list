@@ -7,6 +7,7 @@ import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../logs/logging_manager.dart';
 import '../../presentation/core/core.dart';
 import '../../presentation/home/pages/home_page.dart';
+import 'aisles_page.dart';
 
 class ListSettingsPage extends StatelessWidget {
   static const id = 'list_settings_page';
@@ -51,7 +52,7 @@ class ListSettingsView extends StatelessWidget {
           children: [
             Card(
               child: ListTile(
-                leading: const Text('List Name'),
+                leading: const Text('Name'),
                 title: Align(
                   alignment: Alignment.centerRight,
                   child: Text(state.name),
@@ -71,14 +72,13 @@ class ListSettingsView extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(height: 30),
             Card(
               child: ListTile(
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 16,
                 ),
-                title: const Text('List name color'),
+                title: const Text('Color'),
                 trailing: ColorIndicator(
                   width: 44,
                   height: 44,
@@ -113,6 +113,30 @@ class ListSettingsView extends StatelessWidget {
                     await shoppingListCubit.updateList(
                         color: colorBeforeDialog);
                   }
+                },
+              ),
+            ),
+            // Go to edit aisles
+            Card(
+              child: ListTile(
+                leading: const Text('Aisles'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: ShoppingListCubit.instance,
+                            ),
+                          ],
+                          child: const AislesPage(),
+                        );
+                      },
+                    ),
+                  );
                 },
               ),
             ),

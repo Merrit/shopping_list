@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../../logs/logging_manager.dart';
 import '../../../presentation/home/home.dart';
 import '../../home/cubit/home_cubit.dart';
 
@@ -80,8 +81,8 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
       sortBy: sortBy,
       sortAscending: sortAscending,
     );
-    await _shoppingListRepository.updateShoppingList(_shoppingList);
     _emitNewState(list: _shoppingList, checkedItems: checkedItems);
+    await _shoppingListRepository.updateShoppingList(_shoppingList);
   }
 
   void _emitNewState({
@@ -192,7 +193,25 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
 
   Future<void> deleteAisle({required Aisle aisle}) async {
     _shoppingList.aisles.remove(aisle);
-    await updateList(aisles: _shoppingList.aisles);
+
+    // Remove deleted aisle from items.
+    final items = _shoppingList.items
+        .map((item) => item.copyWith(aisle: verifyAisle(aisle: item.aisle)))
+        .toList();
+
+    await updateList(
+      aisles: _shoppingList.aisles,
+      items: items,
+    );
+  }
+
+  /// Reorders the aisles in the shopping list.
+  Future<void> reorderAisles(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) newIndex -= 1;
+    final aisles = List<Aisle>.from(_shoppingList.aisles);
+    final aisle = aisles.removeAt(oldIndex);
+    aisles.insert(newIndex, aisle);
+    await updateList(aisles: aisles);
   }
 
   String get taxRate => homeCubit.state.taxRate;
@@ -215,6 +234,7 @@ class ShoppingListCubit extends Cubit<ShoppingListState> {
     int? color,
     String? name,
   }) async {
+    log.v('updateAisle: $oldAisle, $color, $name');
     final updatedAisle = oldAisle.copyWith(
       color: color,
       name: name,

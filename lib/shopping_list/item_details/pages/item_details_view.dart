@@ -7,13 +7,11 @@ import '../../../application/item_details/cubit/item_details_cubit.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../../domain/core/core.dart';
 import '../../../infrastructure/shopping_list_repository/models/item.dart';
-import '../../core/core.dart';
-import '../../home/pages/home_page.dart';
-import '../../settings/settings.dart';
-import '../../../shopping_list/shopping_list.dart';
-import '../../../shopping_list/pages/aisles_page.dart';
+import '../../../presentation/core/core.dart';
+import '../../../presentation/home/pages/home_page.dart';
+import '../../../presentation/settings/settings.dart';
+import '../../shopping_list.dart';
 import 'item_details_page.dart';
-import 'item_details_page_state.dart';
 import 'parent_list_page.dart';
 
 class ItemDetailsView extends StatelessWidget {
@@ -234,8 +232,87 @@ class AisleTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing: const Icon(Icons.keyboard_arrow_right),
-      onTap: () => _goToSubPage(context, pageId: AislesPage.id),
+      onTap: () => _showAisleDialog(context),
+    );
+  }
+
+  /// Show a dialog with a list of aisles to choose from and a button to go to
+  /// the edit aisles page.
+  Future<void> _showAisleDialog(BuildContext context) async {
+    final itemDetailsCubit = context.read<ItemDetailsCubit>();
+
+    final aisle = await showDialog<String>(
+      context: context,
+      builder: (context) => const _ChooseAisleDialog(),
+    );
+
+    if (aisle != null) {
+      itemDetailsCubit.updateItem(itemDetailsCubit.state.copyWith(
+        aisle: aisle,
+      ));
+    } else {
+      itemDetailsCubit.refresh();
+    }
+  }
+}
+
+/// A dialog with a list of aisles to choose from and a button to go to the edit
+/// aisles page.
+class _ChooseAisleDialog extends StatelessWidget {
+  const _ChooseAisleDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ShoppingListCubit, ShoppingListState>(
+      builder: (context, state) {
+        return SimpleDialog(
+          title: Row(
+            children: [
+              const Text('Aisle'),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () => _goToAislesPage(context),
+              ),
+            ],
+          ),
+          children: [
+            ...state.aisles.map(
+              (aisle) {
+                return SimpleDialogOption(
+                  child: Text(
+                    aisle.name,
+                    style: TextStyle(
+                      color: (aisle.color == 0) ? null : Color(aisle.color),
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context, aisle.name),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Go to the edit aisles page.
+  void _goToAislesPage(BuildContext context) {
+    final shoppingCubit = context.read<ShoppingListCubit>();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: homeCubit),
+              BlocProvider.value(value: shoppingCubit),
+            ],
+            child: const AislesPage(),
+          );
+        },
+      ),
     );
   }
 }
@@ -302,31 +379,6 @@ class HaveCouponSwitchTile extends StatelessWidget {
           )),
         );
       },
-    );
-  }
-}
-
-// TODO: After removing LabelsPage this function is redundant, only pushing one
-// route - refactor required to simplify.
-void _goToSubPage(BuildContext context, {required String pageId}) {
-  final isWide = isLargeFormFactor(context);
-  if (isWide) {
-    final state = context.read<ItemDetailsPageState>();
-    state.subpage = pageId;
-  } else {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: itemDetailsCubit),
-              BlocProvider.value(value: shoppingListCubit),
-            ],
-            child: const AislesPage(),
-          );
-        },
-      ),
     );
   }
 }

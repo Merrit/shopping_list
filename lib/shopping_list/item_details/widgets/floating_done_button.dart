@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../domain/core/core.dart';
-import '../../core/core.dart';
+import '../../../presentation/core/core.dart';
 import '../pages/item_details_page.dart';
 
 class FloatingDoneButton extends StatelessWidget {
