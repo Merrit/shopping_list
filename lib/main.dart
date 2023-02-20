@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app.dart';
 import 'application/setup/setup.dart';
@@ -11,6 +12,7 @@ import 'firebase_options.dart';
 import 'infrastructure/authentication_repository/authentication_repository.dart';
 import 'infrastructure/preferences/preferences_repository.dart';
 import 'logs/logging_manager.dart';
+import 'settings/settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +30,17 @@ void main() async {
   await PreferencesRepository.init();
   EquatableConfig.stringify = kDebugMode;
   setup.init();
-  runApp(App(authenticationRepository: AuthenticationRepository()));
+
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<SettingsCubit>(
+          create: (context) => SettingsCubit(),
+        ),
+      ],
+      child: App(authenticationRepository: AuthenticationRepository()),
+    ),
+  );
 }
 
 /// Pre-cache the fonts so there is no jank loading emoji on web.
