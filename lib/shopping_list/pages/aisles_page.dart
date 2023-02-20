@@ -58,6 +58,8 @@ class _AislesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     // ignore: no_leading_underscores_for_local_identifiers
     final _isLargeFormFactor = isLargeFormFactor(context);
 
@@ -67,7 +69,14 @@ class _AislesList extends StatelessWidget {
           controller: _controller,
           thumbVisibility: _isLargeFormFactor ? true : false,
           child: ReorderableListView(
-            padding: Insets.listViewWithFloatingButton,
+            // Padding added on large screens to prevent the [ListTile]s from
+            // taking up the entire width of the screen.
+            padding: _isLargeFormFactor
+                ? EdgeInsets.symmetric(
+                    horizontal: mediaQuery.size.width * 0.3,
+                    vertical: 30,
+                  )
+                : const EdgeInsets.all(30),
             children: shoppingListState.aisles.map((aisle) {
               return ListTile(
                 key: ValueKey(aisle.name),
