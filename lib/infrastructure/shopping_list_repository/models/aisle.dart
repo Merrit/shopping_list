@@ -41,3 +41,23 @@ class Aisle extends Equatable {
   @override
   bool get stringify => true;
 }
+
+extension AisleExtension on List<Aisle> {
+  /// Returns the verified list of aisles.
+  List<Aisle> verify() {
+    List<Aisle> aisles;
+    aisles = _removeDuplicates();
+    return aisles;
+  }
+
+  /// Remove duplicates if they exist.
+  List<Aisle> _removeDuplicates() {
+    final aisles = <Aisle>[];
+    for (final aisle in this) {
+      if (!aisles.any((element) => element.name == aisle.name)) {
+        aisles.add(aisle);
+      }
+    }
+    return aisles;
+  }
+}
