@@ -6,7 +6,6 @@ import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../domain/core/core.dart';
 import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../presentation/core/core.dart';
-import '../item_details/widgets/floating_done_button.dart';
 
 /// Displays a list of aisles and allows the user to edit them.
 class AislesPage extends StatelessWidget {
@@ -16,10 +15,30 @@ class AislesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Round button with icon and background color to create aisle.
+    final Widget createAisleButton = FloatingActionButton.small(
+      onPressed: () => _createAisle(context: context),
+      backgroundColor: Colors.greenAccent.shade400,
+      child: const Icon(Icons.add),
+    );
+
+    final Widget floatingDoneButton = FloatingActionButton.extended(
+      onPressed: () => Navigator.pop(context),
+      label: const Text('Done'),
+      icon: const Icon(Icons.done),
+    );
+
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Aisle')),
+        appBar: AppBar(
+          title: const Text('Aisle'),
+          actions: [
+            createAisleButton,
+            const SizedBox(width: 10),
+          ],
+        ),
         body: const AislesView(),
+        floatingActionButton: floatingDoneButton,
       ),
     );
   }
@@ -30,12 +49,7 @@ class AislesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _AislesList(),
-        const FloatingDoneButton(),
-      ],
-    );
+    return _AislesList();
   }
 }
 
@@ -47,43 +61,32 @@ class _AislesList extends StatelessWidget {
     // ignore: no_leading_underscores_for_local_identifiers
     final _isLargeFormFactor = isLargeFormFactor(context);
 
-    return Column(
-      children: [
-        Expanded(
-          child: BlocBuilder<ShoppingListCubit, ShoppingListState>(
-            builder: (context, shoppingListState) {
-              return Scrollbar(
-                controller: _controller,
-                thumbVisibility: _isLargeFormFactor ? true : false,
-                child: ReorderableListView(
-                  padding: Insets.listViewWithFloatingButton,
-                  children: shoppingListState.aisles.map((aisle) {
-                    return ListTile(
-                      key: ValueKey(aisle.name),
-                      title: Chip(
-                        label: Text(aisle.name),
-                        backgroundColor: Color(aisle.color),
-                      ),
-                      enabled: aisle.name != 'None',
-                      onTap: () => _editAisle(context: context, aisle: aisle),
-                    );
-                  }).toList(),
-                  onReorder: (int oldIndex, int newIndex) {
-                    context
-                        .read<ShoppingListCubit>()
-                        .reorderAisles(oldIndex, newIndex);
-                  },
+    return BlocBuilder<ShoppingListCubit, ShoppingListState>(
+      builder: (context, shoppingListState) {
+        return Scrollbar(
+          controller: _controller,
+          thumbVisibility: _isLargeFormFactor ? true : false,
+          child: ReorderableListView(
+            padding: Insets.listViewWithFloatingButton,
+            children: shoppingListState.aisles.map((aisle) {
+              return ListTile(
+                key: ValueKey(aisle.name),
+                title: Chip(
+                  label: Text(aisle.name),
+                  backgroundColor: Color(aisle.color),
                 ),
+                enabled: aisle.name != 'None',
+                onTap: () => _editAisle(context: context, aisle: aisle),
               );
+            }).toList(),
+            onReorder: (int oldIndex, int newIndex) {
+              context
+                  .read<ShoppingListCubit>()
+                  .reorderAisles(oldIndex, newIndex);
             },
           ),
-        ),
-        const SizedBox(height: 10),
-        IconButton(
-          onPressed: () => _createAisle(context: context),
-          icon: const CircleAvatar(child: Icon(Icons.add)),
-        ),
-      ],
+        );
+      },
     );
   }
 }
