@@ -164,7 +164,6 @@ class _NameTile extends StatelessWidget {
             );
             switch (choice) {
               case 'List settings':
-                // TODO: Combine with AppBar method that does same.
                 setCurrentList(context, list.id);
                 await Navigator.push(
                   context,

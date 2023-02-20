@@ -1,9 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../infrastructure/shopping_list_repository/models/item.dart';
+import '../../shopping_list/cubit/shopping_list_cubit.dart';
 
 class ItemDetailsCubit extends Cubit<Item> {
   ItemDetailsCubit(Item item) : super(item);
+
+  /// Refreshes the item data from the ShoppingListCubit.
+  void refresh() {
+    final item = ShoppingListCubit.instance.state.items.firstWhere(
+      (element) => element.name == state.name,
+    );
+
+    emit(item);
+  }
 
   /// Update item value(s). Only affects local state until applied when
   /// leaving the ItemDetailsPage, which is useful because it will mean only 1

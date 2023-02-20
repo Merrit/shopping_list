@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../application/item_details/cubit/item_details_cubit.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
-import '../../../shopping_list/pages/aisles_page.dart';
+import '../../pages/aisles_page.dart';
 import 'item_details_page_state.dart';
 import 'item_details_view.dart';
 

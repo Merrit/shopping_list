@@ -9,7 +9,7 @@ import '../../domain/core/core.dart';
 import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../presentation/core/core.dart';
 import '../../presentation/home/home.dart';
-import '../../presentation/item_details/pages/item_details_page.dart';
+import '../item_details/pages/item_details_page.dart';
 import '../widgets/aisle_group.dart';
 import '../widgets/main_floating_button.dart';
 
