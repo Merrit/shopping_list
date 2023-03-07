@@ -187,14 +187,14 @@ void _showAisleDialog({required BuildContext context, Aisle? aisle}) {
               if (aisle == null) {
                 if (nameController.text.trim().isEmpty) return;
                 await context.read<ShoppingListCubit>().createAisle(
-                      name: nameController.text,
+                      name: nameController.text.capitalize,
                       color: color.value,
                     );
               } else {
                 await context.read<ShoppingListCubit>().updateAisle(
                       oldAisle: aisle,
                       color: color.value,
-                      name: nameController.text,
+                      name: nameController.text.capitalize,
                     );
               }
               navigator.pop();
