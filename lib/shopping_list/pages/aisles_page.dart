@@ -149,6 +149,7 @@ void _showAisleDialog({required BuildContext context, Aisle? aisle}) {
 
       return AlertDialog(
         title: Text(aisle == null ? 'Create aisle' : 'Edit aisle'),
+        scrollable: true,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
