@@ -1,41 +1,26 @@
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../shopping_list.dart';
 
+part 'item.freezed.dart';
 part 'item.g.dart';
 
-@immutable
-@JsonSerializable()
-class Item extends Equatable {
-  final String name;
-  final String aisle;
-  final String notes;
-  final bool isComplete;
-  final bool hasTax;
-  final bool onSale;
-  final bool buyWhenOnSale;
-  final bool haveCoupon;
-  final String quantity;
-  final String price;
-  final String total;
-  final String taxRate;
-
-  const Item._internal({
-    required this.name,
-    required this.aisle,
-    required this.notes,
-    required this.isComplete,
-    required this.hasTax,
-    required this.onSale,
-    required this.buyWhenOnSale,
-    required this.haveCoupon,
-    required this.quantity,
-    required this.price,
-    required this.total,
-    required this.taxRate,
-  });
+@freezed
+class Item with _$Item {
+  const factory Item._({
+    required String name,
+    required String aisle,
+    required String notes,
+    required bool isComplete,
+    required bool hasTax,
+    required bool onSale,
+    required bool buyWhenOnSale,
+    required bool haveCoupon,
+    required String quantity,
+    required String price,
+    required String total,
+    required String taxRate,
+  }) = _Item;
 
   factory Item({
     /// Can be passed in for unit tests.
@@ -59,7 +44,7 @@ class Item extends Equatable {
       quantity: validatedQuantity,
       taxRate: taxRate,
     );
-    return Item._internal(
+    return Item._(
       name: name,
       aisle: aisle ?? 'None',
       notes: notes ?? '',
@@ -75,55 +60,7 @@ class Item extends Equatable {
     );
   }
 
-  Item copyWith({
-    String? name,
-    String? aisle,
-    String? notes,
-    bool? isComplete,
-    bool? hasTax,
-    bool? onSale,
-    bool? buyWhenOnSale,
-    bool? haveCoupon,
-    String? quantity,
-    String? price,
-    String? taxRate,
-  }) {
-    return Item(
-      name: name ?? this.name,
-      aisle: aisle ?? this.aisle,
-      notes: notes ?? this.notes,
-      isComplete: isComplete ?? this.isComplete,
-      hasTax: hasTax ?? this.hasTax,
-      onSale: onSale ?? this.onSale,
-      buyWhenOnSale: buyWhenOnSale ?? this.buyWhenOnSale,
-      haveCoupon: haveCoupon ?? this.haveCoupon,
-      quantity: quantity ?? this.quantity,
-      price: price ?? this.price,
-      taxRate: taxRate ?? this.taxRate,
-    );
-  }
-
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ItemToJson(this);
-
-  @override
-  List<Object> get props {
-    return [
-      name,
-      aisle,
-      notes,
-      isComplete,
-      hasTax,
-      onSale,
-      buyWhenOnSale,
-      haveCoupon,
-      quantity,
-      price,
-      total,
-      taxRate,
-    ];
-  }
 
   @override
   String toString() {
