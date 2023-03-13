@@ -106,5 +106,14 @@ void main() {
       );
       expect(item1 == item2, true);
     });
+
+    test('total without tax is calculated correctly', () {
+      final Item item1 = Item(
+        name: 'Test Item',
+        quantity: '5',
+        price: '3.49',
+      );
+      expect(item1.total, '17.45');
+    });
   });
 }
