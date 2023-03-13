@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../shopping_list/shopping_list.dart';
 import 'shopping_list_repository.dart';
 
 class FirebaseShoppingListRepository implements ShoppingListRepository {

@@ -6,13 +6,10 @@ import '../../../application/home/cubit/home_cubit.dart';
 import '../../../application/item_details/cubit/item_details_cubit.dart';
 import '../../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../../domain/core/core.dart';
-import '../../../infrastructure/shopping_list_repository/models/item.dart';
 import '../../../presentation/core/core.dart';
 import '../../../presentation/home/pages/home_page.dart';
 import '../../../presentation/settings/settings.dart';
 import '../../shopping_list.dart';
-import 'item_details_page.dart';
-import 'parent_list_page.dart';
 
 class ItemDetailsView extends StatefulWidget {
   const ItemDetailsView({

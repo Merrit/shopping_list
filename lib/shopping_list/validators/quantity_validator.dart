@@ -1,4 +1,4 @@
-import '../shopping_list_repository.dart';
+import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 
 class QuantityValidator {
   final String? input;

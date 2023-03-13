@@ -6,6 +6,7 @@ import '../../../domain/preferences/preferences.dart';
 import '../../../infrastructure/authentication_repository/authentication_repository.dart';
 import '../../../infrastructure/preferences/preferences_repository.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../../../shopping_list/shopping_list.dart';
 import '../../shopping_list/cubit/shopping_list_cubit.dart';
 
 part 'home_state.dart';

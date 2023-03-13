@@ -1,5 +1,5 @@
-import '../../../logs/logging_manager.dart';
-import '../shopping_list_repository.dart';
+import '../../logs/logging_manager.dart';
+import '../shopping_list.dart';
 
 class ListItemsValidator {
   static List<Item> validateItems({
