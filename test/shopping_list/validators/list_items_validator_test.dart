@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shopping_list/infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import 'package:shopping_list/shopping_list/shopping_list.dart';
 
 void main() {
   final aisles = <Aisle>[];
@@ -33,6 +33,20 @@ void main() {
       Item(name: 'Mango', aisle: 'Fruit'),
     ];
     expect(validatedItems, expected);
+  });
+
+  test('Duplicate items are removed', () {
+    final itemsWithDuplicate = <Item>[
+      Item(name: 'Arthur Dent'),
+      Item(name: 'Arthur Dent'),
+    ];
+    final validatedItems = ListItemsValidator.validateItems(
+      aisles: [],
+      items: itemsWithDuplicate,
+      sortBy: 'Name',
+      sortAscending: true,
+    );
+    expect(validatedItems.length, 1);
   });
 
   test('Missing aisle items don\'t get removed', () {

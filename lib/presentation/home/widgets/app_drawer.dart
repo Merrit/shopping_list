@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/home/cubit/home_cubit.dart';
 import '../../../domain/core/core.dart';
-import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../../logs/logging_manager.dart';
 import '../../../settings/settings.dart';
 import '../../../shopping_list/shopping_list.dart';

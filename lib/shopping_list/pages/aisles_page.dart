@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
 import '../../domain/core/core.dart';
-import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../shopping_list.dart';
 
 /// Displays a list of aisles and allows the user to edit them.
 class AislesPage extends StatelessWidget {

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
 import '../../../logs/logging_manager.dart';
 import '../../../presentation/home/home.dart';
+import '../../../shopping_list/shopping_list.dart';
 import '../../home/cubit/home_cubit.dart';
 
 part 'shopping_list_state.dart';

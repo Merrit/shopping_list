@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../infrastructure/shopping_list_repository/models/item.dart';
+import '../../../shopping_list/shopping_list.dart';
 import '../../shopping_list/cubit/shopping_list_cubit.dart';
 
 class ItemDetailsCubit extends Cubit<Item> {

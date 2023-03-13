@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../application/shopping_list/cubit/shopping_list_cubit.dart';
-import '../../infrastructure/shopping_list_repository/shopping_list_repository.dart';
+import '../shopping_list.dart';
 
 class SortByPage extends StatelessWidget {
   const SortByPage({Key? key}) : super(key: key);
