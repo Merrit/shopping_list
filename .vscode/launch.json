@@ -9,12 +9,14 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
+            "preLaunchTask": "${defaultBuildTask}",
         },
         {
             "name": "Chrome",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
+            "preLaunchTask": "${defaultBuildTask}",
             "args": [
                 "-d",
                 "chrome",
@@ -27,6 +29,7 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
+            "preLaunchTask": "${defaultBuildTask}",
             "args": [
                 "-d",
                 "web-server",
