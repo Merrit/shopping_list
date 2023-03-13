@@ -35,7 +35,7 @@ dependencies:
   universal_platform: ^1.0.0-nullsafety
 
 dev_dependencies:
-  bloc_test: ^9.0.3
+  bloc_test: ^9.1.1
   build_runner: ^2.3.3
   flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
