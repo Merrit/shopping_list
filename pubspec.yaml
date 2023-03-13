@@ -18,13 +18,13 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_signin_button: ^2.0.0
   font_awesome_flutter: ^9.2.0
+  freezed_annotation: ^2.2.0
   google_sign_in: ^5.0.1
   helpers:
     git:
       url: https://github.com/Merrit/helpers.git
       ref: 2dd7305c83b9b2a86829c46a4cb7fb1d5857ff4f
-  json_annotation: ^4.6.0
-  json_serializable: ^6.1.6
+  json_annotation: ^4.8.0
   logger: ^1.1.0
   meta: ^1.1.8
   money2: ^3.1.3
@@ -36,11 +36,13 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.0.3
-  build_runner: ^2.2.1
+  build_runner: ^2.3.3
   flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
   mockito: ^5.0.3
 
 flutter_icons:
