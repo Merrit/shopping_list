@@ -156,14 +156,29 @@ class _Quantity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final quantity = Text(
+      item.quantity,
+      style: TextStyle(color: getQuantityColor()),
+    );
+
+    final Widget quantityUnit = (item.quantityUnit != null)
+        ? Text(
+            item.quantityUnit!,
+            style: TextStyle(color: getQuantityColor()),
+          )
+        : const SizedBox();
+
     return SizedBox(
-      width: 60,
+      width: 70,
       child: Row(
         children: [
           const Spacer(),
-          Text(
-            item.quantity,
-            style: TextStyle(color: getQuantityColor()),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              quantity,
+              quantityUnit,
+            ],
           ),
           const Spacer(),
           const SizedBox(width: 8),
