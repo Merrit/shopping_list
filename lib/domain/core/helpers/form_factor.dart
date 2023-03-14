@@ -12,7 +12,7 @@ enum FormFactor { desktop, tablet, handset, watch }
 /// Desktop, Tablet, Handset, Watch
 FormFactor getFormFactor(BuildContext context) {
   // Use .shortestSide to detect device type regardless of orientation
-  double deviceWidth = MediaQuery.of(context).size.shortestSide;
+  final double deviceWidth = MediaQuery.of(context).size.shortestSide;
   if (deviceWidth > ScreenType.desktop) return FormFactor.desktop;
   if (deviceWidth > ScreenType.tablet) return FormFactor.tablet;
   if (deviceWidth > ScreenType.handset) return FormFactor.handset;

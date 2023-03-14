@@ -26,7 +26,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     var newSelection = newValue.selection;
     var truncated = newValue.text;
 
-    var value = newValue.text;
+    final value = newValue.text;
 
     if (value.contains('.') &&
         value.substring(value.indexOf('.') + 1).length > decimalRange) {

@@ -20,7 +20,7 @@ class SidePanel extends StatelessWidget {
       child: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            var width = (constraints.maxWidth > 600) ? 0.4 : 0.85;
+            final width = (constraints.maxWidth > 600) ? 0.4 : 0.85;
 
             return Align(
               alignment: Alignment.centerRight,
