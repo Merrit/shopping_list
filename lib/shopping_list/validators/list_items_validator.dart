@@ -36,7 +36,7 @@ class _AisleValidator {
 
   /// Clean out aisles that have been deleted.
   List<Item> validate() {
-    List<Item> validatedItems = [];
+    final List<Item> validatedItems = [];
     final aisleNames = aisles.map((aisle) => aisle.name).toList();
     for (var item in items) {
       final bool aisleExists = aisleNames.contains(item.aisle);

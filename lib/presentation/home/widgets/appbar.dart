@@ -13,8 +13,8 @@ class ShoppingListAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        var shoppingCubit = state.shoppingListCubit;
-        var listColor = (shoppingCubit == null)
+        final shoppingCubit = state.shoppingListCubit;
+        final listColor = (shoppingCubit == null)
             ? Colors.white.value
             : shoppingCubit.state.color;
         final shoppingList = state.shoppingLists

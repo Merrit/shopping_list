@@ -52,7 +52,7 @@ class HomeCubit extends Cubit<HomeState> {
     for (var list in shoppingLists) {
       listIds.add(list.id);
     }
-    var savedId = _preferencesRepository.getKey('currentList') as String?;
+    final savedId = _preferencesRepository.getKey('currentList') as String?;
     if (savedId == null) return;
     final bool savedIdExists = listIds.contains(savedId);
     if (savedIdExists) {

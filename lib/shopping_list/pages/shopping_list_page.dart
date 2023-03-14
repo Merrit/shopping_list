@@ -176,7 +176,7 @@ class ScrollingItemsWidget extends StatelessWidget {
           builder: (context, shoppingListState) {
             return LayoutBuilder(
               builder: (context, constraints) {
-                double sidePadding = _isLargeFormFactor
+                final double sidePadding = _isLargeFormFactor
                     ? (constraints.maxWidth * 0.15)
                     : Insets.xsmall;
 
