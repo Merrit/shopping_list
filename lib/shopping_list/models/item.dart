@@ -7,7 +7,10 @@ part 'item.g.dart';
 
 @freezed
 class Item with _$Item {
-  const factory Item._({
+  /// Private constructor required for Freezed to enable getters.
+  const Item._();
+
+  const factory Item._private({
     required String name,
     required String aisle,
     required String notes,
@@ -17,10 +20,21 @@ class Item with _$Item {
     required bool buyWhenOnSale,
     required bool haveCoupon,
     required String quantity,
+
+    /// Optional user-defined unit of measure for the quantity.
+    ///
+    /// For example, "1 lb", "300 grams" or "2 cups".
+    @JsonKey(required: false) String? quantityUnit,
     required String price,
-    required String total,
     required String taxRate,
-  }) = _Item;
+  }) = _Private;
+
+  /// Total price of the item, including tax if applicable.
+  String get total => MoneyHandler().totalPrice(
+        price: price,
+        quantity: quantity,
+        taxRate: taxRate,
+      );
 
   factory Item({
     /// Can be passed in for unit tests.
@@ -34,17 +48,14 @@ class Item with _$Item {
     bool? buyWhenOnSale,
     bool? haveCoupon,
     String? quantity,
+    String? quantityUnit,
     String? price,
     String? taxRate,
   }) {
     final validatedQuantity = QuantityValidator(quantity).validate();
     moneyHandler ??= MoneyHandler();
-    final String total = moneyHandler.totalPrice(
-      price: price,
-      quantity: validatedQuantity,
-      taxRate: taxRate,
-    );
-    return Item._(
+
+    return Item._private(
       name: name,
       aisle: aisle ?? 'None',
       notes: notes ?? '',
@@ -54,8 +65,8 @@ class Item with _$Item {
       buyWhenOnSale: buyWhenOnSale ?? false,
       haveCoupon: haveCoupon ?? false,
       quantity: validatedQuantity,
+      quantityUnit: quantityUnit,
       price: price ?? '0.00',
-      total: total,
       taxRate: taxRate ?? '0.00',
     );
   }
@@ -75,6 +86,7 @@ Item {
   buyWhenOnSale: $buyWhenOnSale,
   haveCoupon: $haveCoupon,
   quantity: $quantity,
+  quantityUnit: $quantityUnit,
   price: $price,
   total: $total,
   taxRate: $taxRate,

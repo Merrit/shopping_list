@@ -50,8 +50,8 @@ void main() {
         'buyWhenOnSale': false,
         'haveCoupon': false,
         'quantity': '1',
+        'quantityUnit': null,
         'price': '0.00',
-        'total': '0.00',
         'taxRate': '0.00',
       };
       expect(testItem.toJson(), jsonMap);

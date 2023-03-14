@@ -73,7 +73,7 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
           ),
         );
 
-        final items = [
+        final List<Widget> tiles = [
           ListTile(
             leading: const Icon(Icons.title),
             title: const Text('Name'),
@@ -111,6 +111,7 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
               }
             },
           ),
+          const _QuantityUnitTile(),
           const AisleTile(),
           ListTile(
             leading: const Icon(Icons.attach_money),
@@ -211,10 +212,90 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
         return ListView.separated(
           padding: listPadding,
           separatorBuilder: (context, index) => const Divider(height: 0),
-          itemCount: items.length,
+          itemCount: tiles.length,
           itemBuilder: (context, index) {
-            return items[index];
+            return tiles[index];
           },
+        );
+      },
+    );
+  }
+}
+
+/// A ListTile that shows the item's quantity unit and allows
+/// the user to change it.
+class _QuantityUnitTile extends StatelessWidget {
+  const _QuantityUnitTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ItemDetailsCubit, Item>(
+      builder: (context, state) {
+        return ListTile(
+          leading: const Icon(Icons.fullscreen_exit_outlined),
+          title: const Text('Quantity Unit'),
+          subtitle: Text(state.quantityUnit ?? 'None'),
+          onTap: () async => await _showQuantityUnitDialog(context),
+        );
+      },
+    );
+  }
+
+  Future<String?> _showQuantityUnitDialog(BuildContext context) async {
+    final itemDetailsCubit = context.read<ItemDetailsCubit>();
+    final state = itemDetailsCubit.state;
+
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Quantity Unit'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                initialValue: state.quantityUnit,
+                decoration: const InputDecoration(
+                  hintText: 'Quantity Unit',
+                ),
+                style: Theme.of(context).textTheme.bodyLarge,
+                onChanged: (value) {
+                  itemDetailsCubit.updateItem(
+                    state.copyWith(
+                      quantityUnit: value,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          actions: [
+            const Tooltip(
+              message:
+                  'The quantity unit is an optional description of the quantity of an item. '
+                  'For example "kg" or "g". '
+                  'The default is to consider the quantity as being per item, '
+                  'so if you have 2 apples, the quantity is 2.\n'
+                  '\n'
+                  'This doesn\'t currently affect the price, it\'s just a description.',
+              child: Icon(Icons.info_outline),
+            ),
+            TextButton(
+              onPressed: () {
+                itemDetailsCubit.updateItem(
+                  state.copyWith(
+                    quantityUnit: null,
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('Reset'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Done'),
+            ),
+          ],
         );
       },
     );
