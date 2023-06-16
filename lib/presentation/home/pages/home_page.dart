@@ -51,9 +51,9 @@ class TwoColumnView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisSize: MainAxisSize.min,
-      children: const [
+      children: [
         SizedBox(
           width: 200,
           child: ListDrawer(),

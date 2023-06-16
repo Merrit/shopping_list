@@ -65,8 +65,8 @@ class TwoColumnView extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ItemDetailsPageState(),
       builder: (context, child) {
-        return Row(
-          children: const [
+        return const Row(
+          children: [
             Flexible(
               flex: 2,
               child: ItemDetailsView(),
