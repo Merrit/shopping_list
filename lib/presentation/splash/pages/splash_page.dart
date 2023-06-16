@@ -24,12 +24,12 @@ class SplashPage extends StatelessWidget {
       }
     });
 
-    return Scaffold(
+    return const Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          children: const [
+          children: [
             SizedBox(
               height: 50,
               width: double.infinity,

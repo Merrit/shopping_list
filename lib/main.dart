@@ -47,7 +47,7 @@ void main() async {
 ///
 /// https://github.com/flutter/flutter/issues/42586#issuecomment-541870382
 void primeFonts() {
-  final pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
+  final pb = ParagraphBuilder(ParagraphStyle());
   pb.addText('\ud83d\ude01'); // Smiley-face emoji.
   pb.build().layout(const ParagraphConstraints(width: 100));
 }
